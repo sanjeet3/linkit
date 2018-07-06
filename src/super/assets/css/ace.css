@@ -22701,3 +22701,8 @@ textarea.input-custom {
   background-color: #eee;
   border: 1px solid #ccc;
 }
+
+.input-retail-price {
+  font-size: 10px !important;
+  color: #444 !important;
+  width: 75px;}
