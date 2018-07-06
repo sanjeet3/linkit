@@ -1,0 +1,138 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-sitemap"></i> <a href="javascript:">Product</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="showFormDom()">
+      <i class="ace-icon fa fa-plus"></i> Product
+    </button>
+    <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
+      onclick="showListDom()">
+      <i class="ace-icon fa fa-arrow-left"></i> Back
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Category</td>
+            <td>UOM</td>
+            <td>Price</td>
+            <td>Size</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody id="product_table_body">
+          <tr>
+            <td>PRO098212</td>
+            <td>Drinking Bottel</td>
+            <td>SCHOOL</td>
+            <td>PIECE</td>
+            <td>150</td>
+            <td></td>
+            <td>School bag dringking water bottel</td>
+          </tr>
+          <tr>
+            <td>PRO098001</td>
+            <td>Coffee Mug printed</td>
+            <td>HOUSE</td>
+            <td>PIECE</td>
+            <td>110</td>
+            <td></td>
+            <td>Printed coffee mug</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="form-dom" style="display: none;">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="product_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="code"> Code </label>
+          <div class="col-sm-4">
+            <input type="text" name="code" id="code" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="name"> Name </label>
+          <div class="col-sm-4">
+            <input type="text" name="name" id="name" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="size"> Size </label>
+          <div class="col-sm-4">
+            <input type="text" name="size" id="size" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="price"> Price </label>
+          <div class="col-sm-4">
+            <input type="number" step=".01" name="price" id="price" class="form-control input-custom" value="0.0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="category">Category </label>
+          <div class="col-sm-4">
+            <input type="text" id="category" name="category" placeholder="Category"
+              class="form-control input-custom">
+          </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="uom"> UOM </label>
+          <div class="col-sm-4">
+            <select class="form-control input-custom" name="uom" id="uom">
+              <option value="PIECE">PIECE</option>
+              <option value="UNIT">UNIT</option>
+            </select>
+          </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="description">Description
+          </label>
+          <div class="col-sm-4">
+            <textarea rows="3" name="description" id="description" class="form-control input-custom"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveProduct()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit
+              <i id="save_product_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn btn-minier" type="reset">
+              <i class="ace-icon fa fa-undo bigger-110"></i> Reset
+            </button>
+          </div>
+        </div>
+        <div class="clearfix form-actions" id="dummy_dom" style="display: none;">
+        <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Category</td>
+            <td>UOM</td>
+            <td>Price</td>
+            <td>Size</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody id="dummy_product_table_body"></tbody></table>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

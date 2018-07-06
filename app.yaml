@@ -1,0 +1,22 @@
+application: link-it-portal
+version: 2018july4
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /super/assets
+  static_dir: src/super/assets  
+  
+- url: /.*
+  script: src.main.app
+  login: required
+
+ 
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+- name: pycrypto 
+  version: latest

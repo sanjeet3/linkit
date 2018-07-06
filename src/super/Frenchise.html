@@ -1,0 +1,236 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-sitemap"></i> <a href="javascript:">Frenchise</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="showFrenchiseFormDom()">
+      <i class="ace-icon fa fa-plus"></i> Frechise
+    </button>
+    <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
+      onclick="showFrechiseListDom()">
+      <i class="ace-icon fa fa-arrow-left"></i> Back
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Person</td>
+            <td>Email</td>
+            <td>Landline</td>
+            <td>Mobile</td>
+            <td>GEO</td>
+            <td>Address</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody id="table_body">
+          <tr id="1">
+            <td>Purpink Gifts & Florist</td>
+            <td>Yang su</td>
+            <td>purpinkgifts@gmail.com</td>
+            <td>+254 702 100100</td>
+            <td>33555884445</td>
+            <td>-1.279874, 36.8451278</td>
+            <td>1B7, Magharibi Place, Mai Mahiu Rd, Nairobi, Kenya</td>
+            <td>
+              <div class="widget-toolbar no-border">
+                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="ace-icon fa fa-cog"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                  <li><a href="javascript:addProductToFrenchise('1')">Add Products</a></li>
+                  <li><a href="#">Edit Account</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Suspend Account</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr id="2">
+            <td>Blueline Gifts</td>
+            <td>Mr. Mombasa</td>
+            <td>matunga@gmail.com</td>
+            <td>+254 20 3743454</td>
+            <td>3367425484445</td>
+            <td>-1.270537,36.811769</td>
+            <td>71 Muthithi Road, Fruity Fruits Plaza, Ground Floor, Nairobi, Kenya</td>
+            <td>
+              <div class="widget-toolbar no-border">
+                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="ace-icon fa fa-cog"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                  <li><a href="javascript:addProductToFrenchise('2')">Add Products</a></li>
+                  <li><a href="#">Edit Account</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Suspend Account</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="form-dom" style="display: none;">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="frenchise_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="name"> Name </label>
+          <div class="col-sm-4">
+            <input type="text" name="name" id="name" class="form-control input-custom"
+              placeholder="Brand Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="person"> Contact
+            Person </label>
+          <div class="col-sm-4">
+            <input type="text" name="person" id="person" class="form-control input-custom"
+              placeholder="Contact Person">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="size">Google Email </label>
+          <div class="col-sm-4">
+            <input type="text" name="email" id="email" class="form-control input-custom"
+              placeholder="Login account email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="telephone"> Land-line
+          </label>
+          <div class="col-sm-4">
+            <input type="text" name="telephone" id="telephone" class="form-control input-custom"
+              placeholder="land-line number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="mobile">Mobile </label>
+          <div class="col-sm-4">
+            <input type="text" id="mobile" name="mobile" placeholder="Mobile"
+              class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="geo">Geocode </label>
+          <div class="col-sm-4">
+            <input type="text" id="geo" name="geo" placeholder="Paste geo code here"
+              class="form-control input-custom">
+          </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="address">Address </label>
+          <div class="col-sm-4">
+            <textarea rows="3" name="address" id="address" class="form-control input-custom"
+              placeholder="Shop/Market Address"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveFrenchise()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn btn-minier" type="reset">
+              <i class="ace-icon fa fa-undo bigger-110"></i> Reset
+            </button>
+          </div>
+        </div>
+        <div class="clearfix form-actions" id="dummy_dom" style="display: none;">
+          <table class="table  table-bordered table-hover">
+            <thead>
+              <tr>
+                <td>Name</td>
+                <td>Person</td>
+                <td>Email</td>
+                <td>Landline</td>
+                <td>Mobile</td>
+                <td>GEO</td>
+                <td>Address</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody id="dummy_table_body"></tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-10" id="add-product-frenchise" style="display: none;">
+    <div class="col-xs-12">
+      <div class="page-header">Frenchise: <font id="selected_frenchise_text"></font></div>
+      <div class="table-header">Master Products</div>
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Category</td>
+            <td>UOM</td>
+            <td>Size</td>
+            <td>Description</td>
+            <td>Price</td>
+            <td>Assign</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="p_1">
+            <td>PRO098212</td>
+            <td>Drinking Bottel</td>
+            <td>SCHOOL</td>
+            <td>PIECE</td>
+            <td></td>
+            <td>School bag dringking water bottel</td>
+            <td>150</td>
+            <td><button type="button" class="btn btn-info btn-minier"
+                onclick="assignProductToFrechise('p_1')">Add</button></td>
+          </tr>
+          <tr id="p_2">
+            <td>PRO098001</td>
+            <td>Coffee Mug printed</td>
+            <td>HOUSE</td>
+            <td>PIECE</td>
+            <td></td>
+            <td>Printed coffee mug</td>
+            <td>110</td>
+            <td><button type="button" class="btn btn-info btn-minier"
+                onclick="assignProductToFrechise('p_2')">Add</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="clearfix">
+        <div class="table-header">Frenchise's Products</div>
+        <table class="table  table-bordered table-hover">
+          <thead>
+            <tr>
+              <td>Code</td>
+              <td>Name</td>
+              <td>Category</td>
+              <td>UOM</td>
+              <td>Size</td>
+              <td>Description</td>
+              <td>Price</td>
+            </tr>
+          </thead>
+          <tbody id="assigned_product_frenchise"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-xs-12"></div>
+  </div>
+</div>
