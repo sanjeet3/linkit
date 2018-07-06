@@ -1,5 +1,5 @@
 application: link-it-portal
-version: 2018july4
+version: v2
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -9,8 +9,7 @@ handlers:
   static_dir: src/super/assets  
   
 - url: /.*
-  script: src.main.app
-  login: required
+  script: src.main.app 
 
  
 libraries:
