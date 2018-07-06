@@ -139,7 +139,7 @@ function searchOrder(){
     tr.push('</td><td>');
     tr.push(getRandomInt(558899))
     tr.push('</td><td>');
-    tr.push(dt[getRandomInt(1)])
+    tr.push(dt[getRandomInt(2)])
     tr.push('</td><td>');
     tr.push(prod[getRandomInt(3)])
     tr.push('</td><td>');

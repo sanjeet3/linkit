@@ -1,0 +1,77 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Listed Product</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search"></div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10">
+    <div class="col-xs-12">
+      <div class="page-header">
+        To sell products add to your account with retail price.
+      </div>
+      <div class="table-header">Master Products</div>
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Category</td>
+            <td>UOM</td>
+            <td>Size</td>
+            <td>Description</td>
+            <td>Price</td>
+            <td>Retail Price</td>
+            <td>Assign</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="p_1">
+            <td>PRO098212</td>
+            <td>Drinking Bottel</td>
+            <td>SCHOOL</td>
+            <td>PIECE</td>
+            <td></td>
+            <td>School bag dringking water bottel</td>
+            <td>150</td>
+            <td><input type="number" min="0.0" value="150" step=".01" name="retail_price" class="retail_price"></td>
+            <td><button type="button" class="btn btn-info btn-minier"
+                onclick="addProductToFrechise('p_1')">Add</button></td>
+          </tr>
+          <tr id="p_2">
+            <td>PRO098001</td>
+            <td>Coffee Mug printed</td>
+            <td>HOUSE</td>
+            <td>PIECE</td>
+            <td></td>
+            <td>Printed coffee mug</td>
+            <td>110</td>
+            <td><input type="number" min="0.0" value="110" step=".01" name="retail_price" class="retail_price"></td>
+            <td><button type="button" class="btn btn-info btn-minier"
+                onclick="addProductToFrechise('p_2')">Add</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="clearfix">
+        <div class="table-header">Your Products</div>
+        <table class="table  table-bordered table-hover">
+          <thead>
+            <tr>
+              <td>Code</td>
+              <td>Name</td>
+              <td>Category</td>
+              <td>UOM</td>
+              <td>Size</td>
+              <td>Description</td>
+              <td>Price</td>
+              <td>Retail Price</td>
+            </tr>
+          </thead>
+          <tbody id="frenchise_product"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

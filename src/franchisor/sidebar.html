@@ -1,0 +1,27 @@
+<div id="sidebar" class="sidebar  responsive ace-save-state" data-sidebar="true"
+  data-sidebar-scroll="true" data-sidebar-hover="true">
+  <script type="text/javascript">
+      try {
+        ace.settings.loadState('sidebar')
+      } catch (e) {
+      }
+    </script> 
+  <ul class="nav nav-list">
+    <li class="active"><a href="/franchisor"> <i class="menu-icon fa fa-tachometer"></i> <span
+        class="menu-text"> Dashboard </span>
+    </a> <b class="arrow"></b></li>
+    <li class=""><a
+      href="javascript:getWebPage('/franchisor/Products',{'title':'Products', 'data':''})"> <i
+        class="menu-icon fa fa-picture-o"></i> <span class="menu-text"> Products </span>
+    </a> <b class="arrow"></b></li> 
+    <li class=""><a
+      href="javascript:getWebPage('/franchisor/Order',{'title':'Order', 'data':''})"> <i
+        class="menu-icon fa fa-shopping-cart"></i> <span class="menu-text"> Order </span>
+    </a> <b class="arrow"></b></li>
+  </ul>
+  <!-- /.nav-list -->
+  <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i id="sidebar-toggle-icon" class="ace-save-state ace-icon fa fa-angle-double-left"
+      data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+  </div>
+</div>
