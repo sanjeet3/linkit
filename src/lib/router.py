@@ -16,6 +16,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
     RedirectRoute(r'/superadmin/CreateFrenchise', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
+    RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
                  
     ]
 

@@ -148,6 +148,10 @@ function log(e){
   console.log(e)
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
 function showFormDom(){ 
   $('#bck-btn, #form-dom').show();
   $('#add_btn, #list-dom').hide();

@@ -12,7 +12,7 @@ Created on 04-Jul-2018
 from src.api.baseapi import json_response, SUCCESS, ERROR
 from src.lib.SABasehandler import ActionSupport
  
-import logging 
+import logging, datetime
 
 class Home(ActionSupport):
   def get(self):
@@ -66,5 +66,10 @@ class SaveFrenchise(ActionSupport):
     'address': address, 
     }
     return  json_response(self.response, data_dict, SUCCESS, 'Frenchise %s account created' %(email))
-
-
+     
+class Order(ActionSupport):
+  def get(self):
+    template = self.get_jinja2_env.get_template('super/Order.html') 
+    today = datetime.datetime.now().strftime('%d-%m-%Y')
+       
+    self.response.out.write(template.render({'dt': today}))

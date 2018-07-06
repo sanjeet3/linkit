@@ -22684,3 +22684,20 @@ textarea.input-custom {
   font-size: 12px !important;
 }
 
+.date-input {
+  padding: 3px 4px !important;
+  height: 26px;
+  width: 85px;
+  margin-top: 1px;
+}
+
+.dt-arrow {
+  padding: 4px 4px 4px 4px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #555;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}

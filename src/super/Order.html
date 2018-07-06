@@ -1,0 +1,60 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-shopping-cart"></i> <a href="javascript:">Order</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search"></div>
+</div>
+<div class="page-content">
+  <div class="page-header">
+    <form class="form-inline">
+      <select class="input-small" name="user">
+        <option value="Purpink Gifts & Florist">Purpink Gifts & Florist</option>
+        <option value="Blueline Gifts">Blueline Gifts</option>
+      </select>
+      <div class="input-daterange input-group">
+        <input type="text" class="date-input" name="start" id="start" value="{{dt}}"> <span
+          class="dt-arrow"> <i class="fa fa-exchange"></i>
+        </span> <input type="text" class="date-input" name="end" id="end" value="{{dt}}">
+      </div>
+      <button type="button" onclick="searchOrder()" class="btn btn-info btn-mini">
+        <i class="ace-icon fa fa-search bigger-110"></i>Search
+      </button>
+    </form>
+  </div>
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Order Number</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Product</th>
+            <th>QTY</th>
+            <th>Frenchisee</th>
+            <th>Client Address</th>
+          </tr>
+        </thead>
+        <tbody id="table_body">
+          <tr>
+            <td>ORD875798</td>
+            <td>14821</td>
+            <td>{{dt}}</td>
+            <td>Drinking Bottle</td>
+            <td>2</td>
+            <td>Blueline Gifts</td>
+            <td>M-Pesa Swift Smart Ltd, Garissa Lodge Shopping Complex, 1st Floor, Eastleigh,
+              Kenya</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $('.input-daterange').datepicker({
+    autoclose : true,
+    format : 'dd-mm-yyyy',
+  });
+</script>

@@ -115,3 +115,43 @@ function assignProductToFrechise(id){
   $('#'+id).remove();
 };
 
+function searchOrder(){
+  var tr=[];
+  dt1=$('#start').val();
+  dt2=$('#end').val();
+  dt=[dt1,dt2]
+  if(!dt1 || !dt2){
+    showMSG('Please enter daterage', 'warning');
+    return;
+  }
+  frnc=['Blueline Gifts', 'Purpink Gifts & Florist'];
+  prod=['Coffe Mug', 'School Bag', 'Water Bottle'];
+  add=['Eastleigh Second Ave, Nairobi, Kenya',
+
+'Shariff Guest House, Eastleigh Second Ave, Nairobi City, Kenya',
+
+'Off 2nd Avenue, Eastleigh, Tenth St, Nairobi, Kenya',
+
+'Next To Sky Blue Lodge, Eastleigh Second Avenue, Nairobi, Kenya ']
+  for(var i=0; i<5; i++){
+    tr.push('<tr><td>');
+    tr.push('ORD'+getRandomInt(15648));
+    tr.push('</td><td>');
+    tr.push(getRandomInt(558899))
+    tr.push('</td><td>');
+    tr.push(dt[getRandomInt(1)])
+    tr.push('</td><td>');
+    tr.push(prod[getRandomInt(3)])
+    tr.push('</td><td>');
+    tr.push(getRandomInt(24))
+    tr.push('</td><td>');
+    tr.push(frnc[getRandomInt(2)])
+    tr.push('</td><td>');
+    tr.push(add[getRandomInt(4)])
+    tr.push('</td></tr>');
+    
+  }
+  $('#table_body').html(tr.join(''));
+}
+
+
