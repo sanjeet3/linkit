@@ -145,6 +145,20 @@ function assignProductToFrechise(id){
     return;
   }
   $('#'+id).remove();
+  btnH = ['<td>  <button type="button" class="btn btn-info btn-minier" onclick="editFrncProduct('];
+  btnH.push("'");
+  btnH.push(id);
+  btnH.push("'");
+  btnH.push(')">Edit</button><button type="button" class="btn btn-info btn-minier" onclick="editDoneFrncProduct(');
+  btnH.push("'");
+  btnH.push(id);
+  btnH.push("'");
+  btnH.push(')" style="display: none;">Done</button><button type="button" class="btn btn-danger btn-minier ml-5" onclick="removeFrncProduct(');
+  btnH.push("'");
+  btnH.push(id);
+  btnH.push("'");
+  btnH.push(')">Remove</button></td>'); 
+  
   var row = $("<tr id='"+id+"'></tr>");
   row.append(tds.eq(0).clone())
   .append(tds.eq(1).clone())
@@ -153,7 +167,7 @@ function assignProductToFrechise(id){
   .append(tds.eq(4).clone())
   .append(tds.eq(5).clone())
   .append('<td>'+reatilPrice+'</td>')
-  .append('<td></td>')
+  .append(btnH.join(''))
   .appendTo($('#assigned_product_frenchise'));
   
 };
