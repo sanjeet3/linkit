@@ -33,7 +33,7 @@ function saveProductCallBack(obj, fID) {
   tr.push(obj.data.size);
   tr.push('</td><td>');
   tr.push(obj.data.description);
-  tr.push('</td></tr>');
+  tr.push('</td><td></td></tr>');
   tr = tr.join('')
   $('#dummy_product_table_body').append(tr);
   $('#product_table_body').prepend(tr);
@@ -242,3 +242,58 @@ function searchOrder(){
 }
 
 
+function imgSetupProduct(id){
+  var tds = $('#'+id).children();
+  code = tds.eq(0).html();
+  name = tds.eq(1).html();
+  $('#prod_code').html(code);
+  $('#prod_name').html(name);
+  $('#image-setup').show();
+  $('#list-dom, #add_btn').hide();
+  
+};
+
+function backImgSetupProduct(){
+  $('#image-setup').hide();
+  $('#list-dom, #add_btn').show();
+  
+}
+
+function addImgTOProductList(t, src){ 
+  if(t=='2D'){
+    h='<li><img alt="150x150" src="'+src+'"></li>';
+    $('#product_img_list').append(h);  
+  } else {
+    i=$('#product_3d_img_list').children().length;
+    id='pannellum_'+i;
+    $('#product_3d_img_list').append('<div id="'+id+'" class="panorama"></div>');
+    setTimeout(function(){ pannellum.viewer(id, {
+      "type" : "equirectangular",
+      /*"panorama" : "/super/assets/images/alma.jpg",*/
+      "panorama" : src,
+      "autoLoad": true,
+    })}, 400);
+    
+    
+  }
+}
+
+function uploadImage() {
+  t=$('#pictype').val();
+  fileObj=$('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    //addImgTOProductList(t, fileObj.files[0].mozFullPath); 
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      src = e.target.result;
+      addImgTOProductList(t, src)
+    }
+
+    reader.readAsDataURL(fileObj.files[0]);
+  
+  }
+  
+  
+  
+};

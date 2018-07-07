@@ -22798,3 +22798,18 @@ textarea.input-custom {
 .mx-w-99{
   max-width: 99%;
 }
+
+.pannorama-containor {
+  min-width: 245px;
+  min-height: 200px;
+}
+
+.product-img-list img{
+  width: 150px;
+  height: 150px;
+}
+
+.pannellum-div{
+  width: 150px;
+  height: 150px;
+}

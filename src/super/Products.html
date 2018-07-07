@@ -27,10 +27,11 @@
             <td>Price</td>
             <td>Size</td>
             <td>Description</td>
+            <td></td>
           </tr>
         </thead>
         <tbody id="product_table_body">
-          <tr>
+          <tr id="prd_1">
             <td>PRO098212</td>
             <td>Drinking Bottel</td>
             <td>SCHOOL</td>
@@ -38,8 +39,18 @@
             <td>150</td>
             <td></td>
             <td>School bag dringking water bottel</td>
+            <td><div class="widget-toolbar no-border">
+                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="ace-icon fa fa-cog"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                  <li><a href="javascript:imgSetupProduct('prd_1')">Setup Images</a></li>
+                </ul>
+              </div></td>
           </tr>
-          <tr>
+          <tr id="prd_2">
             <td>PRO098001</td>
             <td>Coffee Mug printed</td>
             <td>HOUSE</td>
@@ -47,6 +58,16 @@
             <td>110</td>
             <td></td>
             <td>Printed coffee mug</td>
+            <td><div class="widget-toolbar no-border">
+                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="ace-icon fa fa-cog"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                  <li><a href="javascript:imgSetupProduct('prd_2')">Setup Images</a></li>
+                </ul>
+              </div></td>
           </tr>
         </tbody>
       </table>
@@ -137,6 +158,7 @@
                 <td>Price</td>
                 <td>Size</td>
                 <td>Description</td>
+                <td></td>
               </tr>
             </thead>
             <tbody id="dummy_product_table_body"></tbody>
@@ -145,8 +167,84 @@
       </form>
     </div>
   </div>
+  <div class="row mt-10" id="image-setup" style="display: none;">
+    <div class="message-container">
+      <div class="message-navbar clearfix">
+        <div class="message-bar">
+          <div class="message-toolbar">
+            <h4 class="widget-title blue smaller">
+              Product Code: <font id="prod_code"></font>, Name: <font id="prod_name"></font>
+            </h4>
+          </div>
+        </div>
+        <div>
+          <div class="messagebar-item-left">
+            <a href="javascript:backImgSetupProduct()" class="btn-back-message-list font-12"> <i
+              class="ace-icon fa fa-arrow-left bigger-110 middle blue"></i> <b
+              class="middle bigger-110">Back</b>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="message-list-container">
+        <form class="form-horizontal message-form col-xs-12">
+          <div class="form-group">
+            <label class="col-sm-1 control-label no-padding-right">Image Type:</label>
+            <div class="col-sm-3">
+              <select name="pictype" class="form-control" id="pictype">
+                <option value="2D">2D</option>
+                <option value="3D">360 Degree</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-1 control-label no-padding-right">Image:</label>
+            <div class="col-sm-9">
+              <input type="file" name="file" id="imgage_file" accept=".png,.jpg,.png,.jpeg" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-9">
+              <button class="btn btn-info btn-minier" type="button" onclick="uploadImage()">
+                <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
+                  id="save_product_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-12 user-profile">
+        <div class="widget-box transparent">
+          <div class="widget-header widget-header-small">
+            <h4 class="widget-title smaller">
+              <i class="ace-icon fa fa-check-square-o bigger-110"></i> 2D Pictures
+            </h4>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main">
+              <ul class="ace-thumbnails product-img-list" id="product_img_list">
+                <li><img alt="150x150" src="/super/assets/images/gallery/thumb-1.jpg"></li>
+                <li></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 mt-20">
+        <div class="widget-box transparent">
+          <div class="widget-header widget-header-small">
+            <h4 class="widget-title smaller">
+              <i class="ace-icon fa fa-check-square-o bigger-110"></i> 3D Pictures
+            </h4>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main" id="product_3d_img_list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
 <div id="addCategoryDailog" class="dialog-box">
   <div class="dailog-header">
     <span>Add Category</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
@@ -155,7 +253,8 @@
   <div class="dialog-content">
     <form class="form-horizontal mx-w-99" role="form" id="add_new_category_form">
       <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category </label>
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category
+        </label>
         <div class="col-sm-9">
           <input type="text" name="category" id="new_category" class="form-control input-custom">
         </div>
@@ -171,7 +270,7 @@
           </button>
         </div>
       </div>
-    </form> 
+    </form>
   </div>
 </div>
 <div id="addUOMDailog" class="dialog-box">
@@ -198,6 +297,22 @@
           </button>
         </div>
       </div>
-    </form> 
+    </form>
   </div>
 </div>
+<script type="text/javascript">
+  //file input
+  $('.message-form input[type=file]')
+      .ace_file_input()
+      .closest('.ace-file-input')
+      .addClass('width-90 inline')
+      .wrap(
+          '<div class="form-group file-input-container"><div class="col-sm-7"></div></div>');
+</script>
+<script>
+  /*  pannellum.viewer('product_img_list_li_1', {
+    "type" : "equirectangular",
+    "panorama" : "/super/assets/images/alma.jpg",
+  });  */
+  //"https://pannellum.org/images/alma.jpg"
+</script>
