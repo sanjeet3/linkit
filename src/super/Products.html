@@ -224,7 +224,6 @@
             <div class="widget-main">
               <ul class="ace-thumbnails product-img-list" id="product_img_list">
                 <li><img alt="150x150" src="/super/assets/images/gallery/thumb-1.jpg"></li>
-                <li></li>
               </ul>
             </div>
           </div>
@@ -238,7 +237,9 @@
             </h4>
           </div>
           <div class="widget-body">
-            <div class="widget-main" id="product_3d_img_list"></div>
+            <div class="widget-main" id="product_3d_img_list">
+              <div id="360frames"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -309,10 +310,68 @@
       .wrap(
           '<div class="form-group file-input-container"><div class="col-sm-7"></div></div>');
 </script>
+<script type="text/javascript">
+$(function(){
+var frames = [
+"super/assets/test/rad_zoom_001.jpg",
+"super/assets/test/rad_zoom_002.jpg",
+"super/assets/test/rad_zoom_003.jpg",
+"super/assets/test/rad_zoom_004.jpg",
+"super/assets/test/rad_zoom_005.jpg",
+"super/assets/test/rad_zoom_006.jpg",
+"super/assets/test/rad_zoom_007.jpg",
+"super/assets/test/rad_zoom_008.jpg",
+"super/assets/test/rad_zoom_009.jpg",
+"super/assets/test/rad_zoom_010.jpg",
+"super/assets/test/rad_zoom_011.jpg",
+"super/assets/test/rad_zoom_012.jpg",
+"super/assets/test/rad_zoom_013.jpg",
+"super/assets/test/rad_zoom_014.jpg",
+"super/assets/test/rad_zoom_015.jpg",
+"super/assets/test/rad_zoom_016.jpg",
+"super/assets/test/rad_zoom_017.jpg",
+"super/assets/test/rad_zoom_018.jpg",
+"super/assets/test/rad_zoom_019.jpg",
+"super/assets/test/rad_zoom_020.jpg",
+"super/assets/test/rad_zoom_021.jpg",
+"super/assets/test/rad_zoom_022.jpg",
+"super/assets/test/rad_zoom_023.jpg",
+"super/assets/test/rad_zoom_024.jpg",
+"super/assets/test/rad_zoom_025.jpg",
+"super/assets/test/rad_zoom_026.jpg",
+"super/assets/test/rad_zoom_027.jpg",
+"super/assets/test/rad_zoom_028.jpg",
+"super/assets/test/rad_zoom_029.jpg",
+"super/assets/test/rad_zoom_030.jpg",
+"super/assets/test/rad_zoom_031.jpg",
+"super/assets/test/rad_zoom_032.jpg",
+"super/assets/test/rad_zoom_033.jpg",
+"super/assets/test/rad_zoom_034.jpg"
+];
+
+$("#360frames").spritespin({
+width : 480,
+height: 327,
+frames: frames.length,
+behavior: "drag", // "hold"
+module: "360",
+sense : -1,
+source: frames,
+animate : true,
+loop: true,
+frameWrap : true,
+frameStep : 1,
+frameTime : 60,
+enableCanvas : true
+});
+
+});
+</script>
 <script>
   /*  pannellum.viewer('product_img_list_li_1', {
     "type" : "equirectangular",
     "panorama" : "/super/assets/images/alma.jpg",
   });  */
   //"https://pannellum.org/images/alma.jpg"
+  //bucket=productpromo
 </script>
