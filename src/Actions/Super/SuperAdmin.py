@@ -48,6 +48,24 @@ class SaveProducts(ActionSupport):
     }
     return  json_response(self.response, data_dict, SUCCESS, 'Product %s saved' %(name))
 
+class SaveProductsUOM(ActionSupport):
+  def post(self):           
+    uom=self.request.get('uom').upper() 
+    data_dict={ 
+    'name': uom, 
+    }
+    return  json_response(self.response, data_dict, SUCCESS, 'Product UOM %s saved' %(uom))
+
+class SaveProductsCategory(ActionSupport):
+  def post(self):           
+    category=self.request.get('category').upper() 
+    data_dict={ 
+    'name': category, 
+    }
+    return  json_response(self.response, data_dict, SUCCESS, 'Product category %s saved' %(category))
+
+
+
 class SaveFrenchise(ActionSupport):
   def post(self):          
     person=self.request.get('person')

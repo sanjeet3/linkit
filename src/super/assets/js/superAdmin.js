@@ -40,6 +40,42 @@ function saveProductCallBack(obj, fID) {
   $('#' + fID)[0].reset();
 };
 
+function saveCategory(){
+  
+  if (!$('#new_category').val()) {
+    showMSG('Please enter category', 'warning');
+    return;
+  }
+  postRequest('add_new_category_form', '/superadmin/SaveProductCategory', 'saveCategoryCallBack')
+}
+
+function saveCategoryCallBack(obj, fID) {
+  $('#add_new_category_spin').hide();
+  $('#' + fID)[0].reset();
+  closeDialog('#addCategoryDailog');
+  category
+  $('#category').append($('<option>', {
+    value: obj.data.name
+  }).text(obj.data.name));
+}
+
+function saveUOM(){
+  
+  if (!$('#new_uom').val()) {
+    showMSG('Please enter UOM', 'warning');
+    return;
+  }
+  postRequest('add_new_uom_form', '/superadmin/SaveProductUOM', 'saveProductUOMCallBack')
+}
+function saveProductUOMCallBack(obj, fID) {
+  $('#save_product_spin').hide();
+  $('#' + fID)[0].reset(); 
+  closeDialog('#addUOMDailog')
+  $('#uom').append($('<option>', {
+    value: obj.data.name
+  }).text(obj.data.name));
+}
+
 function showFrenchiseFormDom(){
   $('#list-dom, #add_btn').hide();
   $('#form-dom, #bck-btn').show();
@@ -103,16 +139,53 @@ function addProductToFrenchise(id){
 
 function assignProductToFrechise(id){
   var tds = $('#'+id).children(); 
-  var row = $("<tr></tr>");
+  var reatilPrice = tds.eq(6).children()[0].value;
+  if(!reatilPrice) {
+    showMSG('Please enter price', 'warning');
+    return;
+  }
+  $('#'+id).remove();
+  var row = $("<tr id='"+id+"'></tr>");
   row.append(tds.eq(0).clone())
   .append(tds.eq(1).clone())
   .append(tds.eq(2).clone())
   .append(tds.eq(3).clone())
   .append(tds.eq(4).clone())
   .append(tds.eq(5).clone())
-  .append(tds.eq(6).clone())
+  .append('<td>'+reatilPrice+'</td>')
+  .append('<td></td>')
   .appendTo($('#assigned_product_frenchise'));
-  $('#'+id).remove();
+  
+};
+
+function editFrncProduct(id){
+  var tds = $('#'+id).children();
+  var editTD = tds.eq(7);
+  $(editTD.children()[0]).hide()
+  $(editTD.children()[1]).show()
+  price = tds.eq(6).html();
+  input = '<input type="number" min="0.0" name="price" step=".50" value="'+ price +'" class="input-retail-price">';
+  tds.eq(6).html(input)
+};
+
+function editDoneFrncProduct(id){
+  var tds = $('#'+id).children();
+  var reatilPrice = tds.eq(6).children()[0].value;
+  if(!reatilPrice) {
+    showMSG('Please enter price', 'warning');
+    return;
+  }
+  tds.eq(6).html(reatilPrice);
+  var editTD = tds.eq(7);
+  $(editTD.children()[0]).show()
+  $(editTD.children()[1]).hide()
+  
+};
+
+function removeFrncProduct(id){
+  if(confirm('Remove this product from frenchise')){
+    $('#'+id).remove();
+  }
 };
 
 function searchOrder(){

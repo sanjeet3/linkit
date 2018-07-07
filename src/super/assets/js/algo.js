@@ -151,6 +151,37 @@ function log(e){
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+ 
+// if user resize the window, call the same function again
+// to make sure the overlay fills the screen and dialogbox aligned to center    
+$(window).resize(function () {
+  //only do it if the dialog box is not hidden
+  if (!$('.dialog-box').is(':hidden')) resizeDialog();       
+});
+
+function resizeDialog(){
+//get the screen height and width  
+  var maskHeight = $(document).height();  
+  var maskWidth = $(window).width();
+  
+  // calculate the values for center alignment
+  var dialogTop =  (maskHeight/3) - ($('.dialog-box').height());  
+  var dialogLeft = (maskWidth/2) - ($('.dialog-box').width()/2); 
+  
+  // assign values to the overlay and dialog box
+  $('.dialog-overlay').css({height:maskHeight, width:maskWidth})
+  $('.dialog-box').css({top:dialogTop, left:dialogLeft}) 
+};
+
+function openDialog(dailogID){
+  resizeDialog();
+  $('.dialog-overlay').show();
+  $(dailogID).show();
+}
+
+function closeDialog(dailogID) {
+  $('.dialog-overlay, '+ dailogID).hide();
+};
 
 function showFormDom(){ 
   $('#bck-btn, #form-dom').show();

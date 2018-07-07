@@ -22705,4 +22705,96 @@ textarea.input-custom {
 .input-retail-price {
   font-size: 10px !important;
   color: #444 !important;
-  width: 75px;}
+  width: 75px;
+}
+
+.dialog-overlay {
+  width: 100%;
+  height: 100%;
+  filter: alpha(opacity = 50);
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+  background: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  display: none;
+}
+
+.dialog-box { 
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: #eee;
+  min-width: 20%;
+  position: absolute;
+  z-index: 5000;
+  display: none;
+}
+
+.dialog-vw-30{
+  min-width: 30vw;
+}
+
+.dialog-vw-40{
+  min-width: 40vw;
+}
+
+.dialog-vw-50{
+  min-width: 50vw;
+}
+
+.dialog-vw-60{
+  min-width: 60vw;
+}
+
+.dialog-vw-70{
+  min-width: 70vw;
+}
+
+.dialog-vw-80{
+  min-width: 80vw;
+}
+
+.dialog-vw-90{
+  min-width: 90vw;
+}
+
+.dialog-vw-97{
+  min-width: 97vw;
+}
+
+.dialog-box .dialog-content { 
+	text-align:left; 
+	padding:10px;  
+	color:#666; 
+	font-family:arial;
+	font-size:11px; 
+	max-height: 80vh;
+	overflow-y: auto;
+}
+
+.dailog-header {
+  background-color: #bec9d4;
+  border-bottom: 1px solid #acb8c3;
+  min-height: 41px;
+  line-height: 35px;
+  font-weight: 700;
+  padding: 0px 0px 0px 8px;
+}
+
+.font-12 { 
+  font-size: 12px !important; 
+  cursor: pointer;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.mx-w-99{
+  max-width: 99%;
+}

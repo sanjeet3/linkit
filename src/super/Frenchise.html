@@ -173,7 +173,9 @@
   </div>
   <div class="row mt-10" id="add-product-frenchise" style="display: none;">
     <div class="col-xs-12">
-      <div class="page-header">Frenchise: <font id="selected_frenchise_text"></font></div>
+      <div class="page-header">
+        Frenchise: <font id="selected_frenchise_text"></font>
+      </div>
       <div class="table-header">Master Products</div>
       <table class="table  table-bordered table-hover">
         <thead>
@@ -196,7 +198,8 @@
             <td>PIECE</td>
             <td></td>
             <td>School bag dringking water bottel</td>
-            <td>150</td>
+            <td><input type="number" min="0.0" value="150" step=".50" name="price"
+              class="input-retail-price"></td>
             <td><button type="button" class="btn btn-info btn-minier"
                 onclick="assignProductToFrechise('p_1')">Add</button></td>
           </tr>
@@ -207,7 +210,8 @@
             <td>PIECE</td>
             <td></td>
             <td>Printed coffee mug</td>
-            <td>110</td>
+            <td><input type="number" min="0.0" value="110" step=".50" name="price"
+              class="input-retail-price"></td>
             <td><button type="button" class="btn btn-info btn-minier"
                 onclick="assignProductToFrechise('p_2')">Add</button></td>
           </tr>
@@ -225,9 +229,25 @@
               <td>Size</td>
               <td>Description</td>
               <td>Price</td>
+              <td>Edit</td>
             </tr>
           </thead>
-          <tbody id="assigned_product_frenchise"></tbody>
+          <tbody id="assigned_product_frenchise">
+            <tr id="prd_3">
+              <td>PRO098150</td>
+              <td>Pillow</td>
+              <td>Home</td>
+              <td>PIECE</td>
+              <td></td>
+              <td>Printed pillow</td>
+              <td>145.5</td>
+              <td>
+                <button type="button" class="btn btn-info btn-minier" onclick="editFrncProduct('prd_3')">Edit</button>
+                <button type="button" class="btn btn-info btn-minier" onclick="editDoneFrncProduct('prd_3')" style="display: none;">Done</button>
+                <button type="button" class="btn btn-danger btn-minier pl-5" onclick="removeFrncProduct('prd_3')">Remove</button>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>

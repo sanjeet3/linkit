@@ -77,24 +77,33 @@
         <div class="form-group">
           <label class="col-sm-1 control-label no-padding-right" for="price"> Price </label>
           <div class="col-sm-4">
-            <input type="number" step=".01" name="price" id="price" class="form-control input-custom" value="0.0">
+            <input type="number" step=".01" name="price" id="price"
+              class="form-control input-custom" value="0.0">
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-1 control-label no-padding-right" for="category">Category </label>
           <div class="col-sm-4">
-            <input type="text" id="category" name="category" placeholder="Category"
-              class="form-control input-custom">
+            <div class="input-group">
+              <select class="form-control input-custom" id="category" name="category">
+              </select> <span class="input-group-addon font-12" onclick="openDialog('#addCategoryDailog')">
+                <i class="fa fa-plus bigger-110"></i>
+              </span>
+            </div>
           </div>
         </div>
         <div class="space-4"></div>
         <div class="form-group">
           <label class="col-sm-1 control-label no-padding-right" for="uom"> UOM </label>
           <div class="col-sm-4">
-            <select class="form-control input-custom" name="uom" id="uom">
-              <option value="PIECE">PIECE</option>
-              <option value="UNIT">UNIT</option>
-            </select>
+            <div class="input-group">
+              <select class="form-control input-custom" name="uom" id="uom">
+                <option value="PIECE">PIECE</option>
+                <option value="UNIT">UNIT</option>
+              </select> <span class="input-group-addon font-12" onclick="openDialog('#addUOMDailog')">
+                <i class="fa fa-plus bigger-110"></i>
+              </span>
+            </div>
           </div>
         </div>
         <div class="space-4"></div>
@@ -108,8 +117,8 @@
         <div class="form-group">
           <div class="col-md-offset-1 col-md-9">
             <button class="btn btn-info btn-minier" type="button" onclick="saveProduct()">
-              <i class="ace-icon fa fa-check bigger-110"></i> Submit
-              <i id="save_product_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_product_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
             </button>
             &nbsp; &nbsp; &nbsp;
             <button class="btn btn-minier" type="reset">
@@ -118,21 +127,77 @@
           </div>
         </div>
         <div class="clearfix form-actions" id="dummy_dom" style="display: none;">
-        <table class="table  table-bordered table-hover">
-        <thead>
-          <tr>
-            <td>Code</td>
-            <td>Name</td>
-            <td>Category</td>
-            <td>UOM</td>
-            <td>Price</td>
-            <td>Size</td>
-            <td>Description</td>
-          </tr>
-        </thead>
-        <tbody id="dummy_product_table_body"></tbody></table>
+          <table class="table  table-bordered table-hover">
+            <thead>
+              <tr>
+                <td>Code</td>
+                <td>Name</td>
+                <td>Category</td>
+                <td>UOM</td>
+                <td>Price</td>
+                <td>Size</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody id="dummy_product_table_body"></tbody>
+          </table>
         </div>
       </form>
     </div>
+  </div>
+</div>
+
+<div id="addCategoryDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add Category</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addCategoryDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_new_category_form">
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category </label>
+        <div class="col-sm-9">
+          <input type="text" name="category" id="new_category" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveCategory()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="add_new_category_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addCategoryDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form> 
+  </div>
+</div>
+<div id="addUOMDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add UOM</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addUOMDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_new_uom_form">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code"> UOM </label>
+        <div class="col-sm-9">
+          <input type="text" name="uom" id="new_uom" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveUOM()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="add_new_uom_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addUOMDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form> 
   </div>
 </div>
