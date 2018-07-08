@@ -100,7 +100,7 @@ function saveFrenchise() {
     return;
   }  
   $('#save_spin').show();
-  postRequest('frenchise_form', '/superadmin/CreateFrenchise', 'saveFrenchiseCallBack')
+  postRequest('frenchise_form', '/superadmin/CreateSeller', 'saveFrenchiseCallBack')
 };
 
 function saveFrenchiseCallBack(obj, fID) {

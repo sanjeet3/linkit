@@ -13,18 +13,18 @@ __route_list = [
     RedirectRoute(r'/', Home.Home, name='Home page', strict_slash=True), 
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
-    RedirectRoute(r'/superadmin/Franchise', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),
+    RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductCategory', SuperAdmin.SaveProductsCategory, name='SuperAdmin SaveProductCategory', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductUOM', SuperAdmin.SaveProductsUOM, name='SuperAdmin SaveProductUOM', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
-    RedirectRoute(r'/superadmin/CreateFrenchise', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
+    RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
     
     #franchisor
-    RedirectRoute(r'/Franchise', franchisor.Home, name='franchisor home page', strict_slash=True),
-    RedirectRoute(r'/Franchise/Products', franchisor.Product, name='franchisor Products page', strict_slash=True),
-    RedirectRoute(r'/Franchise/Order', franchisor.Order, name='franchisor order', strict_slash=True),
+    RedirectRoute(r'/Seller', franchisor.Home, name='franchisor home page', strict_slash=True),
+    RedirectRoute(r'/Seller/Products', franchisor.Product, name='franchisor Products page', strict_slash=True),
+    RedirectRoute(r'/Seller/Order', franchisor.Order, name='franchisor order', strict_slash=True),
     
                  
     ]

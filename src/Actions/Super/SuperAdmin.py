@@ -1,14 +1,8 @@
 '''
 Created on 04-Jul-2018
 
-@author: Sanjay Saini
-'''
+@author: Sanjay Saini '''
 
-'''
-Created on 04-Jul-2018
-
-@author: Sanjay Saini
-'''
 from src.api.baseapi import json_response, SUCCESS, ERROR
 from src.lib.SABasehandler import ActionSupport
  
@@ -83,7 +77,7 @@ class SaveFrenchise(ActionSupport):
     'geo': geo,
     'address': address, 
     }
-    return  json_response(self.response, data_dict, SUCCESS, 'Frenchise %s account created' %(email))
+    return  json_response(self.response, data_dict, SUCCESS, 'Seller %s account created' %(email))
      
 class Order(ActionSupport):
   def get(self):
