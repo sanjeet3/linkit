@@ -81,3 +81,9 @@ jQuery(window).scroll( function() {
     }
 });
 //SLIDER
+
+function menuClick(elm){ 
+  $("#navbar-list>ul>li>a.active").removeClass("active");
+  $(elm).addClass("active");
+}
+

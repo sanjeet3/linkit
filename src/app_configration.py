@@ -11,6 +11,7 @@ config={
     'send_mail_developer': True,
     'app_lang': 'en',
     'super_admin': ['care4growth@gmail.com',
+                    'badalvpatel1980@gmail.com',
                     'sainisanjeet3@gmail.com',
                     'ballucorp@gmail.com',
                     'balvinder.kumar913@gmail.com'],

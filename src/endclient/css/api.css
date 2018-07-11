@@ -1,17 +1,213 @@
-
-
 /*ANUMATION*/
-.animation-container{height: 100vh;width: 100%;position: fixed;background-color: #A5E2FF;background-image: url('/img/skyline.jpg');	background-position: left 367px bottom 248px;background-repeat: repeat no-repeat;}
-.animation-container .buildings{height: 375px;width: 100%;position: fixed;	bottom: 188px;background-image: url('/img/landmarks.png');background-position: left -625px bottom;	background-repeat: repeat no-repeat;}
-.animation-container .road1{background-color: #2D2D2D;	height: 126px;	width: 100%;	position: fixed;	bottom: 0px;	background-image: url('/img/road1.png');	background-position: left 0px bottom;	background-repeat: repeat no-repeat;}
-.animation-container .road2{background-color: #2D2D2D;height: 62px;width: 100%;position: fixed;bottom: 126px;background-image: url('/img/road2.png');background-position: left 0px bottom;background-repeat: repeat no-repeat;}
-.animation-container .taxi1{width: 335px;height: 133px;background-image: url('/img/taxi1.png');background-repeat: no-repeat;position: absolute;bottom: 16px;right: 100px;z-index: 100;}
-.animation-container .train{width: 90px;height: 394px;background-image: url('/img/local_train.png');background-repeat: no-repeat;position: absolute;bottom: 72px;left: 0px;}
-.animation-container .bus1{width: 480px;height: 168px;background-image: url('/img/bus1.png');background-repeat: no-repeat;position: absolute;bottom: 103px;left: 186px;z-index: 80;}
-.animation-container .bus2{width: 546px;height: 189px;background-image: url('/img/bus2.png');background-repeat: no-repeat;position: absolute;bottom: 50px;right: -600px;z-index: 85;}
-.animation-container .car1{width: 200px;height: 86px;background-image: url('/img/car1.png');background-repeat: no-repeat;position: absolute;bottom: 105px;left: -986px;z-index: 82;}
-.animation-container .car2{width: 255px;height: 109px;background-image: url('/img/car2.png');background-repeat: no-repeat;position: absolute;bottom: 24px;right: -4300px;z-index: 100;}
-.animation-container .cycle{width: 92px;height: 95px;background-image: url('/img/cycle.png');background-repeat: no-repeat;position: absolute;bottom: 145px;left: -586px;z-index: 75;}
-.animation-container .truck{width: 258px;height: 103px;background-image: url('/img/truck.png');background-repeat: no-repeat;position: absolute;bottom: 145px;right: 400px;z-index: 75;}
-.animation-container .attribute{position: absolute;bottom: 2px;right: 10px;font-size: 12px;color: #363636;}
-.animation-container .attribute a{text-transform: capitalize;color: #363636;text-decoration: underline;}
+.animation-container {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  background-color: #A5E2FF;
+  background-image: url('/img/skyline.jpg');
+  background-position: left 367px bottom 248px;
+  background-repeat: repeat no-repeat;
+}
+
+.animation-container .buildings {
+  height: 375px;
+  width: 100%;
+  position: fixed;
+  bottom: 188px;
+  background-image: url('/img/landmarks.png');
+  background-position: left -625px bottom;
+  background-repeat: repeat no-repeat;
+}
+
+.animation-container .road1 {
+  background-color: #2D2D2D;
+  height: 126px;
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  background-image: url('/img/road1.png');
+  background-position: left 0px bottom;
+  background-repeat: repeat no-repeat;
+}
+
+.animation-container .road2 {
+  background-color: #2D2D2D;
+  height: 62px;
+  width: 100%;
+  position: fixed;
+  bottom: 126px;
+  background-image: url('/img/road2.png');
+  background-position: left 0px bottom;
+  background-repeat: repeat no-repeat;
+}
+
+.animation-container .taxi1 {
+  width: 335px;
+  height: 133px;
+  background-image: url('/img/taxi1.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 16px;
+  right: 100px;
+  z-index: 100;
+}
+
+.animation-container .train {
+  width: 90px;
+  height: 394px;
+  background-image: url('/img/local_train.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 72px;
+  left: 0px;
+}
+
+.animation-container .bus1 {
+  width: 480px;
+  height: 168px;
+  background-image: url('/img/bus1.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 103px;
+  left: 186px;
+  z-index: 80;
+}
+
+.animation-container .bus2 {
+  width: 546px;
+  height: 189px;
+  background-image: url('/img/bus2.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 50px;
+  right: -600px;
+  z-index: 85;
+}
+
+.animation-container .car1 {
+  width: 200px;
+  height: 86px;
+  background-image: url('/img/car1.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 105px;
+  left: -986px;
+  z-index: 82;
+}
+
+.animation-container .car2 {
+  width: 255px;
+  height: 109px;
+  background-image: url('/img/car2.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 24px;
+  right: -4300px;
+  z-index: 100;
+}
+
+.animation-container .cycle {
+  width: 92px;
+  height: 95px;
+  background-image: url('/img/cycle.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 145px;
+  left: -586px;
+  z-index: 75;
+}
+
+.animation-container .truck {
+  width: 258px;
+  height: 103px;
+  background-image: url('/img/truck.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: 145px;
+  right: 400px;
+  z-index: 75;
+}
+
+.animation-container .attribute {
+  position: absolute;
+  bottom: 2px;
+  right: 10px;
+  font-size: 12px;
+  color: #363636;
+}
+
+.animation-container .attribute a {
+  text-transform: capitalize;
+  color: #363636;
+  text-decoration: underline;
+}
+
+.navbar {
+  text-align: center;
+  width: 101%;
+  background: #800000 url(/img/nav.gif) repeat-x;
+  margin: 0px 0px 0px -2px;
+  padding: 0;
+  height: 40px;
+  overflow: hidden;
+  cursor: default;
+  position: fixed;
+  z-index: 10000;
+}
+
+.navbar ul {
+  list-style: none;
+}
+
+.navbar li, .navbar a {
+  display: inline;
+  color: #FE9B27;
+  text-decoration: none;
+  font: bold 11px arial;
+  height: 40px;
+  line-height: 50px;
+  padding: 0px 7px;
+  margin: 0;
+}
+
+.navbar li a:hover, .navbar li a.active {
+  background: #ED700D url(/img/orange.jpg) no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #000;
+}
+
+.navbar li a {
+  background: transparent url(/img/ad.gif) repeat-x;
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+}
+
+.container {
+  padding-top: 60px;
+}
+
+/* Responsive css */
+@media ( max-device-width : 480px) and (orientation: landscape) {
+  .navbar ul {
+    padding-left: 0;
+  }
+}
+
+@media ( max-device-width : 480px) {
+  .navbar ul {
+    padding-left: 0;
+  }
+}
+
+@media ( max-device-width : 785px) {
+  .navbar ul {
+    padding-left: 0;
+  }
+}
+
+@media ( min-width : 768px) {
+  .navbar ul {
+    padding-left: 0;
+  }
+}
