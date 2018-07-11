@@ -26,19 +26,20 @@
             <td>UOM</td>
             <td>Price</td>
             <td>Size</td>
-            <td>Description</td>
+            <td width="30%">Description</td>
             <td></td>
           </tr>
         </thead>
         <tbody id="product_table_body">
-          <tr id="prd_1">
-            <td>PRO098212</td>
-            <td>Drinking Bottel</td>
-            <td>SCHOOL</td>
-            <td>PIECE</td>
-            <td>150</td>
-            <td></td>
-            <td>School bag dringking water bottel</td>
+          {%for e in prd_list%}
+          <tr id="{{e.entityKey}}">
+            <td>{{e.code}}</td>
+            <td>{{e.name}}</td>
+            <td>{{e.category}}</td>
+            <td>{{e.uom}}</td>
+            <td>{{e.price}}</td>
+            <td>{{e.size}}</td>
+            <td>{{e.description}}</td>
             <td><div class="widget-toolbar no-border">
                 <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
                   aria-expanded="false">
@@ -46,29 +47,11 @@
                 </button>
                 <ul
                   class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                  <li><a href="javascript:imgSetupProduct('prd_1')">Setup Images</a></li>
+                  <li><a href="javascript:imgSetupProduct('{{e.entityKey}}')">Setup Images</a></li>
                 </ul>
               </div></td>
           </tr>
-          <tr id="prd_2">
-            <td>PRO098001</td>
-            <td>Coffee Mug printed</td>
-            <td>HOUSE</td>
-            <td>PIECE</td>
-            <td>110</td>
-            <td></td>
-            <td>Printed coffee mug</td>
-            <td><div class="widget-toolbar no-border">
-                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
-                  aria-expanded="false">
-                  <i class="ace-icon fa fa-cog"></i>
-                </button>
-                <ul
-                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                  <li><a href="javascript:imgSetupProduct('prd_2')">Setup Images</a></li>
-                </ul>
-              </div></td>
-          </tr>
+          {%endfor%}
         </tbody>
       </table>
     </div>
@@ -107,6 +90,8 @@
           <div class="col-sm-4">
             <div class="input-group">
               <select class="form-control input-custom" id="category" name="category">
+                {%for e in category_list%}
+                <option value="{{e.entityKey}}">{{e.name}}</option> {%endfor%}
               </select> <span class="input-group-addon font-12" onclick="openDialog('#addCategoryDailog')">
                 <i class="fa fa-plus bigger-110"></i>
               </span>
@@ -118,9 +103,9 @@
           <label class="col-sm-1 control-label no-padding-right" for="uom"> UOM </label>
           <div class="col-sm-4">
             <div class="input-group">
-              <select class="form-control input-custom" name="uom" id="uom">
-                <option value="PIECE">PIECE</option>
-                <option value="UNIT">UNIT</option>
+              <select class="form-control input-custom" name="uom" id="uom"> {%for e in
+                uom_list%}
+                <option value="{{e.entityKey}}">{{e.name}}</option> {%endfor%}
               </select> <span class="input-group-addon font-12" onclick="openDialog('#addUOMDailog')">
                 <i class="fa fa-plus bigger-110"></i>
               </span>
@@ -158,7 +143,6 @@
                 <td>Price</td>
                 <td>Size</td>
                 <td>Description</td>
-                <td></td>
               </tr>
             </thead>
             <tbody id="dummy_product_table_body"></tbody>
@@ -187,7 +171,8 @@
         </div>
       </div>
       <div class="message-list-container">
-        <form class="form-horizontal message-form col-xs-12">
+        <form class="form-horizontal message-form col-xs-12" id="upload_2d_pic_form">
+          <input type="hidden" name="key" id="product_key_upload_img">
           <div class="form-group">
             <label class="col-sm-1 control-label no-padding-right">Image Type:</label>
             <div class="col-sm-3">
@@ -311,61 +296,59 @@
           '<div class="form-group file-input-container"><div class="col-sm-7"></div></div>');
 </script>
 <script type="text/javascript">
-$(function(){
-var frames = [
-"super/assets/test/rad_zoom_001.jpg",
-"super/assets/test/rad_zoom_002.jpg",
-"super/assets/test/rad_zoom_003.jpg",
-"super/assets/test/rad_zoom_004.jpg",
-"super/assets/test/rad_zoom_005.jpg",
-"super/assets/test/rad_zoom_006.jpg",
-"super/assets/test/rad_zoom_007.jpg",
-"super/assets/test/rad_zoom_008.jpg",
-"super/assets/test/rad_zoom_009.jpg",
-"super/assets/test/rad_zoom_010.jpg",
-"super/assets/test/rad_zoom_011.jpg",
-"super/assets/test/rad_zoom_012.jpg",
-"super/assets/test/rad_zoom_013.jpg",
-"super/assets/test/rad_zoom_014.jpg",
-"super/assets/test/rad_zoom_015.jpg",
-"super/assets/test/rad_zoom_016.jpg",
-"super/assets/test/rad_zoom_017.jpg",
-"super/assets/test/rad_zoom_018.jpg",
-"super/assets/test/rad_zoom_019.jpg",
-"super/assets/test/rad_zoom_020.jpg",
-"super/assets/test/rad_zoom_021.jpg",
-"super/assets/test/rad_zoom_022.jpg",
-"super/assets/test/rad_zoom_023.jpg",
-"super/assets/test/rad_zoom_024.jpg",
-"super/assets/test/rad_zoom_025.jpg",
-"super/assets/test/rad_zoom_026.jpg",
-"super/assets/test/rad_zoom_027.jpg",
-"super/assets/test/rad_zoom_028.jpg",
-"super/assets/test/rad_zoom_029.jpg",
-"super/assets/test/rad_zoom_030.jpg",
-"super/assets/test/rad_zoom_031.jpg",
-"super/assets/test/rad_zoom_032.jpg",
-"super/assets/test/rad_zoom_033.jpg",
-"super/assets/test/rad_zoom_034.jpg"
-];
+  $(function() {
+    var frames = [ "super/assets/test/rad_zoom_001.jpg",
+        "super/assets/test/rad_zoom_002.jpg",
+        "super/assets/test/rad_zoom_003.jpg",
+        "super/assets/test/rad_zoom_004.jpg",
+        "super/assets/test/rad_zoom_005.jpg",
+        "super/assets/test/rad_zoom_006.jpg",
+        "super/assets/test/rad_zoom_007.jpg",
+        "super/assets/test/rad_zoom_008.jpg",
+        "super/assets/test/rad_zoom_009.jpg",
+        "super/assets/test/rad_zoom_010.jpg",
+        "super/assets/test/rad_zoom_011.jpg",
+        "super/assets/test/rad_zoom_012.jpg",
+        "super/assets/test/rad_zoom_013.jpg",
+        "super/assets/test/rad_zoom_014.jpg",
+        "super/assets/test/rad_zoom_015.jpg",
+        "super/assets/test/rad_zoom_016.jpg",
+        "super/assets/test/rad_zoom_017.jpg",
+        "super/assets/test/rad_zoom_018.jpg",
+        "super/assets/test/rad_zoom_019.jpg",
+        "super/assets/test/rad_zoom_020.jpg",
+        "super/assets/test/rad_zoom_021.jpg",
+        "super/assets/test/rad_zoom_022.jpg",
+        "super/assets/test/rad_zoom_023.jpg",
+        "super/assets/test/rad_zoom_024.jpg",
+        "super/assets/test/rad_zoom_025.jpg",
+        "super/assets/test/rad_zoom_026.jpg",
+        "super/assets/test/rad_zoom_027.jpg",
+        "super/assets/test/rad_zoom_028.jpg",
+        "super/assets/test/rad_zoom_029.jpg",
+        "super/assets/test/rad_zoom_030.jpg",
+        "super/assets/test/rad_zoom_031.jpg",
+        "super/assets/test/rad_zoom_032.jpg",
+        "super/assets/test/rad_zoom_033.jpg",
+        "super/assets/test/rad_zoom_034.jpg" ];
 
-$("#360frames").spritespin({
-width : 480,
-height: 327,
-frames: frames.length,
-behavior: "drag", // "hold"
-module: "360",
-sense : -1,
-source: frames,
-animate : true,
-loop: true,
-frameWrap : true,
-frameStep : 1,
-frameTime : 60,
-enableCanvas : true
-});
+    $("#360frames").spritespin({
+      width : 480,
+      height : 327,
+      frames : frames.length,
+      behavior : "drag", // "hold"
+      module : "360",
+      sense : -1,
+      source : frames,
+      animate : true,
+      loop : true,
+      frameWrap : true,
+      frameStep : 1,
+      frameTime : 60,
+      enableCanvas : true
+    });
 
-});
+  });
 </script>
 <script>
   /*  pannellum.viewer('product_img_list_li_1', {

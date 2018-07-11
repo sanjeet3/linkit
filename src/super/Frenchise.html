@@ -31,14 +31,15 @@
           </tr>
         </thead>
         <tbody id="table_body">
-          <tr id="1">
-            <td>Purpink Gifts & Florist</td>
-            <td>Yang su</td>
-            <td>purpinkgifts@gmail.com</td>
-            <td>+254 702 100100</td>
-            <td>33555884445</td>
-            <td>-1.279874, 36.8451278</td>
-            <td>1B7, Magharibi Place, Mai Mahiu Rd, Nairobi, Kenya</td>
+          {%for e in seller_list%}
+          <tr id="{{e.entityKey}}">
+            <td>{{e.name}}</td>
+            <td>{{e.person}}</td>
+            <td>{{e.email}}</td>
+            <td>{{e.telephone}}</td>
+            <td>{{e.mobile}}</td>
+            <td>{{e.geo_code}}</td>
+            <td>{{e.address}}</td>
             <td>
               <div class="widget-toolbar no-border">
                 <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
@@ -47,7 +48,8 @@
                 </button>
                 <ul
                   class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                  <li><a href="javascript:addProductToFrenchise('1')">Add Products</a></li>
+                  <li><a href="javascript:addProductToSeller('{{e.entityKey}}')">Add
+                      Products</a></li>
                   <li><a href="#">Edit Account</a></li>
                   <li class="divider"></li>
                   <li><a href="#">Suspend Account</a></li>
@@ -55,30 +57,7 @@
               </div>
             </td>
           </tr>
-          <tr id="2">
-            <td>Blueline Gifts</td>
-            <td>Mr. Mombasa</td>
-            <td>matunga@gmail.com</td>
-            <td>+254 20 3743454</td>
-            <td>3367425484445</td>
-            <td>-1.270537,36.811769</td>
-            <td>71 Muthithi Road, Fruity Fruits Plaza, Ground Floor, Nairobi, Kenya</td>
-            <td>
-              <div class="widget-toolbar no-border">
-                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
-                  aria-expanded="false">
-                  <i class="ace-icon fa fa-cog"></i>
-                </button>
-                <ul
-                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                  <li><a href="javascript:addProductToFrenchise('2')">Add Products</a></li>
-                  <li><a href="#">Edit Account</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">Suspend Account</a></li>
-                </ul>
-              </div>
-            </td>
-          </tr>
+          {%endfor%}
         </tbody>
       </table>
     </div>
@@ -172,6 +151,7 @@
     </div>
   </div>
   <div class="row mt-10" id="add-product-frenchise" style="display: none;">
+    <input type="hidden" name="seller_key" id="seller_key">
     <div class="col-xs-12">
       <div class="page-header">
         Frenchise: <font id="selected_frenchise_text"></font>
@@ -191,30 +171,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="p_1">
-            <td>PRO098212</td>
-            <td>Drinking Bottel</td>
-            <td>SCHOOL</td>
-            <td>PIECE</td>
-            <td></td>
-            <td>School bag dringking water bottel</td>
-            <td><input type="number" min="0.0" value="150" step=".50" name="price"
+          {%for e in prd_list%}
+          <tr id="{{e.entityKey}}" class="master-product">
+            <td>{{e.code}}</td>
+            <td>{{e.name}}</td>
+            <td>{{e.category}}</td>
+            <td>{{e.uom}}</td>
+            <td>{{e.size}}</td>
+            <td>{{e.description}}</td>
+            <td><input type="number" min="0.0" value="{{e.price}}" step=".50" name="price"
               class="input-retail-price"></td>
             <td><button type="button" class="btn btn-info btn-minier"
-                onclick="assignProductToFrechise('p_1')">Add</button></td>
+                onclick="assignProductToSeller('{{e.entityKey}}')">Add</button></td>
           </tr>
-          <tr id="p_2">
-            <td>PRO098001</td>
-            <td>Coffee Mug printed</td>
-            <td>HOUSE</td>
-            <td>PIECE</td>
-            <td></td>
-            <td>Printed coffee mug</td>
-            <td><input type="number" min="0.0" value="110" step=".50" name="price"
-              class="input-retail-price"></td>
-            <td><button type="button" class="btn btn-info btn-minier"
-                onclick="assignProductToFrechise('p_2')">Add</button></td>
-          </tr>
+          {%endfor%}
         </tbody>
       </table>
       <div class="clearfix">
@@ -227,30 +197,25 @@
               <td>Category</td>
               <td>UOM</td>
               <td>Size</td>
-              <td>Description</td>
+              <td width="30%">Description</td>
               <td>Price</td>
+              <td>Retail Price</td>
               <td>Edit</td>
             </tr>
           </thead>
           <tbody id="assigned_product_frenchise">
-            <tr id="prd_3">
-              <td>PRO098150</td>
-              <td>Pillow</td>
-              <td>Home</td>
-              <td>PIECE</td>
-              <td></td>
-              <td>Printed pillow</td>
-              <td>145.5</td>
-              <td>
-                <button type="button" class="btn btn-info btn-minier" onclick="editFrncProduct('prd_3')">Edit</button>
-                <button type="button" class="btn btn-info btn-minier" onclick="editDoneFrncProduct('prd_3')" style="display: none;">Done</button>
-                <button type="button" class="btn btn-danger btn-minier ml-5" onclick="removeFrncProduct('prd_3')">Remove</button>
-              </td>
-            </tr>
+          
+          
           </tbody>
         </table>
       </div>
     </div>
     <div class="col-xs-12"></div>
+  </div>
+</div>
+<div id="assign-product-to-seller" class="dialog-box">
+  <div class="dialog-content text-center">
+    <i class="fa fa-spinner fa-spin fa-2x"></i>
+    <p id="msg_text"></p>
   </div>
 </div>

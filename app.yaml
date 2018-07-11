@@ -6,6 +6,23 @@ handlers:
 - url: /super/assets
   static_dir: src/super/assets  
   
+- url: /js
+  static_dir: src/endclient/js 
+  
+- url: /css
+  static_dir: src/endclient/css  
+
+- url: /img
+  static_dir: src/endclient/img  
+  
+- url: /superadmin
+  script: src.main.app 
+  login: required
+  
+- url: /Seller
+  script: src.main.app 
+  login: required
+    
 - url: /.*
   script: src.main.app 
 
@@ -17,3 +34,5 @@ libraries:
   version: latest
 - name: pycrypto 
   version: latest
+- name: endpoints
+  version: 1.0

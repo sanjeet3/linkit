@@ -128,8 +128,8 @@
           </ul></li>
         <li class="light-blue dropdown-modal"><a data-toggle="dropdown" href="#"
           class="dropdown-toggle"> <img class="nav-user-photo"
-            src="/super/assets/images/avatars/user.jpg" alt="Jason's Photo"> <span
-            class="user-info"> <small>Welcome,</small> Franchisor
+            src="/super/assets/images/avatars/user.jpg" alt="{{seller.person}}"> <span
+            class=""> <font class="font-11">{{seller.email}}</font> 
           </span> <i class="ace-icon fa fa-caret-down"></i>
         </a>
           <ul
@@ -137,7 +137,7 @@
             <li><a href="#"> <i class="ace-icon fa fa-cog"></i> Settings
             </a></li> 
             <li class="divider"></li>
-            <li><a href="#"> <i class="ace-icon fa fa-power-off"></i> Logout
+            <li><a href="{{logout_url}}"> <i class="ace-icon fa fa-power-off"></i> Logout
             </a></li>
           </ul></li>
       </ul>

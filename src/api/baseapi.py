@@ -7,6 +7,8 @@ import json
 
 SUCCESS='SUCCESS'
 ERROR='ERROR'
+WARNING='WARNING'
+INFO='INFO'
 
 def json_response(response, data_dict={}, status=SUCCESS, message=''):  
   ''' Response json string '''

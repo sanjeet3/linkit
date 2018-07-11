@@ -22767,8 +22767,7 @@ textarea.input-custom {
   min-width: 97vw;
 }
 
-.dialog-box .dialog-content { 
-	text-align:left; 
+.dialog-box .dialog-content {  
 	padding:10px;  
 	color:#666; 
 	font-family:arial;
@@ -22788,7 +22787,10 @@ textarea.input-custom {
 
 .font-12 { 
   font-size: 12px !important; 
-  cursor: pointer;
+}
+
+.font-11 { 
+  font-size: 11px !important; 
 }
 
 .cursor{

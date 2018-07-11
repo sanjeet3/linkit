@@ -57,3 +57,24 @@ function addProductToFrechise(id){
   .appendTo($('#frenchise_product'));
   $('#'+id).remove();
 }
+
+function editSellerProduct(key) {
+  var reatilPrice = $('#rp_'+key).val();
+  if(!reatilPrice) {
+    showMSG('Please enter retail price', 'warning');
+    return;
+  }
+  
+  $("#rp_"+key).prop('disabled', true);
+  $("#btn_"+key).prop('disabled', true);
+  $("#req_"+key).show();
+  
+  getRequest('', '/Seller/EditProductRetailPrice?key='+key+'&retailPrice='+reatilPrice, 'editSellerProductCallBack');
+};
+
+function editSellerProductCallBack(obj) {
+  $("#rp_"+obj.data.key).prop('disabled', false);
+  $("#btn_"+obj.data.key).prop('disabled', false);
+  $("#req_"+obj.data.key).hide();
+};
+

@@ -18,8 +18,8 @@ function saveProduct() {
 
 function saveProductCallBack(obj, fID) {
   $('#save_product_spin').hide();
-  $('#dummy_dom').show();
-  var tr = [ '<tr><td>' ];
+  $('#dummy_dom').show(); 
+  var tr = [ "<tr id='"+obj.data.key+"'><td> "];
   tr.push(obj.data.code);
   tr.push('</td><td>');
   tr.push(obj.data.name);
@@ -33,10 +33,17 @@ function saveProductCallBack(obj, fID) {
   tr.push(obj.data.size);
   tr.push('</td><td>');
   tr.push(obj.data.description);
-  tr.push('</td><td></td></tr>');
-  tr = tr.join('')
-  $('#dummy_product_table_body').append(tr);
-  $('#product_table_body').prepend(tr);
+    var dummytr = tr.join('');
+  $('#dummy_product_table_body').append(dummytr+'</td></tr>');
+  tr.push('</td><td><div class="widget-toolbar no-border"> <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"');
+  tr.push(' aria-expanded="false"><i class="ace-icon fa fa-cog"></i></button><ul ');
+  tr.push(' class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">');
+  tr.push('<li><a href="javascript:imgSetupProduct(');
+  tr.push("'");
+  tr.push(obj.data.key);
+  tr.push("'");
+  tr.push(')">Setup Images</a></li> </ul> </div></td> </tr>');
+  $('#product_table_body').prepend(tr.join(''));
   $('#' + fID)[0].reset();
 };
 
@@ -55,7 +62,7 @@ function saveCategoryCallBack(obj, fID) {
   closeDialog('#addCategoryDailog');
   category
   $('#category').append($('<option>', {
-    value: obj.data.name
+    value: obj.data.key
   }).text(obj.data.name));
 }
 
@@ -72,7 +79,7 @@ function saveProductUOMCallBack(obj, fID) {
   $('#' + fID)[0].reset(); 
   closeDialog('#addUOMDailog')
   $('#uom').append($('<option>', {
-    value: obj.data.name
+    value: obj.data.key
   }).text(obj.data.name));
 }
 
@@ -106,7 +113,9 @@ function saveFrenchise() {
 function saveFrenchiseCallBack(obj, fID) {
   $('#save_spin').hide();
   $('#dummy_dom').show();
-  var tr = [ '<tr><td>' ];
+  var tr = [ '<tr id="']; 
+  tr.push(obj.data.key);
+  tr.push('"><td>');
   tr.push(obj.data.name);
   tr.push('</td><td>');
   tr.push(obj.data.person);
@@ -120,77 +129,132 @@ function saveFrenchiseCallBack(obj, fID) {
   tr.push(obj.data.geo);
   tr.push('</td><td>');
   tr.push(obj.data.address);
-  tr.push('</td><td></td></tr>');
-  tr = tr.join('')
+  tr.push('</td><td><div class="widget-toolbar no-border"><button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown" aria-expanded="false">');
+  tr.push('<i class="ace-icon fa fa-cog"></i></button> <ul class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">');
+  tr.push('<li><a href="javascript:addProductToSeller(');
+  tr.push("'"); 
+  tr.push(obj.data.key);
+  tr.push("'");
+  tr.push(')">Add Products</a></li><li><a href="#">Edit Account</a></li>');
+  tr.push('<li class="divider"></li> <li><a href="#">Suspend Account</a></li></ul></div></td></tr>');
+  tr = tr.join('');
   $('#dummy_table_body').append(tr);
   $('#table_body').prepend(tr);
   $('#' + fID)[0].reset();
 };
 
 
-function addProductToFrenchise(id){ 
-  log(id);
+function addProductToSeller(id){
+  $('#assigned_product_frenchise').html('');
+  $('#seller_key').val(id);
   tds = $('#'+id).children();
   $('#selected_frenchise_text').html(tds.eq(0).html());
-  $('#add-product-frenchise, #bck-btn').show();
-  $('#list-dom, #add_btn').hide();
+  $('#add-product-frenchise, #bck-btn, .master-product').show();
+  $('#list-dom, #add_btn, #form-dom').hide();
+  $('#msg_text').html('Fetching seller products please wait...');
+  openDialog('#assign-product-to-seller');
+  getRequest('', '/superadmin/GetSellerProduct?key='+id, 'getSellerProductListCallBack')
   
 };
 
-function assignProductToFrechise(id){
+function getSellerProductListCallBack(obj){
+  var product_list=obj.data.product_list;
+  for(var i=0; i<product_list.length; i++) {
+    var d = product_list[i];
+  btnH = ['<td>  <button type="button" class="mr-5 mt-5 btn btn-info btn-minier" onclick="editFrncProduct('];
+  btnH.push("'");
+  btnH.push(d.key);
+  btnH.push("'");
+  btnH.push(')">Edit</button><button type="button" class="mr-5 mt-5 btn btn-info btn-minier" onclick="editDoneFrncProduct(');
+  btnH.push("'");
+  btnH.push(d.key);
+  btnH.push("'");
+  btnH.push(')" style="display: none;">Done</button><button type="button" class="btn btn-danger btn-minier mt-5" onclick="removeFrncProduct(');
+  btnH.push("'");
+  btnH.push(d.key);
+  btnH.push("'");
+  btnH.push(')">Remove</button></td>'); 
+  
+  var row = $("<tr id='"+d.key+"'></tr>");
+  row.append("<td>"+d.code+"</td>")
+  .append("<td>"+d.name+"</td>")
+  .append("<td>"+d.category+"</td>")
+  .append("<td>"+d.uom+"</td>")
+  .append("<td>"+d.size+"</td>")
+  .append("<td>"+d.description+"</td>")
+  .append("<td>"+d.master_price+"</td>")  
+  .append("<td>"+d.retail_price+"</td>")  
+  .append(btnH.join(''))
+  .appendTo($('#assigned_product_frenchise'));
+  $('#'+d.product_key).hide();
+  }
+  closeDialog('#assign-product-to-seller');
+};
+
+function assignProductToSeller(id){
   var tds = $('#'+id).children(); 
   var reatilPrice = tds.eq(6).children()[0].value;
   if(!reatilPrice) {
     showMSG('Please enter price', 'warning');
     return;
   }
-  $('#'+id).remove();
-  btnH = ['<td>  <button type="button" class="btn btn-info btn-minier" onclick="editFrncProduct('];
+  $('#msg_text').html('Assign product to seller please wait...');
+  openDialog('#assign-product-to-seller');
+  var seller_key = $('#seller_key').val();
+  var reqUrl="/superadmin/AssignProductToSeller?product_key="+id+"&seller_key="+seller_key+"&reatilPrice="+reatilPrice;
+  getRequest('',reqUrl,'assignProductToSellerCallBack');
+};
+
+function assignProductToSellerCallBack(obj, Fid){
+  var d=obj.data; 
+  btnH = ['<td>  <button type="button" class="mr-5 mt-5 btn btn-info btn-minier" onclick="editFrncProduct('];
   btnH.push("'");
-  btnH.push(id);
+  btnH.push(d.key);
   btnH.push("'");
-  btnH.push(')">Edit</button><button type="button" class="btn btn-info btn-minier" onclick="editDoneFrncProduct(');
+  btnH.push(')">Edit</button><button type="button" class="mr-5 mt-5 btn btn-info btn-minier" onclick="editDoneFrncProduct(');
   btnH.push("'");
-  btnH.push(id);
+  btnH.push(d.key);
   btnH.push("'");
-  btnH.push(')" style="display: none;">Done</button><button type="button" class="btn btn-danger btn-minier ml-5" onclick="removeFrncProduct(');
+  btnH.push(')" style="display: none;">Done</button><button type="mt-5 button" class="btn btn-danger btn-minier ml-5" onclick="removeFrncProduct(');
   btnH.push("'");
-  btnH.push(id);
+  btnH.push(d.key);
   btnH.push("'");
   btnH.push(')">Remove</button></td>'); 
   
-  var row = $("<tr id='"+id+"'></tr>");
-  row.append(tds.eq(0).clone())
-  .append(tds.eq(1).clone())
-  .append(tds.eq(2).clone())
-  .append(tds.eq(3).clone())
-  .append(tds.eq(4).clone())
-  .append(tds.eq(5).clone())
-  .append('<td>'+reatilPrice+'</td>')
+  var row = $("<tr id='"+d.key+"'></tr>");
+  row.append("<td>"+d.code+"</td>")
+  .append("<td>"+d.name+"</td>")
+  .append("<td>"+d.category+"</td>")
+  .append("<td>"+d.uom+"</td>")
+  .append("<td>"+d.size+"</td>")
+  .append("<td>"+d.description+"</td>")
+  .append("<td>"+d.master_price+"</td>")  
+  .append("<td>"+d.retail_price+"</td>")  
   .append(btnH.join(''))
   .appendTo($('#assigned_product_frenchise'));
-  
+  $('#'+d.product_key).remove();
+  closeDialog('#assign-product-to-seller');
 };
 
 function editFrncProduct(id){
   var tds = $('#'+id).children();
-  var editTD = tds.eq(7);
+  var editTD = tds.eq(8);
   $(editTD.children()[0]).hide()
   $(editTD.children()[1]).show()
-  price = tds.eq(6).html();
+  price = tds.eq(7).html();
   input = '<input type="number" min="0.0" name="price" step=".50" value="'+ price +'" class="input-retail-price">';
-  tds.eq(6).html(input)
+  tds.eq(7).html(input)
 };
 
 function editDoneFrncProduct(id){
   var tds = $('#'+id).children();
-  var reatilPrice = tds.eq(6).children()[0].value;
+  var reatilPrice = tds.eq(7).children()[0].value;
   if(!reatilPrice) {
     showMSG('Please enter price', 'warning');
     return;
   }
-  tds.eq(6).html(reatilPrice);
-  var editTD = tds.eq(7);
+  tds.eq(7).html(reatilPrice);
+  var editTD = tds.eq(8);
   $(editTD.children()[0]).show()
   $(editTD.children()[1]).hide()
   
@@ -243,6 +307,8 @@ function searchOrder(){
 
 
 function imgSetupProduct(id){
+  $('#upload_2d_pic_form')[0].reset();
+  $('#product_key_upload_img').val(id);
   var tds = $('#'+id).children();
   code = tds.eq(0).html();
   name = tds.eq(1).html();
@@ -262,7 +328,12 @@ function backImgSetupProduct(){
 function addImgTOProductList(t, src){ 
   if(t=='2D'){
     h='<li><img alt="150x150" src="'+src+'"></li>';
-    $('#product_img_list').append(h);  
+    $('#product_img_list').append(h); 
+    var p_key = $('#product_key_upload_img').val();
+    if(p_key.length>30){
+      console.log('uploading pic');
+    }
+    
   } else {
     i=$('#product_3d_img_list').children().length;
     id='pannellum_'+i;
