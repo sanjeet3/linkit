@@ -4,10 +4,9 @@
 <title>Custom Branding</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap337.css">
 <link rel="stylesheet" href="/css/api.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/super/assets/css/ace.css" />
 </head>
 <body style="height: 9000px">
   <div class="animation-container">
@@ -23,7 +22,7 @@
     <div class="cycle"></div>
     <div class="truck"></div>
   </div>
-  <nav class="navbar" id="navbar-list">
+  <nav class="navbar-home" id="navbar-list">
     <ul>
       <li><a href="javascript:menuClick('#menu_1')" class="active" id="menu_1">HOME</a></li>
       <li><a href="javascript:menuClick('#menu_2')" id="menu_2">Order</a></li>
@@ -35,12 +34,39 @@
   <section class="container">
     <div class="row">
       <div class="col-lg-12 col-xs-12">
-      {%for e in product_list%}
-      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12"><h1>{{e.name}}</h1></div>
-      {%endfor%}
+        {%set img=['/img/bag1.png', '/img/bag2.png', ]%} {%for e in product_list%}
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 center">
+          <div class="product-container">
+            <img class="img-responsive" alt="{{e.name}}" src="{{img[loop.index-1]}}">
+            <div class="space-4"></div>
+            <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+              <div class="inline position-relative">
+                <span class="white"> Buy </span>
+              </div>
+            </div>
+            <div class="space-6"></div>
+            <div class="product-info">
+              <div class="col-lg-12 col-sm-12">
+                <p>{{e.code}}, {{e.name}}</p>
+                <p>
+                  <b>Size: </b> {{e.size}}
+                </p>
+                <p>
+                  <b>Category: </b> {{e.category}}
+                </p>
+                <p>
+                  <b>UNIT: </b> {{e.uom}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {%endfor%}
       </div>
     </div>
   </section>
 </body>
+<script src="/js/jquery311.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/api.js"></script>
 </html>
