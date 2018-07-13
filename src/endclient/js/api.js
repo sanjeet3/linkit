@@ -112,5 +112,25 @@ function changeProductViewImg(elm){
   $('#product-view-img').attr('src',elm.src);
 };
 
+function checkPriceForProduct(){
+  $('#prd-main-action').hide();
+  $('#prd-seller-selection-dom').show();
+}
 
+function backCheckPriceForProduct(){
+  $('#prd-main-action').show();
+  $('#prd-seller-selection-dom').hide();
+}
 
+function selectProductSeller(productKey){
+  $('.order-act, #prd-main-action').show();
+  $('.select-seller, #prd-seller-selection-dom').hide();
+  $('#selected_seller_product').val(productKey);
+}
+
+function resetProductSeller(){
+  $('.order-act').hide();
+  $('.select-seller').show();
+  $('#selected_seller_product').val('');
+  
+}

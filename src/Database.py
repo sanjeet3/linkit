@@ -19,6 +19,8 @@ class Seller(EndpointsModel):
   geo_code = ndb.StringProperty(default='')
   geo = ndb.GeoPtProperty()
   address = ndb.TextProperty(default='')
+  img_url = ndb.StringProperty(default='') 
+  bucket_key = ndb.StringProperty(default='')
 
   @classmethod
   def get_by_email(cls, email):
@@ -27,6 +29,14 @@ class Seller(EndpointsModel):
   @classmethod
   def get_list(cls):
     return cls.query().fetch()
+
+  @classmethod
+  def get_key_obj_dict(cls):
+    d = {}
+    for e in cls.query():
+      d[e.key] = e
+            
+    return d
 
 class ProductUOM(EndpointsModel):
   name = ndb.StringProperty(default='') 
@@ -105,6 +115,10 @@ class SellerProduct(EndpointsModel):
   @classmethod
   def get_seller_product_list(cls, seller_key):
     return cls.query(cls.seller==seller_key).fetch()
+  
+  @classmethod
+  def get_product_by_master_key_for_client(cls, master_product):
+    return cls.query(cls.master_product==master_product, cls.endclient_visible==True).fetch()
 
 class SellerOrder(EndpointsModel):
   '''Franchisor order Data Store model '''

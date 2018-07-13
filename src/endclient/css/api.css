@@ -187,6 +187,11 @@
   padding-top: 65px;
 }
 
+.prd-seller-list {
+  padding: 5px 5px 20px 5px;
+  background: #d2b48ca6;
+}
+
 .product-container {
   background-image: url('/img/WoodenWallBackground.jpg');
   background-position: left 0px bottom 0px;
@@ -215,7 +220,7 @@
 
 .product-images-list {
   float: left;
-  width: 10%; 
+  width: 10%;
   padding-bottom: 10px;
 }
 
@@ -236,7 +241,8 @@
   width: 75px;
   height: 75px;
   clear: both;
-  margin: auto; margin-top : 5px;
+  margin: auto;
+  margin-top: 5px;
   border: 1px dotted #dadada;
   margin-top: 5px;
 }
@@ -257,7 +263,7 @@
   padding: 5px 5px 20px 5px;
   background: #d2b48ca6;
 }
- 
+
 .prd-inf {
   display: table;
   width: 98%;
@@ -319,6 +325,10 @@
 .prd-inf-striped .prd-inf-val {
   border-top: 1px dotted #DCEBF7;
   padding-left: 12px
+}
+
+.order-act{
+  display: none;
 }
 
 /* Responsive css */

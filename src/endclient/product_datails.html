@@ -10,47 +10,87 @@
   <img class="img-responsive" src="/img/frozenbag1.png" id="product-view-img">
 </div>
 <div class="product-details-action">
-  <div class="prd-info-content">
-    <h6 class="pull-left">{{p.code}}, {{p.name}}</h6>
-    <button type="button" onclick="backToProductList()"
-      class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right"><i class="ace-icon fa fa-arrow-left"></i> Back</button>
-    <hr style="clear: both;" />
-    <span class="space-4"></span>
-    <div class="prd-inf">
-      <div class="prd-inf-row">
-        <div class="prd-inf-title">Size:</div>
-        <div class="prd-inf-val">
-          <span>{{p.size}}</span>
+  <div id="prd-main-action">
+    <div class="prd-info-content">
+      <form id="product_order_form">
+        <input type="hidden" name="product" id="selected_seller_product">
+      </form>
+      <h6 class="pull-left">{{p.code}}, {{p.name}}</h6>
+      <button type="button" onclick="backToProductList()"
+        class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right">
+        <i class="ace-icon fa fa-arrow-left"></i> Back
+      </button>
+      <hr style="clear: both;" />
+      <span class="space-4"></span>
+      <div class="prd-inf">
+        <div class="prd-inf-row">
+          <div class="prd-inf-title">Size:</div>
+          <div class="prd-inf-val">
+            <span>{{p.size}}</span>
+          </div>
         </div>
-      </div>
-      <div class="prd-inf-row">
-        <div class="prd-inf-title">Category:</div>
-        <div class="prd-inf-val">
-          <span>{{p.category}}</span>
+        <div class="prd-inf-row">
+          <div class="prd-inf-title">Category:</div>
+          <div class="prd-inf-val">
+            <span>{{p.category}}</span>
+          </div>
         </div>
-      </div>
-      <div class="prd-inf-row">
-        <div class="prd-inf-title">Description:</div>
-        <div class="prd-inf-val">
-          <span>{{p.description}}</span>
+        <div class="prd-inf-row">
+          <div class="prd-inf-title">Description:</div>
+          <div class="prd-inf-val">
+            <span>{{p.description}}</span>
+          </div>
         </div>
-      </div>
-      <div class="prd-inf-row">
-        <div class="prd-inf-title">Seller & Price:</div>
-        <div class="prd-inf-val">
-          <span> Seller are selling this item </span>
+        <div class="prd-inf-row">
+          <div class="prd-inf-title">Seller & Price:</div>
+          <div class="prd-inf-val">
+            <span> {{seller_product_list|length}} Seller are selling this item </span>
+          </div>
         </div>
       </div>
     </div>
+    <div class="center mt-10">
+      <span class="order-act">
+        <button type="button" class="btn btn-success btn-mini " onclick="orderProduct()">
+          <i class="fa fa-shopping-cart"></i> Order Now
+        </button>
+        <button type="button" class="btn btn-danger btn-mini" onclick="resetProductSeller()">
+          <i class="fa fa-times"></i> Cancel
+        </button>
+      </span> <span class="select-seller">
+        <button type="button" class="btn btn-info btn-mini" onclick="checkPriceForProduct()">Check
+          seller and price</button>
+      </span>
+    </div>
   </div>
-  <div class="center mt-10">
-    <span class="space-8"></span>
-    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
-      <div class="inline position-relative">
-        <a href="javascript:" class="user-title-label"> <i
-          class="ace-icon fa fa-map-marker light-green"></i> &nbsp; <span class="white">Check
-            seller and price</span>
-        </a>
+  <div id="prd-seller-selection-dom" style="display: none;">
+    <div class="col-xs-12">
+      <div class="prd-seller-list">
+        {%for seller_product in seller_product_list%} {%set
+        seller=seller_dict[seller_product.seller]%}
+        <div class="media search-media">
+          <div class="media-left">
+            <a href="javascript:"> <img class="media-object" alt="{{seller.name}}"
+              src="{{seller.img_url or '/super/assets/images/avatars/avatar2.png'}}"
+              style="width: 72px; height: 72px;">
+            </a>
+          </div>
+          <div class="media-body">
+            <div>
+              <h4 class="media-heading">
+                <a href="javascript:" class="blue">{{seller.name}} </a>
+              </h4>
+            </div>
+            <p>{{seller.person}}, {{seller.address}}</p>
+            <div class="search-actions text-center">
+              <span class="text-info">KES</span> <span class="blue bolder bigger-150">{{seller_product.retail_price}}</span>
+              <a class="btn btn-sm btn-block btn-info"
+                href="javascript:selectProductSeller('{{seller_product.entityKey}}')">Book it!</a>
+            </div>
+          </div>
+        </div>
+        {%endfor%} <a href="javascript:backCheckPriceForProduct()"
+          class="mt-10 btn btn-sm btn-white">Cancel</a>
       </div>
     </div>
   </div>
