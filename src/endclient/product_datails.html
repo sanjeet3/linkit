@@ -1,0 +1,57 @@
+<div class="product-images-list">
+  <img class="img-responsive cursor active" id="product_img_1" src="/img/frozenbag1.png"
+    onclick="changeProductViewImg(this)"> <img class="img-responsive cursor"
+    id="product_img_2" src="/img/frozenbag2.png" onclick="changeProductViewImg(this)"> <img
+    class="img-responsive cursor" id="product_img_3" src="/img/frozenbag3.png"
+    onclick="changeProductViewImg(this)"> <img class="img-responsive cursor"
+    id="product_img_4" src="/img/frozenbag4.png" onclick="changeProductViewImg(this)">
+</div>
+<div class="product-img-preview">
+  <img class="img-responsive" src="/img/frozenbag1.png" id="product-view-img">
+</div>
+<div class="product-details-action">
+  <div class="prd-info-content">
+    <h6 class="pull-left">{{p.code}}, {{p.name}}</h6>
+    <button type="button" onclick="backToProductList()"
+      class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right"><i class="ace-icon fa fa-arrow-left"></i> Back</button>
+    <hr style="clear: both;" />
+    <span class="space-4"></span>
+    <div class="prd-inf">
+      <div class="prd-inf-row">
+        <div class="prd-inf-title">Size:</div>
+        <div class="prd-inf-val">
+          <span>{{p.size}}</span>
+        </div>
+      </div>
+      <div class="prd-inf-row">
+        <div class="prd-inf-title">Category:</div>
+        <div class="prd-inf-val">
+          <span>{{p.category}}</span>
+        </div>
+      </div>
+      <div class="prd-inf-row">
+        <div class="prd-inf-title">Description:</div>
+        <div class="prd-inf-val">
+          <span>{{p.description}}</span>
+        </div>
+      </div>
+      <div class="prd-inf-row">
+        <div class="prd-inf-title">Seller & Price:</div>
+        <div class="prd-inf-val">
+          <span> Seller are selling this item </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="center mt-10">
+    <span class="space-8"></span>
+    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+      <div class="inline position-relative">
+        <a href="javascript:" class="user-title-label"> <i
+          class="ace-icon fa fa-map-marker light-green"></i> &nbsp; <span class="white">Check
+            seller and price</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

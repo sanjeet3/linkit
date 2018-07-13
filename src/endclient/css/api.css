@@ -203,6 +203,124 @@
   font-size: 10px;
 }
 
+.product-view {
+  background-image: url('/img/WoodenWallBackground.jpg');
+  background-position: left 0px bottom 0px;
+  background-repeat: repeat no-repeat;
+  padding-bottom: 10px;
+  box-shadow: 3px 2px 10px 2px #c37739bd;
+  display: flow-root;
+  min-height: 300px;
+}
+
+.product-images-list {
+  float: left;
+  width: 10%; 
+  padding-bottom: 10px;
+}
+
+.product-img-preview {
+  float: left;
+  width: 30%;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.product-details-action {
+  float: left;
+  width: 50%;
+  padding-top: 10px;
+}
+
+.product-images-list img {
+  width: 75px;
+  height: 75px;
+  clear: both;
+  margin: auto; margin-top : 5px;
+  border: 1px dotted #dadada;
+  margin-top: 5px;
+}
+
+.product-img-preview img {
+  width: 300px;
+  height: 300px;
+  margin: 5px 5px 5px 5px;
+  border: 1px dotted #dadada;
+}
+
+.product-images-list img:hover, .product-images-list img.active {
+  border: 1px dotted #000;
+}
+
+.prd-info-content {
+  font-size: 12px;
+  padding: 5px 5px 20px 5px;
+  background: #d2b48ca6;
+}
+ 
+.prd-inf {
+  display: table;
+  width: 98%;
+  width: calc(100% - 24px);
+  margin: 0 auto;
+  border: 1px dotted #dadada;
+}
+
+.prd-inf-row {
+  display: table-row
+}
+
+.prd-inf-title, .prd-inf-val {
+  display: table-cell;
+  border-top: 1px dotted #D5E4F1
+}
+
+.prd-inf-title {
+  text-align: right;
+  padding: 6px 10px 6px 4px;
+  font-weight: 700;
+  background-color: transparent;
+  width: 110px;
+  vertical-align: middle
+}
+
+.prd-inf-val {
+  padding: 6px 4px 6px 6px
+}
+
+.prd-inf-val>span+span:before {
+  display: inline;
+  content: ",";
+  margin-left: 1px;
+  margin-right: 3px;
+  color: #666;
+  border-bottom: 1px solid #FFF
+}
+
+.prd-inf-val>span+span.editable-container:before {
+  display: none
+}
+
+.prd-inf-row:first-child .prd-inf-title, .prd-inf-row:first-child .prd-inf-val
+  {
+  border-top: none
+}
+
+.prd-inf-striped {
+  border: 1px solid #DCEBF7
+}
+
+.prd-inf-striped .prd-inf-title {
+  color: #336199;
+  background-color: #EDF3F4;
+  border-top: 1px solid #F7FBFF
+}
+
+.prd-inf-striped .prd-inf-val {
+  border-top: 1px dotted #DCEBF7;
+  padding-left: 12px
+}
+
 /* Responsive css */
 @media ( max-device-width : 480px) and (orientation: landscape) {
   .navbar-home ul {

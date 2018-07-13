@@ -6,7 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/css/bootstrap337.css">
 <link rel="stylesheet" href="/css/api.css">
-<link rel="stylesheet" href="/super/assets/css/ace.css" />
+<link rel="stylesheet" href="/super/assets/css/ace.css" /><!-- bootstrap & fontawesome -->
+<link rel="stylesheet" href="/super/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
+
 </head>
 <body style="height: 9000px">
   <div class="animation-container">
@@ -33,17 +36,16 @@
   </nav>
   <section class="container">
     <div class="row">
-      <div class="col-lg-12 col-xs-12">
+      <div class="col-lg-12 col-xs-12 product-view" id="product-detail-dom" style="display: none;">
+      </div>
+      <div class="col-lg-12 col-xs-12" id="product-list-dom">
         {%set img=['/img/bag1.png', '/img/bag2.png', ]%} {%for e in product_list%}
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 center">
           <div class="product-container">
-            <img class="img-responsive" alt="{{e.name}}" src="{{img[loop.index-1]}}">
+            <img class="img-responsive cursor" alt="{{e.name}}" src="{{img[loop.index-1]}}"
+              onclick="viewProductDetails('{{e.entityKey}}')">
             <div class="space-4"></div>
-            <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
-              <div class="inline position-relative">
-                <span class="white"> Buy </span>
-              </div>
-            </div>
+            <button type="button" class="btn btn-info btn-mini" onclick="viewProductDetails('{{e.entityKey}}')">Buy</button>
             <div class="space-6"></div>
             <div class="product-info">
               <div class="col-lg-12 col-sm-12">
@@ -68,5 +70,6 @@
 </body>
 <script src="/js/jquery311.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="super/assets/js/algo.js"></script>
 <script type="text/javascript" src="/js/api.js"></script>
 </html>

@@ -87,3 +87,30 @@ function menuClick(elm){
   $(elm).addClass("active");
 }
 
+function viewProductDetails(key){ 
+  $('#product-list-dom').hide();
+  $('#product-detail-dom').show();
+  $('#product-detail-dom').html('<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading product</p></div>');
+  
+  getRequest('', '/GetProductDetails?key=' + key, 'viewProductDetailsCallBack');
+  
+};
+
+function viewProductDetailsCallBack(r) {
+  $('#product-detail-dom').html(r);
+};
+
+
+function backToProductList(){
+  $('#product-list-dom').show();
+  $('#product-detail-dom').hide();
+};
+
+function changeProductViewImg(elm){
+  $(".product-images-list>img").removeClass('active');
+  $("#"+elm.id).addClass('active');
+  $('#product-view-img').attr('src',elm.src);
+};
+
+
+

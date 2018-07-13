@@ -64,7 +64,9 @@ class Product(EndpointsModel):
   description = ndb.TextProperty(default='') 
   image_url = ndb.StringProperty(repeated=True)
   bucket_path = ndb.StringProperty(repeated=True) 
-  bucket_key = ndb.StringProperty(repeated=True) 
+  bucket_key = ndb.StringProperty(repeated=True)
+  slider_url = ndb.StringProperty(repeated=True) 
+  slider_key = ndb.StringProperty(repeated=True) 
   instock = ndb.BooleanProperty(default=True) 
   endclient_visible = ndb.BooleanProperty(default=False)
 

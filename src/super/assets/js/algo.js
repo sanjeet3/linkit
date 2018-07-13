@@ -99,7 +99,10 @@ function getWebPage(reqUrl, config) {
 }
 
 function getRequest(formID, url, callback) {
-	var formData = $("#" + formID).serializeArray(); 
+	var formData = [];
+	try{
+	  formData = $("#" + formID).serializeArray();
+	} catch {}  
 	// Ajax call
 	$.get(url, $.param(formData), function(obj) {
 		if (callback != null) {
