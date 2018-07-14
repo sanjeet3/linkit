@@ -125,6 +125,8 @@ class SellerOrder(EndpointsModel):
   cancel = ndb.BooleanProperty(default=False) 
   created_on = ndb.DateTimeProperty(auto_now_add=True)
   order_number = ndb.StringProperty(default='')
+  payment_ref = ndb.StringProperty(default='')
+  payed = ndb.BooleanProperty(default=False) 
   amount = ndb.FloatProperty(default=0.0) 
   date = ndb.DateProperty(auto_now_add=True)
   seller = ndb.KeyProperty(Seller)
@@ -132,9 +134,7 @@ class SellerOrder(EndpointsModel):
   seller_name = ndb.StringProperty(default='')
   seller_email = ndb.StringProperty(default='')
   master_product = ndb.KeyProperty(Product)
-  master_product_urlsafe= ndb.StringProperty(default='')
-  product = ndb.KeyProperty(Product)
-  product_urlsafe= ndb.StringProperty(default='')
+  master_product_urlsafe= ndb.StringProperty(default='') 
   code = ndb.StringProperty(default='')
   name = ndb.StringProperty(default='')
   size = ndb.StringProperty(default='')
@@ -152,3 +152,10 @@ class SellerOrder(EndpointsModel):
   alternate_phone = ndb.StringProperty(default='')
   status = ndb.StringProperty(default='created')
   history = ndb.TextProperty(default='[]')
+  
+  @classmethod
+  def get_order_filetered(cls, from_date, to_date, seller_list=[]):  
+    q = cls.query(cls.date>=from_date, cls.date<=to_date).order(-cls.date)
+    if seller_list:
+      q = q.filter(cls.seller.IN(seller_list))    
+    return q

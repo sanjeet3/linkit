@@ -1,0 +1,58 @@
+<div class="ord-dtl-stg-1">
+  <div class="col-sm-12">
+    <div class="prod-img">
+      <img class="img-responsive" src="/img/frozenbag1.png" id="product-view-img">
+    </div>
+    <div class="prod-detail">
+      <h4>{{product.code}}, {{product.name}}</h4>
+      <p>
+        <strong>Quantity: </strong> {{qty}}
+      </p>
+      <p>
+        <strong>Size: </strong>{{product.size}}
+      </p>
+      <p>
+        <strong>Price: </strong>{{product.retail_price}}
+      </p>
+      <p>
+        <strong>Category: </strong> {{product.category}}
+      </p>
+      <p>
+        <strong>UOM: </strong> {{product.uom}}
+      </p>
+      <p>
+        <strong>Description: </strong>{{product.description}}
+      </p>
+      <p>
+        <strong>Total Pay Amount: </strong> {{qty*product.retail_price}} KES
+      </p>
+    </div>
+  </div>
+  <div class="col-sm-12 mt-10">
+    <div class="media search-media">
+      <div class="media-left">
+        <a href="javascript:"> <img class="media-object" alt="{{seller.name}}"
+          src="{{seller.img_url or '/super/assets/images/avatars/avatar2.png'}}"
+          style="width: 72px; height: 72px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <div>
+          <h4 class="media-heading">
+            <a href="javascript:" class="blue">{{seller.name}}, {{seller.person}} </a>
+          </h4>
+        </div>
+        <p>{{seller.address}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 mt-10 text-center">
+    <button type="button" class="btn btn-success btn-mini " onclick="orderPaymentStart()">
+      <i class="fa fa-shopping-cart"></i> Pay Now
+    </button>
+    <button type="button" onclick="backFromOrderStageFirst()"
+      class="btn btn-sm btn-primary btn-white btn-round btn-mini">
+      <i class="ace-icon fa fa-times"></i> cancel
+    </button>
+  </div>
+</div>

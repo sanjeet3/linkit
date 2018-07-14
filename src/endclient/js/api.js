@@ -1,136 +1,290 @@
-var sprite = function(element, direction, factor) { 
-    this.element = element;
-    this.direction = direction;
-    this.factor = factor;
-    var left = this.element.css("left");
+var sprite = function(element, direction, factor) {
+  this.element = element;
+  this.direction = direction;
+  this.factor = factor;
+  var left = this.element.css("left");
 
-    if ("auto" == left) {
-        this.position = $(document).width() - this.element.width() - parseFloat(this.element.css("right"));
-    } else {
-        this.position = parseFloat(this.element.css("left"));
-    }
+  if ("auto" == left) {
+    this.position = $(document).width() - this.element.width()
+        - parseFloat(this.element.css("right"));
+  } else {
+    this.position = parseFloat(this.element.css("left"));
+  }
 };
 
 sprite.prototype.render = function(diff) {
-    if (this.position < 0 - 500) {
-        this.position = $(document).width();
-    } else if (this.position > $(document).width()) {
-        this.position = -500;
-    } else {
-        this.position += (diff / this.factor) * this.direction;
-    }
+  if (this.position < 0 - 500) {
+    this.position = $(document).width();
+  } else if (this.position > $(document).width()) {
+    this.position = -500;
+  } else {
+    this.position += (diff / this.factor) * this.direction;
+  }
 
-    this.element.css("left", this.position + "px");
+  this.element.css("left", this.position + "px");
 }
 
-//Initial position of elements
+// Initial position of elements
 var skyline_initial_pos = 367;
 var buildings_inital_pos = -625;
 var road_initial_pos = 0;
 var train_initial_pos = 0;
 
-//To calculate amount scrolled.
+// To calculate amount scrolled.
 var scroll_diff = 0;
 var old_scroll_pos = 0;
 var curr_scroll_pos = 0;
 
 var browser_width = jQuery(document).width();
 
-var sprites = [new sprite(jQuery(".animation-container .bus1"), 1, 3),
+var sprites = [ new sprite(jQuery(".animation-container .bus1"), 1, 3),
     new sprite(jQuery(".animation-container .truck"), 1, 3.5),
     new sprite(jQuery(".animation-container .car1"), 1, 1.4),
     new sprite(jQuery(".animation-container .cycle"), 1, 5),
     new sprite(jQuery(".animation-container .taxi1"), -1, 2.2),
     new sprite(jQuery(".animation-container .bus2"), -1, 1.8),
-    new sprite(jQuery(".animation-container .car2"), -1, 0.8)];
+    new sprite(jQuery(".animation-container .car2"), -1, 0.8) ];
 
-jQuery(window).scroll( function() {
-    
-    curr_scroll_pos = jQuery(window).scrollTop();
-    
-    if (curr_scroll_pos < jQuery(document).height()) {
-    
-    //Code to find scrolled amount
-    scroll_diff = Math.abs(old_scroll_pos - curr_scroll_pos);
-    old_scroll_pos = curr_scroll_pos;
-    
-    //Animation code
-    jQuery(".animation-container").css("background-position" , function() {
-    return "left " + (skyline_initial_pos - curr_scroll_pos / 10) + "px bottom 248px";
-    });
-    
-    jQuery(".animation-container .road1").css("background-position" , function() {
-    return "left " + (road_initial_pos - curr_scroll_pos / 6) + "px bottom";
-    });
-    
-    jQuery(".animation-container .road2").css("background-position" , function() {
-    return "left " + (road_initial_pos - curr_scroll_pos / 6) + "px bottom";
-    });
-    
-    jQuery(".animation-container .buildings").css("background-position" , function() {
-    return "left " + (buildings_inital_pos - curr_scroll_pos / 6) + "px bottom";
-    });
-    
-    jQuery(".animation-container .train").css("background-position" , function() {
-    return "left " + (train_initial_pos - curr_scroll_pos / 6) + "px bottom";
-    });
-    
-    sprites.forEach( function (value, key) {
-    value.render(scroll_diff);  
-    });
-    }
-});
-//SLIDER
+jQuery(window).scroll(
+    function() {
 
-function menuClick(elm){ 
+      curr_scroll_pos = jQuery(window).scrollTop();
+
+      if (curr_scroll_pos < jQuery(document).height()) {
+
+        // Code to find scrolled amount
+        scroll_diff = Math.abs(old_scroll_pos - curr_scroll_pos);
+        old_scroll_pos = curr_scroll_pos;
+
+        // Animation code
+        jQuery(".animation-container").css(
+            "background-position",
+            function() {
+              return "left " + (skyline_initial_pos - curr_scroll_pos / 10)
+                  + "px bottom 248px";
+            });
+
+        jQuery(".animation-container .road1").css(
+            "background-position",
+            function() {
+              return "left " + (road_initial_pos - curr_scroll_pos / 6)
+                  + "px bottom";
+            });
+
+        jQuery(".animation-container .road2").css(
+            "background-position",
+            function() {
+              return "left " + (road_initial_pos - curr_scroll_pos / 6)
+                  + "px bottom";
+            });
+
+        jQuery(".animation-container .buildings").css(
+            "background-position",
+            function() {
+              return "left " + (buildings_inital_pos - curr_scroll_pos / 6)
+                  + "px bottom";
+            });
+
+        jQuery(".animation-container .train").css(
+            "background-position",
+            function() {
+              return "left " + (train_initial_pos - curr_scroll_pos / 6)
+                  + "px bottom";
+            });
+
+        sprites.forEach(function(value, key) {
+          value.render(scroll_diff);
+        });
+      }
+    });
+// SLIDER
+
+function menuClick(elm) {
   $("#navbar-list>ul>li>a.active").removeClass("active");
   $(elm).addClass("active");
 }
 
-function viewProductDetails(key){ 
+function viewProductDetails(key) {
   $('#product-list-dom').hide();
   $('#product-detail-dom').show();
-  $('#product-detail-dom').html('<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading product</p></div>');
-  
+  $('#product-detail-dom')
+      .html(
+          '<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading product</p></div>');
+
   getRequest('', '/GetProductDetails?key=' + key, 'viewProductDetailsCallBack');
-  
+
 };
 
 function viewProductDetailsCallBack(r) {
   $('#product-detail-dom').html(r);
 };
 
-
-function backToProductList(){
+function backToProductList() {
   $('#product-list-dom').show();
   $('#product-detail-dom').hide();
 };
 
-function changeProductViewImg(elm){
+function changeProductViewImg(elm) {
   $(".product-images-list>img").removeClass('active');
-  $("#"+elm.id).addClass('active');
-  $('#product-view-img').attr('src',elm.src);
+  $("#" + elm.id).addClass('active');
+  $('#product-view-img').attr('src', elm.src);
 };
 
-function checkPriceForProduct(){
+function checkPriceForProduct() {
   $('#prd-main-action').hide();
   $('#prd-seller-selection-dom').show();
 }
 
-function backCheckPriceForProduct(){
+function backCheckPriceForProduct() {
   $('#prd-main-action').show();
   $('#prd-seller-selection-dom').hide();
 }
 
-function selectProductSeller(productKey){
+function selectProductSeller(productKey, seller, price) {
   $('.order-act, #prd-main-action').show();
   $('.select-seller, #prd-seller-selection-dom').hide();
   $('#selected_seller_product').val(productKey);
+  var h = '<div class="prd-inf-title">Order</div><div class="prd-inf-val text-blue">Seller: '
+      + seller + '<br/> Price per item: ' + price + ' KES</div>'
+  $('#selected_seller_price_info').html(h);
 }
 
-function resetProductSeller(){
+function resetProductSeller() {
   $('.order-act').hide();
   $('.select-seller').show();
   $('#selected_seller_product').val('');
+  $('#selected_seller_price_info').html('');
+
+}
+
+function orderProductStage1() {
+  var qty = $('#user-priece-qty').val();
+  var pk = $('#selected_seller_product').val();
+  if (!qty) {
+    alert('Please enter quantity!');
+    return;
+  }
+  qty = parseInt(qty);
+  if (qty < 1) {
+    alert('Minmum quantity is 1!');
+    return;
+  }
+  if (!pk) {
+    alert('Please select seller!');
+    return;
+  }
+  $('#selected_product_qty').val(qty);
+  $('#order-stage-1').hide();
+  $('#order-stage-2').show();
+  $('#order-detail-stage1')
+      .html(
+          '<div style="width: 100%;text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading order details</p></div>');
+
+  getRequest('product_order_form', '/OrderStageFirst',
+      'orderProductStageFirstCallBack');
+
+};
+
+function orderProductStageFirstCallBack(r) {
+  $('#order-detail-stage1').html(r);
+}
+
+function backFromOrderStageFirst() {
+  $('#order-stage-1').show();
+  $('#order-stage-2, #order-payment-stage, #order-suucess').hide();
+  $('#order-detail-stage1').html('');
+
+};
+
+function setOrderProdutQty(elm) {
+  $('#selected_product_qty').val(elm.value);
+};
+
+function orderPaymentStart() {
+
+  var qty = $('#user-priece-qty').val();
+  var pk = $('#selected_seller_product').val();
+  if (!qty) {
+    alert('Quantity missing!');
+    return;
+  }
+  qty = parseInt(qty);
+  if (qty < 1) {
+    alert('Minmum quantity is 1!');
+    return;
+  }
+  if (!pk) {
+    alert('Seller missing!');
+    return;
+  }
+
+  $('#order-stage-2').hide();
+  $('#order-payment-stage').show();
+
+};
+
+function orderMakePayment() {
+  var client_name = $('#client_name').val();
+  var client_mobile = $('#client_mobile').val();
+  var client_email = $('#client_email').val();
+  var card_number = $('#card_number').val();
+  var name_on_card = $('#name_on_card').val();
+  var cvv_number = $('#cvv_number').val();
+  var qty = $('#user-priece-qty').val();
+  var pk = $('#selected_seller_product').val();
+
+  if (!qty) {
+    alert('Quantity missing!');
+    return;
+  }
+
+  if (!pk) {
+    alert('Seller missing!');
+    return;
+  }
+
+  if (!client_name) {
+    alert('Please enter your name');
+    return;
+  }
+  if (!client_email) {
+    alert('Please enter your email');
+    return;
+  }
+  if (!card_number) {
+    alert('Please enter debit card number');
+    return;
+  }
+  if (card_number.length < 16) {
+    alert('Debit card number incomplete');
+    return;
+  }
+  if (!name_on_card) {
+    alert('Please enter name on your card');
+    return;
+  }
+  if (!cvv_number) {
+    alert('Please enter cvv number');
+    return;
+  }
+  
+  var h='<div style="width: 100%;text-align: center;padding-bottom: 150px; padding-top: 150px;">\
+    <i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Plaese Wait Payment proccessing</p>\
+    <br><p>Do not refresh or press back button untill payment success</p></div>';
+
+  
+  $('#order-payment-stage').hide();
+  $('#order-suucess').show();
+  $('#order-suucess-details').html(h);
+  var reqURL= '/PlaceOrder?qty='+qty+'&product='+pk;
+  postRequest('order-payment-form', reqURL, 'orderMakePaymentCallBack');
+};
+
+
+function orderMakePaymentCallBack(r) {
+  
+  $('#order-suucess-details').html(r.data.html);
+  $("button").attr("disabled", false); 
   
 }
+

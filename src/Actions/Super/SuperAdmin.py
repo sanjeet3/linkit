@@ -10,6 +10,7 @@ from src.Database import ProductCategory
 from src.Database import ProductUOM
 from src.Database import Seller
 from src.Database import SellerProduct
+from src.Database import SellerOrder
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
@@ -214,7 +215,13 @@ class GetSellerProduct(ActionSupport):
            
 class Order(ActionSupport):
   def get(self):
-    template = self.get_jinja2_env.get_template('super/Order.html') 
-    today = datetime.datetime.now().strftime('%d-%m-%Y')
-       
-    self.response.out.write(template.render({'dt': today}))
+    seller_list = Seller.get_list()  
+    template = self.get_jinja2_env.get_template('super/Order.html')
+    now = datetime.datetime.now() 
+    today = now.strftime('%d-%m-%Y')
+    today_date = now.date()
+    order_list = SellerOrder.get_order_filetered(today_date, today_date).fetch()
+    data = {'dt': today,
+            'seller_list': seller_list,
+            'order_list': order_list}   
+    self.response.out.write(template.render(data))

@@ -8,9 +8,8 @@
 <div class="page-content">
   <div class="page-header">
     <form class="form-inline">
-      <select class="input-small" name="user">
-        <option value="Purpink Gifts & Florist">Purpink Gifts & Florist</option>
-        <option value="Blueline Gifts">Blueline Gifts</option>
+      <select class="input-small" name="user"> {%for s in seller_list%}
+        <option value="{{s.entityKey}}">{{s.name}}-{{s.person}}</option> {%endfor%}
       </select>
       <div class="input-daterange input-group">
         <input type="text" class="date-input" name="start" id="start" value="{{dt}}"> <span
@@ -32,21 +31,20 @@
             <th>Date</th>
             <th>Product</th>
             <th>QTY</th>
-            <th>Frenchisee</th>
-            <th>Client Address</th>
+            <th>Seller</th> 
           </tr>
         </thead>
         <tbody id="table_body">
+          {%for e in order_list%}
           <tr>
-            <td>ORD875798</td>
-            <td>14821</td>
-            <td>{{dt}}</td>
-            <td>Drinking Bottle</td>
-            <td>2</td>
-            <td>Blueline Gifts</td>
-            <td>M-Pesa Swift Smart Ltd, Garissa Lodge Shopping Complex, 1st Floor, Eastleigh,
-              Kenya</td>
+            <td>{{e.order_number}}</td>
+            <td>{{e.amount}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{e.seller_name}}</td>
           </tr>
+          {%endfor%} 
         </tbody>
       </table>
     </div>
