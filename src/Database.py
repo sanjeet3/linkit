@@ -150,7 +150,7 @@ class SellerOrder(EndpointsModel):
   phone = ndb.StringProperty(default='')
   email = ndb.StringProperty(default='')
   alternate_phone = ndb.StringProperty(default='')
-  status = ndb.StringProperty(default='created')
+  status = ndb.StringProperty(default='Ordered')
   history = ndb.TextProperty(default='[]')
   
   @classmethod

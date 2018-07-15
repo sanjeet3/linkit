@@ -12,6 +12,8 @@ from uuid import uuid1
 from google.appengine.ext import ndb
 import json
 from src.api.baseapi import json_response, SUCCESS
+from src.api.datetimeapi import get_dt_by_country
+import datetime
 
 class Home(ActionSupport):
   def get(self):
@@ -76,10 +78,15 @@ class PlaceOrder(ActionSupport):
     card_number = self.request.get('card_number')
     name_on_card = self.request.get('name_on_card')
     cvv_number = self.request.get('cvv_number')
+    cdt=datetime.datetime.now()
+    ldt=get_dt_by_country(cdt, 'KE')
+    logging.info(ldt)  
     history_list = []  
     product = ndb.Key(urlsafe=self.request.get('product')).get()
     seller = product.seller.get()  
     order = SellerOrder()
+    order.date = ldt.date()
+    order.qty = qty
     order.amount = qty*product.retail_price
     order.category = product.category
     order.client_name = client_name
@@ -96,16 +103,19 @@ class PlaceOrder(ActionSupport):
     order.seller_name = seller.name
     order.seller_urlsafe = seller.entityKey
     order.size = product.size
-    order.status = 'CREATED'
+    order.status = 'Ordered'
     order.phone = client_mobile
     order.uom = product.uom
     order.payed =True
     order.payment_ref = str(uuid1(123456789))
     order.order_number = order.payment_ref.replace('-','').upper()[:10]
-    history_list.append({'qty': qty,
+    history_list.append({'status': order.status,
+                         'qty': qty,
                          'retail_price': product.retail_price,
                          'price': product.master_price,
-                         'amount': order.amount
+                         'amount': order.amount,
+                         'time': ldt.strftime('%I:%M %p'),
+                         'date': ldt.strftime('%I:%M %p'),
                          })
     order.history = json.dumps(history_list) 
     order.put()

@@ -5,6 +5,7 @@ Created on 04-Jul-2018
 
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.datetimeapi import get_dt_by_country
+from src.api.datetimeapi import get_date_from_str
 from src.Database import Product
 from src.Database import ProductCategory
 from src.Database import ProductUOM
@@ -218,6 +219,7 @@ class Order(ActionSupport):
     seller_list = Seller.get_list()  
     template = self.get_jinja2_env.get_template('super/Order.html')
     now = datetime.datetime.now() 
+    now = get_dt_by_country(now, 'KE')
     today = now.strftime('%d-%m-%Y')
     today_date = now.date()
     order_list = SellerOrder.get_order_filetered(today_date, today_date).fetch()
@@ -225,3 +227,23 @@ class Order(ActionSupport):
             'seller_list': seller_list,
             'order_list': order_list}   
     self.response.out.write(template.render(data))
+
+class OrderSearch(ActionSupport):
+  def post(self):
+    seller_list=[]
+    key = self.request.get('seller')
+    if key:
+      seller_list = [ndb.Key(urlsafe=key)]    
+    start= get_date_from_str(self.request.get('start'))
+    end=get_date_from_str(self.request.get('end'))
+    order_list = SellerOrder.get_order_filetered(start, end, seller_list).fetch()
+    data = {'order_list': order_list}
+    template = self.get_jinja2_env.get_template('super/ordersearch.html')
+    html = template.render(data)
+    
+    return json_response(self.response,
+                         {'html': html},
+                         SUCCESS,
+                         'Order search result')
+    
+      

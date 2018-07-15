@@ -24,6 +24,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
     RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
+    RedirectRoute(r'/superadmin/OrderSearch', SuperAdmin.OrderSearch, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/AssignProductToSeller', SuperAdmin.AssignProductToSeller, name='SuperAdmin AssignProductToSeller', strict_slash=True),
     RedirectRoute(r'/superadmin/GetSellerProduct', SuperAdmin.GetSellerProduct, name='SuperAdmin get Product of Seller', strict_slash=True),
     #franchisor
@@ -31,6 +32,7 @@ __route_list = [
     RedirectRoute(r'/Seller/Products', franchisor.Product, name='Seller Products page', strict_slash=True),
     RedirectRoute(r'/Seller/EditProductRetailPrice', franchisor.ProductRetailPriceEdit, name='Seller ProductRetailPriceEdit', strict_slash=True),
     RedirectRoute(r'/Seller/Order', franchisor.Order, name='Seller order', strict_slash=True),
+    RedirectRoute(r'/Seller/OrderSearch', franchisor.OrderSearch, name='Seller order', strict_slash=True),
     
                  
     ]

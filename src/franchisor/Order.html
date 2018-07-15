@@ -7,7 +7,7 @@
 </div>
 <div class="page-content">
   <div class="page-header">
-    <form class="form-inline"> 
+    <form class="form-inline" id="seller-search-order-form"> 
       <div class="input-daterange input-group">
         <input type="text" class="date-input" name="start" id="start" value="{{dt}}"> <span
           class="dt-arrow"> <i class="fa fa-exchange"></i>
@@ -24,25 +24,26 @@
         <thead>
           <tr>
             <th>Order Number</th>
+            <td>Status</td>
             <th>Amount</th>
             <th>Date</th>
             <th>Product</th>
             <th>QTY</th>
-            <th>Client Name</th>
-            <th>Client Address</th>
+            <th>Seller</th> 
           </tr>
         </thead>
         <tbody id="table_body">
+          {%for e in order_list%}
           <tr>
-            <td>ORD875798</td>
-            <td>14821</td>
-            <td>{{dt}}</td>
-            <td>Drinking Bottle</td>
-            <td>2</td>
-            <td>Shriman Vijay</td>
-            <td>M-Pesa Swift Smart Ltd, Garissa Lodge Shopping Complex, 1st Floor, Eastleigh,
-              Kenya</td>
+            <td>{{e.order_number}}</td>
+            <td>{{e.status}}</td>
+            <td>{{e.amount}}</td>
+            <td>{{e.date}}</td>
+            <td>{{e.code}}-{{e.name}}</td>
+            <td>{{e.qty}}</td>
+            <td>{{e.seller_name}}</td>
           </tr>
+          {%endfor%} 
         </tbody>
       </table>
     </div>

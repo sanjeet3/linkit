@@ -1,0 +1,15 @@
+{%for e in order_list%}
+<tr>
+  <td>{{e.order_number}}</td>
+  <td>{{e.status}}</td>
+  <td>{{e.amount}}</td>
+  <td>{{e.date}}</td>
+  <td>{{e.code}}-{{e.name}}</td>
+  <td>{{e.qty}}</td>
+  <td>{{e.seller_name}}</td>
+</tr>
+{%else%}
+<tr class="text-center">
+  <td colspan="20">No record available</td>
+</tr>
+{%endfor%}

@@ -1,3 +1,5 @@
+var searchTableMsg = '<tr class="text-center"><td colspan="20"><i class="fa fa-spinner fa-spin" ></i> Searching...</td></tr>'
+
 function saveProduct() {
   if (!$('#name').val()) {
     showMSG('Please enter name of product', 'warning');
@@ -275,34 +277,14 @@ function searchOrder(){
     showMSG('Please enter daterage', 'warning');
     return;
   }
-  frnc=['Blueline Gifts', 'Purpink Gifts & Florist'];
-  prod=['Coffe Mug', 'School Bag', 'Water Bottle'];
-  add=['Eastleigh Second Ave, Nairobi, Kenya',
-
-'Shariff Guest House, Eastleigh Second Ave, Nairobi City, Kenya',
-
-'Off 2nd Avenue, Eastleigh, Tenth St, Nairobi, Kenya',
-
-'Next To Sky Blue Lodge, Eastleigh Second Avenue, Nairobi, Kenya ']
-  for(var i=0; i<5; i++){
-    tr.push('<tr><td>');
-    tr.push('ORD'+getRandomInt(15648));
-    tr.push('</td><td>');
-    tr.push(getRandomInt(558899))
-    tr.push('</td><td>');
-    tr.push(dt[getRandomInt(2)])
-    tr.push('</td><td>');
-    tr.push(prod[getRandomInt(3)])
-    tr.push('</td><td>');
-    tr.push(getRandomInt(24))
-    tr.push('</td><td>');
-    tr.push(frnc[getRandomInt(2)])
-    tr.push('</td><td>');
-    tr.push(add[getRandomInt(4)])
-    tr.push('</td></tr>');
-    
-  }
-  $('#table_body').html(tr.join(''));
+  $('#table_body').html(searchTableMsg);
+  postRequest('super-admin-order--search-form',
+              '/superadmin/OrderSearch',
+              'searchOrderCallBack');
+};
+  
+function searchOrderCallBack(r){
+  $('#table_body').html(r.data.html);
 }
 
 
