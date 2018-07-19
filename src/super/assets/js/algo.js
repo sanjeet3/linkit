@@ -134,6 +134,7 @@ function postRequest(formID, url, callback) {
 };
 
 function postFormWithFile(formID, url, callback) {
+  $("button").attr("disabled", true); 
   var formData = new FormData($("#" + formID)[0]); 
   $.ajax({
       url: url,
@@ -144,6 +145,7 @@ function postFormWithFile(formID, url, callback) {
       contentType: false,
       processData: false,
       success: function (obj) {
+        $("button").attr("disabled", false);
         if (callback != null ) {
           var callbackMethod = eval(callback);
           callbackMethod(obj, formID);
@@ -151,6 +153,7 @@ function postFormWithFile(formID, url, callback) {
         messageConfirmation(obj);
       },
       error: function(){
+        $("button").attr("disabled", false); 
           alert("error in form submission");
       }
   });

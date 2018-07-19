@@ -270,7 +270,7 @@ class UploadProductPicture(ActionSupport):
                            'Select image file')    
         
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s/%s' %(product.code, file_name)
+    bucket_path = '/productpromo/%s' %(product.code, file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
     

@@ -42,8 +42,8 @@
         {%set img=['/img/bag1.png', '/img/bag2.png', ]%} {%for e in product_list%}
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 center">
           <div class="product-container">
-            <img class="img-responsive cursor" alt="{{e.name}}" src="{{img[loop.index-1]}}"
-              onclick="viewProductDetails('{{e.entityKey}}')">
+            <img class="img-responsive cursor" alt="{{e.name}}" src="{{e.image_url[0]}}"
+              onclick="viewProductDetails('{{e.entityKey}}')" height="750px">
             <div class="space-4"></div>
             <button type="button" class="btn btn-info btn-mini" onclick="viewProductDetails('{{e.entityKey}}')">Buy</button>
             <div class="space-6"></div>
