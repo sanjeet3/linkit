@@ -133,6 +133,31 @@ function postRequest(formID, url, callback) {
 	});
 };
 
+function postFormWithFile(formID, url, callback) {
+  var formData = new FormData($("#" + formID)[0]); 
+  $.ajax({
+      url: url,
+      type: 'POST',
+      data: formData,
+      async: false,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (obj) {
+        if (callback != null ) {
+          var callbackMethod = eval(callback);
+          callbackMethod(obj, formID);
+        }
+        messageConfirmation(obj);
+      },
+      error: function(){
+          alert("error in form submission");
+      }
+  });
+
+};
+
+
 function messageConfirmation(obj) {
   if(obj.message) {
 	if (obj.status == 'SUCCESS') {

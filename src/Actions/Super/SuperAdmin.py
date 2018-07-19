@@ -4,6 +4,7 @@ Created on 04-Jul-2018
 @author: Sanjay Saini '''
 
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
+from src.api.bucketHandler import upload_image_to_bucket
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
 from src.Database import Product
@@ -15,7 +16,7 @@ from src.Database import SellerOrder
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
-
+import cgi    
 from google.appengine.ext import ndb
 
 class Home(ActionSupport):
@@ -48,6 +49,16 @@ class Products(ActionSupport):
              }
     template = self.get_jinja2_env.get_template('super/Products.html')    
     self.response.out.write(template.render(context))
+
+class GetProductPics(ActionSupport):
+  def get(self):  
+    
+    key = self.request.get('key') 
+    product = ndb.Key(urlsafe=key).get()
+    img_list = product.image_url
+    
+    data_dict = {'img_list': img_list}  
+    return  json_response(self.response, data_dict, SUCCESS,'')
 
 class SaveProducts(ActionSupport):
   def post(self):          
@@ -245,5 +256,30 @@ class OrderSearch(ActionSupport):
                          {'html': html},
                          SUCCESS,
                          'Order search result')
+
+class UploadProductPicture(ActionSupport):    
+  def post(self):  
+    key = self.request.get('key') 
+    product = ndb.Key(urlsafe=key).get()
     
-      
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')    
+        
+    file_name = image_file.filename    
+    bucket_path = '/product/%s/%s' %(product.code, file_name)
+    bucket_path = bucket_path.lower()
+    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    
+    product.image_url.append(serving_url)
+    product.bucket_path.append(bucket_path)
+    product.bucket_key.append(bucket_key)
+    product.put()
+    return json_response(self.response, 
+                         {'serving_url': serving_url},
+                         SUCCESS,
+                         'Product image uploaded')
+    
