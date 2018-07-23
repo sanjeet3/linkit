@@ -14,6 +14,21 @@ handlers:
 
 - url: /img
   static_dir: src/endclient/img  
+
+- url: /images
+  static_dir: src/endclient/images  
+
+- url: /fonts
+  static_dir: src/endclient/fonts  
+
+- url: /lang
+  static_dir: src/endclient/lang  
+
+- url: /html
+  static_dir: src/endclient/html  
+
+- url: /php
+  static_dir: src/endclient/php  
   
 - url: /superadmin
   script: src.main.app 

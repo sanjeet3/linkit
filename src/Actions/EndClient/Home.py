@@ -128,6 +128,11 @@ class PlaceOrder(ActionSupport):
     html_str = template.render(data)   
     return json_response(self.response, {'html': html_str}, SUCCESS, 'Payment success')
                             
-                            
+
+class CreateDesign(ActionSupport):
+  def get(self):
+    product_list = Product.get_selling_product_list()  
+    template = self.get_jinja2_env.get_template('endclient/customDesign.html')    
+    self.response.out.write(template.render({}))                            
                             
                             

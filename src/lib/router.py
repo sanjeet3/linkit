@@ -11,6 +11,7 @@ from webapp2_extras.routes import RedirectRoute
 
 __route_list = [
     RedirectRoute(r'/', Home.Home, name='Home page', strict_slash=True),
+    RedirectRoute(r'/CreateDesign', Home.CreateDesign, name='Create Product Design page', strict_slash=True),
     RedirectRoute(r'/GetProductDetails', Home.GetProductDetails, name='Get product details page', strict_slash=True),
     RedirectRoute(r'/OrderStageFirst', Home.OrderStageFirst, name='Order stage 1', strict_slash=True),
     RedirectRoute(r'/PlaceOrder', Home.PlaceOrder, name='Place Order', strict_slash=True),
