@@ -7,7 +7,7 @@
 <!-- Style sheets -->
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <!-- Google Webfonts -->
-<link href='http://fonts.googleapis.com/css?family=Gorditas' rel='stylesheet' type='text/css'>
+<link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
 <!-- The CSS for the plugin itself - required -->
 <link rel="stylesheet" type="text/css" href="/css/FancyProductDesigner-all.min.css" />
 <!-- Optional - only when you would like to use custom fonts - optional -->
@@ -19,15 +19,51 @@
 <script src="/js/fabric.min.js" type="text/javascript"></script>
 <!-- The plugin itself - required -->
 <script src="/js/FancyProductDesigner-all.min.js" type="text/javascript"></script>
+<script src="/js/designAlgo.js" type="text/javascript"></script>
 <script type="text/javascript">
   jQuery(document).ready(
       function() {
 
-        var $yourDesigner = $('#clothing-designer'), pluginOpts = {
-          stageWidth : 1200,
+        var $yourDesigner = $('#product-designer'), pluginOpts = {
+          /* stageWidth : 1200, */
           editorMode : false,
+          actions : {
+            'top' : [ 'download', 'print','preview-lightbox' ],
+            'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
+            'bottom' : [ 'undo', 'redo' ],
+          },
+
           fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
-              'Verdana', 'Geneva', 'Gorditas' ],
+              'Verdana', 'Geneva', 'Gorditas', 'Eczar', 'Roboto Mono',
+              'Poor Story', 'Titillium Web', 'Noto Serif', 'Work Sans',
+              'Chela One', 'Indie Flower', 'Inconsolata', 'Bitter',
+              'Libre Baskerville', 'Anton', 'Josefin Sans',
+              'Cormorant Unicase', 'Lobster', 'Arvo', 'Pacifico', 'Do Hyeon',
+              'Shadows Into Light', 'Dancing Script', 'Abril Fatface',
+              'Bree Serif', 'Coda Caption', 'Kanit', 'Acme',
+              'Gloria Hallelujah', 'Righteous', 'Rajdhani', 'Permanent Marker',
+              'Farsan', 'Great Vibes', 'Concert One', 'Poiret One', 'Satisfy',
+              'Courgette', 'Marck Script', 'Prata', 'Audiowide', 'Unica One',
+              'Julius Sans One', 'Ultra', 'Economica', 'IBM Plex Mono',
+              'Amaranth', 'Prosto One', 'Bangers', 'Shrikhand', 'Handlee',
+              'Boogaloo', 'Tangerine', 'Kalam', 'Sacramento',
+              'Architects Daughter', 'PT Mono', 'Bad Script', 'Special Elite',
+              'Libre Barcode 128 Text', 'Shadows Into Light Two',
+              'Cabin Sketch', 'Parisienne', 'Damion', 'Covered By Your Grace',
+              'Playball', 'Nothing You Could Do', 'Homemade Apple',
+              'Fugaz One', 'Rock Salt', 'Allura', 'Press Start 2P',
+              'Alex Brush', 'Black Ops One', 'Carter One', 'Just Another Hand',
+              'Fredericka the Great', 'Syncopate', 'Bungee Inline', 'Niconne',
+              'Coming Soon', 'Leckerli One', 'Galada', 'Caveat Brush',
+              'Pinyon Script', 'Cinzel Decorative', 'Mr Dafoe',
+              'Reenie Beanie', 'Italianno', 'Nanum Pen Script', 'Quantico',
+              'Skranji', 'Allerta Stencil', 'Grand Hotel', 'Yesteryear',
+              'Marvel', 'Freckle Face', 'Rochester', 'Nanum Brush Script',
+              'Alegreya SC', 'Annie Use Your Telescope', 'Faster One',
+              'Raleway Dots', 'Calligraffitti', 'Aclonica', 'Yatra One',
+              'Share Tech Mono', 'Graduate', 'Petit Formal Script',
+              'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
+              'IM Fell Double Pica', ],
           customTextParameters : {
             colors : false,
             removable : true,
@@ -42,11 +78,13 @@
             removable : true,
             colors : '#000',
             autoCenter : true,
-            boundingBox : "Base"
+            boundingBox : "Base",
+            resizable : true,
           }
-        }, yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-
-        //print button
+        };
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+         
+/*         //print button
         $('#print-button').click(function() {
           yourDesigner.print();
           return false;
@@ -91,85 +129,20 @@
           });
 
         });
-
-      });
+        */
+      }); 
 </script>
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
   <div id="main-container">
     <h3 id="clothing">Custom Product Design</h3>
-    <div id="clothing-designer"
-      class="fpd-container fpd-shadow-2 fpd-topbar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-      <div class="fpd-product" title="Shirt Front"
-        data-thumbnail="images/yellow_shirt/front/preview.png">
-        <img src="images/yellow_shirt/front/base.png" title="Base"
-          data-parameters='{"left": 325, "top": 329, "colors": "#d59211", "price": 20}' /> <img
-          src="images/yellow_shirt/front/shadows.png" title="Shadow"
-          data-parameters='{"left": 325, "top": 329}' /> <img
-          src="images/yellow_shirt/front/body.png" title="Hightlights"
-          data-parameters='{"left": 322, "top": 137}' /> <span title="Any Text"
-          data-parameters='{"boundingBox": "Base", "left": 326, "top": 232, "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}'>Default
-          Text</span>
-        <div class="fpd-product" title="Shirt Back"
-          data-thumbnail="images/yellow_shirt/back/preview.png">
-          <img src="images/yellow_shirt/back/base.png" title="Base"
-            data-parameters='{"left": 317, "top": 329, "colors": "Base", "price": 20}' /> <img
-            src="images/yellow_shirt/back/body.png" title="Hightlights"
-            data-parameters='{"left": 333, "top": 119}' /> <img
-            src="images/yellow_shirt/back/shadows.png" title="Shadow"
-            data-parameters='{"left": 318, "top": 329}' />
-        </div>
-      </div>
+    <div id="product-designer"
+      class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
       <div class="fpd-product" title="Sweater" data-thumbnail="images/sweater/preview.png">
-        <img src="images/sweater/basic.png" title="Base"
-          data-parameters='{"left": 332, "top": 311, "colors": "#D5D5D5,#990000,#cccccc", "price": 20}' />
-        <img src="images/sweater/highlights.png" title="Hightlights"
-          data-parameters='{"left": 332, "top": 311}' /> <img src="images/sweater/shadow.png"
-          title="Shadow" data-parameters='{"left": 332, "top": 309}' />
-      </div>
-      <div class="fpd-product" title="Scoop Tee" data-thumbnail="images/scoop_tee/preview.png">
-        <img src="images/scoop_tee/basic.png" title="Base"
-          data-parameters='{"left": 314, "top": 323, "colors": "#98937f, #000000, #ffffff", "price": 15}' />
-        <img src="images/scoop_tee/highlights.png" title="Hightlights"
-          data-parameters='{"left":308, "top": 316}' /> <img src="images/scoop_tee/shadows.png"
-          title="Shadow" data-parameters='{"left": 308, "top": 316}' /> <img
-          src="images/scoop_tee/label.png" title="Label" data-parameters='{"left": 314, "top": 140}' />
-      </div>
-      <div class="fpd-product" title="Hoodie" data-thumbnail="images/hoodie/preview.png">
-        <img src="images/hoodie/basic.png" title="Base"
-          data-parameters='{"left": 313, "top": 322, "colors": "#850b0b", "price": 40}' /> <img
-          src="images/hoodie/highlights.png" title="Hightlights"
-          data-parameters='{"left": 311, "top": 318}' /> <img src="images/hoodie/shadows.png"
-          title="Shadow" data-parameters='{"left": 311, "top": 321}' /> <img
-          src="images/hoodie/zip.png" title="Zip" data-parameters='{"left": 303, "top": 216}' />
-      </div>
-      <div class="fpd-product" title="Shirt" data-thumbnail="images/shirt/preview.png">
-        <img src="images/shirt/basic.png" title="Base"
-          data-parameters='{"left": 327, "top": 313, "colors": "#6ebed5", "price": 10}' /> <img
-          src="images/shirt/collar_arms.png" title="Collars & Arms"
-          data-parameters='{"left": 326, "top": 217, "colors": "#000000"}' /> <img
-          src="images/shirt/highlights.png" title="Hightlights"
-          data-parameters='{"left": 330, "top": 313}' /> <img src="images/shirt/shadow.png"
-          title="Shadow" data-parameters='{"left": 327, "top": 312}' /> <span title="Any Text"
-          data-parameters='{"boundingBox": "Base", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}'>Default
-          Text</span>
-      </div>
-      <div class="fpd-product" title="Short" data-thumbnail="images/shorts/preview.png">
-        <img src="images/shorts/basic.png" title="Base"
-          data-parameters='{"left": 317, "top": 332, "colors": "#81b5eb", "price": 15}' /> <img
-          src="images/shorts/highlights.png" title="Hightlights"
-          data-parameters='{"left": 318, "top": 331}' /> <img src="images/shorts/pullstrings.png"
-          title="Pullstrings" data-parameters='{"left": 307, "top": 195, "colors": "#ffffff"}' /> <img
-          src="images/shorts/midtones.png" title="Midtones"
-          data-parameters='{"left": 317, "top": 332}' /> <img src="images/shorts/shadows.png"
-          title="Shadow" data-parameters='{"left": 320, "top": 331}' />
-      </div>
-      <div class="fpd-product" title="Basecap" data-thumbnail="images/cap/preview.png">
-        <img src="images/cap/basic.png" title="Base"
-          data-parameters='{"left": 318, "top": 311, "colors": "#ededed", "price": 5}' /> <img
-          src="images/cap/highlights.png" title="Hightlights"
-          data-parameters='{"left": 309, "top": 300}' /> <img src="images/cap/shadows.png"
-          title="Shadows" data-parameters='{"left": 306, "top": 299}' />
+        <img src="images/sweater/preview.png" title="Base"
+          data-parameters='{"left": 432, "top": 311}' />
       </div>
       <div class="fpd-design">
         <div class="fpd-category" title="Swirls">
@@ -207,7 +180,7 @@
       </div>
     </div>
     <br />
-    <div class="fpd-clearfix" style="margin-top: 30px; display: none;">
+    {#<div class="fpd-clearfix" style="margin-top: 30px; display: none;">
       <div class="api-buttons fpd-container fpd-left">
         <a href="#" id="print-button" class="fpd-btn">Print</a> <a href="#" id="image-button"
           class="fpd-btn">Create Image</a> <a href="#" id="checkout-button" class="fpd-btn">Checkout</a>
@@ -221,6 +194,12 @@
       Only working on a webserver:<br /> <span class="fpd-btn" id="save-image-php">Save
         image with php</span> <span class="fpd-btn" id="send-image-mail-php">Send image to mail</span>
     </p>
-  </div>
+  </div>#}
+  <div class="fpd-clearfix text-center" style="margin-top: 15px;">
+    <div class="api-buttons fpd-container"> 
+      <button type="button" class="fpd-btn" onclick="saveYourDisign()">Save Design</button> 
+    </div>
+  </div> 
+  <div id="output_dom"></div>
 </body>
 </html>

@@ -152,7 +152,7 @@
   overflow: hidden;
   cursor: default;
   position: fixed;
-  z-index: 10000;
+  z-index: 1028;
 }
 
 .navbar-home ul {
@@ -370,6 +370,12 @@
 
 .ord-dtl-stg-1 .search-media {
   border: 1px solid #6178e873;
+}
+
+.dom-bg {
+  margin-top: 10px;
+  padding: 5px 5px 20px 5px;
+  background: #d2b48ca6;
 }
 
 /* Responsive css */

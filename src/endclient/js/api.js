@@ -267,24 +267,74 @@ function orderMakePayment() {
     alert('Please enter cvv number');
     return;
   }
-  
-  var h='<div style="width: 100%;text-align: center;padding-bottom: 150px; padding-top: 150px;">\
+
+  var h = '<div style="width: 100%;text-align: center;padding-bottom: 150px; padding-top: 150px;">\
     <i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Plaese Wait Payment proccessing</p>\
     <br><p>Do not refresh or press back button untill payment success</p></div>';
 
-  
   $('#order-payment-stage').hide();
   $('#order-suucess').show();
   $('#order-suucess-details').html(h);
-  var reqURL= '/PlaceOrder?qty='+qty+'&product='+pk;
+  var reqURL = '/PlaceOrder?qty=' + qty + '&product=' + pk;
   postRequest('order-payment-form', reqURL, 'orderMakePaymentCallBack');
 };
 
-
 function orderMakePaymentCallBack(r) {
-  
+
   $('#order-suucess-details').html(r.data.html);
-  $("button").attr("disabled", false); 
-  
+  $("button").attr("disabled", false);
+
 }
+
+function showLoginDom() {
+  $('#login_dom').show();
+  $('#registeration_dom, #product-detail-dom, #product-list-dom, #registeration_msg_dom').hide();
+}
+
+function showRegisterDom() {
+  $('#registeration_dom').show();
+  $('#login_dom, #product-detail-dom, #product-list-dom, #registeration_msg_dom').hide();
+}
+
+function register() {
+  var name = $('#name').val(), user_email = $('#user_email').val(), password = $(
+      '#password').val(), confirmpassword = $('#confirm-password').val();
+  // var term_condition= $('term_condition').val();
+  if (!name) {
+    alert('Enter your name');
+    return;
+  }
+
+  if (!user_email || user_email.length < 5) {
+    alert('Enter valid email address');
+    return;
+  }
+
+  if (!password || password.length < 5) {
+    alert('Password minimun 5 character long.');
+    return;
+  }
+
+  if (password != confirmpassword) {
+    alert('Password not matched');
+    return;
+  }
+
+  if (!$('#term_condition')[0].checked) {
+    alert('You are not accept terms and conditions');
+    return;
+  }
+
+  postRequest('registration_form', '/Register', 'registerCallBack');
+}
+
+function registerCallBack(r, fid) {
+  if (r.status == 'SUCCESS') {
+    $('#email_text').html(r.data.email);
+    $('#registeration_msg_dom').show();
+    $('#registeration_dom').hide();
+  } else {
+
+  }
+};
 

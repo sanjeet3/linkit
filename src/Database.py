@@ -6,8 +6,75 @@ Created on 05-Jul-2018
  
 from src.endpoints_proto_datastore.ndb import EndpointsModel
 
+import time
+import logging
+  
 from google.appengine.ext import ndb
+from webapp2_extras import security
+from webapp2_extras.appengine.auth.models import User as UserSessionModel
 
+class UserSession(UserSessionModel):
+  username = ndb.StringProperty()
+    
+  def set_password(self, raw_password):
+    """Sets the password for the current user
+
+    :param raw_password:
+        The raw password which will be hashed and stored
+    """
+    self.password = security.generate_password_hash(raw_password, length=12)
+
+  @classmethod
+  def get_by_auth_token(cls, user_id, token, subject='auth'):
+    """Returns a user object based on a user ID and token.
+
+    :param user_id:
+        The user_id of the requesting user.
+    :param token:
+        The token string to be verified.
+    :returns:
+        A tuple ``(User, timestamp)``, with a user object and
+        the token timestamp, or ``(None, None)`` if both were not found.
+    """
+    token_key = cls.token_model.get_key(user_id, subject, token)
+    user_key = ndb.Key(cls, user_id)
+    # Use get_multi() to save a RPC call.
+    valid_token, user = ndb.get_multi([token_key, user_key])
+    if valid_token and user:
+        timestamp = int(time.mktime(valid_token.created.timetuple()))
+        return user, timestamp
+
+    return None, None
+
+  @classmethod
+  def get_user_session_model_by_username(cls, username):
+    return cls.query(cls.username==username).get()  
+
+
+class Client(EndpointsModel):
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=False) 
+  alert = ndb.BooleanProperty(default=False) 
+  name = ndb.StringProperty(default='')
+  email = ndb.StringProperty(default='')
+  password = ndb.StringProperty(default='')
+  telephone = ndb.StringProperty(default='')
+  verification_code = ndb.StringProperty(default='')
+  address = ndb.TextProperty(default='')
+
+  @classmethod
+  def get_active_client_by_email(cls, email):
+    return cls.query(cls.status==True, cls.email==email).get() 
+
+  @classmethod
+  def verify_email(cls, email):
+    return cls.query(cls.email==email).get() 
+
+  @classmethod
+  def validate_active_client(cls, email, password):
+    return cls.query(cls.status==True, cls.email==email, cls.password==password).get()   
+  
+  
 class Seller(EndpointsModel):
   '''Franchisor Data Store model '''
   status = ndb.BooleanProperty(default=True) 
