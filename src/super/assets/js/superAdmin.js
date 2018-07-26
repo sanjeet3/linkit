@@ -297,6 +297,7 @@ function searchOrderCallBack(r) {
 function imgSetupProduct(id) {
   $('#upload_product_pic_form')[0].reset();
   $('#product_key_upload_img').val(id);
+  $('#product_key_upload_design').val(id);
   var tds = $('#' + id).children();
   code = tds.eq(0).html();
   name = tds.eq(1).html();
@@ -304,8 +305,14 @@ function imgSetupProduct(id) {
   $('#prod_name').html(name);
   $('#image-setup').show();
   $('#list-dom, #add_btn').hide();
-  $('#product_img_list').html('<li class="text-center"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading Pics...</li>');
-  getRequest('', '/superadmin/GetProductPics?key='+id, 'getProductImageCallBack')
+  $('#product_img_list')
+      .html(
+          '<li class="text-center"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading Pics...</li>');
+  $('#product_design_img_list')
+      .html(
+          '<li class="text-center"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading Design...</li>');
+  getRequest('', '/superadmin/GetProductPics?key=' + id,
+      'getProductImageCallBack')
 };
 
 function backImgSetupProduct() {
@@ -343,29 +350,99 @@ function addImgTOProductList(t, src) {
 function uploadProductImage() {
   t = $('#pictype').val();
   fileObj = $('#imgage_file')[0];
-  if (fileObj.files && fileObj.files[0]) { 
-    postFormWithFile("upload_product_pic_form", '/superadmin/UploadProductPicture', 'uploadProductImageCallBack'); 
-  } 
+  if (fileObj.files && fileObj.files[0]) {
+    $('#save_product_pic_spin').show();
+    postFormWithFile("upload_product_pic_form",
+        '/superadmin/UploadProductPicture', 'uploadProductImageCallBack');
+  }
 };
 
 function uploadProductImageCallBack(r) {
-  var h = '<li><img alt="150x150" src="' + r.data.serving_url + '"></li>'
-  $('#product_img_list').append(h);
+  $('#save_product_pic_spin').hide();
+  if (r.status == 'SUCCESS') {
+    var h = '<li><img alt="150x150" src="' + r.data.serving_url + '"></li>'
+    $('#product_img_list').append(h);
+  }
+};
+
+function uploadProductDesign() {
+  t = $('#pictype').val();
+  fileObj = $('#design_file')[0];
+  if (fileObj.files && fileObj.files[0]) {
+    $('#save_product_design_spin').show();
+    postFormWithFile("upload_product_design_form",
+        '/superadmin/UploadProductDesign', 'uploadProductDisignCallBack');
+  }
+};
+
+function uploadProductDisignCallBack(r) {
+  $('#save_product_design_spin').hide();
+  if (r.status == 'SUCCESS') {
+    var h = '<li><img alt="150x150" src="' + r.data.serving_url
+        + '"><div class="tags"><span class="label label-warning arrowed-in">'
+        + r.data.title + '</span></div></li>'
+    $('#product_design_img_list').append(h);
+  }
 };
 
 function getProductImageCallBack(r) {
   var arr = r.data.img_list;
-  if(arr.length==0) {
-    $('#product_img_list').html('<li class="text-center">No Pics Available</li>'); 
+  var design = r.data.design_list;
+  if (arr.length == 0) {
+    $('#product_img_list').html(
+        '<li class="text-center">No Pics Available</li>');
   } else {
-    var h=[];
-    for(var i=0; i<arr.length; i++) {
+    var h = [];
+    for (var i = 0; i < arr.length; i++) {
       h.push('<li><img alt="150x150" src="' + arr[i] + '"></li>');
     }
-    
+
     $('#product_img_list').html(h.join(''));
   }
 
-};  
+  if (design.length == 0) {
+    $('#product_design_img_list').html(
+        '<li class="text-center">No Design Available</li>');
+  } else {
+    var h = [];
+    for (var i = 0; i < design.length; i++) {
+      var d = design[i];
+      h.push('<li><img alt="150x150" src="' + d.image_url
+          + '"><div class="tags"><span class="label label-warning arrowed-in">'
+          + d.title + '</span></div></li>');
+    }
+
+    $('#product_design_img_list').html(h.join(''));
+  }
+
+};
+
+function saveOrderStage() {
+  $('#save_spin').show();
+  postRequest('action_form', '/superadmin/OrderStage', 'saveOrderStageCallBack');
+};
+
+function saveOrderStageCallBack(r) {
+  $('#save_spin').hide();
+
+  var h = [ '<tr><td><input type="number" min="1" name="index" value="' ];
+  h.push(r.data.i);
+  h.push('"></td><td>');
+  h.push(r.data.code);
+  h.push('</td></tr>');
+
+  $('#order_stage_tbody').append(h.join(''));
+};
+
+function updateOrderStage() {
+  $('#order_stage_tbody').html();
+  alert('comming soon')
   
+  /*var tbl = $('table#whatever tr').map(function() {
+    return $(this).find('td').map(function() {
+      return $(this).html();
+    }).get();
+  }).get();*/
   
+};
+

@@ -5,12 +5,11 @@
   <!-- /.breadcrumb -->
   <div class="nav-search" id="nav-search"></div>
 </div>
-<div class="page-content">
+<div class="page-content"> 
   <div class="page-header">
     <form class="form-inline" id="super-admin-order--search-form">
-      <select class="input-small" name="seller"> 
-        <option value="">--seller--</option>
-        {%for s in seller_list%}
+      <select class="input-small" name="seller">
+        <option value="">--seller--</option> {%for s in seller_list%}
         <option value="{{s.entityKey}}">{{s.name}}-{{s.person}}</option> {%endfor%}
       </select>
       <div class="input-daterange input-group">
@@ -34,7 +33,7 @@
             <th>Date</th>
             <th>Product</th>
             <th>QTY</th>
-            <th>Seller</th> 
+            <th>Seller</th>
           </tr>
         </thead>
         <tbody id="table_body">
@@ -48,7 +47,7 @@
             <td>{{e.qty}}</td>
             <td>{{e.seller_name}}</td>
           </tr>
-          {%endfor%} 
+          {%endfor%}
         </tbody>
       </table>
     </div>

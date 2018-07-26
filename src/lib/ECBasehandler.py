@@ -25,8 +25,7 @@ class ActionSupport(webapp2.RequestHandler):
     
     self.initialize(request, response)
     self.client = None
-    user_session = self.auth.get_user_by_session() 
-    logging.info(user_session)
+    user_session = self.auth.get_user_by_session()  
     if user_session:
       self.client = Client.get_active_client_by_email(user_session['username'])
           
@@ -60,8 +59,7 @@ class ActionSupport(webapp2.RequestHandler):
     return self.auth.store.user_model     
     
   @webapp2.cached_property
-  def get_jinja2_env(self): 
-    msg=os.path.join(os.path.dirname(__file__), '..')
+  def get_jinja2_env(self):  
     environment = jinja2.Environment(loader = jinja2.FileSystemLoader(os.path.join(
         os.path.dirname(__file__), '..')), extensions=['jinja2.ext.do',],
         autoescape=True)

@@ -46,6 +46,7 @@
       </div>
     </div>
   </div>
+  {% if user_obj %}
   <div class="col-sm-12 mt-10 text-center">
     <button type="button" class="btn btn-success btn-mini " onclick="orderPaymentStart()">
       <i class="fa fa-shopping-cart"></i> Pay Now
@@ -55,4 +56,14 @@
       <i class="ace-icon fa fa-times"></i> cancel
     </button>
   </div>
+  {%else%}
+  <div class="col-sm-12 mt-10 text-center">
+    <p>Please sign-in first to order your item.</p> 
+    <button type="button" onclick="backFromOrderStageFirst()"
+      class="btn btn-sm btn-primary btn-white btn-round btn-mini">
+      <i class="ace-icon fa fa-times"></i> cancel
+    </button>
+  </div>
+  {% endif %}
+  
 </div>

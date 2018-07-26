@@ -15,7 +15,8 @@
       <div class="prd-info-content">
         <form id="product_order_form">
           <input type="hidden" name="product" id="selected_seller_product"> <input
-            type="hidden" name="qty" id="selected_product_qty">
+            type="hidden" name="qty" id="selected_product_qty"><input
+            type="hidden" name="design_id" id="selected_design_id">
         </form>
         <h6 class="pull-left">{{p.code}}, {{p.name}}</h6>
         <button type="button" onclick="backToProductList()"
@@ -57,9 +58,20 @@
             </div>
           </div>
           <div class="prd-inf-row" id="selected_seller_price_info"></div>
+          <div class="prd-inf-row" id="design_info">
+            <div class="prd-inf-title">Design Id:</div>
+            <div class="prd-inf-val">
+              <input type="text" value="" name="design_id" id="design_id">
+              <i class="fa fa-bolt fa-2x" title="Create your design and use given design id here"></i>
+            </div>
+          </div>
         </div>
       </div>
       <div class="center mt-10">
+        <a type="button" class="btn btn-info btn-mini"
+          href="/CreateDesign?k={{p.entityKey}}" target="_blank">
+          <i class="fa fa-pencil"></i> Create Design
+        </a>
         <span class="order-act">
           <button type="button" class="btn btn-success btn-mini " onclick="orderProductStage1()">
             <i class="fa fa-shopping-cart"></i> Order Now
@@ -119,22 +131,24 @@
         <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for=""> Your Name
         </label>
         <div class="col-lg-6 col-sm-12">
-          <input type="text" name="client_name" id="client_name" placeholder="Your name" class="form-control input-custom">
+          <input type="text" name="client_name" id="client_name" placeholder="Your name"
+            class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
         <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for=""> Your
           Mobile Number </label>
         <div class="col-lg-6 col-sm-12">
-          <input type="text" name="client_mobile" id="client_mobile" placeholder="your mobile number"
-            class="form-control input-custom">
+          <input type="text" name="client_mobile" id="client_mobile"
+            placeholder="your mobile number" class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
         <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for=""> Your Email
         </label>
         <div class="col-lg-6 col-sm-12">
-          <input type="text" placeholder="Order notification will send vai email" name="client_email" id="client_email" class="form-control input-custom">
+          <input type="text" placeholder="Order notification will send vai email"
+            name="client_email" id="client_email" class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
@@ -149,7 +163,8 @@
         <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for="code"> Name
           On Card</label>
         <div class="col-lg-6 col-sm-12">
-          <input type="text" name="name_on_card" placeholder="Name on your card" id="name_on_card" class="form-control input-custom">
+          <input type="text" name="name_on_card" placeholder="Name on your card" id="name_on_card"
+            class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">

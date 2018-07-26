@@ -11,6 +11,7 @@ from webapp2_extras.routes import RedirectRoute
 
 __route_list = [
     RedirectRoute(r'/', Home.Home, name='Home page', strict_slash=True),
+    RedirectRoute(r'/ActivateAccount', Home.ActivateAccount, name='ActivateAccount page', strict_slash=True),
     RedirectRoute(r'/Register', Home.Register, name='Register page', strict_slash=True),
     RedirectRoute(r'/Login', Home.Login, name='Login page', strict_slash=True),
     RedirectRoute(r'/Logout', Home.Logout, name='Logout page', strict_slash=True),
@@ -25,11 +26,13 @@ __route_list = [
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductPics', SuperAdmin.GetProductPics, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductPicture', SuperAdmin.UploadProductPicture, name='SuperAdmin Upload Product Picture', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadProductDesign', SuperAdmin.UploadProductDesign, name='SuperAdmin Upload Product Design', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductCategory', SuperAdmin.SaveProductsCategory, name='SuperAdmin SaveProductCategory', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductUOM', SuperAdmin.SaveProductsUOM, name='SuperAdmin SaveProductUOM', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
     RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
+    RedirectRoute(r'/superadmin/OrderStage', SuperAdmin.OrderStageView, name='SuperAdmin Order Stage view', strict_slash=True),
     RedirectRoute(r'/superadmin/OrderSearch', SuperAdmin.OrderSearch, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/AssignProductToSeller', SuperAdmin.AssignProductToSeller, name='SuperAdmin AssignProductToSeller', strict_slash=True),
     RedirectRoute(r'/superadmin/GetSellerProduct', SuperAdmin.GetSellerProduct, name='SuperAdmin get Product of Seller', strict_slash=True),

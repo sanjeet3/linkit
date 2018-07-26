@@ -1,0 +1,60 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-map-signs"></i> <a href="javascript:">Order Stage Settings</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search"></div>
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Stage</th>
+          </tr>
+        </thead>
+        <tbody id="order_stage_tbody">
+          {%for d in stage_list%}
+          <tr>
+            <td><input type="number" min="1" name="index" value="{{loop.index}}"></td>
+            <td>{{d}}</td>
+          </tr>
+          {%endfor%}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2"><button type="button" class="btn btn-danger btn-minier">
+                Update <i id="upload_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+              </button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="form-dom">
+    <div class="col-xs-12">
+      <form id="update_form" style="display: none;">
+        <input type="hidden" name="data" id="stage_order">
+      </form>
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="action_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="code"> Order Stage </label>
+          <div class="col-sm-4">
+            <input type="text" name="code" id="code" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveOrderStage()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

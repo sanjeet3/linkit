@@ -11,10 +11,16 @@ config={
                             'user_attributes': ['username']},
     # application name
     'app_name': "linkit",
+    
     # send error emails to developers
     'send_mail_developer': True,
     
+    # default email as sender
+    'emailsender': 'sainisanjeet3@gmail.com', 
+    
     'app_lang': 'en',
+    'design_img_title': ['BASE', 'LEFT', 'CENTER', 'RIGHT'],
+    
     'super_admin': ['care4growth@gmail.com',
                     'badalvpatel1980@gmail.com',
                     'sainisanjeet3@gmail.com',

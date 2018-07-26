@@ -5,7 +5,8 @@ Created on 04-Jul-2018
 '''
 
 from src.Database import Product, Seller, SellerProduct, SellerOrder
-from src.Database import Client
+from src.Database import Client, ClientProductDesign, ProductDesign
+from src.Database import OrderStage
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -15,11 +16,30 @@ from src.api.baseapi import json_response, SUCCESS, ERROR
 from src.api.datetimeapi import get_dt_by_country
 import datetime
 
+from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
+from src.app_configration import config
 
+design_img_title = config.get('design_img_title')
 
+class ActivateAccount(ActionSupport):
+  def get(self):     
+    key = self.request.get('key')
+    
+    try:
+      e = ndb.Key(urlsafe=key).get()    
+    except Exception, msg:
+      logging.error(msg)
+      self.abort(401) 
+      return
+    
+    e.status=True
+    e.put()
+    return self.redirect('/')  
+  
+          
 
 class Register(ActionSupport): 
   def post(self):  
@@ -35,13 +55,22 @@ class Register(ActionSupport):
       return json_response(self.response, data_dict, ERROR, 'Email account exist')    
     
     e = Client()
-    e.status=True
     e.email=email
     e.name=name
     e.telephone=contact
     e.password=password 
     e.alert = True if self.request.get('recieved_offers') else False
-    e.put()
+    e = e.put().get()
+    try:
+      taskqueue.add(url='/taskqueue/VerifyAccountMailer',
+                    queue_name='VerifyAccountMailer',
+                    params={'receiver_mail': email,
+                            'name': name,
+                            'key': e.key.urlsafe()})
+    except Exception, msg:
+      logging.error(msg)
+      
+        
     data_dict['email']=email    
     return json_response(self.response, data_dict, SUCCESS, '%s account created' %(email))
     
@@ -150,9 +179,10 @@ class GetProductDetails(ActionSupport):
     p = ndb.Key(urlsafe=self.request.get('key')).get()
     seller_dict = Seller.get_key_obj_dict()
     seller_product_list = SellerProduct.get_product_by_master_key_for_client(p.key)
-    
+    design_list = ProductDesign.get_design_list(p.key)
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
     self.response.out.write(template.render({'p': p,
+                                             'design_list': design_list,
                                              'seller_product_list': seller_product_list,
                                              'seller_dict': seller_dict}))
 
@@ -182,7 +212,8 @@ class OrderStageFirst(ActionSupport):
     template = self.get_jinja2_env.get_template('endclient/product-buy-stage1.html')    
     self.response.out.write(template.render({'product': product,
                                              'seller': seller,
-                                             'qty': qty
+                                             'qty': qty,
+                                             'user_obj': self.client,
                                              }))
 
 class PlaceOrder(ActionSupport):
@@ -190,6 +221,7 @@ class PlaceOrder(ActionSupport):
     seller = Seller()
     master_product = Product()
     product = SellerProduct()  
+    design = ClientProductDesign()
     qty = int(self.request.get('qty'))   
     if qty < 1:
       HTML= QUANTITY_ERROR.replace('[ONCLICK]', 'backFromOrderStageFirst()')  
@@ -198,6 +230,7 @@ class PlaceOrder(ActionSupport):
     client_name = self.request.get('client_name')
     client_mobile = self.request.get('client_mobile')
     client_email = self.request.get('client_email')
+    design_id = self.request.get('design_id')
     card_number = self.request.get('card_number')
     name_on_card = self.request.get('name_on_card')
     cvv_number = self.request.get('cvv_number')
@@ -206,12 +239,18 @@ class PlaceOrder(ActionSupport):
     logging.info(ldt)  
     history_list = []  
     product = ndb.Key(urlsafe=self.request.get('product')).get()
-    seller = product.seller.get()  
+    seller = product.seller.get()
+    if design_id:  
+      design = ClientProductDesign.get_by_design_id(design_id)
+    
     order = SellerOrder()
+    if design and design.product== product.master_product:
+      order.design = design.key
     order.date = ldt.date()
     order.qty = qty
     order.amount = qty*product.retail_price
     order.category = product.category
+    order.client = self.client.key
     order.client_name = client_name
     order.code = product.code
     order.description = product.description
@@ -226,19 +265,22 @@ class PlaceOrder(ActionSupport):
     order.seller_name = seller.name
     order.seller_urlsafe = seller.entityKey
     order.size = product.size
-    order.status = 'Ordered'
     order.phone = client_mobile
     order.uom = product.uom
     order.payed =True
     order.payment_ref = str(uuid1(123456789))
     order.order_number = order.payment_ref.replace('-','').upper()[:10]
+    
+    order_stage_list = OrderStage.get_order_stage().name
+    
+    order.status = order_stage_list[0]if order_stage_list else 'Ordered'
     history_list.append({'status': order.status,
                          'qty': qty,
                          'retail_price': product.retail_price,
                          'price': product.master_price,
                          'amount': order.amount,
                          'time': ldt.strftime('%I:%M %p'),
-                         'date': ldt.strftime('%I:%M %p'),
+                         'date': ldt.strftime('%d %b%Y'),
                          })
     order.history = json.dumps(history_list) 
     order.put()
@@ -253,9 +295,53 @@ class PlaceOrder(ActionSupport):
                             
 
 class CreateDesign(ActionSupport):
-  def get(self):
-    product_list = Product.get_selling_product_list()  
+  def get(self): 
+    p = ndb.Key(urlsafe=self.request.get('k')).get() 
+    design_list = ProductDesign.get_design_list(p.key)
     template = self.get_jinja2_env.get_template('endclient/customDesign.html')    
-    self.response.out.write(template.render({}))                            
-                            
-                            
+    self.response.out.write(template.render({'p': p,
+                                             'design_list': design_list,
+                                             'key': self.request.get('k'), 
+                                             'user_obj': self.client}))  
+    
+    
+  def post(self): 
+    layer_list = []
+    layer_ext_list = []  
+    p = Product()  
+    p = ndb.Key(urlsafe=self.request.get('product')).get()                          
+    design_print = self.request.get('design_print')
+    layer = self.request.get('layer')
+    layer_json = json.loads(layer)
+    for data in layer_json:
+      layr_type=data['type']
+      title = data['title']  
+      if layr_type =="image" and title in design_img_title:
+        continue    
+      source = data['source']
+      if layr_type =="image":
+        layer_list.append('<img src="%s">' %(source))
+        layer_ext_list.append('image')   
+      else:
+        parameters= data['parameters']
+        fontSize = parameters['fontSize']
+        fontFamily = parameters['fontFamily']
+        r= '<font style="font-family: %s;font-size: %spx">%s</font>' %(fontFamily, fontSize, source)
+        layer_list.append(r)
+        layer_ext_list.append('text')
+        
+      logging.info(data['type'])  
+        
+    design_obj = ClientProductDesign()                    
+    design_obj.client = self.client.key
+    design_obj.product_code = p.code
+    design_obj.product = p.key
+    design_obj.design_prev = design_print
+    design_obj.layer_ext_list =layer_ext_list
+    design_obj.layer_list = layer_list
+    design_obj = design_obj.put().get()
+    design_obj.design_id = str(design_obj.id)
+    design_obj.put()
+    
+    data_dict = {'id': design_obj.id}                        
+    return json_response(self.response, data_dict, SUCCESS, 'Product design saved')                        

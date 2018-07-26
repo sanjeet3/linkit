@@ -174,6 +174,7 @@ function orderProductStage1() {
     return;
   }
   $('#selected_product_qty').val(qty);
+  $('#selected_design_id').val($('#design_id').val());
   $('#order-stage-1').hide();
   $('#order-stage-2').show();
   $('#order-detail-stage1')
@@ -232,7 +233,7 @@ function orderMakePayment() {
   var cvv_number = $('#cvv_number').val();
   var qty = $('#user-priece-qty').val();
   var pk = $('#selected_seller_product').val();
-
+  var design_id = $('#selected_design_id').val();
   if (!qty) {
     alert('Quantity missing!');
     return;
@@ -275,7 +276,7 @@ function orderMakePayment() {
   $('#order-payment-stage').hide();
   $('#order-suucess').show();
   $('#order-suucess-details').html(h);
-  var reqURL = '/PlaceOrder?qty=' + qty + '&product=' + pk;
+  var reqURL = '/PlaceOrder?qty=' + qty + '&product=' + pk+ '&design_id='+design_id;
   postRequest('order-payment-form', reqURL, 'orderMakePaymentCallBack');
 };
 

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customize Product Designer</title>
+<title>Create Product Design</title>
 <!-- Style sheets -->
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <!-- Google Webfonts -->
@@ -27,8 +27,9 @@
         var $yourDesigner = $('#product-designer'), pluginOpts = {
           /* stageWidth : 1200, */
           editorMode : false,
+          toolbarPlacement : "smart",
           actions : {
-            'top' : [ 'download', 'print','preview-lightbox' ],
+            'top' : [ 'download', 'print', 'preview-lightbox' ],
             'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
             'bottom' : [ 'undo', 'redo' ],
           },
@@ -83,65 +84,77 @@
           }
         };
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-         
-/*         //print button
-        $('#print-button').click(function() {
-          yourDesigner.print();
-          return false;
-        });
 
-        //create an image
-        $('#image-button').click(function() {
-          var image = yourDesigner.createImage();
-          return false;
-        });
+        /*         //print button
+         $('#print-button').click(function() {
+         yourDesigner.print();
+         return false;
+         });
 
-        //checkout button with getProduct()
-        $('#checkout-button').click(function() {
-          var product = yourDesigner.getProduct();
-          console.log(product);
-          return false;
-        });
+         //create an image
+         $('#image-button').click(function() {
+         var image = yourDesigner.createImage();
+         return false;
+         });
 
-        //event handler when the price is changing
-        $yourDesigner.on('priceChange', function(evt, price, currentPrice) {
-          $('#thsirt-price').text(currentPrice);
-        });
+         //checkout button with getProduct()
+         $('#checkout-button').click(function() {
+         var product = yourDesigner.getProduct();
+         console.log(product);
+         return false;
+         });
 
-        //save image on webserver
-        $('#save-image-php').click(function() {
+         //event handler when the price is changing
+         $yourDesigner.on('priceChange', function(evt, price, currentPrice) {
+         $('#thsirt-price').text(currentPrice);
+         });
 
-          yourDesigner.getProductDataURL(function(dataURL) {
-            $.post("php/save_image.php", {
-              base64_image : dataURL
-            });
-          });
+         //save image on webserver
+         $('#save-image-php').click(function() {
 
-        });
+         yourDesigner.getProductDataURL(function(dataURL) {
+         $.post("php/save_image.php", {
+         base64_image : dataURL
+         });
+         });
 
-        //send image via mail
-        $('#send-image-mail-php').click(function() {
+         });
 
-          yourDesigner.getProductDataURL(function(dataURL) {
-            $.post("php/send_image_via_mail.php", {
-              base64_image : dataURL
-            });
-          });
+         //send image via mail
+         $('#send-image-mail-php').click(function() {
 
-        });
-        */
-      }); 
+         yourDesigner.getProductDataURL(function(dataURL) {
+         $.post("php/send_image_via_mail.php", {
+         base64_image : dataURL
+         });
+         });
+
+         });
+         */
+      });
+  function point_it(event) {
+    pos_x = event.offsetX ? (event.offsetX) : event.pageX
+        - document.getElementById("body").offsetLeft;
+    pos_y = event.offsetY ? (event.offsetY) : event.pageY
+        - document.getElementById("body").offsetTop;
+    console.log(pos_x);
+    console.log(pos_y);
+  }
 </script>
 <!-- Google Webfonts 110 -->
 <link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
 </head>
-<body>
+<body onclick="point_it(event)" id="body">
   <div id="main-container">
-    <h3 id="clothing">Custom Product Design</h3>
+    <h3 id="clothing">Create Product Design</h3>
+    {%if not user_obj %}
+    <p>Please Sign-in first to use custom design for your order. You can sign-up by using your
+      email address.</p>
+    {%endif%}
     <div id="product-designer"
       class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
       <div class="fpd-product" title="Sweater" data-thumbnail="images/sweater/preview.png">
-        <img src="images/sweater/preview.png" title="Base"
+        <img src="images/sweater/preview.png" title="BASE"
           data-parameters='{"left": 432, "top": 311}' />
       </div>
       <div class="fpd-design">
@@ -178,9 +191,15 @@
             data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
         </div>
       </div>
+      <div class="fpd-background">
+        <div class="fpd-category" title="Swirls">
+          <img src="images/designs/swirl.png" title="Swirl"
+            data-parameters='{"zChangeable": true, "left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
+        </div>
+      </div>
     </div>
-    <br />
-    {#<div class="fpd-clearfix" style="margin-top: 30px; display: none;">
+    <br /> {#
+    <div class="fpd-clearfix" style="margin-top: 30px; display: none;">
       <div class="api-buttons fpd-container fpd-left">
         <a href="#" id="print-button" class="fpd-btn">Print</a> <a href="#" id="image-button"
           class="fpd-btn">Create Image</a> <a href="#" id="checkout-button" class="fpd-btn">Checkout</a>
@@ -194,12 +213,26 @@
       Only working on a webserver:<br /> <span class="fpd-btn" id="save-image-php">Save
         image with php</span> <span class="fpd-btn" id="send-image-mail-php">Send image to mail</span>
     </p>
-  </div>#}
+  </div>
+  #}
   <div class="fpd-clearfix text-center" style="margin-top: 15px;">
-    <div class="api-buttons fpd-container"> 
-      <button type="button" class="fpd-btn" onclick="saveYourDisign()">Save Design</button> 
+    <div class="api-buttons fpd-container">
+      {% if user_obj %}
+      <form id="create_product_design_form">
+        <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
+          name="layer" id="design_layer"> <input type="hidden" name="design_print"
+          id="design_print">
+        <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
+      </form>
+      <p id="pls_wait_design_saving" style="display: none;">Please wait preparing your design...</p>
+      {%else%}
+      <p>Please Sign-in first to use custom design for your order. You can sign-up by using your
+        email address.</p>
+      {%endif%}
     </div>
-  </div> 
+  </div>
   <div id="output_dom"></div>
 </body>
+<script src="/super/assets/js/bootstrap-notify.js"></script>
+<script type="text/javascript" src="super/assets/js/algo.js"></script>
 </html>

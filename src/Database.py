@@ -12,6 +12,9 @@ import logging
 from google.appengine.ext import ndb
 from webapp2_extras import security
 from webapp2_extras.appengine.auth.models import User as UserSessionModel
+from src.app_configration import config
+
+product_design_title_choice = config.get('design_img_title')
 
 class UserSession(UserSessionModel):
   username = ndb.StringProperty()
@@ -61,6 +64,14 @@ class Client(EndpointsModel):
   telephone = ndb.StringProperty(default='')
   verification_code = ndb.StringProperty(default='')
   address = ndb.TextProperty(default='')
+
+  @classmethod
+  def get_all(cls):
+    return cls.query()
+
+  @classmethod
+  def get_inactive(cls):
+    return cls.query(cls.status==False)
 
   @classmethod
   def get_active_client_by_email(cls, email):
@@ -158,7 +169,25 @@ class Product(EndpointsModel):
   @classmethod
   def get_product_list(cls):
     return cls.query().fetch()
-      
+
+class ProductDesign(EndpointsModel):
+  ''' Product datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  product = ndb.KeyProperty(Product)
+  title = ndb.StringProperty(choices=product_design_title_choice)
+  top = ndb.StringProperty(default='')
+  left = ndb.StringProperty(default='') 
+  image_url = ndb.StringProperty(default='') 
+  bucket_path = ndb.StringProperty(default='') 
+  bucket_key = ndb.StringProperty(default='')  
+    
+  @classmethod
+  def get_exist_design(cls, product, title):
+    return cls.query(cls.product==product, cls.title==title).get()
+    
+  @classmethod
+  def get_design_list(cls, product):
+    return cls.query(cls.product==product).order(cls.created_on).fetch()  
   
 class SellerProduct(EndpointsModel):
   ''' Franchisor Product datastore '''
@@ -197,6 +226,8 @@ class SellerOrder(EndpointsModel):
   amount = ndb.FloatProperty(default=0.0) 
   date = ndb.DateProperty(auto_now_add=True)
   seller = ndb.KeyProperty(Seller)
+  client = ndb.KeyProperty(Client)
+  design = ndb.KeyProperty()
   seller_urlsafe = ndb.StringProperty(default='')
   seller_name = ndb.StringProperty(default='')
   seller_email = ndb.StringProperty(default='')
@@ -226,3 +257,32 @@ class SellerOrder(EndpointsModel):
     if seller_list:
       q = q.filter(cls.seller.IN(seller_list))    
     return q
+
+class ClientProductDesign(EndpointsModel): 
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  client = ndb.KeyProperty(Client)
+  product = ndb.KeyProperty(Product)
+  product_code = ndb.StringProperty(default='')
+  design_id = ndb.StringProperty(default='')
+  design_prev = ndb.TextProperty(default='')
+  layer_list = ndb.TextProperty(repeated=True)
+  layer_ext_list = ndb.TextProperty(repeated=True)
+
+  @classmethod
+  def get_by_design_id(cls, design_id):
+    e = cls.query(cls.design_id==design_id).get()      
+    return e
+  
+class OrderStage(EndpointsModel):
+  name = ndb.StringProperty(repeated=True)
+
+  @classmethod
+  def get_order_stage(cls):
+    e = cls.query().get()
+    if not e:
+      e = OrderStage()
+      
+    return e
+
+        
+      
