@@ -6,75 +6,80 @@
     <li><i class="ace-icon fa fa-shopping-cart"></i> <a href="javascript:">Order</a></li>
   </ul>
   <!-- /.breadcrumb -->
-  <div class="nav-search" id="nav-search"></div>
+  <div class="nav-search" id="nav-search">
+    <button type="button" onclick="orderApi.backToList()" class="btn btn-default btn-mini"
+      id="back_btn" style="display: none;">
+      <i class="ace-icon fa fa-arrow-left bigger-110"></i>Back
+    </button>
+  </div>
 </div>
 <div class="page-content">
-  <div class="page-header">
-    <form class="form-inline" id="super-admin-order--search-form">
-      <select class="input-small" name="seller">
-        <option value="">--seller--</option> {%for s in seller_list%}
-        <option value="{{s.entityKey}}">{{s.name}}-{{s.person}}</option> {%endfor%}
-      </select>
-      <div class="input-daterange input-group">
-        <input type="text" class="date-input" name="start" id="start" value="{{dt}}"> <span
-          class="dt-arrow"> <i class="fa fa-exchange"></i>
-        </span> <input type="text" class="date-input" name="end" id="end" value="{{dt}}">
+  <div id="list-dom">
+    <div class="page-header">
+      <form class="form-inline" id="super-admin-order--search-form">
+        <select class="input-small" name="seller">
+          <option value="">--seller--</option> {%for s in seller_list%}
+          <option value="{{s.entityKey}}">{{s.name}}-{{s.person}}</option> {%endfor%}
+        </select>
+        <div class="input-daterange input-group">
+          <input type="text" class="date-input" name="start" id="start" value="{{dt}}"> <span
+            class="dt-arrow"> <i class="fa fa-exchange"></i>
+          </span> <input type="text" class="date-input" name="end" id="end" value="{{dt}}">
+        </div>
+        <button type="button" onclick="searchOrder()" class="btn btn-info btn-mini">
+          <i class="ace-icon fa fa-search bigger-110"></i>Search
+        </button>
+      </form>
+    </div>
+    <div class="row mt-10">
+      <div class="col-xs-12">
+        <table class="table  table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Order Number</th>
+              <td>Stage</td>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Product</th>
+              <th>QTY</th>
+              <th>Client</th>
+              <th>Seller</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="table_body">
+            {%for e in order_list%}
+            <tr id="{{e.entityKey}}">
+              <td>{{e.order_number}}</td>
+              <td>{{e.status}}</td>
+              <td>{{e.amount}}</td>
+              <td>{{e.date}}</td>
+              <td>{{e.code}}-{{e.name}}</td>
+              <td>{{e.qty}}</td>
+              <td>{{e.client_name}}</td>
+              <td>{{e.seller_name}}</td>
+              <td><div class="widget-toolbar no-border">
+                  <button class="btn btn-xs bigger btn-yellow dropdown-toggle"
+                    data-toggle="dropdown" aria-expanded="false">
+                    <i class="ace-icon fa fa-cog"></i>
+                  </button>
+                  <ul
+                    class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                    <li><a href="javascript:orderApi.gotoEditStatus('{{e.entityKey}}')">Stage</a></li>
+                    <li><a href="javascript:orderApi.gotoProductionPrint('{{e.entityKey}}')">Production
+                        Print</a></li>
+                    <li><a href="javascript:orderApi.gotoViewMode('{{e.entityKey}}')">View</a></li>
+                  </ul>
+                </div></td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
       </div>
-      <button type="button" onclick="searchOrder()" class="btn btn-info btn-mini">
-        <i class="ace-icon fa fa-search bigger-110"></i>Search
-      </button>
-    </form>
-  </div>
-  <div class="row mt-10" id="list-dom">
-    <div class="col-xs-12">
-      <table class="table  table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>Order Number</th>
-            <td>Stage</td>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Product</th>
-            <th>QTY</th>
-            <th>Client</th>
-            <th>Seller</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="table_body">
-          {%for e in order_list%}
-          <tr id="{{e.entityKey}}">
-            <td>{{e.order_number}}</td>
-            <td>{{e.status}}</td>
-            <td>{{e.amount}}</td>
-            <td>{{e.date}}</td>
-            <td>{{e.code}}-{{e.name}}</td>
-            <td>{{e.qty}}</td>
-            <td>{{e.client_name}}</td>
-            <td>{{e.seller_name}}</td>
-            <td><div class="widget-toolbar no-border">
-                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
-                  aria-expanded="false">
-                  <i class="ace-icon fa fa-cog"></i>
-                </button>
-                <ul
-                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                  <li><a href="javascript:orderApi.gotoEditStatus('{{e.entityKey}}')">Stage</a></li>
-                  <li><a href="javascript:orderApi.gotoProductionPrint('{{e.entityKey}}')">Production
-                      Print</a></li>
-                  <li><a href="javascript:orderApi.gotoViewMode('{{e.entityKey}}')">View</a></li>
-                </ul>
-              </div></td>
-          </tr>
-          {%endfor%}
-        </tbody>
-      </table>
     </div>
   </div>
-  <div class="row mt-10" id="view-dom" style="display: none;">
-    <div class="col-xs-12"></div>
-  </div>
-</div> 
+  <div id="view-dom" style="display: none;"></div>
+</div>
 <div id="editOrderStatusDailog" class="dialog-box">
   <div class="dailog-header">
     <span>Update Order Stage</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"

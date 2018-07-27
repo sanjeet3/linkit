@@ -311,9 +311,7 @@ class EditOrderStage(ActionSupport):
     return json_response(self.response, data_dict, SUCCESS, 'Order stage updated')
 
 class GerOrderProductPrint(ActionSupport):
-  def get(self):
-    order = SellerOrder()  
-    design = ClientProductDesign 
+  def get(self): 
     order = ndb.Key(urlsafe=self.request.get('key')).get()
     if order.design:
       design = order.design.get()  
@@ -323,8 +321,17 @@ class GerOrderProductPrint(ActionSupport):
       html_str = 'No design available'  
     data_dict = {'html': html_str}  
     return json_response(self.response, data_dict, SUCCESS, '')
-    
+
+class GerOrderDetails(ActionSupport):
+  def get(self):  
+    order = ndb.Key(urlsafe=self.request.get('key')).get()    
   
+    template = self.get_jinja2_env.get_template('super/order_details.html') 
+    html_str = template.render({'order': order}) 
+    data_dict = {'html': html_str}  
+    return json_response(self.response, data_dict, SUCCESS, '')
+
+
 class UploadProductPicture(ActionSupport):    
   def post(self):  
     key = self.request.get('key') 

@@ -464,37 +464,38 @@ function updateOrderStage() {
   postRequest('update_form', '/superadmin/OrderStageUpdate', null)
 };
 
-function downloadPic(elm){
-  var img = $( elm ).siblings()[0];
+function downloadPic(elm) {
+  var img = $(elm).siblings()[0];
   var src = img.src;
   src = src.split(';');
   src = src[0].split('/');
-  src=src[1];
-  var url = img.src.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
-  /*window.open('ilename=image.'+src+';'+url);*/
+  src = src[1];
+  var url = img.src.replace(/^data:image\/[^;]+/,
+      'data:application/octet-stream');
+  /* window.open('ilename=image.'+src+';'+url); */
   var hiddenElement = document.createElement('a');
   hiddenElement.href = url;
   hiddenElement.target = '_blank';
-  hiddenElement.download = 'image.'+src;
+  hiddenElement.download = 'image.' + src;
   hiddenElement.click();
 }
 
 var orderApi = {};
 var loadingPrintHtml = '<div class="text-center mt-20"><i class="fa fa-spinner fa-spin" ></i><br/>Loading order production print...</div>'
 
-orderApi.backFromProductionPrint = function(){
+orderApi.backFromProductionPrint = function() {
   $('#main-container').show();
   $('#print-content').hide();
-  
+
 }
-  
+
 orderApi.gotoProductionPrint = function(key) {
-  //openDialog('#productionPrintDailog');
-  //$('#order-print-content').html(loadingPrintHtml);
+  // openDialog('#productionPrintDailog');
+  // $('#order-print-content').html(loadingPrintHtml);
   $('#main-container').hide();
   $('#print-content').show();
   $('#print-inner-content').html(loadingPrintHtml);
-  
+
   getRequest('', '/superadmin/GerOrderProductPrint?key=' + key,
       'orderApi.renderProductionPrint');
 };
@@ -503,9 +504,26 @@ orderApi.renderProductionPrint = function(r) {
   $('#print-inner-content').html(r.data.html);
   $('.tobehide').show();
 };
-orderApi.gotoViewMode = function(key) {
+orderApi.backToList = function() {
+  $('#list-dom').show();
+  $('#view-dom, #back_btn').hide();
 
+}
+
+orderApi.gotoViewMode = function(key) {
+  $('#list-dom').hide();
+  $('#view-dom, #back_btn').show();
+  $('#view-dom')
+      .html(
+          '<div class="text-center mt-20"><i class="fa fa-spinner fa-spin" ></i><br/>Loading order details...</div>');
+  getRequest('', '/superadmin/GerOrderDetails?key=' + key,
+      'orderApi.gotoViewModeCallBack');
 };
+
+orderApi.gotoViewModeCallBack = function(r) {
+  $('#view-dom').html(r.data.html);
+}
+
 orderApi.gotoEditStatus = function(key) {
   $('#order_key_stage').val(key);
   openDialog('#editOrderStatusDailog');
@@ -537,7 +555,7 @@ orderApi.editOrderStatusCallBack = function(r) {
   row.find("td:eq(1)").text(r.data.stage);
 
 };
- 
+
 function printFromHtml(data) {
   var mywindow = window.open('', 'my div', 'height=842,width=595');
   mywindow.document.write('<html><head><title>Invoice</title>');
@@ -564,24 +582,25 @@ function printFromHtml(data) {
   return true;
 }
 
-
 function printWindow(selector, title) {
   var divContents = $(selector).html();
   var $cssLink = $('link');
-  var printWindow = window.open('', '', 'height=' + window.outerHeight * 0.6 + ', width=' + window.outerWidth  * 0.6);
-  printWindow.document.write('<html><head><h2><b><title>' + title + '</title></b></h2>');
-  for(var i = 0; i<$cssLink.length; i++) {
-   printWindow.document.write($cssLink[i].outerHTML);
+  var printWindow = window.open('', '', 'height=' + window.outerHeight * 0.6
+      + ', width=' + window.outerWidth * 0.6);
+  printWindow.document.write('<html><head><h2><b><title>' + title
+      + '</title></b></h2>');
+  for (var i = 0; i < $cssLink.length; i++) {
+    printWindow.document.write($cssLink[i].outerHTML);
   }
   printWindow.document.write('</head><body >');
   printWindow.document.write(divContents);
   printWindow.document.write('</body></html>');
   printWindow.document.close();
-  printWindow.onload = function () {
-           printWindow.focus();
-           setTimeout( function () {
-               printWindow.print();
-               printWindow.close();
-           }, 100);  
-       }
+  printWindow.onload = function() {
+    printWindow.focus();
+    setTimeout(function() {
+      printWindow.print();
+      printWindow.close();
+    }, 100);
+  }
 }

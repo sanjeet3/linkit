@@ -22,7 +22,10 @@ __route_list = [
      
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
+    #Super Admin Seller
     RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),
+    RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
+    #Super Admin Product
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductPics', SuperAdmin.GetProductPics, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductPicture', SuperAdmin.UploadProductPicture, name='SuperAdmin Upload Product Picture', strict_slash=True),
@@ -30,8 +33,9 @@ __route_list = [
     RedirectRoute(r'/superadmin/SaveProductCategory', SuperAdmin.SaveProductsCategory, name='SuperAdmin SaveProductCategory', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductUOM', SuperAdmin.SaveProductsUOM, name='SuperAdmin SaveProductUOM', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
-    RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
+    #Super Admin order
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
+    RedirectRoute(r'/superadmin/GerOrderDetails', SuperAdmin.GerOrderDetails, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/GerOrderProductPrint', SuperAdmin.GerOrderProductPrint, name='SuperAdmin GerOrderProductPrint', strict_slash=True),
     RedirectRoute(r'/superadmin/EditOrderStage', SuperAdmin.EditOrderStage, name='SuperAdmin EditOrderStage', strict_slash=True),
     RedirectRoute(r'/superadmin/OrderStage', SuperAdmin.OrderStageView, name='SuperAdmin Order Stage view', strict_slash=True),
