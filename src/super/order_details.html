@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <div class="widget-box transparent">
+      <div class="widget-header widget-header-large">
+        <h3 class="widget-title grey lighter">
+          <i class="ace-icon fa fa-leaf green"></i> Customer Invoice
+        </h3>
+        <div class="widget-toolbar no-border invoice-info">
+          <span class="invoice-info-label">Invoice:</span> <span class="red">#{{order.order_number}}</span>
+          <br> <span class="invoice-info-label">Date:</span> <span class="blue">{{order.date}}</span>
+        </div>
+        <div class="widget-toolbar hidden-480">
+          <a href="#"> <i class="ace-icon fa fa-print"></i>
+          </a>
+        </div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main padding-24">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-xs-11 label label-lg label-info arrowed-in arrowed-right">
+                  <b>Customer Info</b>
+                </div>
+              </div>
+              <div>
+                <ul class="list-unstyled spaced">
+                  <li><i class="ace-icon fa fa-caret-right blue"></i>{{order.client_name}}</li>
+                  <li><i class="ace-icon fa fa-caret-right blue"></i>{{order.email}}</li>
+                  <li><i class="ace-icon fa fa-caret-right blue"></i>Phone: {{order.phone}}</li>
+                  </li>
+                  <li class="divider"></li>
+                  <li><i class="ace-icon fa fa-caret-right blue"></i> Paymant Info</li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                  <b>Product Info</b>
+                </div>
+              </div>
+              <div>
+                <ul class="list-unstyled  spaced">
+                  <li><i class="ace-icon fa fa-caret-right green"></i>{{order.code}},
+                    {{order.name}}</li>
+                  <li><i class="ace-icon fa fa-caret-right green"></i>QTY: {{order.qty}}</li>
+                  <li><i class="ace-icon fa fa-caret-right green"></i>Category:
+                    {{order.category}}</li>
+                  <li class="divider"></li>
+                  <li><i class="ace-icon fa fa-caret-right green"></i>UOM: {{order.uom}}</li>
+                </ul>
+              </div>
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+          <div class="space"></div>
+          <div class="hr hr8 hr-double hr-dotted"></div>
+          <div class="row">
+            <div class="col-sm-5 pull-right">
+              <h4 class="pull-right">
+                Total amount : <span class="red">{{order.amount}} KES</span>
+              </h4>
+            </div>
+            <div class="col-sm-7 pull-left"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
