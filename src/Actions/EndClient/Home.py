@@ -227,19 +227,20 @@ class PlaceOrder(ActionSupport):
       HTML= QUANTITY_ERROR.replace('[ONCLICK]', 'backFromOrderStageFirst()')  
       return json_response(self.response, {'html': HTML}, 'ERROR', 'Item quantity missing') 
      
-    client_name = self.request.get('client_name')
-    client_mobile = self.request.get('client_mobile')
-    client_email = self.request.get('client_email')
+    #client_name = self.request.get('client_name')
+    #client_mobile = self.request.get('client_mobile')
+    #client_email = self.request.get('client_email')
+    #card_number = self.request.get('card_number')
+    #name_on_card = self.request.get('name_on_card')
+    #cvv_number = self.request.get('cvv_number')
     design_id = self.request.get('design_id')
-    card_number = self.request.get('card_number')
-    name_on_card = self.request.get('name_on_card')
-    cvv_number = self.request.get('cvv_number')
     cdt=datetime.datetime.now()
     ldt=get_dt_by_country(cdt, 'KE')
     logging.info(ldt)  
     history_list = []  
     product = ndb.Key(urlsafe=self.request.get('product')).get()
     seller = product.seller.get()
+    master_product = product.master_product.get()
     if design_id:  
       design = ClientProductDesign.get_by_design_id(design_id)
     
@@ -251,10 +252,14 @@ class PlaceOrder(ActionSupport):
     order.amount = qty*product.retail_price
     order.category = product.category
     order.client = self.client.key
-    order.client_name = client_name
+    order.client_name = self.client.name
     order.code = product.code
     order.description = product.description
-    order.email = client_email
+    order.email = self.client.email
+    try:
+      order.image_url = master_product.image_url[0]
+    except:
+      pass    
     order.master_price = product.master_price
     order.master_product = product.master_product
     order.master_product_urlsafe = product.master_product_urlsafe
@@ -265,7 +270,7 @@ class PlaceOrder(ActionSupport):
     order.seller_name = seller.name
     order.seller_urlsafe = seller.entityKey
     order.size = product.size
-    order.phone = client_mobile
+    order.phone = self.client.telephone
     order.uom = product.uom
     order.payed =True
     order.payment_ref = str(uuid1(123456789))
@@ -273,7 +278,7 @@ class PlaceOrder(ActionSupport):
     
     order_stage_list = OrderStage.get_order_stage().name
     
-    order.status = order_stage_list[0]if order_stage_list else 'Ordered'
+    order.status = order_stage_list[0] if order_stage_list else 'Ordered'
     history_list.append({'status': order.status,
                          'qty': qty,
                          'retail_price': product.retail_price,

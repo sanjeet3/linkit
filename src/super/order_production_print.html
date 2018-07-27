@@ -1,0 +1,42 @@
+<input type="hidden" id="print_title" value="{{order.order_number}}">
+<div style="display: block;" id="order-print-content">
+  <div style="clear: both;">
+    <table style="width: 50%; float: left;">
+      <tr>
+        <th>Order Number</th>
+        <td>{{order.order_number}}</td>
+      </tr>
+      <tr>
+        <th>Design Id</th>
+        <td>{{design.design_id}}</td>
+      </tr>
+    </table>
+    <table style="width: 50%; float: right;">
+      <tr>
+        <th>Item Quantity</th>
+        <td>{{order.qty}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <div style="clear: both;">
+    <hr>
+    <h5>Design View</h5>
+    <div class="download-item">
+      <img alt="" src="{{design.design_prev}}"> <a href="javascript:" onclick="downloadPic(this)" class="tobehide"
+        style="clear: both; display: block;">Download</a>
+    </div>
+    <hr>
+    <h5>Design Items</h5>
+    {%for item in design.layer_list%} {%if design.layer_ext_list[loop.index-1]=='text'%}
+    <div style="margin-bottom: 5px; clear: both; display: block;">{{item|safe}}</div>
+    {%else%}
+    <div class="download-item" style="margin-bottom: 5px; clear: both; display: block;">
+      {{item|safe}}<a href="javascript:" onclick="downloadPic(this)" class="tobehide" style="clear: both; display: block;">Download</a>
+    </div>
+    {%endif%} {%endfor%}
+  </div>
+</div>

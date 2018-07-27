@@ -258,6 +258,15 @@ class SellerOrder(EndpointsModel):
       q = q.filter(cls.seller.IN(seller_list))    
     return q
 
+class SellerOrderHistory(EndpointsModel):
+  '''Franchisor order Data Store model ''' 
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  order = ndb.KeyProperty(SellerOrder)
+  stage = ndb.StringProperty()
+  date = ndb.StringProperty()
+  time = ndb.StringProperty()
+  
+  
 class ClientProductDesign(EndpointsModel): 
   created_on = ndb.DateTimeProperty(auto_now_add=True)
   client = ndb.KeyProperty(Client)
@@ -283,6 +292,3 @@ class OrderStage(EndpointsModel):
       e = OrderStage()
       
     return e
-
-        
-      

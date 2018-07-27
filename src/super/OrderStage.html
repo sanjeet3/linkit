@@ -23,9 +23,10 @@
           </tr>
           {%endfor%}
         </tbody>
-        <tfoot>
+        
+        <tfoot style="{%if not stage_list%}display: none;{%endif%}" id="tbla_footer">
           <tr>
-            <td colspan="2"><button type="button" class="btn btn-danger btn-minier">
+            <td colspan="2"><button type="button" class="btn btn-danger btn-minier" onclick="updateOrderStage()">
                 Update <i id="upload_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
               </button></td>
           </tr>

@@ -424,7 +424,7 @@ function saveOrderStage() {
 
 function saveOrderStageCallBack(r) {
   $('#save_spin').hide();
-
+  $('#tbla_footer').show();
   var h = [ '<tr><td><input type="number" min="1" name="index" value="' ];
   h.push(r.data.i);
   h.push('"></td><td>');
@@ -435,14 +435,153 @@ function saveOrderStageCallBack(r) {
 };
 
 function updateOrderStage() {
+  var tbl = {}, stageCount = 0;
+
   $('#order_stage_tbody').html();
-  alert('comming soon')
-  
-  /*var tbl = $('table#whatever tr').map(function() {
-    return $(this).find('td').map(function() {
-      return $(this).html();
-    }).get();
-  }).get();*/
-  
+  $('#order_stage_tbody tr').map(function() {
+    var x = $(this).find('td').map(function() {
+      // return $(this).html();
+      if (this.children.length)
+        return this.children[0].value
+      return this.innerText
+    }).get()
+
+    tbl[x[0]] = x[1];
+    stageCount += 1;
+  })
+
+  if ('' in tbl) {
+    showMSG('index missing', 'warning');
+    return;
+  }
+
+  if (stageCount != Object.keys(tbl).length) {
+    showMSG('index duplicate', 'warning');
+    return;
+  }
+
+  $('#stage_order').val(JSON.stringify(tbl));
+  postRequest('update_form', '/superadmin/OrderStageUpdate', null)
 };
 
+function downloadPic(elm){
+  var img = $( elm ).siblings()[0];
+  var src = img.src;
+  src = src.split(';');
+  src = src[0].split('/');
+  src=src[1];
+  var url = img.src.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+  /*window.open('ilename=image.'+src+';'+url);*/
+  var hiddenElement = document.createElement('a');
+  hiddenElement.href = url;
+  hiddenElement.target = '_blank';
+  hiddenElement.download = 'image.'+src;
+  hiddenElement.click();
+}
+
+var orderApi = {};
+var loadingPrintHtml = '<div class="text-center mt-20"><i class="fa fa-spinner fa-spin" ></i><br/>Loading order production print...</div>'
+
+orderApi.backFromProductionPrint = function(){
+  $('#main-container').show();
+  $('#print-content').hide();
+  
+}
+  
+orderApi.gotoProductionPrint = function(key) {
+  //openDialog('#productionPrintDailog');
+  //$('#order-print-content').html(loadingPrintHtml);
+  $('#main-container').hide();
+  $('#print-content').show();
+  $('#print-inner-content').html(loadingPrintHtml);
+  
+  getRequest('', '/superadmin/GerOrderProductPrint?key=' + key,
+      'orderApi.renderProductionPrint');
+};
+
+orderApi.renderProductionPrint = function(r) {
+  $('#print-inner-content').html(r.data.html);
+  $('.tobehide').show();
+};
+orderApi.gotoViewMode = function(key) {
+
+};
+orderApi.gotoEditStatus = function(key) {
+  $('#order_key_stage').val(key);
+  openDialog('#editOrderStatusDailog');
+  var date = new Date(), hour = date.getHours(), min = date.getMinutes();
+  hour = (hour < 10 ? "0" : "") + hour;
+
+  var displayTime = hour + ":" + min;
+  $('#status_time').val(displayTime);
+
+};
+orderApi.editOrderStatus = function() {
+
+  if (!$('#status_date').val()) {
+    showMSG('Date missing', 'warning');
+    return;
+  }
+
+  if (!$('#status_time').val()) {
+    showMSG('Time missing', 'warning');
+    return;
+  }
+
+  postRequest('update_order_stage_form', '/superadmin/EditOrderStage',
+      'orderApi.editOrderStatusCallBack');
+}
+
+orderApi.editOrderStatusCallBack = function(r) {
+  var row = $('#' + r.data.key);
+  row.find("td:eq(1)").text(r.data.stage);
+
+};
+ 
+function printFromHtml(data) {
+  var mywindow = window.open('', 'my div', 'height=842,width=595');
+  mywindow.document.write('<html><head><title>Invoice</title>');
+  mywindow.document.write('<style>');
+  mywindow.document.write(' a {text-decoration: none !important;}');
+  mywindow.document
+      .write(' .invoice-list {margin-bottom: 30px;} .col-lg-4 {width: 48%;}');
+  mywindow.document
+      .write(' .col-lg-12 {width: 100%;} .col-lg-4,.col-sm-4, .col-lg-12 {position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;} .pull-right {float: right!important;} .invoice-block {text-align: right;} ul {padding-left: 0;}');
+  mywindow.document
+      .write(' ul, ol {margin-top: 0;margin-bottom: 10px;} * {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}');
+  mywindow.document
+      .write(' table.table {clear: both;margin-bottom: 6px !important;max-width: none !important;} .table, th, td {border: 1px solid #000;}');
+  mywindow.document
+      .write(' .table {width: 100%;max-width: 100%;margin-bottom: 20px;} table {background-color: transparent;} table {border-spacing: 0;border-collapse: collapse;}');
+  mywindow.document.write('</style>');
+  mywindow.document.write('</head><body><div class="col-lg-12">');
+  mywindow.document.write(data);
+  mywindow.document.write('</div></body></html>');
+  mywindow.document.close(); // necessary for IE >= 10
+  mywindow.focus(); // necessary for IE >= 10
+  mywindow.print();
+  mywindow.close();
+  return true;
+}
+
+
+function printWindow(selector, title) {
+  var divContents = $(selector).html();
+  var $cssLink = $('link');
+  var printWindow = window.open('', '', 'height=' + window.outerHeight * 0.6 + ', width=' + window.outerWidth  * 0.6);
+  printWindow.document.write('<html><head><h2><b><title>' + title + '</title></b></h2>');
+  for(var i = 0; i<$cssLink.length; i++) {
+   printWindow.document.write($cssLink[i].outerHTML);
+  }
+  printWindow.document.write('</head><body >');
+  printWindow.document.write(divContents);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.onload = function () {
+           printWindow.focus();
+           setTimeout( function () {
+               printWindow.print();
+               printWindow.close();
+           }, 100);  
+       }
+}

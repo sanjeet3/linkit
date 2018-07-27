@@ -9,7 +9,7 @@ from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
-from src.Database import Client
+from src.Database import Client, ClientProductDesign
 from src.Database import Product
 from src.Database import ProductDesign
 from src.Database import ProductCategory
@@ -17,12 +17,14 @@ from src.Database import ProductUOM
 from src.Database import Seller
 from src.Database import SellerProduct
 from src.Database import SellerOrder
+from src.Database import SellerOrderHistory
 from src.Database import OrderStage
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
 import cgi    
 from google.appengine.ext import ndb
+import json
 
 design_img_title = config.get('design_img_title')
 
@@ -261,7 +263,9 @@ class Order(ActionSupport):
     today = now.strftime('%d-%m-%Y')
     today_date = now.date()
     order_list = SellerOrder.get_order_filetered(today_date, today_date).fetch()
+    stage_list = OrderStage.get_order_stage().name
     data = {'dt': today,
+            'stage_list': stage_list,
             'seller_list': seller_list,
             'order_list': order_list}   
     self.response.out.write(template.render(data))
@@ -284,6 +288,43 @@ class OrderSearch(ActionSupport):
                          SUCCESS,
                          'Order search result')
 
+class EditOrderStage(ActionSupport):
+  def post(self):
+    order = SellerOrder()  
+    order = ndb.Key(urlsafe=self.request.get('key')).get()
+    stage = self.request.get('stage')
+    action_date = self.request.get('date')
+    action_time = self.request.get('time')  
+    
+    order.status = stage
+    order.put()
+    
+    history = SellerOrderHistory()
+    history.date = action_date
+    history.time = action_time
+    history.stage = stage
+    history.order = order.key
+    history.put()
+    
+    data_dict = {'key': self.request.get('key'),
+                 'stage': stage,}
+    return json_response(self.response, data_dict, SUCCESS, 'Order stage updated')
+
+class GerOrderProductPrint(ActionSupport):
+  def get(self):
+    order = SellerOrder()  
+    design = ClientProductDesign 
+    order = ndb.Key(urlsafe=self.request.get('key')).get()
+    if order.design:
+      design = order.design.get()  
+      template = self.get_jinja2_env.get_template('super/order_production_print.html') 
+      html_str = template.render({'order': order, 'design': design}) 
+    else:    
+      html_str = 'No design available'  
+    data_dict = {'html': html_str}  
+    return json_response(self.response, data_dict, SUCCESS, '')
+    
+  
 class UploadProductPicture(ActionSupport):    
   def post(self):  
     key = self.request.get('key') 
@@ -376,4 +417,21 @@ class OrderStageView(ActionSupport):
                          data_dict,
                          SUCCESS,
                          'Stage saved')
+
+    
+class OrderStageUpdated(ActionSupport):
+  def post(self):
+    stage_list = []
+    stagedict = json.loads(self.request.get('data'))
+    for key in sorted(stagedict.iterkeys()):
+      name = stagedict[key]  
+      logging.info( "%s: %s" % (key, name) )
+      stage_list.append(name) 
+    order_stage_obj = OrderStage.get_order_stage()
+    order_stage_obj.name = stage_list
+    order_stage_obj.put()
+    return json_response(self.response,
+                         {},
+                         SUCCESS,
+                         'Stage updated')    
     

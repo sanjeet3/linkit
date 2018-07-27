@@ -6,7 +6,20 @@
   <td>{{e.date}}</td>
   <td>{{e.code}}-{{e.name}}</td>
   <td>{{e.qty}}</td>
+  <td>{{e.client_name}}</td>
   <td>{{e.seller_name}}</td>
+  <td><div class="widget-toolbar no-border">
+      <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+        aria-expanded="false">
+        <i class="ace-icon fa fa-cog"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+        <li><a href="javascript:orderApi.gotoEditStatus('{{e.entityKey}}')">Stage</a></li>
+        <li><a href="javascript:orderApi.gotoProductionPrint('{{e.entityKey}}')">Production
+            Print</a></li>
+        <li><a href="javascript:orderApi.gotoViewMode('{{e.entityKey}}')">View</a></li>
+      </ul>
+    </div></td>
 </tr>
 {%else%}
 <tr class="text-center">

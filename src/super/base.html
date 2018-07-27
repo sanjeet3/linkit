@@ -245,6 +245,24 @@ to {
     <!-- /.page-content -->
   </div>
   <!-- /.main-content -->
+  <div class="main-content" id="print-content" style="display: none;">
+    <div class="main-content-inner">
+      <div class="dailog-header">
+        <span style="font-size: 15px;">Production Print</span>
+        <div class="pull-right" style="margin-right: 10px;">
+          <button class="btn btn-danger btn-minier" id="bck-btn"
+            onclick="orderApi.backFromProductionPrint()">
+            <i class="ace-icon fa fa-arrow-left"></i> Back
+          </button>
+          <button class="btn btn-success btn-minier" id="bck-btn"
+            onclick="$('.tobehide').hide();printWindow('#order-print-content', $('#print_title').val())">
+            <i class="ace-icon fa fa-print"></i> Print
+          </button>
+        </div>
+      </div>
+      <div id="print-inner-content" style="padding: 15px; background-color: #fff;"></div>
+    </div>
+  </div>
   <div class="footer">
     <div class="footer-inner">
       <div class="footer-content">
@@ -261,7 +279,6 @@ to {
   <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> <i
     class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
   </a>
-  </div>
   <!-- /.main-container -->
   <!-- basic scripts -->
   <!--[if !IE]> -->
