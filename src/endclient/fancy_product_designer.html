@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Product Design</title>
+<!-- Style sheets -->
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<!-- Google Webfonts -->
+<link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
+<!-- The CSS for the plugin itself - required -->
+<link rel="stylesheet" type="text/css" href="/plugin/css/FancyProductDesigner-all.min.css" /> 
+<!-- Optional - only when you would like to use custom fonts - optional -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.fancyProductDesigner-fonts.css" />
+<!-- Include js files -->
+<script src="/plugin/js/jquery.min.js" type="text/javascript"></script>
+<script src="/plugin/js/jquery-ui.min.js" type="text/javascript"></script>
+<!-- HTML5 canvas library - required -->
+<script src="/plugin/js/fabric.min.js" type="text/javascript"></script>
+<!-- The plugin itself - required -->
+<script src="/plugin/js/FancyProductDesigner-all.min.js" type="text/javascript"></script> 
+<script src="/js/designAlgo.js" type="text/javascript"></script>
+<script type="text/javascript">
+  jQuery(document).ready(
+      function() {
+
+        var $yourDesigner = $('#product-designer'), pluginOpts = {
+          stageWidth : 1200, 
+          editorMode : false,
+          toolbarPlacement : "smart",
+          actions : {
+            'top' : [ 'download', 'print', 'preview-lightbox' ],
+            'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
+            'bottom' : [ 'undo', 'redo' ],
+          },
+
+          fonts : [ {name: 'Arial'},{name: 'Fearless'},{name: 'Helvetica'},{name: 'Times New Roman'}, 
+          {name: 'Verdana'},{name: 'Geneva'},{name: 'Gorditas'},{name: 'Eczar'},{name: 'Roboto Mono'},
+          {name: 'Poor Story'},{name: 'Titillium Web'},{name: 'Noto Serif'},{name: 'Work Sans'},
+          {name: 'Chela One'},{name: 'Indie Flower'},{name: 'Inconsolata'},{name: 'Bitter'},
+          {name: 'Libre Baskerville'},{name: 'Anton'},{name: 'Josefin Sans'},{name: 
+          'Cormorant Unicase'},{name: 'Lobster'},{name: 'Arvo'},{name: 'Pacifico'},{name: 'Do Hyeon'},{name: 
+          'Shadows Into Light'},{name: 'Dancing Script'},{name: 'Abril Fatface'},{name: 
+          'Bree Serif'},{name: 'Coda Caption'},{name: 'Kanit'},{name: 'Acme'},{name: 
+          'Gloria Hallelujah'},{name: 'Righteous'},{name: 'Rajdhani'},{name: 'Permanent Marker'},{name: 
+          'Farsan'},{name: 'Great Vibes'},{name: 'Concert One'},{name: 'Poiret One'},{name: 'Satisfy'},{name: 
+          'Courgette'},{name: 'Marck Script'},{name: 'Prata'},{name: 'Audiowide'},{name: 'Unica One'},{name: 
+          'Julius Sans One'},{name: 'Ultra'},{name: 'Economica'},{name: 'IBM Plex Mono'},{name: 
+          'Amaranth'},{name: 'Prosto One'},{name: 'Bangers'},{name: 'Shrikhand'},{name: 'Handlee'},{name: 
+          'Boogaloo'},{name: 'Tangerine'},{name: 'Kalam'},{name: 'Sacramento'}, {name: 
+          'Architects Daughter'},{name: 'PT Mono'},{name: 'Bad Script'},{name: 'Special Elite'},{name: 
+          'Libre Barcode 128 Text'},{name: 'Shadows Into Light Two'},{name: 
+          'Cabin Sketch'},{name: 'Parisienne'},{name: 'Damion'},{name: 'Covered By Your Grace'},{name: 
+          'Playball'},{name: 'Nothing You Could Do'},{name: 'Homemade Apple'},{name: 
+          'Fugaz One'},{name: 'Rock Salt'},{name: 'Allura'},{name: 'Press Start 2P'},{name: 
+          'Alex Brush'},{name: 'Black Ops One'},{name: 'Carter One'},{name: 'Just Another Hand'},{name: 
+          'Fredericka the Great'},{name: 'Syncopate'},{name: 'Bungee Inline'},{name: 'Niconne'},{name: 
+          'Coming Soon'},{name: 'Leckerli One'},{name: 'Galada'},{name: 'Caveat Brush'},{name: 
+          'Pinyon Script'},{name: 'Cinzel Decorative'},{name: 'Mr Dafoe'},{name: 
+          'Reenie Beanie'},{name: 'Italianno'},{name: 'Nanum Pen Script'},{name: 'Quantico'},{name: 
+          'Skranji'},{name: 'Allerta Stencil'},{name: 'Grand Hotel'},{name: 'Yesteryear'},{name: 
+          'Marvel'},{name: 'Freckle Face'},{name: 'Rochester'},{name: 'Nanum Brush Script'},{name: 
+          'Alegreya SC'},{name: 'Annie Use Your Telescope'},{name: 'Faster One'},{name: 
+          'Raleway Dots'},{name: 'Calligraffitti'},{name: 'Aclonica'},{name: 'Yatra One'},{name: 
+          'Share Tech Mono'},{name: 'Graduate'},{name: 'Petit Formal Script'},{name: 
+          'East Sea Dokdo'},{name: 'Love Ya Like A Sister'},{name: 'Kurale'},
+          {name: 'IM Fell Double Pica'},],
+          customTextParameters : {
+            colors : false,
+            removable : true,
+            resizable : true,
+            draggable : true,
+            rotatable : true,
+            autoCenter : true,
+            boundingBox : "Base"
+          },
+          customImageParameters : {
+            draggable : true,
+            removable : true,
+            colors : '#000',
+            autoCenter : true,
+            boundingBox : "Base",
+            resizable : true,
+          }
+        };
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+
+        /*         //print button
+         $('#print-button').click(function() {
+         yourDesigner.print();
+         return false;
+         });
+
+         //create an image
+         $('#image-button').click(function() {
+         var image = yourDesigner.createImage();
+         return false;
+         });
+
+         //checkout button with getProduct()
+         $('#checkout-button').click(function() {
+         var product = yourDesigner.getProduct();
+         console.log(product);
+         return false;
+         });
+
+         //event handler when the price is changing
+         $yourDesigner.on('priceChange', function(evt, price, currentPrice) {
+         $('#thsirt-price').text(currentPrice);
+         });
+
+         //save image on webserver
+         $('#save-image-php').click(function() {
+
+         yourDesigner.getProductDataURL(function(dataURL) {
+         $.post("php/save_image.php", {
+         base64_image : dataURL
+         });
+         });
+
+         });
+
+         //send image via mail
+         $('#send-image-mail-php').click(function() {
+
+         yourDesigner.getProductDataURL(function(dataURL) {
+         $.post("php/send_image_via_mail.php", {
+         base64_image : dataURL
+         });
+         });
+
+         });
+         */
+      }); 
+</script>
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <div id="main-container">
+    <h3 id="clothing">Create Product Design</h3>
+    {%if not user_obj %}
+    <p>Please Sign-in first to use custom design for your order. You can sign-up by using your
+      email address.</p>
+    {%endif%}
+    <div id="product-designer"
+      class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
+      <div class="fpd-product" title="Sweater" data-thumbnail="images/sweater/preview.png">
+        <img src="images/sweater/preview.png" title="BASE"
+          data-parameters='{"left": 432, "top": 311}' />
+      </div>
+      <div class="fpd-design">
+        <div class="fpd-category" title="Swirls">
+          <img src="images/designs/swirl.png" title="Swirl"
+            data-parameters='{"zChangeable": true, "left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/swirl2.png" title="Swirl 2"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 5, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/swirl3.png" title="Swirl 3"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "autoCenter": true}' />
+          <img src="images/designs/heart_blur.png" title="Heart Blur"
+            data-parameters='{"left": 215, "top": 200, "colors": "#bf0200", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 5, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/converse.png" title="Converse"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "autoCenter": true}' />
+          <img src="images/designs/crown.png" title="Crown"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "autoCenter": true}' />
+          <img src="images/designs/men_women.png" title="Men hits Women"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        </div>
+        <div class="fpd-category" title="Retro">
+          <img src="images/designs/retro_1.png" title="Retro One"
+            data-parameters='{"left": 210, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.25, "price": 7, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/retro_2.png" title="Retro Two"
+            data-parameters='{"left": 193, "top": 180, "colors": "#ffffff", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.46, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/retro_3.png" title="Retro Three"
+            data-parameters='{"left": 240, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.25, "price": 8, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/heart_circle.png" title="Heart Circle"
+            data-parameters='{"left": 240, "top": 200, "colors": "#007D41", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.4, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/swirl.png" title="Swirl"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/swirl2.png" title="Swirl 2"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 5, "boundingBox": "Base", "autoCenter": true}' />
+          <img src="images/designs/swirl3.png" title="Swirl 3"
+            data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
+        </div>
+      </div>
+      <div class="fpd-background">
+        <div class="fpd-category" title="Swirls">
+          <img src="images/designs/swirl.png" title="Swirl"
+            data-parameters='{"zChangeable": true, "left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
+        </div>
+      </div>
+    </div>
+    <br /> {#
+    <div class="fpd-clearfix" style="margin-top: 30px; display: none;">
+      <div class="api-buttons fpd-container fpd-left">
+        <a href="#" id="print-button" class="fpd-btn">Print</a> <a href="#" id="image-button"
+          class="fpd-btn">Create Image</a> <a href="#" id="checkout-button" class="fpd-btn">Checkout</a>
+        <a href="#" id="recreation-button" class="fpd-btn">Recreate product</a>
+      </div>
+      <div class="fpd-right">
+        <span class="price badge badge-inverse"><span id="thsirt-price"></span> $</span>
+      </div>
+    </div>
+    <p class="fpd-container" style="display: none;">
+      Only working on a webserver:<br /> <span class="fpd-btn" id="save-image-php">Save
+        image with php</span> <span class="fpd-btn" id="send-image-mail-php">Send image to mail</span>
+    </p>
+  </div>
+  #}
+  <div class="fpd-clearfix text-center" style="margin-top: 15px;">
+    <div class="api-buttons fpd-container">
+      {% if user_obj %}
+      <form id="create_product_design_form">
+        <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
+          name="layer" id="design_layer"> <input type="hidden" name="design_print"
+          id="design_print">
+        <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
+      </form>
+      <p id="pls_wait_design_saving" style="display: none;">Please wait preparing your design...</p>
+      {%else%}
+      <p>Please Sign-in first to use custom design for your order. You can sign-up by using your
+        email address.</p>
+      {%endif%}
+    </div>
+  </div>
+  <div id="output_dom"></div>
+</body>
+<script src="/super/assets/js/bootstrap-notify.js"></script>
+<script type="text/javascript" src="super/assets/js/algo.js"></script>
+</html>

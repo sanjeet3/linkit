@@ -54,20 +54,45 @@
 		"redo": "Redo",
 		"snap": "Center Snap",
 		"preview_lightbox": "Preview",
-		"save_placeholder": "Optional: Enter a title"
+		"save_placeholder": "Optional: Enter a title", 
+		"ruler": "Toggle Ruler",
+		"previous_view": "Previous View",
+		"next_view": "Next View",
+		"start_guided_tour": "Start Guided Tour"
 	},
 	"modules": {
 		"products": "Swap Product",
 		"images": "Add Image",
 		"upload_zone": "Click or drop images here",
 		"facebook_select_album": "Select An Album",
-		"instagram_recent_photos_button": "My Recent Photos",
-		"instagram_like_photos_button": "My Liked Photos",
 		"text": "Add Text",
 		"text_input_placeholder": "Enter some text",
 		"text_add_btn": "Add Text",
 		"designs": "Choose From Designs",
-		"manage_layers": "Manage Layers"
+		"designs_search_in": "Search in",
+		"manage_layers": "Manage Layers",
+		"images_agreement": "I have the rights to use the images.",
+		"images_confirm_button": "Confirm",
+		"pixabay_search": "Search in Pixabay library",
+		"depositphotos_search": "Search in depositphotos.com",
+		"depositphotos_search_category": "Search In ",
+		"text_layers_clear": "Clear",
+		"layouts": "Layouts",
+		"layouts_confirm_replacement": "Are you sure to replace all elements in the current view?",
+		"layouts_confirm_button": "Yes, got it!"
+	},
+	"image_editor": {
+		"mask": "Mask",
+		"filters": "Filters",
+		"color_manipulation": "Color Manipulation",
+		"custom_cropping": "Custom Cropping",
+		"filter_none": "None",
+		"brightness": "Brightness",
+		"contrast": "Contrast",
+		"remove_white": "Remove White",
+		"remove_white_distance": "Distance",
+		"restore": "Restore Original",
+		"save": "Save"
 	},
 	"misc": {
 		"initializing": "Initializing Product Designer",
@@ -80,6 +105,32 @@
 		"maximum_size_info": "The image %filename exceeds the maximum file size of %mbMB.",
 		"customization_required_info": "You need to customize the default design!",
 		"not_supported_device_info": "Sorry! But the product designer can not be displayed on your device. Please use a device with a larger screen!",
-		"unsaved_product_alert": "Your customizations are not saved. Are you sure to leave this page?"
+		"unsaved_product_alert": "Your customizations are not saved. Are you sure to leave this page?",
+		"image_added": "Image Added!",
+		"reset_confirm": "Are you sure to reset everything?",
+		"popup_blocker_alert": "Please disable your pop-up blocker and try again.",
+		"view_optional_unlock": "Unlock view",
+		"guided_tour_back": "Back",
+		"guided_tour_next": "Next"
+	},
+	"plus": {
+		"names_numbers": "Names & Numbers",
+		"names_numbers_add_new": "Add New",
+		"drawing": "Free Drawing",
+		"drawing_brush_type": "Brush Type",
+		"drawing_pencil": "Pencil",
+		"drawing_circle": "Circle",
+		"drawing_spray": "Spray",
+		"drawing_color": "Color",
+		"drawing_line_width": "Line Width",
+		"drawing_draw_here": "Draw Here",
+		"drawing_clear": "Clear",
+		"drawing_add": "Add",
+		"bulk_add_variations_title": "Bulk Order",
+		"bulk_add_variations_add": "Add",
+		"dynamic_views": "Manage Views",
+		"dynamic_views_add_view_info": "Add new view",
+		"dynamic_views_add_blank": "Blank",
+		"dynamic_views_add_from_layouts": "From Layouts"
 	}
 }

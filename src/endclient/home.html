@@ -126,8 +126,7 @@
             <img class="img-responsive cursor" alt="{{e.name}}" src="{{e.image_url[0]}}"
               onclick="viewProductDetails('{{e.entityKey}}')" height="750px">
             <div class="space-4"></div>
-            <button type="button" class="btn btn-info btn-mini"
-              onclick="viewProductDetails('{{e.entityKey}}')">Buy</button>
+            <a class="btn btn-info btn-mini" href="/Product?key={{e.entityKey}}" >Buy</a>
             <div class="space-6"></div>
             <div class="product-info">
               <div class="col-lg-12 col-sm-12">

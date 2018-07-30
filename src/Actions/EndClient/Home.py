@@ -172,7 +172,17 @@ class Home(ActionSupport):
     template = self.get_jinja2_env.get_template('endclient/home.html')    
     self.response.out.write(template.render({'product_list': product_list,
                                              'user_obj': self.client}))
-    
+
+class ProductView(ActionSupport):
+  def get(self):    
+    p = ndb.Key(urlsafe=self.request.get('key')).get()
+    seller_dict = Seller.get_key_obj_dict()
+    seller_product_list = SellerProduct.get_product_by_master_key_for_client(p.key)
+    template = self.get_jinja2_env.get_template('endclient/product_view.html')    
+    self.response.out.write(template.render({'seller_dict': seller_dict,
+                                             'seller_product_list': seller_product_list,
+                                             'p': p,
+                                             'user_obj': self.client}))
     
 class GetProductDetails(ActionSupport):
   def get(self):
@@ -301,9 +311,10 @@ class PlaceOrder(ActionSupport):
 
 class CreateDesign(ActionSupport):
   def get(self): 
+    template_path = 'endclient/customDesign.html' #'endclient/fancy_product_designer.html'
     p = ndb.Key(urlsafe=self.request.get('k')).get() 
     design_list = ProductDesign.get_design_list(p.key)
-    template = self.get_jinja2_env.get_template('endclient/customDesign.html')    
+    template = self.get_jinja2_env.get_template(template_path)    
     self.response.out.write(template.render({'p': p,
                                              'design_list': design_list,
                                              'key': self.request.get('k'), 

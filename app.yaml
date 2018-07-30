@@ -30,6 +30,13 @@ handlers:
 - url: /php
   static_dir: src/endclient/php  
   
+- url: /light
+  static_dir: src/endclient/light  
+    
+
+- url: /taskqueue/.*
+  script: src.Actions.taskqueue.app
+  
 - url: /superadmin
   script: src.main.app 
   login: required
