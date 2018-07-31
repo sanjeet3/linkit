@@ -202,10 +202,28 @@
   display: flow-root;
 }
 
+.product-img {
+  display: block;
+  max-width: 100%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+  border-radius: 20% 20% 0 0;
+  padding: 10px;
+}
+
 .product-info {
   color: #000;
   font-weight: 600;
   font-size: 10px;
+  display: flex;
+}
+
+.text-ovrflw {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .product-view {

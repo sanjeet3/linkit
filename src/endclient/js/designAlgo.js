@@ -58,7 +58,10 @@ function createUserDisgn() {
 };
 
 function createUserDisgnCallBack(r) {
-  $('#pls_wait_design_saving').html('Your design id: ' + r.data.id);
-
+  var h = 'Your design is ready<br>Design Id: ' + r.data.id
+          + ' <br><button type="button" class="fpd-btn" onclick="backToProductAcitionDom()">Continue</button>';
+  $('#pls_wait_design_saving').html(h);
+  $('#selected_design_id').val(r.data.id);
+  $('#design_id').val(r.data.id);
 };
 

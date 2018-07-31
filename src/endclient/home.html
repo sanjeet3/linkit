@@ -120,25 +120,20 @@
       <div class="col-lg-12 col-xs-12 product-view" id="product-detail-dom" style="display: none;">
       </div>
       <div class="col-lg-12 col-xs-12" id="product-list-dom">
-        {%set img=['/img/bag1.png', '/img/bag2.png', ]%} {%for e in product_list%}
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 center">
+        {%for e in product_list%}
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 mb-20 center">
           <div class="product-container">
-            <img class="img-responsive cursor" alt="{{e.name}}" src="{{e.image_url[0]}}"
-              onclick="viewProductDetails('{{e.entityKey}}')" height="750px">
-            <div class="space-4"></div>
-            <a class="btn btn-info btn-mini" href="/Product?key={{e.entityKey}}" >Buy</a>
+            <img class="product-img" alt="{{e.name}}" src="{{e.image_url[0] or '/img/prod_default.png'}}"
+              onclick="viewProduct('{{e.entityKey}}')"> 
             <div class="space-6"></div>
             <div class="product-info">
               <div class="col-lg-12 col-sm-12">
-                <p>{{e.code}}, {{e.name}}</p>
-                <p>
+                <p class="text-ovrflw">{{e.code}}, {{e.name}}</p>
+                <p class="text-ovrflw">
                   <b>Size: </b> {{e.size}}
                 </p>
                 <p>
                   <b>Category: </b> {{e.category}}
-                </p>
-                <p>
-                  <b>UNIT: </b> {{e.uom}}
                 </p>
               </div>
             </div>

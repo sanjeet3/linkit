@@ -457,7 +457,7 @@ h5.latest-product{
 	margin: 0;
 }
 .star-price {
-	padding: 1em 0.5em;
+	padding: 1.5em 0.5em;
 }
 .chain{
 	margin: 0 auto;
@@ -631,8 +631,7 @@ p.m_text {
 /*--product--*/
 /*-- start w_content --*/
 .women-product,.account_grid,.register,.single_top,.main{
-	width: 70%;
-	float: right;
+	width: 100%;
 }
 .women_main{
 	padding:2em 0;
@@ -1721,4 +1720,89 @@ img.banner-bag {
 .img-left-arrow {
 	padding: 0 0 0 6.2em;
 }
+}
+
+.category-btn {
+  border: 1px solid #ddd;
+  outline: none;
+  cursor: pointer;
+  height: 35px;
+  padding: 7px;
+  float: right;
+  color: #1B242F;
+  text-decoration: none;
+}
+
+.category-btn.active {
+  color: blue;
+}
+
+.mb-10{
+  margin-bottom: 10px;
+}
+.mb-20{
+  margin-bottom: 20px;
+}
+
+.mt-15{
+  margin-top: 15px;
+}  
+.mt-20{
+  margin-top: 20px;
+}
+
+.text-ovrflw {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.item-broder{
+  border: 1px solid #ddd;
+}
+
+a.buy:hover {
+    background: #0D3F84;
+}
+
+.view-all, a.get-buy { 
+    padding: 0.4em 0.6em;
+    font-size: 1em;
+}
+a.buy {
+    font-size: 1.1em;
+    color: #fff;
+    padding: 0.6em 0.8em;
+    background: #323A45;
+    text-decoration: none;
+}
+a:hover, a:focus {
+    color: #E74C3C; 
+}
+a:active, a:hover {
+    outline: 0;
+}
+.share_nav li a.active {
+    background: #1DBAA5;
+}
+
+.seller-media {
+  display: flex;
+  padding: 5px;
+  border: 1px solid #ddd;
+}
+.seller-pic{
+  float: left; width: 15%;
+}
+.seller-pic img{
+  width: 72px; height: 72px; padding: auto:
+}
+.seller-info{
+  width: 65%; float: left;
+}
+.seller-heading{
+  
+}
+.seller-selection{
+  width: 20%; float: left;
 }

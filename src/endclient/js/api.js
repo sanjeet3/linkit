@@ -339,3 +339,6 @@ function registerCallBack(r, fid) {
   }
 };
 
+function viewProduct(k){
+  window.location.href = '/Product?key='+k;
+}

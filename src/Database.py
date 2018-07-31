@@ -132,7 +132,7 @@ class ProductCategory(EndpointsModel):
   
   @classmethod
   def get_list(cls):
-    return cls.query().fetch()
+    return cls.query().order(cls.name).fetch()
 
   @classmethod
   def get_product_cat(cls, category):
@@ -165,6 +165,10 @@ class Product(EndpointsModel):
   @classmethod
   def get_selling_product_list(cls):
     return cls.query(cls.endclient_visible==True).fetch()
+
+  @classmethod
+  def get_selling_product_list_by_category(cls, category_key):
+    return cls.query(cls.endclient_visible==True, cls.category_key==category_key).fetch()
 
   @classmethod
   def get_product_list(cls):

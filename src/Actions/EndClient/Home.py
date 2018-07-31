@@ -6,7 +6,7 @@ Created on 04-Jul-2018
 
 from src.Database import Product, Seller, SellerProduct, SellerOrder
 from src.Database import Client, ClientProductDesign, ProductDesign
-from src.Database import OrderStage
+from src.Database import OrderStage, ProductCategory
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -77,7 +77,8 @@ class Register(ActionSupport):
 class Login(ActionSupport): 
   def get(self):
     template = self.get_jinja2_env.get_template('endclient/loginerror.html')    
-    self.response.out.write(template.render({'msg': 'Kindly fill login details'}))    
+    self.response.out.write(template.render({'msg': 'Kindly fill login details',
+                                             'register': self.request.get('r')}))    
       
   def validate_login_detail(self):
     self.valid_credential = True     
@@ -174,15 +175,28 @@ class Home(ActionSupport):
                                              'user_obj': self.client}))
 
 class ProductView(ActionSupport):
-  def get(self):    
-    p = ndb.Key(urlsafe=self.request.get('key')).get()
-    seller_dict = Seller.get_key_obj_dict()
-    seller_product_list = SellerProduct.get_product_by_master_key_for_client(p.key)
+  def get(self):
+    product_key=self.request.get('key')
+    category_key=self.request.get('cat')
+    if product_key:
+      p = ndb.Key(urlsafe=product_key).get()  
+      selected_cat = p.category_key
+    elif category_key:
+      selected_cat = ndb.Key(urlsafe=category_key)  
+    else:
+      self.abort(401)        
+    
+    category_list = ProductCategory.get_list()
+    product_list = Product.get_selling_product_list_by_category(selected_cat)
+    
+    
+    data = {'selected_cat': selected_cat,
+            'category_list': category_list,
+            'product_list': product_list,
+            'user_obj': self.client}
+    
     template = self.get_jinja2_env.get_template('endclient/product_view.html')    
-    self.response.out.write(template.render({'seller_dict': seller_dict,
-                                             'seller_product_list': seller_product_list,
-                                             'p': p,
-                                             'user_obj': self.client}))
+    self.response.out.write(template.render(data))
     
 class GetProductDetails(ActionSupport):
   def get(self):
@@ -194,7 +208,8 @@ class GetProductDetails(ActionSupport):
     self.response.out.write(template.render({'p': p,
                                              'design_list': design_list,
                                              'seller_product_list': seller_product_list,
-                                             'seller_dict': seller_dict}))
+                                             'seller_dict': seller_dict,
+                                             'user_obj': self.client}))
 
 QUANTITY_ERROR='''
 '<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;width: 100%;">
@@ -307,7 +322,16 @@ class PlaceOrder(ActionSupport):
     template = self.get_jinja2_env.get_template('endclient/order-success.html') 
     html_str = template.render(data)   
     return json_response(self.response, {'html': html_str}, SUCCESS, 'Payment success')
-                            
+
+class GetProductDesignor(ActionSupport):
+  def get(self): 
+    template_path = 'endclient/product_designor.html'
+    p = ndb.Key(urlsafe=self.request.get('key')).get() 
+    template = self.get_jinja2_env.get_template(template_path)    
+    self.response.out.write(template.render({'p': p,
+                                             'key': self.request.get('key'), 
+                                             'user_obj': self.client}))  
+                                
 
 class CreateDesign(ActionSupport):
   def get(self): 
@@ -315,11 +339,11 @@ class CreateDesign(ActionSupport):
     p = ndb.Key(urlsafe=self.request.get('k')).get() 
     design_list = ProductDesign.get_design_list(p.key)
     template = self.get_jinja2_env.get_template(template_path)    
-    self.response.out.write(template.render({'p': p,
-                                             'design_list': design_list,
-                                             'key': self.request.get('k'), 
-                                             'user_obj': self.client}))  
-    
+    html_dta={'p': p,
+              'design_list': design_list,
+              'key': self.request.get('k'), 
+              'user_obj': self.client} 
+    return self.response.out.write(template.render(html_dta))
     
   def post(self): 
     layer_list = []
