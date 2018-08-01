@@ -22815,3 +22815,8 @@ textarea.input-custom {
   width: 150px;
   height: 150px;
 }
+
+.theme-pc-cont {
+  border: 1px solid #dadada;
+  padding: 10px;
+}

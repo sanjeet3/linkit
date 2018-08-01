@@ -19,6 +19,7 @@ from src.Database import SellerProduct
 from src.Database import SellerOrder
 from src.Database import SellerOrderHistory
 from src.Database import OrderStage
+from src.Database import Themes
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
@@ -441,4 +442,95 @@ class OrderStageUpdated(ActionSupport):
                          {},
                          SUCCESS,
                          'Stage updated')    
+     
+class ThemesView(ActionSupport):
+  def get(self): 
+    themes_list = Themes.get_theme_list()  
+    context={'themes_list': themes_list
+             }
+    template = self.get_jinja2_env.get_template('super/Themes.html')    
+    self.response.out.write(template.render(context))  
     
+  def post(self):   
+    title = self.request.get('title')
+    e = Themes(title=title).put().get()  
+    data_dict = {'title': title,
+                 'key': e.entityKey}  
+    return json_response(self.response,
+                         data_dict,
+                         SUCCESS,
+                         '')  
+
+class SetupThemesLive(ActionSupport):
+  def get(self):
+    
+    for e in Themes.get_active_theme():
+      e.status=False
+      e.put()
+      
+    tk = self.request.get('key')
+    if tk:  
+      themes = ndb.Key(urlsafe=tk).get()
+      themes.status = True
+      themes.put()
+        
+    data_dict = {}
+    return json_response(self.response,
+                         data_dict,
+                         SUCCESS,
+                         '')
+    
+class ThemesPicsUploading(ActionSupport):    
+  def post(self):     
+    collum = self.request.get('collum')
+    param = self.request.get('param')
+    image_file = self.request.POST.get(param, None)
+    file_obj = self.request.get(param, None)   
+    
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')    
+        
+    themes = ndb.Key(urlsafe=self.request.get('key')).get()
+    file_name = image_file.filename
+    msg = '%s, %s, %s' %(collum, param, file_name) 
+    logging.info(msg)   
+    bucket_path = '/productpromo/themes/%s' %(file_name)
+    bucket_path = bucket_path.lower()
+    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    
+    if collum == 'img1':
+      themes.img1 = serving_url
+    elif collum == 'img2':     
+      themes.img2 = serving_url
+    elif collum == 'img3':     
+      themes.img3 = serving_url
+    elif collum == 'img4':     
+      themes.img4 = serving_url
+    elif collum == 'img5':     
+      themes.img5 = serving_url
+    elif collum == 'img6':     
+      themes.img6 = serving_url
+    elif collum == 'img7':     
+      themes.img7 = serving_url
+    elif collum == 'img8':     
+      themes.img8 = serving_url
+    elif collum == 'img9':     
+      themes.img9 = serving_url
+    elif collum == 'img10':     
+      themes.img10 = serving_url
+    elif collum == 'img11':     
+      themes.img11 = serving_url
+    elif collum == 'img12':     
+      themes.img12 = serving_url 
+       
+    themes.put()
+          
+    data_dict = {}     
+    return json_response(self.response,
+                         data_dict,
+                         SUCCESS,
+                         '')  
+         
+         

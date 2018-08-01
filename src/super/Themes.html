@@ -1,0 +1,293 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Themes</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-danger btn-minier" onclick="getRequest('','/superadmin/SetupThemesLive', null)">
+      <i class="ace-icon fa fa-times"></i> Disable All
+    </button>
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="showFormDom()">
+      <i class="ace-icon fa fa-plus"></i> Themes
+    </button>
+    <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
+      onclick="showListDom()">
+      <i class="ace-icon fa fa-arrow-left"></i> Back
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Themes</td>
+            <td>Online</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody id="product_table_body">
+          {%for e in themes_list%}
+          <tr id="">
+            <td>{{e.title}}</td>
+            <td>{{e.status}}</td>
+            <td><button class="btn btn-xs bigger btn-success" type="button"
+                onclick="getRequest('','/superadmin/SetupThemesLive?key={{e.entityKey}}', 'liveTheme')">
+                Use It
+              </button></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="form-dom" style="display: none;">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="themes_form">
+        <div class="form-group theme-pc-cont">
+          <label class="col-sm-1 control-label no-padding-right" for="title"> Title </label>
+          <div class="col-sm-4">
+            <input type="text" name="title" id="title" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-10">
+            <img alt="" src="/img/skyline.jpg" width="100%">
+          </div>
+          <div class="col-sm-2">
+            <label>Resolution: 1632x361</label> <input type="file" accept=".jpeg,.jpg,.png,.gif"
+              name="skyline" id="skyline">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-10">
+            <img alt="" src="/img/landmarks.png" width="100%">
+          </div>
+          <div class="col-sm-2">
+            <label>3349x375</label> <input type="file" accept=".jpeg,.jpg,.png,.gif"
+              name="landmarks" id="landmarks">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/road1.png">
+          </div>
+          <div class="col-sm-4">
+            <label>207x126</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="road1"
+              id="road1">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/road2.png">
+          </div>
+          <div class="col-sm-4">
+            <label>146x62</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="road2"
+              id="road2">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/taxi1.png">
+          </div>
+          <div class="col-sm-4">
+            <label>278x110</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="taxi1"
+              id="taxi1">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/local_train.png">
+          </div>
+          <div class="col-sm-4">
+            <label>90x394</label> <input type="file" accept=".jpeg,.jpg,.png,.gif"
+              name="local_train" id="local_train">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/bus1.png">
+          </div>
+          <div class="col-sm-4">
+            <label>397x147</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="bus1"
+              id="bus1">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/bus2.png">
+          </div>
+          <div class="col-sm-4">
+            <label>546x189</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="bus2"
+              id="bus2">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/car1.png">
+          </div>
+          <div class="col-sm-4">
+            <label>166x70</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="car1"
+              id="car1">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/car2.png">
+          </div>
+          <div class="col-sm-4">
+            <label>269x111</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="car2"
+              id="car2">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/cycle.png">
+          </div>
+          <div class="col-sm-4">
+            <label>76x79</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="cycle"
+              id="cycle">
+          </div>
+        </div>
+        <div class="form-group theme-pc-cont">
+          <div class="col-sm-8">
+            <img alt="" src="/img/truck.png">
+          </div>
+          <div class="col-sm-4">
+            <label>258x130</label> <input type="file" accept=".jpeg,.jpg,.png,.gif" name="truck"
+              id="truck">
+          </div>
+        </div>
+        <div class="space-4"></div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveThemes()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_product_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-10" id="image-setup" style="display: none;">
+    <div class="message-container">
+      <div class="message-navbar clearfix">
+        <div class="message-bar">
+          <div class="message-toolbar">
+            <h4 class="widget-title blue smaller">
+              Product Code: <font id="prod_code"></font>, Name: <font id="prod_name"></font>
+            </h4>
+          </div>
+        </div>
+        <div>
+          <div class="messagebar-item-left">
+            <a href="javascript:backImgSetupProduct()" class="btn-back-message-list font-12"> <i
+              class="ace-icon fa fa-arrow-left bigger-110 middle blue"></i> <b
+              class="middle bigger-110">Back</b>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="message-list-container">
+        <form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
+          id="upload_product_pic_form">
+          <input type="hidden" name="key" id="product_key_upload_img">
+          <p>Upload product images</p>
+          <div class="form-group">
+            <div class="col-sm-9">
+              <input type="file" name="pic" id="imgage_file" accept=".png,.jpg,.png,.jpeg" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-9">
+              <button class="btn btn-info btn-minier" type="button" onclick="uploadProductImage()">
+                <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
+                  id="save_product_pic_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        <form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
+          id="upload_product_design_form">
+          <input type="hidden" name="key" id="product_key_upload_design">
+          <p>Upload product design</p>
+          <div class="form-group">
+            <label class="col-sm-1">Top</label>
+            <div class="col-sm-9">
+              <input type="number" name="top" value="300">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-1">Left</label>
+            <div class="col-sm-9">
+              <input type="number" name="left" value="400">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-1"></label>
+            <div class="col-sm-9">
+              <input type="file" name="pic" id="design_file" accept=".png,.jpg,.png,.jpeg" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-9">
+              <button class="btn btn-info btn-minier" type="button" onclick="uploadProductDesign()">
+                <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
+                  id="save_product_design_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-12 user-profile">
+        <div class="widget-box transparent">
+          <div class="widget-header widget-header-small">
+            <h4 class="widget-title smaller">
+              <i class="ace-icon fa fa-check-square-o bigger-110"></i> Product Design
+            </h4>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main">
+              <ul class="ace-thumbnails product-img-list" id="product_design_img_list">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="addUOMDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add UOM</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addUOMDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_new_uom_form">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code"> UOM </label>
+        <div class="col-sm-9">
+          <input type="text" name="uom" id="new_uom" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveUOM()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="add_new_uom_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addUOMDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+  
+</script>

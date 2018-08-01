@@ -604,3 +604,156 @@ function printWindow(selector, title) {
     }, 100);
   }
 }
+
+
+var ThemesUploader = function(title, key) {
+  this.title = title;
+  this.key=key;
+};
+
+ThemesUploader.prototype.img1 = function() {
+  var collum = 'img1';param = 'skyline';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img2 = function() {
+  var collum='img2';param ='landmarks';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img3 = function() {
+  var collum='img3';param='road1';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img4 = function() {
+  var collum='img4'; param = 'road2';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img5 = function() {
+  var collum='img5';param = 'taxi1';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img6 = function() {
+  var collum = 'img6';param = 'local_train';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img7 = function() {
+  var collum = 'img7'; param = 'bus1';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img8 = function() {
+  var collum = 'img8'; param = 'bus2';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img9 = function() {
+  var collum = 'img9'; param = 'car1';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+ThemesUploader.prototype.img10 = function() {
+  var collum = 'img10'; param = 'car2';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+  
+};
+ThemesUploader.prototype.img11 = function() {
+  var collum = 'img11'; param = 'cycle';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+  
+};
+ThemesUploader.prototype.img12 = function() {
+  var collum = 'img12'; param = 'truck';
+  var url = '/superadmin/ThemesPicsUploading?collum='+collum+'&param='+param+'&key='+this.key;
+  postFormWithFile('themes_form', url, null)
+};
+
+function saveThemes(){ 
+  var title = $('#title').val();
+  if(!title){
+    showMSG('Title missing', 'warning');
+    return;    
+  }
+  $('#save_product_spin').show();
+  
+  postRequest('themes_form', '/superadmin/Themes', 'saveThemesCallBack');
+  
+};
+
+function saveThemesCallBack(r){   
+  var skyline = $('#skyline')[0],
+  landmarks = $('#landmarks')[0],
+  road1 = $('#road1')[0],
+  road2 = $('#road2')[0],
+  taxi1 = $('#taxi1')[0],
+  local_train = $('#local_train')[0],
+  bus1 = $('#bus1')[0],
+  bus2 = $('#bus2')[0],
+  car1 = $('#car1')[0],
+  car2 = $('#car2')[0],
+  cycle = $('#cycle')[0],
+  truck = $('#truck')[0];
+  
+
+  var themesUploader = new ThemesUploader(r.data.title, r.data.key);
+  
+  if (skyline.files && skyline.files[0]) { 
+    themesUploader.img1();
+  }
+  
+  if (landmarks.files && landmarks.files[0]) { 
+    themesUploader.img2();
+  }
+  
+  if (road1.files && road1.files[0]) { 
+    themesUploader.img3();
+  }
+  
+  if (road2.files && road2.files[0]) { 
+    themesUploader.img4();
+  }
+  
+  if (taxi1.files && taxi1.files[0]) { 
+    themesUploader.img5();
+  }
+  
+  if (local_train.files && local_train.files[0]) { 
+    themesUploader.img6();
+  }
+  
+  if (bus1.files && bus1.files[0]) { 
+    themesUploader.img7();
+  }
+  
+  if (bus2.files && bus2.files[0]) { 
+    themesUploader.img8();
+  }
+  
+  if (car1.files && car1.files[0]) { 
+    themesUploader.img9();
+  }
+  
+  if (car2.files && car2.files[0]) { 
+    themesUploader.img10();
+  }
+  
+  if (cycle.files && cycle.files[0]) { 
+    themesUploader.img11();
+  }
+  
+  if (truck.files && truck.files[0]) { 
+    themesUploader.img12();
+  } 
+
+  $('#save_product_spin').hide();
+};
+
+function liveTheme(r){
+  showMSG('Theme is live', 'success'); 
+}

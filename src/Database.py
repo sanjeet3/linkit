@@ -157,6 +157,8 @@ class Product(EndpointsModel):
   slider_key = ndb.StringProperty(repeated=True) 
   instock = ndb.BooleanProperty(default=True) 
   endclient_visible = ndb.BooleanProperty(default=False)
+  bg_uri = ndb.StringProperty(default='')
+  bg_bckt_key= ndb.StringProperty(default='')
 
   @classmethod
   def get_product_by_code(cls, code):
@@ -296,3 +298,33 @@ class OrderStage(EndpointsModel):
       e = OrderStage()
       
     return e
+
+class Themes(EndpointsModel):
+  ''' Themes datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  title = ndb.StringProperty(default='')
+  status = ndb.BooleanProperty(default=False) 
+  img1 = ndb.StringProperty(default='')
+  img2 = ndb.StringProperty(default='')
+  img3 = ndb.StringProperty(default='')
+  img4 = ndb.StringProperty(default='')
+  img5 = ndb.StringProperty(default='')
+  img6 = ndb.StringProperty(default='')
+  img7 = ndb.StringProperty(default='')
+  img8 = ndb.StringProperty(default='')
+  img9 = ndb.StringProperty(default='')
+  img10 = ndb.StringProperty(default='')
+  img11 = ndb.StringProperty(default='')
+  img12 = ndb.StringProperty(default='')
+  
+  @classmethod
+  def get_theme(cls):  
+    return cls.query(cls.status==True).get()
+
+  @classmethod
+  def get_active_theme(cls):  
+    return cls.query(cls.status==True)
+  
+  @classmethod
+  def get_theme_list(cls):  
+    return cls.query()
