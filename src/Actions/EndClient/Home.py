@@ -169,12 +169,13 @@ class Logout(ActionSupport):
 
 class Home(ActionSupport):
   def get(self):
-    theme=Themes.get_theme()  
+    themes_obj=Themes.get_theme() 
+    logging.info(themes_obj) 
     product_list = Product.get_selling_product_list()  
     template = self.get_jinja2_env.get_template('endclient/home.html')    
     self.response.out.write(template.render({'product_list': product_list,
                                              'user_obj': self.client,
-                                             'theme': theme}))
+                                             'themes_obj': themes_obj}))
 
 class ProductView(ActionSupport):
   def get(self):

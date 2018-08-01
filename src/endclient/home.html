@@ -12,13 +12,13 @@
 <link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
 <style type="text/css">
 /*ANUMATION*/
-{%if theme%}
+{%if themes_obj%}
 .animation-container {
   height: 100vh;
   width: 100%;
   position: fixed;
   background-color: #A5E2FF;
-  background-image: url('{{ theme.img1 or '/img/skyline.jpg'}}');
+  background-image: url('{{ themes_obj.img1 or '/img/skyline.jpg'}}');
   background-position: left 367px bottom 248px;
   background-repeat: repeat no-repeat;
 }
@@ -28,7 +28,7 @@
   width: 100%;
   position: fixed;
   bottom: 188px;
-  background-image: url('{{ theme.img2 or '/img/landmarks.png'}}');
+  background-image: url('{{ themes_obj.img2 or '/img/landmarks.png'}}');
   background-position: left -625px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -39,7 +39,7 @@
   width: 100%;
   position: fixed;
   bottom: 0px;
-  background-image: url('{{ theme.img3 or '/img/road1.png'}}');
+  background-image: url('{{ themes_obj.img3 or '/img/road1.png'}}');
   background-position: left 0px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -50,7 +50,7 @@
   width: 100%;
   position: fixed;
   bottom: 126px;
-  background-image: url('{{ theme.img4 or '/img/road2.png'}}');
+  background-image: url('{{ themes_obj.img4 or '/img/road2.png'}}');
   background-position: left 0px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -58,7 +58,7 @@
 .animation-container .taxi1 {
   width: 335px;
   height: 133px;
-  background-image: url('{{ theme.img5 or '/img/taxi1.png'}}');
+  background-image: url('{{ themes_obj.img5 or '/img/taxi1.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 16px;
@@ -69,7 +69,7 @@
 .animation-container .train {
   width: 90px;
   height: 394px;
-  background-image: url('{{ theme.img6 or '/img/local_train.png'}}');
+  background-image: url('{{ themes_obj.img6 or '/img/local_train.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 72px;
@@ -79,7 +79,7 @@
 .animation-container .bus1 {
   width: 480px;
   height: 168px;
-  background-image: url('{{ theme.img or '/img/bus1.png'}}');
+  background-image: url('{{ themes_obj.img or '/img/bus1.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 103px;
@@ -90,7 +90,7 @@
 .animation-container .bus2 {
   width: 546px;
   height: 189px;
-  background-image: url('{{ theme.img or '/img/bus2.png'}}');
+  background-image: url('{{ themes_obj.img or '/img/bus2.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 50px;
@@ -101,7 +101,7 @@
 .animation-container .car1 {
   width: 200px;
   height: 86px;
-  background-image: url('{{ theme.img or '/img/car1.png'}}');
+  background-image: url('{{ themes_obj.img or '/img/car1.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 105px;
@@ -112,7 +112,7 @@
 .animation-container .car2 {
   width: 255px;
   height: 109px;
-  background-image: url('{{ theme.img or '/img/car2.png'}}');
+  background-image: url('{{ themes_obj.img or '/img/car2.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 24px;
@@ -123,7 +123,7 @@
 .animation-container .cycle {
   width: 92px;
   height: 95px;
-  background-image: url('{{ theme.img or '/img/cycle.png'}}');
+  background-image: url('{{ themes_obj.img or '/img/cycle.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 145px;
@@ -134,7 +134,7 @@
 .animation-container .truck {
   width: 258px;
   height: 103px;
-  background-image: url('{{ theme.img or '/img/truck.png'}}');
+  background-image: url('{{ themes_obj.img or '/img/truck.png'}}');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 145px;
