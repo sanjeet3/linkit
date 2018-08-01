@@ -496,7 +496,7 @@ class ThemesPicsUploading(ActionSupport):
     file_name = image_file.filename
     msg = '%s, %s, %s' %(collum, param, file_name) 
     logging.info(msg)   
-    bucket_path = '/productpromo/themes/%s' %(file_name)
+    bucket_path = '/productpromo/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
     
