@@ -298,13 +298,14 @@ function imgSetupProduct(id) {
   $('#upload_product_pic_form')[0].reset();
   $('#product_key_upload_img').val(id);
   $('#product_key_upload_design').val(id);
+  $('#product_key_input').val(id);
   var tds = $('#' + id).children();
   code = tds.eq(0).html();
   name = tds.eq(1).html();
   $('#prod_code').html(code);
   $('#prod_name').html(name);
   $('#image-setup').show();
-  $('#list-dom, #add_btn').hide();
+  $('#list-dom, #add_btn, #upload_product_bg_form').hide();
   $('#product_img_list')
       .html(
           '<li class="text-center"><i class="fa fa-spinner fa-spin fa-2x"></i> Loading Pics...</li>');
@@ -414,8 +415,47 @@ function getProductImageCallBack(r) {
 
     $('#product_design_img_list').html(h.join(''));
   }
+  
+  if(r.data.bg_uri){
+    var h = [ '<a href="javascript:deleteImg(' ] 
+    h.push("'")
+    h.push(r.data.key)
+    h.push("'")
+    h.push(')">Delete</a>') 
+    $('#product_bg_img').html('<img alt="150x150" src="' + r.data.bg_uri + '">');
+    $('#product_bg_img').append(h.join(''));
+  } else {
+    $('#product_bg_img').html('No background image available');
+    $('#upload_product_bg_form').show();
+  }
 
 };
+
+function uploadProductBackground() { 
+  fileObj = $('#bg_file')[0];
+  if (fileObj.files && fileObj.files[0]) {
+    $('#save_product_bg_spin').show();
+    postFormWithFile("upload_product_bg_form",
+        '/superadmin/UploadProductBG', 'uploadProductBackgroundCallBack');
+  }
+};
+
+function uploadProductBackgroundCallBack(r) {
+  $('#save_product_bg_spin').hide();
+  if (r.status == 'SUCCESS') {
+    $('#product_bg_img').html('<img alt="150x150" src="'+r.data.bg_uri+'">');
+    $('#upload_product_bg_form').hide();
+  }
+};
+
+function deleteImg(key){
+  getRequest('', '/superadmin/DeleteProductBG?key='+key, 'deleteImgCB');
+}
+
+function deleteImgCB(r){
+  $('#product_bg_img').html('No background image available');
+  $('#upload_product_bg_form').show();
+}
 
 function saveOrderStage() {
   $('#save_spin').show();

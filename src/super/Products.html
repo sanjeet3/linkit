@@ -259,6 +259,41 @@
           </div>
         </div>
       </div>
+      <div class="col-xs-12 user-profile">
+        <div class="widget-box transparent">
+          <div class="widget-header widget-header-small">
+            <h4 class="widget-title smaller">
+              <i class="ace-icon fa fa-check-square-o bigger-110"></i> Product Background
+            </h4>
+          </div>
+          <div class="widget-body">
+            <div class="widget-main">
+              <ul class="ace-thumbnails product-img-list">
+                <li class="text-center" id="product_bg_img">No background image available</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
+          id="upload_product_bg_form" style="    float: none;">
+          <input type="hidden" name="key" id="product_key_input">
+          <p>Upload Background Image</p>
+          <div class="form-group">
+            <div class="col-sm-9">
+              <input type="file" name="pic" id="bg_file" accept=".png,.jpg,.png,.jpeg" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-9">
+              <button class="btn btn-info btn-minier" type="button"
+                onclick="uploadProductBackground()">
+                <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
+                  id="save_product_bg_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -317,7 +352,8 @@
     </form>
   </div>
 </div>
-{#<script type="text/javascript">
+{#
+<script type="text/javascript">
   //file input
   /* $('.message-form input[type=file]')
       .ace_file_input()
@@ -388,4 +424,5 @@
   });  */
   //"https://pannellum.org/images/alma.jpg"
   //bucket=productpromo
-</script>#}
+</script>
+#}

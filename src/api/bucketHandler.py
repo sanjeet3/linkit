@@ -50,3 +50,12 @@ def upload_image_to_bucket(file_obj, bucket_path):
   
   return '', ''
 
+def delete_bucket_file(bucket_key):
+  try:  
+    blobstore.delete(bucket_key)
+    return True
+  except Exception, e:
+    logging.error(e) 
+    return False   
+      
+        

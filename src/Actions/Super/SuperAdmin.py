@@ -4,7 +4,7 @@ Created on 04-Jul-2018
 @author: Sanjay Saini '''
 
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
-from src.api.bucketHandler import upload_image_to_bucket
+from src.api.bucketHandler import upload_image_to_bucket, delete_bucket_file
 from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
@@ -86,6 +86,9 @@ class GetProductPics(ActionSupport):
                           'left': design.left})   
     
     data_dict = {'img_list': img_list,
+                 'bg_uri': product.bg_uri,
+                 'bg_bckt_key': product.bg_bckt_key,
+                 'key': key,
                  'design_list': design_list}
       
     return  json_response(self.response, data_dict, SUCCESS,'')
@@ -401,6 +404,31 @@ class UploadProductDesign(ActionSupport):
                           'title': title},
                          SUCCESS,
                          'Product design uploaded')    
+
+class UploadProductBG(ActionSupport):    
+  def post(self):  
+    key = self.request.get('key')  
+    product = ndb.Key(urlsafe=key).get()
+    
+    
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')     
+        
+    file_name = image_file.filename    
+    bucket_path = '/productpromo/bg/%s' %(file_name)
+    bucket_path = bucket_path.lower()
+    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    product.bg_uri = serving_url
+    product.bg_bckt_key = bucket_key
+    product.put() 
+    return json_response(self.response, 
+                         {'bg_uri': serving_url, },
+                         SUCCESS,
+                         'Product background uploaded')  
     
 class OrderStageView(ActionSupport):
   def get(self):
@@ -533,4 +561,26 @@ class ThemesPicsUploading(ActionSupport):
                          SUCCESS,
                          '')  
          
-         
+class Test(ActionSupport):    
+  def get(self): 
+    #bucket_key = 'encoded_gs_file:cHJvZHVjdHByb21vL2JnL3dvb2Rlbl9ib3guanBn'  
+    #s = delete_bucket_file(bucket_key)
+    #logging.info(s)
+    self.response.out.write('200')
+                  
+class DeleteProductBG(ActionSupport):    
+  def get(self): 
+    product = ndb.Key(urlsafe=self.request.get('key')).get()  
+    bucket_key = product.bg_bckt_key  
+    if product.bg_bckt_key and delete_bucket_file(bucket_key):
+      product.bg_bckt_key = ''
+      product.bg_uri = ''
+      product.put()    
+    
+    data_dict = {}     
+    return json_response(self.response,
+                         data_dict,
+                         SUCCESS,
+                         'Product background removed')
+    
+    

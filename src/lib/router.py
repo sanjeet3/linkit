@@ -24,6 +24,9 @@ __route_list = [
      
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
+    RedirectRoute(r'/superadmin/test', SuperAdmin.Test, name='SuperAdmin Test', strict_slash=True),
+   
+    
     #Super Admin Seller
     RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),
     RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
@@ -36,6 +39,8 @@ __route_list = [
     RedirectRoute(r'/superadmin/GetProductPics', SuperAdmin.GetProductPics, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductPicture', SuperAdmin.UploadProductPicture, name='SuperAdmin Upload Product Picture', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductDesign', SuperAdmin.UploadProductDesign, name='SuperAdmin Upload Product Design', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadProductBG', SuperAdmin.UploadProductBG, name='SuperAdmin Upload Product BG', strict_slash=True),
+    RedirectRoute(r'/superadmin/DeleteProductBG', SuperAdmin.DeleteProductBG, name='SuperAdmin delete Product BG', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductCategory', SuperAdmin.SaveProductsCategory, name='SuperAdmin SaveProductCategory', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductUOM', SuperAdmin.SaveProductsUOM, name='SuperAdmin SaveProductUOM', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
