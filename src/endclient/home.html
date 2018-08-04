@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Custom Branding</title>
+<title>Craftyourchoice</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/css/bootstrap337.css">
@@ -287,128 +287,224 @@
     <div class="cycle"></div>
     <div class="truck"></div>
   </div>
-  <nav class="navbar-home" id="navbar-list">
-    <ul>
-      <li><a href="/" class="active" id="menu_1">HOME</a></li>
-      <li></li> {% if user_obj %}
-      <li><a href="/Logout" id="logout">Logout</a></li> {% else %}
-      <li><a href="javascript:menuClick('#signin');showLoginDom();" id="signin">Sign-in</a></li>
-      <li><a href="javascript:menuClick('#signup');showRegisterDom();" id="signup">Sign-up</a></li>
-      {%endif%}
-    </ul>
-  </nav>
+  <div class="navbar">
+    <img alt="Craft your choice" src="/img/Craftyourchoice.png" class="home-logo"> 
+    <div class="dropdown">
+      <button class="dropbtn">
+        Products <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        {%for e in product_cat_list%}
+        <a href="/Product?cat={{e.entityKey}}">{{e.name}}</a> 
+        {%endfor%}
+      </div>
+    </div>
+    <a href="#About Us">About Us</a> 
+    <a href="#Contact Us">Contact Us</a>
+    {% if user_obj %}
+    <a href="/Logout" id="logout" >Logout</a>
+    {%endif%}
+  </div>
   <section class="container">
     <div class="row">
       <div class="col-lg-12 col-xs-12 product-view text-center" id="login_dom"
         style="display: none;">
         <div class="col-lg-12 col-xs-12 "></div>
-        <form class="dom-bg" action="/Login" method="post">
-          <div class="form-group">
-            <label for="email" style="width: 30%">Email address</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="email" class="form-control" id="email" name="email" required="required">
+        
+      </div> 
+      <div class="col-lg-12 col-xs-12 slide-container ">
+        <div class="shoes-grid" style="{% if user_obj %}width:100%{%endif%}">
+          <div class="wrap-in">
+            <div class="wmuSlider example1 slide-grid">
+              <div class="wmuSliderWrapper">
+                <article style="position: absolute; width: 100%; opacity: 0;">
+                  <div class="banner-matter">
+                    <div class="col-md-5 banner-bag">
+                      <img class="img-responsive " src="img/bag.jpg" alt=" " />
+                    </div>
+                    <div class="col-md-7 banner-off">
+                      <h2>FLAT 50% 0FF</h2>
+                      <label>FOR ALL PURCHASE <b>VALUE</b></label>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                        eiusmod tempor incididunt ut labore et</p>
+                      <span class="on-get">GET NOW</span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </article>
+                <article style="position: absolute; width: 100%; opacity: 0;">
+                  <div class="banner-matter">
+                    <div class="col-md-5 banner-bag">
+                      <img class="img-responsive " src="img/bag1.jpg" alt=" " />
+                    </div>
+                    <div class="col-md-7 banner-off">
+                      <h2>FLAT 50% 0FF</h2>
+                      <label>FOR ALL PURCHASE <b>VALUE</b></label>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                        eiusmod tempor incididunt ut labore et</p>
+                      <span class="on-get">GET NOW</span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </article>
+                <article style="position: absolute; width: 100%; opacity: 0;">
+                  <div class="banner-matter">
+                    <div class="col-md-5 banner-bag">
+                      <img class="img-responsive " src="img/bag.jpg" alt=" " />
+                    </div>
+                    <div class="col-md-7 banner-off">
+                      <h2>FLAT 50% 0FF</h2>
+                      <label>FOR ALL PURCHASE <b>VALUE</b></label>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                        eiusmod tempor incididunt ut labore et</p>
+                      <span class="on-get">GET NOW</span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </article>
+              </div> 
+              <ul class="wmuSliderPagination">
+                <li><a href="#" class="">0</a></li>
+                <li><a href="#" class="">1</a></li>
+                <li><a href="#" class="">2</a></li>
+              </ul>
             </div>
           </div>
-          <div class="form-group">
-            <label for="pwd" style="width: 30%">Password</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="password" name="password" class="form-control" id="pwd" required>
-            </div>
-            <a href="javascript:menuClick('#signup');showRegisterDom();">Create Account</a>
-          </div>
-          <button type="submit" class="btn btn-success">Login</button>
-        </form>
-      </div>
-      <div class="col-lg-12 col-xs-12 product-view text-center" id="registeration_msg_dom"
-        style="display: none;">
-        <div class="dom-bg">
-          <p>
-            Verification mail will sent to your registered email <span id="email_text"></span>,
-            Check your inbox and verify account to complete registration.
-          </p>
         </div>
-      </div>
-      <div class="col-lg-12 col-xs-12 product-view text-center" id="registeration_dom"
-        style="display: none;">
-        <form class="dom-bg" id="registration_form">
-          <div class="form-group">
-            <label for="email" style="width: 30%">Name*</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="text" class="form-control" id="name" name="name" required="required">
-            </div>
+        {% if not user_obj %}
+        <div class="signin-grid">
+          <div class="col-lg-12 col-xs-12text-center" id="registeration_msg_dom"
+            style="display: none;">
+            <p>
+              Verification mail will sent to your registered email <span id="email_text"></span>,
+              Check your inbox and verify account to complete registration.
+            </p>
           </div>
-          <div class="form-group">
-            <label for="email" style="width: 30%">Email address*</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="email" class="form-control" id="user_email" name="email"
-                required="required">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwd" style="width: 30%">Password*</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="password" name="password" class="form-control" id="password" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwd" style="width: 30%">Confirm Password*</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="password" name="confirm-password" class="form-control"
-                id="confirm-password" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="email" style="width: 30%">Contact Number</label>
-            <div style="width: 40%; margin-left: 30%;">
-              <input type="text" class="form-control" id="contact" name="contact"
-                required="required">
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="checkbox">
-              <label><input type="checkbox" name="term_condition" id="term_condition">
-                Accept Term & conditions</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="checkbox">
-              <label><input type="checkbox" name="recieved_offers" id="recieved_offers">
-                Get alert for new offers</label>
-            </div>
-          </div>
-          <button type="button" class="btn btn-success" onclick="register()">Sign-Up</button>
-        </form>
-      </div>
-      <div class="col-lg-12 col-xs-12 product-view" id="product-detail-dom" style="display: none;">
-      </div>
-      <div class="col-lg-12 col-xs-12" id="product-list-dom">
-        {%for e in product_list%}
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 mb-20 center">
-          <div class="product-container" style="background-image: url({{e.bg_uri or '/img/WoodenWallBackground.jpg'}});">
-            <img class="product-img" alt="{{e.name}}" src="{{e.image_url[0] or '/img/prod_default.png'}}"
-              onclick="viewProduct('{{e.entityKey}}')"> 
-            <div class="space-6"></div>
-            <div class="product-info">
-              <div class="col-lg-12 col-sm-12">
-                <p class="text-ovrflw">{{e.code}}, {{e.name}}</p>
-                <p class="text-ovrflw">
-                  <b>Size: </b> {{e.size}}
-                </p>
-                <p>
-                  <b>Category: </b> {{e.category}}
-                </p>
+          <form action="/Login" method="post" style="display: none;" id="login_form">
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <div>
+                <input type="email" class="form-control" id="email" name="email" required="required">
               </div>
             </div>
-          </div>
+            <div class="form-group">
+              <label for="pwd">Password</label>
+              <div>
+                <input type="password" name="password" class="form-control" id="pwd" required>
+              </div>
+            </div>
+                        <div class="form-group">
+            <button type="submit" class="btn btn-success pull-left">Login</button>
+            <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
+            </div>
+          </form>
+          <form id="registration_form">
+            <div class="form-group">
+              <label for="email">Name*</label>
+              <div>
+                <input type="text" class="form-control" id="name" name="name" required="required">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email address*</label>
+              <div>
+                <input type="email" class="form-control" id="user_email" name="email"
+                  required="required">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwd">Password*</label>
+              <div>
+                <input type="password" name="password" class="form-control" id="password" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwd">Confirm Password*</label>
+              <div>
+                <input type="password" name="confirm-password" class="form-control"
+                  id="confirm-password" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Contact Number</label>
+              <div>
+                <input type="text" class="form-control" id="contact" name="contact"
+                  required="required">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <label><input type="checkbox" name="term_condition" id="term_condition">
+                  Accept Term & conditions</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <label><input type="checkbox" name="recieved_offers" id="recieved_offers">
+                  Get alert for new offers</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-success pull-left" onclick="register()">Sign-Up</button>
+              <button type="button" class="btn btn-info pull-right" onclick="showLoginDom()">Sign-in</button>
+            </div>
+          </form>
         </div>
-        {%endfor%}
+        {%endif%}
+      </div>
+      <div class="col-lg-12 col-xs-12 events-slide">
+        <div class="col-lg-3">
+          <b>Religion </b> 
+          <select name="religion">
+            <option value="">ALL</option>
+            <option value="Hindu">Hindu</option>
+            <option value="Christian">Christian</option>
+            <option value="Islam">Islam</option>
+            <option value="Jainism">Jainism</option>
+            <option value="Sikhism">Sikhism</option>
+            <option value="Budhism">Budhism</option>
+          </select>
+        </div>
+        <div class="col-lg-3">
+          <b>Age </b> 
+          <select name="age">
+            <option value="">ALL</option>
+            <option value="0">New born</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5-10</option>
+            <option value="11">11-15</option>
+            <option value="16-21">16-21</option>
+            <option value="21-25">21-25</option>
+            <option value="26-35">26-35</option>
+            <option value="35-45">35-45</option>
+            <option value="46">senior citizen</option> 
+          </select>
+        </div>
+        <div class="col-lg-3">
+          <b>Gender </b> 
+          <select name="gender">
+            <option value="">ALL</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Unisex">Unisex</option>
+          </select>
+        </div>
+        <div class="col-lg-3">
+          <button class="btn btn-info" type="button">Show</button>
+        </div>  
       </div>
     </div>
   </section>
 </body>
-<script src="/js/jquery311.js"></script>
-<script src="/js/bootstrap.min.js"></script>
+<script src="/js/product/jquery.min.js"></script>
+<script src="/js/product/jquery.wmuSlider.js"></script>
 <script src="/super/assets/js/bootstrap-notify.js"></script>
 <script type="text/javascript" src="super/assets/js/algo.js"></script>
 <script type="text/javascript" src="/js/api.js"></script>
+<script>
+  $('.example1').wmuSlider();
+</script>
 </html>

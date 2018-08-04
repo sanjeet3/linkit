@@ -171,9 +171,9 @@ class Home(ActionSupport):
   def get(self):
     themes_obj=Themes.get_theme() 
     logging.info(themes_obj) 
-    product_list = Product.get_selling_product_list()  
+    product_cat_list = ProductCategory.get_list()
     template = self.get_jinja2_env.get_template('endclient/home.html')    
-    self.response.out.write(template.render({'product_list': product_list,
+    self.response.out.write(template.render({'product_cat_list': product_cat_list,
                                              'user_obj': self.client,
                                              'themes_obj': themes_obj}))
 

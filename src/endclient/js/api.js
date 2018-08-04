@@ -288,13 +288,13 @@ function orderMakePaymentCallBack(r) {
 }
 
 function showLoginDom() {
-  $('#login_dom').show();
-  $('#registeration_dom, #product-detail-dom, #product-list-dom, #registeration_msg_dom').hide();
+  $('#login_form').show();
+  $('#registration_form, #registeration_msg_dom').hide();
 }
 
 function showRegisterDom() {
-  $('#registeration_dom').show();
-  $('#login_dom, #product-detail-dom, #product-list-dom, #registeration_msg_dom').hide();
+  $('#registration_form').show();
+  $('#login_form, #registeration_msg_dom').hide();
 }
 
 function register() {
@@ -325,15 +325,26 @@ function register() {
     alert('You are not accept terms and conditions');
     return;
   }
-
-  postRequest('registration_form', '/Register', 'registerCallBack');
+ 
+  var formData = $("#registration_form").serializeArray();
+  $("button").attr("disabled", true); 
+  $.ajax({
+    type: "POST",
+    url: '/Register',
+    data: formData,
+    success: registerCallBack,
+    dataType:  'json',
+  });
+  
+  
 }
 
-function registerCallBack(r, fid) {
+function registerCallBack(r) {
+  $("button").attr("disabled", false); 
   if (r.status == 'SUCCESS') {
     $('#email_text').html(r.data.email);
     $('#registeration_msg_dom').show();
-    $('#registeration_dom').hide();
+    $('#registration_form').hide();
   } else {
 
   }
