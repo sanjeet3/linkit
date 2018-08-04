@@ -353,7 +353,8 @@ class UploadProductPicture(ActionSupport):
     bucket_path = '/productpromo/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    
+    if not serving_url:
+      return json_response(self.response, {}, WARNING, 'Try again')    
     product.image_url.append(serving_url)
     product.bucket_path.append(bucket_path)
     product.bucket_key.append(bucket_key)
@@ -389,7 +390,8 @@ class UploadProductDesign(ActionSupport):
     bucket_path = '/productpromo/design/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    
+    if not serving_url:
+      return json_response(self.response, {}, WARNING, 'Try again')
     design = ProductDesign()
     design.product = product_key
     design.bucket_key = bucket_key
@@ -423,6 +425,8 @@ class UploadProductBG(ActionSupport):
     bucket_path = '/productpromo/bg/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    if not serving_url:
+      return json_response(self.response, {}, WARNING, 'Try again')
     product.bg_uri = serving_url
     product.bg_bckt_key = bucket_key
     product.put() 
@@ -528,7 +532,9 @@ class ThemesPicsUploading(ActionSupport):
     bucket_path = '/productpromo/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    
+    if not serving_url:
+      return json_response(self.response, {}, WARNING, 'Try again')
+  
     if collum == 'img1':
       themes.img1 = serving_url
     elif collum == 'img2':     
