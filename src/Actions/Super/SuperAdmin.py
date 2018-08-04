@@ -20,6 +20,7 @@ from src.Database import SellerOrder
 from src.Database import SellerOrderHistory
 from src.Database import OrderStage
 from src.Database import Themes
+from src.Database import EventMaster
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
@@ -583,4 +584,71 @@ class DeleteProductBG(ActionSupport):
                          SUCCESS,
                          'Product background removed')
     
+class EventView(ActionSupport):
+  def get(self):
+    e_list = EventMaster.get_list()  
+    context = {'e_list': e_list}
+    template = self.get_jinja2_env.get_template('super/events.html')    
+    self.response.out.write(template.render(context)) 
     
+  def post(self):
+    title=self.request.get('title')
+    description=self.request.get('description')
+    religion=self.request.get_all('religion')
+    gender=self.request.get_all('gender')
+    all_age=self.request.get('all_age')
+    from_age=self.request.get('from_age')
+    to_age=self.request.get('to_age')
+    image_file = self.request.POST.get('pic', None)
+    file_obj = self.request.get('pic', None)   
+    
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')
+    file_name = image_file.filename    
+    bucket_path = '/productpromo/%s' %(file_name)
+    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    if not serving_url:
+      return json_response(self.response, {}, 'WARNING', 'Try again')    
+    
+    e = EventMaster()
+    if all_age:  
+      e.all_age = True
+    e.bucket_key = bucket_key
+    e.description = description
+    try:
+      e.from_age = int(from_age)
+    except Exception:
+      pass
+    e.gender = gender
+    e.img_url = serving_url
+    e.religion = religion
+    e.title = title
+    try:
+      e.to_age = int(to_age)
+    except Exception:
+      pass    
+    e.put()
+    
+    data_dict = {'title': e.title,
+                 'description': e.description,
+                 'img_url': e.img_url
+                 }
+    return json_response(self.response, data_dict, SUCCESS, 'Event created')  
+
+class EventSequenceSet(ActionSupport):
+  def post(self):
+    d = self.request.get('data')        
+    d = json.loads(d)
+    e_list = []
+    for k, i in d.items():
+      e = ndb.Key(urlsafe=k).get()
+      e.seq_selected = True
+      e.seq_num = i
+      e_list.append(e)
+      
+    if e_list:
+      ndb.put_multi(e_list)        
+    
+    return json_response(self.response, {}, SUCCESS, 'Event sequence updated')  

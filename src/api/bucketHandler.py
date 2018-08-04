@@ -46,7 +46,7 @@ def upload_image_to_bucket(file_obj, bucket_path):
       serving_url = images.get_serving_url(bucket_key)  
     return serving_url, bucket_key
   except Exception, e:
-    raise Exception('Blob write failed for %s, exception: %s. Additional info was logged' % (bucket_path, str(e)))
+    logging.error('Blob write failed for %s, exception: %s. Additional info was logged' % (bucket_path, str(e)))
   
   return '', ''
 

@@ -797,3 +797,76 @@ function saveThemesCallBack(r){
 function liveTheme(r){
   showMSG('Theme is live', 'success'); 
 }
+ 
+function uploadEvent() {
+ var t = $('#title').val();
+ if(!t){
+   showMSG('Title missing', 'warning');
+   return;
+ }
+ 
+  fileObj = $('#pic')[0];
+  if (fileObj.files && fileObj.files[0]) {
+    $('#action_spin').show();
+    postFormWithFile("events_form",
+        '/superadmin/Events', 'uploadEventCallBack');
+  } else {
+    showMSG('Picture missing', 'warning');
+    return;
+  }
+};
+
+function uploadEventCallBack(r) {
+  $('#action_spin').hide();
+  if(r.status!='SUCCESS') return;
+  var d = r.data;
+  var r = ['<tr><td></td><td>'];
+  r.push(d.title);
+  r.push('</td><td>');
+  r.push(d.description);
+  r.push('</td><td></td><td><img src="');
+  r.push(d.img_url);
+  r.push('"></td></tr>');
+  
+  $('#t_body').append(r.join(''));
+}
+
+function showEventPic(input) {
+
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#event_pic_pre').html('<img src="'+ e.target.result +'">');
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    $('#event_pic_pre').html('No image selected')
+  }
+}
+ 
+function setEventSequence(){
+  var selected = {};
+  var count = 0;
+  var err = true;
+  $('input.sequence:checkbox:checked').each(function (a) {
+    var id = this.name;
+    
+    console.log(this.name);
+    selected[id] = parseInt($('#'+id).val());
+    err = false;
+    count += 1
+  });
+
+  if(err){
+    showMSG('No event selected', 'warning'); return;
+  }
+  var msg = count +' events are selected for show in default to website. Are you sure?'
+  if(!confirm(msg)){return}
+  
+  $('#seq_data').val(JSON.stringify(selected));
+  
+  postRequest('update_event_sequence', '/superadmin/EventSequenceSet', null);
+
+};

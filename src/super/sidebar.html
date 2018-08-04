@@ -7,30 +7,14 @@
 			} catch (e) {
 			}
 		</script>
-  <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-      <button class="btn btn-success">
-        <i class="ace-icon fa fa-signal"></i>
-      </button>
-      <button class="btn btn-info">
-        <i class="ace-icon fa fa-pencil"></i>
-      </button>
-      <button class="btn btn-warning">
-        <i class="ace-icon fa fa-users"></i>
-      </button>
-      <button class="btn btn-danger">
-        <i class="ace-icon fa fa-cogs"></i>
-      </button>
-    </div>
-    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-      <span class="btn btn-success"></span> <span class="btn btn-info"></span> <span
-        class="btn btn-warning"></span> <span class="btn btn-danger"></span>
-    </div>
-  </div>
+ 
   <!-- /.sidebar-shortcuts --> 
   <ul class="nav nav-list">
     <li class="active"><a href="/superadmin"> <i class="menu-icon fa fa-tachometer"></i> <span
         class="menu-text"> Dashboard </span>
+    </a> <b class="arrow"></b></li>            
+    <li class=""><a href="javascript:getWebPage('/superadmin/Events',{'title':'Events', 'data':''})"> <i class="menu-icon fa fa-birthday-cake"></i> <span
+        class="menu-text"> Events </span>
     </a> <b class="arrow"></b></li>           
     <li class=""><a href="javascript:getWebPage('/superadmin/Products',{'title':'Products', 'data':''})"> <i class="menu-icon fa fa-picture-o"></i> <span
         class="menu-text"> Products </span>
@@ -49,7 +33,7 @@
     </a> <b class="arrow"></b></li> 
     <li class=""><a
       href="javascript:getWebPage('/superadmin/Themes',{'title':'Themes Setting', 'data':''})"> <i
-        class="menu-icon fa fa-map-signs"></i> <span class="menu-text"> Themes</span>
+        class="menu-icon fa fa-area-chart"></i> <span class="menu-text"> Themes</span>
     </a> <b class="arrow"></b></li>   
   </ul>
   <!-- /.nav-list -->

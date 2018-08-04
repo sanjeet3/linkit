@@ -328,3 +328,26 @@ class Themes(EndpointsModel):
   @classmethod
   def get_theme_list(cls):  
     return cls.query()
+
+class EventMaster(EndpointsModel):
+  ''' Themes datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  title = ndb.StringProperty(default='')
+  description = ndb.TextProperty(default='')
+  religion = ndb.StringProperty(repeated=True)
+  gender = ndb.StringProperty(repeated=True)
+  from_age = ndb.IntegerProperty(default=-1)
+  to_age = ndb.IntegerProperty(default=-1)
+  all_age = ndb.BooleanProperty(default=False) 
+  img_url = ndb.StringProperty(default='')
+  bucket_key = ndb.StringProperty(default='')
+  seq_num = ndb.IntegerProperty(default=0)
+  seq_selected = ndb.BooleanProperty(default=False)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().fetch()
+  
+  @classmethod
+  def get_client_view(cls):  
+    return cls.query(cls.seq_selected==True).order(-cls.seq_num).fetch()
