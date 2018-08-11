@@ -19,6 +19,7 @@ __route_list = [
     RedirectRoute(r'/GetProductDesignor', Home.GetProductDesignor, name='Get Product Designor page', strict_slash=True),
     RedirectRoute(r'/Product', Home.ProductView, name='View product page', strict_slash=True),
     RedirectRoute(r'/GetProductDetails', Home.GetProductDetails, name='Get product details page', strict_slash=True),
+    RedirectRoute(r'/SearchEvent', Home.GetEventView, name='GetEventView', strict_slash=True),
     RedirectRoute(r'/OrderStageFirst', Home.OrderStageFirst, name='Order stage 1', strict_slash=True),
     RedirectRoute(r'/PlaceOrder', Home.PlaceOrder, name='Place Order', strict_slash=True),
      
@@ -33,11 +34,12 @@ __route_list = [
    
     #Super Admin Product
     RedirectRoute(r'/superadmin/Themes', SuperAdmin.ThemesView, name='SuperAdmin themes page', strict_slash=True),
+    RedirectRoute(r'/superadmin/ThemesPicsUploading', SuperAdmin.ThemesPicsUploading, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Events', SuperAdmin.EventView, name='SuperAdmin EventView page', strict_slash=True),
     RedirectRoute(r'/superadmin/EventSequenceSet', SuperAdmin.EventSequenceSet, name='SuperAdmin Event client view setup', strict_slash=True),
-    RedirectRoute(r'/superadmin/ThemesPicsUploading', SuperAdmin.ThemesPicsUploading, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/SetupThemesLive', SuperAdmin.SetupThemesLive, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetEventList', SuperAdmin.GetEventList, name='SuperAdmin event list', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductPics', SuperAdmin.GetProductPics, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductPicture', SuperAdmin.UploadProductPicture, name='SuperAdmin Upload Product Picture', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductDesign', SuperAdmin.UploadProductDesign, name='SuperAdmin Upload Product Design', strict_slash=True),
@@ -46,6 +48,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/SaveProductCategory', SuperAdmin.SaveProductsCategory, name='SuperAdmin SaveProductCategory', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductUOM', SuperAdmin.SaveProductsUOM, name='SuperAdmin SaveProductUOM', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadTest', SuperAdmin.UploadTest, name='SuperAdmin UploadTest', strict_slash=True),
     #Super Admin order
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/GerOrderDetails', SuperAdmin.GerOrderDetails, name='SuperAdmin Order view', strict_slash=True),
@@ -56,6 +59,13 @@ __route_list = [
     RedirectRoute(r'/superadmin/OrderSearch', SuperAdmin.OrderSearch, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/AssignProductToSeller', SuperAdmin.AssignProductToSeller, name='SuperAdmin AssignProductToSeller', strict_slash=True),
     RedirectRoute(r'/superadmin/GetSellerProduct', SuperAdmin.GetSellerProduct, name='SuperAdmin get Product of Seller', strict_slash=True),
+    
+    #Custom Designs
+    RedirectRoute(r'/superadmin/CustomDesign', SuperAdmin.CustomDesign, name='SuperAdmin Custom designs', strict_slash=True),
+    RedirectRoute(r'/superadmin/DesignCategorySave', SuperAdmin.DesignCategorySave, name='SuperAdmin Custom designs', strict_slash=True),
+    RedirectRoute(r'/superadmin/DesignSubCategorySave', SuperAdmin.DesignSubCategorySave, name='SuperAdmin Custom designs', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadDesignImage', SuperAdmin.UploadDesignImage, name='SuperAdmin Custom designs', strict_slash=True),
+    
     #franchisor
     RedirectRoute(r'/Seller', franchisor.Home, name='Seller home page', strict_slash=True),
     RedirectRoute(r'/Seller/Products', franchisor.Product, name='Seller Products page', strict_slash=True),

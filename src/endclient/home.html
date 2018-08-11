@@ -12,13 +12,12 @@
 <link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
 <style type="text/css">
 /*ANUMATION*/
-{%if themes_obj%}
 .animation-container {
   height: 100vh;
   width: 100%;
   position: fixed;
   background-color: #A5E2FF;
-  background-image: url('{{ themes_obj.img1 or '/img/skyline.jpg'}}');
+  background-image: url('/img/img2/skyline.jpg');
   background-position: left 367px bottom 248px;
   background-repeat: repeat no-repeat;
 }
@@ -28,7 +27,7 @@
   width: 100%;
   position: fixed;
   bottom: 188px;
-  background-image: url('{{ themes_obj.img2 or '/img/landmarks.png'}}');
+  background-image: url('/img/img2/landmarks.png');
   background-position: left -625px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -39,7 +38,7 @@
   width: 100%;
   position: fixed;
   bottom: 0px;
-  background-image: url('{{ themes_obj.img3 or '/img/road1.png'}}');
+  background-image: url('/img/img2/road1.png');
   background-position: left 0px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -50,7 +49,7 @@
   width: 100%;
   position: fixed;
   bottom: 126px;
-  background-image: url('{{ themes_obj.img4 or '/img/road2.png'}}');
+  background-image: url('/img/img2/road2.png');
   background-position: left 0px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -58,7 +57,7 @@
 .animation-container .taxi1 {
   width: 335px;
   height: 133px;
-  background-image: url('{{ themes_obj.img5 or '/img/taxi1.png'}}');
+  background-image: url('/img/img2/taxi1.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 16px;
@@ -69,7 +68,7 @@
 .animation-container .train {
   width: 90px;
   height: 394px;
-  background-image: url('{{ themes_obj.img6 or '/img/local_train.png'}}');
+  background-image: url('/img/img2/local_train.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 72px;
@@ -79,7 +78,7 @@
 .animation-container .bus1 {
   width: 480px;
   height: 168px;
-  background-image: url('{{ themes_obj.img7 or '/img/bus1.png'}}');
+  background-image: url('/img/img2/bus1.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 103px;
@@ -90,7 +89,7 @@
 .animation-container .bus2 {
   width: 546px;
   height: 189px;
-  background-image: url('{{ themes_obj.img8 or '/img/bus2.png'}}');
+  background-image: url('/img/img2/bus2.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 50px;
@@ -101,7 +100,7 @@
 .animation-container .car1 {
   width: 200px;
   height: 86px;
-  background-image: url('{{ themes_obj.img9 or '/img/car1.png'}}');
+  background-image: url('/img/img2/car1.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 105px;
@@ -112,7 +111,7 @@
 .animation-container .car2 {
   width: 255px;
   height: 109px;
-  background-image: url('{{ themes_obj.img10 or '/img/car2.png'}}');
+  background-image: url('/img/img2/car2.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 24px;
@@ -123,7 +122,7 @@
 .animation-container .cycle {
   width: 92px;
   height: 95px;
-  background-image: url('{{ themes_obj.img11 or '/img/cycle.png'}}');
+  background-image: url('/img/img2/cycle.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 145px;
@@ -134,143 +133,13 @@
 .animation-container .truck {
   width: 258px;
   height: 103px;
-  background-image: url('{{ themes_obj.img12 or '/img/truck.png'}}');
+  background-image: url('/img/img2/truck.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 145px;
   right: 400px;
   z-index: 75;
 }
-{%else%}
-.animation-container {
-  height: 100vh;
-  width: 100%;
-  position: fixed;
-  background-color: #A5E2FF;
-  background-image: url('/img/skyline.jpg');
-  background-position: left 367px bottom 248px;
-  background-repeat: repeat no-repeat;
-}
-
-.animation-container .buildings {
-  height: 375px;
-  width: 100%;
-  position: fixed;
-  bottom: 188px;
-  background-image: url('/img/landmarks.png');
-  background-position: left -625px bottom;
-  background-repeat: repeat no-repeat;
-}
-
-.animation-container .road1 {
-  background-color: #2D2D2D;
-  height: 126px;
-  width: 100%;
-  position: fixed;
-  bottom: 0px;
-  background-image: url('/img/road1.png');
-  background-position: left 0px bottom;
-  background-repeat: repeat no-repeat;
-}
-
-.animation-container .road2 {
-  background-color: #2D2D2D;
-  height: 62px;
-  width: 100%;
-  position: fixed;
-  bottom: 126px;
-  background-image: url('/img/road2.png');
-  background-position: left 0px bottom;
-  background-repeat: repeat no-repeat;
-}
-
-.animation-container .taxi1 {
-  width: 335px;
-  height: 133px;
-  background-image: url('/img/taxi1.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 16px;
-  right: 100px;
-  z-index: 100;
-}
-
-.animation-container .train {
-  width: 90px;
-  height: 394px;
-  background-image: url('/img/local_train.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 72px;
-  left: 0px;
-}
-
-.animation-container .bus1 {
-  width: 480px;
-  height: 168px;
-  background-image: url('/img/bus1.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 103px;
-  left: 186px;
-  z-index: 80;
-}
-
-.animation-container .bus2 {
-  width: 546px;
-  height: 189px;
-  background-image: url('/img/bus2.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 50px;
-  right: -600px;
-  z-index: 85;
-}
-
-.animation-container .car1 {
-  width: 200px;
-  height: 86px;
-  background-image: url('/img/car1.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 105px;
-  left: -986px;
-  z-index: 82;
-}
-
-.animation-container .car2 {
-  width: 255px;
-  height: 109px;
-  background-image: url('/img/car2.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 24px;
-  right: -4300px;
-  z-index: 100;
-}
-
-.animation-container .cycle {
-  width: 92px;
-  height: 95px;
-  background-image: url('/img/cycle.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 145px;
-  left: -586px;
-  z-index: 75;
-}
-
-.animation-container .truck {
-  width: 258px;
-  height: 103px;
-  background-image: url('/img/truck.png');
-  background-repeat: no-repeat;
-  position: absolute;
-  bottom: 145px;
-  right: 400px;
-  z-index: 75;
-}
-{%endif%}
 </style>
 </head>
 <body style="height: 9000px">
@@ -288,85 +157,51 @@
     <div class="truck"></div>
   </div>
   <div class="navbar">
-    <img alt="Craft your choice" src="/img/Craftyourchoice.png" class="home-logo"> 
+    <img alt="Craft your choice" src="/img/Craftyourchoice.png" class="home-logo">
     <div class="dropdown">
       <button class="dropbtn">
         Products <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        {%for e in product_cat_list%}
-        <a href="/Product?cat={{e.entityKey}}">{{e.name}}</a> 
+        {%for e in product_cat_list%} <a href="/Product?cat={{e.entityKey}}">{{e.name}}</a>
         {%endfor%}
       </div>
     </div>
-    <a href="#About Us">About Us</a> 
-    <a href="#Contact Us">Contact Us</a>
-    {% if user_obj %}
-    <a href="/Logout" id="logout" >Logout</a>
-    {%endif%}
+    <a href="#About Us">About Us</a> <a href="#Contact Us">Contact Us</a> {% if user_obj %} <a
+      href="/Logout" id="logout">Logout</a> {%endif%}
   </div>
   <section class="container">
     <div class="row">
       <div class="col-lg-12 col-xs-12 product-view text-center" id="login_dom"
         style="display: none;">
         <div class="col-lg-12 col-xs-12 "></div>
-        
-      </div> 
+      </div>
       <div class="col-lg-12 col-xs-12 slide-container ">
-        <div class="shoes-grid" style="{% if user_obj %}width:100%{%endif%}">
+        <div class="shoes-grid" style="">
           <div class="wrap-in">
             <div class="wmuSlider example1 slide-grid">
               <div class="wmuSliderWrapper">
+                {%for p in new_product%}
                 <article style="position: absolute; width: 100%; opacity: 0;">
                   <div class="banner-matter">
                     <div class="col-md-5 banner-bag">
-                      <img class="img-responsive " src="img/bag.jpg" alt=" " />
+                      <img class="img-responsive "
+                        src="{{p.image_url[0] or 'img/prod_default.png'}}" alt=" " />
                     </div>
                     <div class="col-md-7 banner-off">
-                      <h2>FLAT 50% 0FF</h2>
-                      <label>FOR ALL PURCHASE <b>VALUE</b></label>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                        eiusmod tempor incididunt ut labore et</p>
-                      <span class="on-get">GET NOW</span>
+                      <h2>{{p.name}}</h2>
+                      <label>{{p.size}}, {{p.category}}</label>
+                      <p>{{p.description}}</p>
+                      <a class="on-get" href="/Product?key={{p.entityKey}}">GET NOW</a>
                     </div>
                     <div class="clearfix"></div>
                   </div>
                 </article>
-                <article style="position: absolute; width: 100%; opacity: 0;">
-                  <div class="banner-matter">
-                    <div class="col-md-5 banner-bag">
-                      <img class="img-responsive " src="img/bag1.jpg" alt=" " />
-                    </div>
-                    <div class="col-md-7 banner-off">
-                      <h2>FLAT 50% 0FF</h2>
-                      <label>FOR ALL PURCHASE <b>VALUE</b></label>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                        eiusmod tempor incididunt ut labore et</p>
-                      <span class="on-get">GET NOW</span>
-                    </div>
-                    <div class="clearfix"></div>
-                  </div>
-                </article>
-                <article style="position: absolute; width: 100%; opacity: 0;">
-                  <div class="banner-matter">
-                    <div class="col-md-5 banner-bag">
-                      <img class="img-responsive " src="img/bag.jpg" alt=" " />
-                    </div>
-                    <div class="col-md-7 banner-off">
-                      <h2>FLAT 50% 0FF</h2>
-                      <label>FOR ALL PURCHASE <b>VALUE</b></label>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                        eiusmod tempor incididunt ut labore et</p>
-                      <span class="on-get">GET NOW</span>
-                    </div>
-                    <div class="clearfix"></div>
-                  </div>
-                </article>
-              </div> 
+                {%endfor%}
+              </div>
               <ul class="wmuSliderPagination">
-                <li><a href="#" class="">0</a></li>
-                <li><a href="#" class="">1</a></li>
-                <li><a href="#" class="">2</a></li>
+                {%for p in new_product%}
+                <li><a href="#" class="">{{loop.index}}</a></li> {%endfor%}
               </ul>
             </div>
           </div>
@@ -393,9 +228,9 @@
                 <input type="password" name="password" class="form-control" id="pwd" required>
               </div>
             </div>
-                        <div class="form-group">
-            <button type="submit" class="btn btn-success pull-left">Login</button>
-            <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
+            <div class="form-group">
+              <button type="submit" class="btn btn-success pull-left">Login</button>
+              <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
             </div>
           </form>
           <form id="registration_form">
@@ -453,48 +288,102 @@
         {%endif%}
       </div>
       <div class="col-lg-12 col-xs-12 events-slide">
-        <div class="col-lg-3">
-          <b>Religion </b> 
-          <select name="religion">
-            <option value="">ALL</option>
-            <option value="Hindu">Hindu</option>
-            <option value="Christian">Christian</option>
-            <option value="Islam">Islam</option>
-            <option value="Jainism">Jainism</option>
-            <option value="Sikhism">Sikhism</option>
-            <option value="Budhism">Budhism</option>
-          </select>
+        <form id="event_search_form">
+          <div class="col-lg-3 col-sm-3 col-xs-6">
+            <b>Religion </b> <select name="religion">
+              <option value="">ALL</option>
+              <option value="Christian">Christian</option>
+              <option value="Islam">Islam</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Jainism">Jainism</option>
+              <option value="Sikhism">Sikhism</option>
+              <option value="Budhism">Budhism</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-6">
+            <b>Age </b> <select name="age">
+              <option value="">ALL</option>
+              <option value="0">New born</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="21">21</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+              <option value="25">25</option>
+              <option value="26">26</option>
+              <option value="27">27</option>
+              <option value="28">28</option>
+              <option value="29">29</option>
+              <option value="30">30</option>
+              <option value="31">31</option>
+              <option value="32">32</option>
+              <option value="33">33</option>
+              <option value="34">34</option>
+              <option value="35">35</option>
+              <option value="36">36</option>
+              <option value="37">37</option>
+              <option value="38">38</option>
+              <option value="39">39</option>
+              <option value="40">40</option>
+              <option value="41">41</option>
+              <option value="42">42</option>
+              <option value="43">43</option>
+              <option value="44">44</option>
+              <option value="45">45</option>
+              <option value="46">46</option>
+              <option value="47">47</option>
+              <option value="48">48</option>
+              <option value="49">49</option>
+              <option value="50">50</option>
+              <option value="60">60</option>
+              <option value="70">70</option>
+              <option value="80">80</option>
+              <option value="90">90</option>
+              <option value="100">100</option>
+              <option value="110">110</option>
+              <option value="120">120</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-6">
+            <b>Gender </b> <select name="gender">
+              <option value="">ALL</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Unisex">Unisex</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-6">
+            <button class="btn btn-info" type="button" onclick="searchEvent();">Show</button>
+          </div>
+        </form>
+      </div>
+      <div id="event_list">
+        {%for e in e_list%}
+        <div class="col-lg-4 col-xs-12">
+          <a href="/Product?evt={{e.entityKey}}"> <img alt="{{e.title}}" src="{{e.img_url}}"
+            style="width: 100%; height: 250px" class="event-img">
+          </a>
         </div>
-        <div class="col-lg-3">
-          <b>Age </b> 
-          <select name="age">
-            <option value="">ALL</option>
-            <option value="0">New born</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5-10</option>
-            <option value="11">11-15</option>
-            <option value="16-21">16-21</option>
-            <option value="21-25">21-25</option>
-            <option value="26-35">26-35</option>
-            <option value="35-45">35-45</option>
-            <option value="46">senior citizen</option> 
-          </select>
-        </div>
-        <div class="col-lg-3">
-          <b>Gender </b> 
-          <select name="gender">
-            <option value="">ALL</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Unisex">Unisex</option>
-          </select>
-        </div>
-        <div class="col-lg-3">
-          <button class="btn btn-info" type="button">Show</button>
-        </div>  
+        {%endfor%}
       </div>
     </div>
   </section>

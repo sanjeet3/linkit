@@ -1,0 +1,134 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Product Custom
+        design</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-success btn-minier" id="add_cat_btn" onclick="showCatForm()">
+      <i class="ace-icon fa fa-plus"></i> Category
+    </button>
+    <button class="btn btn-success btn-minier" id="add_sub_cat_btn" onclick="showSubCatForm()">
+      <i class="ace-icon fa fa-plus"></i> Sub-Cat
+    </button>
+    <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
+      onclick="hideFormsDom()">
+      <i class="ace-icon fa fa-arrow-left"></i> Back
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <h4>Category</h4>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="category_table">
+          {%for e in cat_list%}
+          <tr>
+            <td>{{e.title}}</td>
+            <td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae('{{e.entityKey}}', '{{e.title}}')">Set Images</button> </td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+      <h4>Sub-Category</h4>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="sub_category_table">
+          {%for e in sub_list%}
+          <tr>
+            <td>{{e.title}}</td>
+            <td>{{e.category_name}}</td>
+            <td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae('{{e.entityKey}}', '{{e.title}}')">Set Images</button> </td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="category-form-dom" style="display: none;">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="category_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="code"> Title </label>
+          <div class="col-sm-4">
+            <input type="text" name="title" id="title" class="form-control input-custom"
+              style="text-transform: capitalize;">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveCategory()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-10" id="sub-category-form-dom" style="display: none;">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="sub_category_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="code"> Title </label>
+          <div class="col-sm-4">
+            <input type="text" name="title" id="sub_title" class="form-control input-custom"
+              style="text-transform: capitalize;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="code"> Category </label>
+          <div class="col-sm-4">
+            <select class="form-control" name="category" id="selected_category"> {%for e in
+              cat_list%}
+              <option value="{{e.entityKey}}">{{e.title}}</option> {%endfor%}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveSubCategory()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-10" id="upload-dom" style="display: none;">
+    <form class="form-horizontal" role="form" id="upload_form">
+      <input type="hidden" name="key" id="design_key">
+      <div class="form-group">
+        <label class="col-sm-1 control-label" id="design_title"></label>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-4">
+          <input type="file" accept=".png,.jpg,.png,.jpeg"  class="form-control input-custom" id="imgage_file" name="pic">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-4">
+          <button class="btn btn-info btn-minier" type="button" onclick="UploadDesignImage()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Upload </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

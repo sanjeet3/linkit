@@ -10,6 +10,17 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: EventMaster
+  properties:
+  - name: seq_selected
+  - name: seq_num
+
+- kind: EventMaster
+  properties:
+  - name: seq_selected
+  - name: seq_num
+    direction: desc
+
 - kind: ProductDesign
   properties:
   - name: product

@@ -145,6 +145,8 @@ class Product(EndpointsModel):
   name = ndb.StringProperty(default='')
   size = ndb.StringProperty(default='')
   uom = ndb.StringProperty(default='')
+  event_list = ndb.KeyProperty(repeated=True)
+  event_urlsafe = ndb.StringProperty(repeated=True)
   uom_key = ndb.KeyProperty(ProductUOM)
   category = ndb.StringProperty(default='')
   category_key = ndb.KeyProperty(ProductCategory)
@@ -165,6 +167,10 @@ class Product(EndpointsModel):
     return cls.query(cls.code==code).get()
 
   @classmethod
+  def get_product_by_event(cls, evnt_list):
+    return cls.query(cls.event_list.IN(evnt_list))
+
+  @classmethod
   def get_selling_product_list(cls):
     return cls.query(cls.endclient_visible==True).fetch()
 
@@ -175,6 +181,10 @@ class Product(EndpointsModel):
   @classmethod
   def get_product_list(cls):
     return cls.query().fetch()
+
+  @classmethod
+  def get_latest_product_list(cls, limit=5):
+    return cls.query().order(-cls.created_on).fetch(limit)
 
 class ProductDesign(EndpointsModel):
   ''' Product datastore '''
@@ -336,8 +346,7 @@ class EventMaster(EndpointsModel):
   description = ndb.TextProperty(default='')
   religion = ndb.StringProperty(repeated=True)
   gender = ndb.StringProperty(repeated=True)
-  from_age = ndb.IntegerProperty(default=-1)
-  to_age = ndb.IntegerProperty(default=-1)
+  age_list = ndb.IntegerProperty(repeated=True)
   all_age = ndb.BooleanProperty(default=False) 
   img_url = ndb.StringProperty(default='')
   bucket_key = ndb.StringProperty(default='')
@@ -347,7 +356,57 @@ class EventMaster(EndpointsModel):
   @classmethod
   def get_list(cls):  
     return cls.query().fetch()
+
+  @classmethod
+  def search_event(cls, religion, gender, age): 
+    q = cls.query(cls.all_age==False)
+    if religion:
+      q = q.filter(cls.religion.IN([religion]))
+    if gender:
+      q = q.filter(cls.gender.IN([gender]))
+    if age:
+      q = q.filter(cls.age_list.IN([age]))
+             
+    return q.fetch()
+
+  @classmethod
+  def search_event_all_age(cls, religion, gender): 
+    q = cls.query(cls.all_age==True)
+    if religion:
+      q = q.filter(cls.religion.IN([religion]))
+    if gender:
+      q = q.filter(cls.gender.IN([gender]))
+              
+    return q.fetch()
   
   @classmethod
   def get_client_view(cls):  
-    return cls.query(cls.seq_selected==True).order(-cls.seq_num).fetch()
+    return cls.query(cls.seq_selected==True).order(cls.seq_num).fetch()
+
+class DesignCategory(EndpointsModel):
+  ''' Themes datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  title = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.title)  
+        
+class DesignSubCategory(EndpointsModel):
+  ''' Themes datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  title = ndb.StringProperty(default='')
+  category = ndb.KeyProperty(DesignCategory)
+  category_urlsafe = ndb.StringProperty(default='')
+  category_name = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.title)  
+  

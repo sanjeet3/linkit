@@ -353,3 +353,12 @@ function registerCallBack(r) {
 function viewProduct(k){
   window.location.href = '/Product?key='+k;
 }
+
+function searchEvent(){
+  $('#event_list').html('<div class="events-search col-lg-12"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Searching Events</p></div>');
+  getRequest('event_search_form','/SearchEvent', 'searchEventCallBack');
+}
+
+function searchEventCallBack(r){
+  $('#event_list').html(r);
+}

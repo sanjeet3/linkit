@@ -86,6 +86,13 @@
           </div>
         </div>
         <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="category">Event </label>
+          <div class="col-sm-4">
+            <select class="form-control" id="event" name="event" multiple="multiple">
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-sm-1 control-label no-padding-right" for="category">Category </label>
           <div class="col-sm-4">
             <div class="input-group">
@@ -275,7 +282,7 @@
           </div>
         </div>
         <form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
-          id="upload_product_bg_form" style="    float: none;">
+          id="upload_product_bg_form" style="float: none;">
           <input type="hidden" name="key" id="product_key_input">
           <p>Upload Background Image</p>
           <div class="form-group">
@@ -352,6 +359,9 @@
     </form>
   </div>
 </div>
+<script type="text/javascript">
+  getRequest('', '/superadmin/GetEventList', 'setEventListForProductPage')
+</script>
 {#
 <script type="text/javascript">
   //file input

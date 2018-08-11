@@ -6,7 +6,8 @@ Created on 04-Jul-2018
 
 from src.Database import Product, Seller, SellerProduct, SellerOrder
 from src.Database import Client, ClientProductDesign, ProductDesign
-from src.Database import OrderStage, ProductCategory, Themes
+from src.Database import OrderStage, ProductCategory, Themes, EventMaster
+from src.Database import DesignCategory, DesignSubCategory
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -168,30 +169,50 @@ class Logout(ActionSupport):
     return self.redirect('/')   
 
 class Home(ActionSupport):
-  def get(self):
-    themes_obj=Themes.get_theme() 
-    logging.info(themes_obj) 
+  def get(self): 
     product_cat_list = ProductCategory.get_list()
+    e_list = EventMaster.get_client_view()
+    new_product = Product.get_latest_product_list(5)
     template = self.get_jinja2_env.get_template('endclient/home.html')    
     self.response.out.write(template.render({'product_cat_list': product_cat_list,
                                              'user_obj': self.client,
-                                             'themes_obj': themes_obj}))
+                                             'e_list': e_list,
+                                             'new_product': new_product,
+                                             'themes_obj': ''}))
 
+class GetEventView(ActionSupport):
+  def get(self):
+    gender=self.request.get('gender')
+    age=int(self.request.get('age')) if self.request.get('age') else None
+    religion=self.request.get('religion')          
+    event_list = EventMaster.search_event(religion, gender, age)
+    event_list_all_age = EventMaster.search_event_all_age(religion, gender)
+    template = self.get_jinja2_env.get_template('endclient/event_list.html') 
+    self.response.out.write(template.render({'event_list_all_age': event_list_all_age,
+                                             'event_list': event_list}))
 class ProductView(ActionSupport):
   def get(self):
     product_key=self.request.get('key')
     category_key=self.request.get('cat')
-    if product_key:
-      p = ndb.Key(urlsafe=product_key).get()  
+    evt_key=self.request.get('evt')
+    selected_cat = None
+    product_list = []
+    
+    if evt_key:
+      product_list=Product.get_product_by_event([ndb.Key(urlsafe=evt_key)])  
+    elif product_key:
+      p = ndb.Key(urlsafe=product_key).get()
+      logging.info(p)
       selected_cat = p.category_key
+      product_list = Product.get_selling_product_list_by_category(selected_cat)
+      logging.info(product_list)
     elif category_key:
-      selected_cat = ndb.Key(urlsafe=category_key)  
+      selected_cat = ndb.Key(urlsafe=category_key)
+      product_list = Product.get_selling_product_list_by_category(selected_cat)  
     else:
       self.abort(401)        
     
     category_list = ProductCategory.get_list()
-    product_list = Product.get_selling_product_list_by_category(selected_cat)
-    
     
     data = {'selected_cat': selected_cat,
             'category_list': category_list,
@@ -330,10 +351,21 @@ class GetProductDesignor(ActionSupport):
   def get(self): 
     template_path = 'endclient/product_designor.html'
     p = ndb.Key(urlsafe=self.request.get('key')).get() 
-    template = self.get_jinja2_env.get_template(template_path)    
+    template = self.get_jinja2_env.get_template(template_path)   
+    design_list  = DesignCategory.get_list()
+    sub_cat_dict = {}
+    e=DesignSubCategory()  
+    for e in DesignSubCategory.get_list():
+      if e.category in sub_cat_dict:
+        sub_cat_dict[e.category].append(e)
+      else:
+        sub_cat_dict[e.category]=[e]            
+     
     self.response.out.write(template.render({'p': p,
                                              'key': self.request.get('key'), 
-                                             'user_obj': self.client}))  
+                                             'user_obj': self.client,
+                                             'design_list': design_list,
+                                             'sub_cat_dict': sub_cat_dict}))  
                                 
 
 class CreateDesign(ActionSupport):

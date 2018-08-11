@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-<title>Custom Branding</title>
+<title>Craftyourchoice</title>
 <link href="/light/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
 <link href="/light/css/style.css" rel="stylesheet" type="text/css" media="all" />
@@ -79,8 +79,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         {% for p in product_list%}
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-20">
           <div class="item-broder">
-            <a href="javascript:clientGetProd('{{p.entityKey}}')"><img
-              class="img-responsive chain" src="/light/images/ch.jpg" alt=" " /></a> <span class="star">
+            <a href="javascript:clientGetProd('{{p.entityKey}}')"><img style="height: 350px;"
+              class="img-responsive chain" src="{{p.image_url[0] or 'img/prod_default.png'}}" alt=" " /></a> <span class="star">
             </span>
             <div class="grid-chain-bottom">
               <h6 class="text-ovrflw">

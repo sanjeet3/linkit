@@ -21,6 +21,8 @@ from src.Database import SellerOrderHistory
 from src.Database import OrderStage
 from src.Database import Themes
 from src.Database import EventMaster
+from src.Database import DesignCategory
+from src.Database import DesignSubCategory
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
@@ -73,6 +75,16 @@ class Products(ActionSupport):
     template = self.get_jinja2_env.get_template('super/Products.html')    
     self.response.out.write(template.render(context))
 
+class GetEventList(ActionSupport):
+  def get(self):
+    event_list = []
+    for e in EventMaster.get_list():
+      event_list.append({'key': e.entityKey,
+                         'title': e.title})    
+    data_dict = {'event_list': event_list}
+    return json_response(self.response, data_dict, SUCCESS, '')
+
+
 class GetProductPics(ActionSupport):
   def get(self):  
     design_list = []
@@ -102,6 +114,7 @@ class SaveProducts(ActionSupport):
     price=float(self.request.get('price'))
     category=self.request.get('category')
     uom=self.request.get('uom')
+    event_list = self.request.get_all('event')
     description=self.request.get('description')
     if code.__len__() < 3:
       return json_response(self, {}, WARNING, 'Product code minimum 3 character')    
@@ -126,7 +139,9 @@ class SaveProducts(ActionSupport):
       p.uom=e.name
       p.uom_key=e.key
       uom=e.name
-          
+    if event_list:
+      p.event_list = [ ndb.Key(urlsafe=k) for k in event_list ]
+      p.event_urlsafe = event_list          
     p=p.put().get()   
     data_dict={'code':code,
     'name': name,
@@ -624,17 +639,18 @@ class EventView(ActionSupport):
     e.bucket_key = bucket_key
     e.description = description
     try:
-      e.from_age = int(from_age)
+      from_age = int(from_age)
+      to_age = int(to_age) + 1
+      age_list = []
+      for i in range(from_age, to_age):
+        age_list.append(i)
+      e.age_list = age_list if age_list else [0]  
     except Exception:
       pass
     e.gender = gender
     e.img_url = serving_url
     e.religion = religion
     e.title = title
-    try:
-      e.to_age = int(to_age)
-    except Exception:
-      pass    
     e.put()
     
     data_dict = {'title': e.title,
@@ -648,6 +664,15 @@ class EventSequenceSet(ActionSupport):
     d = self.request.get('data')        
     d = json.loads(d)
     e_list = []
+    active_list = []
+    for e in EventMaster.get_client_view():
+      e.seq_selected  = False
+      active_list.append(e)
+      
+    if active_list:
+      ndb.put_multi(active_list) 
+      active_list = []
+         
     for k, i in d.items():
       e = ndb.Key(urlsafe=k).get()
       e.seq_selected = True
@@ -656,5 +681,92 @@ class EventSequenceSet(ActionSupport):
       
     if e_list:
       ndb.put_multi(e_list)        
-    
+      e_list=[]
     return json_response(self.response, {}, SUCCESS, 'Event sequence updated')  
+
+class UploadTest(ActionSupport):    
+  def get(self):     
+    template = self.get_jinja2_env.get_template('super/test_upload.html')    
+    self.response.out.write(template.render({})) 
+    
+  def post(self):   
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')     
+        
+    file_name = image_file.filename    
+    bucket_path = '/swamigi/script/%s' %(file_name)
+    bucket_path = bucket_path.lower()
+    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    if not serving_url:
+      return json_response(self.response, {}, WARNING, 'Try again') 
+    return json_response(self.response, 
+                         {'serving_url': serving_url, },
+                         SUCCESS,
+                         'Product background uploaded')  
+    
+class CustomDesign(ActionSupport):   
+  def get(self):   
+    cat_list = DesignCategory.get_list()
+    sub_list = DesignSubCategory.get_list()    
+    d = {'cat_list': cat_list, 'sub_list': sub_list}  
+    template = self.get_jinja2_env.get_template('super/customDesing.html')    
+    self.response.out.write(template.render(d)) 
+    
+class DesignCategorySave(ActionSupport):
+  def post(self):
+    title = self.request.get('title').upper()  
+    e = DesignCategory()
+    e.title = title
+    e = e.put().get()  
+    data_dict = {'title': title,
+                 'key': e.entityKey}
+    return json_response(self.response, data_dict, SUCCESS, 'Category created')
+      
+class DesignSubCategorySave(ActionSupport):
+  def post(self):
+    title = self.request.get('title').upper()  
+    category = self.request.get('category')
+    cat = ndb.Key(urlsafe=category).get()
+    e = DesignSubCategory()
+    e.category = cat.key
+    e.category_name = cat.title
+    e.category_urlsafe = category
+    e.title = title
+    e = e.put().get()
+    data_dict = {'title': title,
+                 'category': cat.title,
+                 'category_key': category,
+                 'key': e.entityKey}      
+    return json_response(self.response, data_dict, SUCCESS, 'Sub-Category created')
+          
+class UploadDesignImage(ActionSupport):
+  def post(self):
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')    
+    
+    key = self.request.get('key') 
+    e = ndb.Key(urlsafe=key).get()
+            
+    file_name = image_file.filename    
+    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = bucket_path.lower()
+    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    if not serving_url:
+      return json_response(self.response, {}, WARNING, 'Try again')   
+    
+    
+    key = self.request.get('key') 
+    e = ndb.Key(urlsafe=key).get()
+    e.img_url.append(serving_url)
+    e.bucket_key.append(bucket_path)
+    e.put()
+    return json_response(self.response, {}, SUCCESS, 'Success')
+    

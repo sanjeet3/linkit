@@ -1,0 +1,133 @@
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-birthday-cake"></i> <a href="javascript:">Events</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="showFormDom()">
+      <i class="ace-icon fa fa-plus"></i> Events
+    </button>
+    <button type="button" onclick="showListDom()" class="btn btn-default btn-mini" id="bck-btn"
+      style="display: none;">
+      <i class="ace-icon fa fa-arrow-left bigger-110"></i>Back
+    </button>
+  </div>
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <form id="update_event_sequence">
+      <input type="hidden" name="data" id="seq_data">
+    </form>
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td><button type="button" class="btn btn-info btn-mini"
+                onclick="setEventSequence()">Update Sequence</button></td>
+            <td>Title</td>
+            <td>Description</td>
+            <td>Details</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody id="t_body">
+          {%for e in e_list%}
+          <tr>
+            <td><input type="checkbox" class="sequence" name="{{e.entityKey}}" {%if
+              e.seq_selected%}checked="checked"{%endif%}> <input type="number"
+              value="{{e.seq_num}}" name="seq_num" id="{{e.entityKey}}"></td>
+            <td>{{e.title}}</td>
+            <td>{{e.description}}</td>
+            <td>Age: {%if e.all_age%}ALL{%else%} {{e.age_list[0]}} - {{e.age_list[-1]}} {%endif%}<br>
+              Gender: {{','.join(e.gender)}}<br> Religion: {{','.join(e.religion)}}<br>
+            </td>
+            <td><img alt="" src="{{e.img_url}}" height="150px"></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="20">
+              <button type="button" class="btn btn-info btn-mini" onclick="setEventSequence()">Update
+                Sequence</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="form-dom" style="display: none;">
+    <div class="col-xs-12">
+      <!-- PAGE CONTENT BEGINS -->
+      <form class="form-horizontal" role="form" id="events_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">Title </label>
+          <div class="col-sm-4">
+            <input type="text" name="title" id="title" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="name"> Description </label>
+          <div class="col-sm-4">
+            <textarea rows="3" name="description" class="form-control input-custom"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">Religion </label>
+          <div class="col-sm-4">
+            <select name="religion" id="religion" class="form-control" multiple>
+              <option value="Hindu">Hindu</option>
+              <option value="Islam">Islam</option>
+              <option value="Christian">Christian</option>
+              <option value="Jainism">Jainism</option>
+              <option value="Sikhism">Sikhism</option>
+              <option value="Budhism">Budhism</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">Gender </label>
+          <div class="col-sm-4">
+            <select name="gender" id="gender" class="form-control" multiple>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Unisex">Unisex</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label"></label> <label class="col-sm-4 control-label"
+            style="text-align: left;"> <input type="checkbox" name="all_age" id="all_age"> All
+            Age
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">From Age </label>
+          <div class="col-sm-4">
+            <input type="text" name="from_age" id="from_age" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">To Age</label>
+          <div class="col-sm-4">
+            <input type="text" name="to_age" id="to_age" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label ">Picture</label> <input type="file" name="pic"
+            id="pic" onchange="showEventPic(this)">
+        </div>
+        <div class="form-group" id="event_pic_pre">No image selected</div>
+        <div class="form-group">
+          <button class="btn btn-info btn-mini" type="button" onclick="uploadEvent()">
+            Upload <i class="fa fa-spinner fa-spin" style="display: none;" id="action_spin"></i>
+          </button>
+          <button type="button" onclick="showListDom()" class="btn btn-default btn-mini">
+            Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

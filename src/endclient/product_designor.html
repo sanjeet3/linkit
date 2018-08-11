@@ -45,7 +45,7 @@
               'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
               'IM Fell Double Pica', ],
           customTextParameters : {
-            colors : false,
+            colors : true,
             removable : true,
             resizable : true,
             draggable : true,
@@ -79,44 +79,24 @@
       <img src="images/sweater/preview.png" title="BASE" data-parameters='{"left": 432, "top": 311}' />
     </div>
     <div class="fpd-design">
-      <div class="fpd-category" title="Swirls">
-        <img src="images/designs/swirl.png" title="Swirl"
-          data-parameters='{"zChangeable": true, "left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/swirl2.png" title="Swirl 2"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 5, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/swirl3.png" title="Swirl 3"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "autoCenter": true}' />
-        <img src="images/designs/heart_blur.png" title="Heart Blur"
-          data-parameters='{"left": 215, "top": 200, "colors": "#bf0200", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 5, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/converse.png" title="Converse"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "autoCenter": true}' />
-        <img src="images/designs/crown.png" title="Crown"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "autoCenter": true}' />
-        <img src="images/designs/men_women.png" title="Men hits Women"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+      {%for cat in design_list%}
+      <div class="fpd-category" title="{{cat.title}}">
+        {%if cat.key in sub_cat_dict%}
+        {%set cat_list=sub_cat_dict[cat.key]%}
+        {%for sc in cat_list%}
+        <div class="fpd-category" title="{{sc.title}}">
+          {%for img in sc.img_url%}
+          <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
+            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          {%endfor%}  
+        </div>
+        {%endfor%}
+        {%endif%}
+        {%for img in cat.img_url%} <img src="{{img}}" title="{{cat.title}}{{loop.index}}"
+          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endfor%}
       </div>
-      <div class="fpd-category" title="Retro">
-        <img src="images/designs/retro_1.png" title="Retro One"
-          data-parameters='{"left": 210, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.25, "price": 7, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/retro_2.png" title="Retro Two"
-          data-parameters='{"left": 193, "top": 180, "colors": "#ffffff", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.46, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/retro_3.png" title="Retro Three"
-          data-parameters='{"left": 240, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.25, "price": 8, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/heart_circle.png" title="Heart Circle"
-          data-parameters='{"left": 240, "top": 200, "colors": "#007D41", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "scale": 0.4, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/swirl.png" title="Swirl"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/swirl2.png" title="Swirl 2"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 5, "boundingBox": "Base", "autoCenter": true}' />
-        <img src="images/designs/swirl3.png" title="Swirl 3"
-          data-parameters='{"left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
-      </div>
-    </div>
-    <div class="fpd-background">
-      <div class="fpd-category" title="Swirls">
-        <img src="images/designs/swirl.png" title="Swirl"
-          data-parameters='{"zChangeable": true, "left": 215, "top": 200, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "price": 10, "boundingBox": "Base", "autoCenter": true}' />
-      </div>
+      {%endfor%}
     </div>
   </div>
   <br />

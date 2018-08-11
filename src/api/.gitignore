@@ -1,2 +1,4 @@
 /__init__.pyc
 /baseapi.pyc
+/bucketHandler.pyc
+/datetimeapi.pyc

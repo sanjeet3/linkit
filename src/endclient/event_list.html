@@ -1,0 +1,20 @@
+{%if event_list_all_age or event_list%}
+{%for e in event_list%}
+<div class="col-lg-4 col-xs-12">
+  <a href="/Product?evt={{e.entityKey}}"> <img alt="{{e.title}}" src="{{e.img_url}}"
+    style="width: 100%; height: 250px" class="event-img">
+  </a>
+</div>
+{%endfor%}
+{%for e in event_list_all_age%}
+<div class="col-lg-4 col-xs-12">
+  <a href="/Product?evt={{e.entityKey}}"> <img alt="{{e.title}}" src="{{e.img_url}}"
+    style="width: 100%; height: 250px" class="event-img">
+  </a>
+</div>
+{%endfor%}
+{%else%}
+<div class="events-search col-lg-12">
+  <p>No event available</p>
+</div>
+{%endif%}

@@ -8,17 +8,21 @@
   <div class="single_grid">
     <div class="grid images_3_of_2">
       <ul id="etalage">
-        <li><a href="optionallink.html"> <img class="etalage_thumb_image"
-            src="/light/images/s4.jpg" class="img-responsive" /> <img class="etalage_source_image"
-            src="/light/images/si4.jpg" class="img-responsive" title="" />
-        </a></li>
-        <li><img class="etalage_thumb_image" src="/light/images/s2.jpg" class="img-responsive" />
-          <img class="etalage_source_image" src="/light/images/si2.jpg" class="img-responsive"
-          title="" /></li>
-        <li><img class="etalage_thumb_image" src="/light/images/s3.jpg" class="img-responsive" />
-          <img class="etalage_source_image" src="/light/images/si3.jpg" class="img-responsive" /></li>
-        <li><img class="etalage_thumb_image" src="/light/images/s1.jpg" class="img-responsive" />
-          <img class="etalage_source_image" src="/light/images/si1.jpg" class="img-responsive" /></li>
+        {%for img in p.image_url%}
+        <li><img class="etalage_thumb_image" src="{{img}}"
+            class="img-responsive" /> <img class="etalage_source_image" src="{{img}}"
+            class="img-responsive" title="" />
+        </li>
+        {%else%}  
+        <li><img class="etalage_thumb_image" src="img/prod_default.png"
+            class="img-responsive" /> <img class="etalage_source_image" src="img/prod_default.png"
+            class="img-responsive" title="" />
+        </li> 
+        <li><img class="etalage_thumb_image" src="img/prod_default.png"
+            class="img-responsive" /> <img class="etalage_source_image" src="img/prod_default.png"
+            class="img-responsive" title="" />
+        </li>  
+        {%endfor%}
       </ul>
       <div class="clearfix"></div>
     </div>
@@ -44,9 +48,11 @@
       <p>
         <b>Description:</b><br>{{p.description}}
       </p>
-      <b>Quantity:</b>&nbsp;<input type="number" min="1" value="1" name="qty" id="user-priece-qty"
-        onchange="setOrderProdutQty(this)"><br>
-      <div id="selected_seller_price_info"></div>  
+      {%if seller_product_list|length==0%}
+      <p>No seller is selling this item</p>
+      {%else%} <b>Quantity:</b>&nbsp;<input type="number" min="1" value="1" name="qty"
+        id="user-priece-qty" onchange="setOrderProdutQty(this)"><br>
+      <div id="selected_seller_price_info"></div>
       <div class="share">
         <h5>Check Product Seller & Price:</h5>
         <ul class="share_nav" id="seller_price_list">
@@ -65,6 +71,7 @@
           </button>
         </span>
       </div>
+      {%endif%}
     </div>
     <div class="desc1 span_3_of_2" id="seller_list" style="display: none;">
       {%for seller_product in seller_product_list%} {%set

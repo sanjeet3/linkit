@@ -1,5 +1,16 @@
 var searchTableMsg = '<tr class="text-center"><td colspan="20"><i class="fa fa-spinner fa-spin" ></i> Searching...</td></tr>'
 
+function setEventListForProductPage(r){
+  var Earr = r.data.event_list;
+  
+  for(var i=0; i<Earr.length; i++){
+    var obj = Earr[i];
+    $('#event').append($('<option>', {
+      value : obj.key
+    }).text(obj.title));
+  }
+}  
+  
 function saveProduct() {
   if (!$('#name').val()) {
     showMSG('Please enter name of product', 'warning');
@@ -804,6 +815,24 @@ function uploadEvent() {
    showMSG('Title missing', 'warning');
    return;
  }
+ var from_age = $('#from_age').val();
+ var to_age = $('#to_age').val();
+ var all_age = $('#all_age')[0].checked;
+ if(!all_age){
+   if(!from_age || !to_age){
+     showMSG('Age missing', 'warning');
+     return;
+   }
+ }
+ 
+ if(from_age && to_age){
+   from_age = parseInt(from_age)
+   to_age = parseInt(to_age)
+   if(to_age<from_age){
+     showMSG('Age selection invalid', 'warning');
+     return;
+   }
+ }
  
   fileObj = $('#pic')[0];
   if (fileObj.files && fileObj.files[0]) {
@@ -870,3 +899,112 @@ function setEventSequence(){
   postRequest('update_event_sequence', '/superadmin/EventSequenceSet', null);
 
 };
+
+
+function uploadPic() { 
+  fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) {
+    $('#save_product_pic_spin').show();
+    postFormWithFile("upload_test", '/superadmin/UploadTest', 'TC');
+  }
+};
+
+function TC(r){
+  $('#save_product_pic_spin').hide();
+  $('#test').append('<p>'+r.data.serving_url);
+}
+
+function showCatForm(){
+  $('#add_cat_btn, #add_sub_cat_btn, #list-dom').hide();
+  $('#bck-btn, #category-form-dom').show();
+}
+
+function showSubCatForm(){
+  $('#add_cat_btn, #add_sub_cat_btn, #list-dom').hide();
+  $('#bck-btn, #sub-category-form-dom').show();
+}
+
+function hideFormsDom(){
+  $('#add_cat_btn, #add_sub_cat_btn, #list-dom').show();
+  $('#bck-btn, #category-form-dom, #sub-category-form-dom, #upload-dom').hide();
+  
+}
+
+function setDesignImgae(key, title){
+  $('#add_cat_btn, #add_sub_cat_btn, #list-dom').hide();
+  $('#bck-btn, #upload-dom').show();
+  $('#design_title').html(title);
+  $('#design_key').val(key);
+}
+
+function saveCategory(){
+  var title = $('#title').val();
+  if(!title){
+    showMSG('Title', 'warning'); return;
+  }
+  
+  
+  postRequest('category_form', '/superadmin/DesignCategorySave', 'saveCategoryCB');
+}
+
+function saveCategoryCB(r, fid){
+  tr = ['<tr><td>'];
+  tr.push(r.data.title);
+  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push("'");
+  tr.push(r.data.key);
+  tr.push("'");
+  tr.push(', ');
+  tr.push("'");
+  tr.push(r.data.title);
+  tr.push("'");
+  tr.push(')">Set Images</button> </td></tr>');
+  
+  $('#category_table').prepend(tr.join(''));
+  $('#selected_category').append($('<option>', {
+    value : r.data.key
+  }).text(r.data.title));
+}
+
+function saveSubCategory(){
+  var title = $('#sub_title').val();
+  var selected_category = $('#selected_category').val();
+  if(!title){
+    showMSG('Title', 'warning'); return;
+  }
+  if(!selected_category){
+    showMSG('No category selected', 'warning'); return;
+  }
+  
+  
+  postRequest('sub_category_form', '/superadmin/DesignSubCategorySave', 'saveSubCategoryCB');
+  
+}
+
+
+function saveSubCategoryCB(r, fid){
+  tr = ['<tr><td>'];
+  tr.push(r.data.title);
+  tr.push('</td><td>');
+  tr.push(r.data.category)
+  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push("'");
+  tr.push(r.data.key);
+  tr.push("'");
+  tr.push(', ');
+  tr.push("'");
+  tr.push(r.data.title);
+  tr.push("'");
+  tr.push(')">Set Images</button> </td></tr>');
+  $('#sub_category_table').prepend(tr.join(''));
+  
+}
+
+function UploadDesignImage() { 
+  fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    postFormWithFile("upload_form", '/superadmin/UploadDesignImage', 'TC');
+  }
+};
+
+
