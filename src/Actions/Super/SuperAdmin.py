@@ -499,8 +499,9 @@ class ThemesView(ActionSupport):
     template = self.get_jinja2_env.get_template('super/Themes.html')    
     self.response.out.write(template.render(context))  
     
-  def post(self):   
-    title = self.request.get('title')
+  def post(self): 
+    i = Themes.get_theme_count()    
+    title = 'theme%s' %(i+1)  
     e = Themes(title=title).put().get()  
     data_dict = {'title': title,
                  'key': e.entityKey}  

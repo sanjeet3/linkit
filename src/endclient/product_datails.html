@@ -1,28 +1,16 @@
-
-<form id="product_order_form">
-  <input type="hidden" name="product" id="selected_seller_product"> <input type="hidden"
-    name="qty" id="selected_product_qty" value="1"><input type="hidden" name="design_id"
-    id="selected_design_id">
-</form>
 <div class=" single_top">
   <div class="single_grid">
     <div class="grid images_3_of_2">
       <ul id="etalage">
         {%for img in p.image_url%}
-        <li><img class="etalage_thumb_image" src="{{img}}"
-            class="img-responsive" /> <img class="etalage_source_image" src="{{img}}"
-            class="img-responsive" title="" />
-        </li>
-        {%else%}  
-        <li><img class="etalage_thumb_image" src="img/prod_default.png"
-            class="img-responsive" /> <img class="etalage_source_image" src="img/prod_default.png"
-            class="img-responsive" title="" />
-        </li> 
-        <li><img class="etalage_thumb_image" src="img/prod_default.png"
-            class="img-responsive" /> <img class="etalage_source_image" src="img/prod_default.png"
-            class="img-responsive" title="" />
-        </li>  
-        {%endfor%}
+        <li><img class="etalage_thumb_image" src="{{img}}" class="img-responsive" /> <img
+          class="etalage_source_image" src="{{img}}" class="img-responsive" title="" /></li> {%else%}
+        <li><img class="etalage_thumb_image" src="img/prod_default.png" class="img-responsive" />
+          <img class="etalage_source_image" src="img/prod_default.png" class="img-responsive"
+          title="" /></li>
+        <li><img class="etalage_thumb_image" src="img/prod_default.png" class="img-responsive" />
+          <img class="etalage_source_image" src="img/prod_default.png" class="img-responsive"
+          title="" /></li> {%endfor%}
       </ul>
       <div class="clearfix"></div>
     </div>
@@ -44,22 +32,21 @@
         <div class="clearfix"></div>
       </div>
       <b>Size:</b> {{p.size}}<br> <b>Category:</b> {{p.category}}<br> <b>UOM:</b>
-      {{p.uom}}<br>
-      <p>
-        <b>Description:</b><br>{{p.description}}
-      </p>
-      {%if seller_product_list|length==0%}
+      {{p.uom}}<br> <b>Description:</b>{{p.description}}<br/><br/>{%if
+      seller_product_list|length==0%}
       <p>No seller is selling this item</p>
       {%else%} <b>Quantity:</b>&nbsp;<input type="number" min="1" value="1" name="qty"
         id="user-priece-qty" onchange="setOrderProdutQty(this)"><br>
       <div id="selected_seller_price_info"></div>
       <div class="share">
-        <h5>Check Product Seller & Price:</h5>
-        <ul class="share_nav" id="seller_price_list">
-          {%for seller_product in seller_product_list%}
-          <li><a href="javascript:checkPrice()" id="{{seller_product.entityKey}}">{{seller_product.retail_price}}
-              KES</a></li> {%endfor%}
-        </ul>
+        <form id="product_order_form">
+          <input type="hidden" name="qty" id="selected_product_qty" value="1"> <input
+            type="hidden" name="design_id" id="selected_design_id"> {%for seller_product in
+          seller_product_list%} <input type="hidden" name="product" id="selected_seller_product"
+            value="{{seller_product.entityKey}}">
+            <b>Price: </b>{{seller_product.retail_price}} KES
+          {%endfor%}
+        </form>
       </div>
       <div class="col-lg-12 text-center">
         <span class="order-act">
@@ -73,6 +60,7 @@
       </div>
       {%endif%}
     </div>
+    {#
     <div class="desc1 span_3_of_2" id="seller_list" style="display: none;">
       {%for seller_product in seller_product_list%} {%set
       seller=seller_dict[seller_product.seller]%}
@@ -100,6 +88,7 @@
       {%endfor%}
       <button type="button" class="btn btn-danger btn-mini" onclick="closeCheckPrice()">Cancel</button>
     </div>
+    #}
     <div class="clearfix"></div>
   </div>
 </div>

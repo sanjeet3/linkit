@@ -63,7 +63,7 @@ function saveProductCallBack(obj, fID) {
   $('#' + fID)[0].reset();
 };
 
-function saveCategory() {
+function saveProductCategory() {
 
   if (!$('#new_category').val()) {
     showMSG('Please enter category', 'warning');
@@ -725,86 +725,6 @@ ThemesUploader.prototype.img12 = function() {
   postFormWithFile('themes_form', url, null)
 };
 
-function saveThemes(){ 
-  var title = $('#title').val();
-  if(!title){
-    showMSG('Title missing', 'warning');
-    return;    
-  }
-  $('#save_product_spin').show();
-  
-  postRequest('themes_form', '/superadmin/Themes', 'saveThemesCallBack');
-  
-};
-
-function saveThemesCallBack(r){   
-  var skyline = $('#skyline')[0],
-  landmarks = $('#landmarks')[0],
-  road1 = $('#road1')[0],
-  road2 = $('#road2')[0],
-  taxi1 = $('#taxi1')[0],
-  local_train = $('#local_train')[0],
-  bus1 = $('#bus1')[0],
-  bus2 = $('#bus2')[0],
-  car1 = $('#car1')[0],
-  car2 = $('#car2')[0],
-  cycle = $('#cycle')[0],
-  truck = $('#truck')[0];
-  
-
-  var themesUploader = new ThemesUploader(r.data.title, r.data.key);
-  
-  if (skyline.files && skyline.files[0]) { 
-    themesUploader.img1();
-  }
-  
-  if (landmarks.files && landmarks.files[0]) { 
-    themesUploader.img2();
-  }
-  
-  if (road1.files && road1.files[0]) { 
-    themesUploader.img3();
-  }
-  
-  if (road2.files && road2.files[0]) { 
-    themesUploader.img4();
-  }
-  
-  if (taxi1.files && taxi1.files[0]) { 
-    themesUploader.img5();
-  }
-  
-  if (local_train.files && local_train.files[0]) { 
-    themesUploader.img6();
-  }
-  
-  if (bus1.files && bus1.files[0]) { 
-    themesUploader.img7();
-  }
-  
-  if (bus2.files && bus2.files[0]) { 
-    themesUploader.img8();
-  }
-  
-  if (car1.files && car1.files[0]) { 
-    themesUploader.img9();
-  }
-  
-  if (car2.files && car2.files[0]) { 
-    themesUploader.img10();
-  }
-  
-  if (cycle.files && cycle.files[0]) { 
-    themesUploader.img11();
-  }
-  
-  if (truck.files && truck.files[0]) { 
-    themesUploader.img12();
-  } 
-
-  $('#save_product_spin').hide();
-};
-
 function liveTheme(r){
   showMSG('Theme is live', 'success'); 
 }
@@ -1007,4 +927,68 @@ function UploadDesignImage() {
   }
 };
 
+function saveThemesCallBack(r){    
+  var d = r.data;
+  tr = ['<tr><td>'];
+  tr.push(d.title);
+  tr.push('</td><td>False</td><td><button class="btn btn-xs bigger btn-success" type="button" onclick="showTheme(');
+  tr.push("'");
+  tr.push(d.title);
+  tr.push("'");
+  tr.push(',');
+  tr.push("'");
+  tr.push(d.key);
+  tr.push("'");
+  tr.push(')">Show</button></td></tr>');
+  $('#table_body').prepend(tr.join(''));
+};
 
+function showTheme(title, key){
+  $('#selected_theme').val(key);
+  var tr=['<h2>'+title+'</h2><hr><h4>skyline</h4>'];
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/skyline.png"><br><h4>landmarks</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/landmarks.png"><br><h4>local_train</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/local_train.png"><br><h4>bus1</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/bus1.png"><br><h4>bus2</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/bus2.png"><br><h4>car1</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/car1.png"><br><h4>car2</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/car2.png"><br><h4>cycle</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/cycle.png"><br><h4>taxi1</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/taxi1.png"><br><h4>truck</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/truck.png"><br><h4>road1</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/road1.png"><br><h4>road2</h4>');
+  tr.push('<img src="/img/');
+  tr.push(title);
+  tr.push('/road2.png">'); 
+  $('#theme_prev').html(tr.join(''));
+  
+  $('#form-dom, #bck-btn').show();
+  $('#add_btn, #list-dom').hide();
+  
+}
+
+function makeThemeLive(){
+  getRequest('theme_live_form','/superadmin/SetupThemesLive', 'liveTheme')
+}

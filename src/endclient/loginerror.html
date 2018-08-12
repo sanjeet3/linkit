@@ -11,26 +11,6 @@
 <link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body style="height: 100%">
-  <div class="animation-container">
-    <div class="buildings"></div>
-    <div class="road1"></div>
-    <div class="road2"></div>
-    <div class="train"></div>
-    <div class="taxi1"></div>
-    <div class="bus1"></div>
-    <div class="bus2"></div>
-    <div class="car1"></div>
-    <div class="car2"></div>
-    <div class="cycle"></div>
-    <div class="truck"></div>
-  </div>
-  <nav class="navbar-home" id="navbar-list">
-    <ul>
-      <li><a href="/" id="home">HOME</a></li>
-      <li><a href="javascript:menuClick('#signin');showLoginDom();" class="active" id="signin">Sign-in</a></li>
-      <li><a href="javascript:menuClick('#signup');showRegisterDom();" id="signup">Sign-up</a></li>
-    </ul>
-  </nav>
   <section class="container">
     <div class="row">
       <div class="col-lg-12 col-xs-12 product-view text-center" id="login_dom">
@@ -119,10 +99,5 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/super/assets/js/bootstrap-notify.js"></script>
 <script type="text/javascript" src="/super/assets/js/algo.js"></script>
-<script type="text/javascript" src="/js/api.js"></script>
-{%if register%}
-<script type="text/javascript">
-menuClick('#signup');showRegisterDom();
-</script>
-{%endif%}
+<script type="text/javascript" src="/js/api.js"></script> 
 </html>

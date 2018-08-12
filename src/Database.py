@@ -313,19 +313,7 @@ class Themes(EndpointsModel):
   ''' Themes datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)
   title = ndb.StringProperty(default='')
-  status = ndb.BooleanProperty(default=False) 
-  img1 = ndb.StringProperty(default='')
-  img2 = ndb.StringProperty(default='')
-  img3 = ndb.StringProperty(default='')
-  img4 = ndb.StringProperty(default='')
-  img5 = ndb.StringProperty(default='')
-  img6 = ndb.StringProperty(default='')
-  img7 = ndb.StringProperty(default='')
-  img8 = ndb.StringProperty(default='')
-  img9 = ndb.StringProperty(default='')
-  img10 = ndb.StringProperty(default='')
-  img11 = ndb.StringProperty(default='')
-  img12 = ndb.StringProperty(default='')
+  status = ndb.BooleanProperty(default=False)
   
   @classmethod
   def get_theme(cls):  
@@ -338,6 +326,10 @@ class Themes(EndpointsModel):
   @classmethod
   def get_theme_list(cls):  
     return cls.query()
+
+  @classmethod
+  def get_theme_count(cls):  
+    return cls.query().count()
 
 class EventMaster(EndpointsModel):
   ''' Themes datastore '''

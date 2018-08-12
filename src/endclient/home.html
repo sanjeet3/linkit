@@ -17,7 +17,7 @@
   width: 100%;
   position: fixed;
   background-color: #A5E2FF;
-  background-image: url('/img/img2/skyline.jpg');
+  background-image: url('/img/{{themes_path}}/skyline.png');
   background-position: left 367px bottom 248px;
   background-repeat: repeat no-repeat;
 }
@@ -27,7 +27,7 @@
   width: 100%;
   position: fixed;
   bottom: 188px;
-  background-image: url('/img/img2/landmarks.png');
+  background-image: url('/img/{{themes_path}}/landmarks.png');
   background-position: left -625px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -38,7 +38,7 @@
   width: 100%;
   position: fixed;
   bottom: 0px;
-  background-image: url('/img/img2/road1.png');
+  background-image: url('/img/{{themes_path}}/road1.png');
   background-position: left 0px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -49,7 +49,7 @@
   width: 100%;
   position: fixed;
   bottom: 126px;
-  background-image: url('/img/img2/road2.png');
+  background-image: url('/img/{{themes_path}}/road2.png');
   background-position: left 0px bottom;
   background-repeat: repeat no-repeat;
 }
@@ -57,7 +57,7 @@
 .animation-container .taxi1 {
   width: 335px;
   height: 133px;
-  background-image: url('/img/img2/taxi1.png');
+  background-image: url('/img/{{themes_path}}/taxi1.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 16px;
@@ -68,7 +68,7 @@
 .animation-container .train {
   width: 90px;
   height: 394px;
-  background-image: url('/img/img2/local_train.png');
+  background-image: url('/img/{{themes_path}}/local_train.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 72px;
@@ -78,7 +78,7 @@
 .animation-container .bus1 {
   width: 480px;
   height: 168px;
-  background-image: url('/img/img2/bus1.png');
+  background-image: url('/img/{{themes_path}}/bus1.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 103px;
@@ -89,7 +89,7 @@
 .animation-container .bus2 {
   width: 546px;
   height: 189px;
-  background-image: url('/img/img2/bus2.png');
+  background-image: url('/img/{{themes_path}}/bus2.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 50px;
@@ -100,7 +100,7 @@
 .animation-container .car1 {
   width: 200px;
   height: 86px;
-  background-image: url('/img/img2/car1.png');
+  background-image: url('/img/{{themes_path}}/car1.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 105px;
@@ -111,7 +111,7 @@
 .animation-container .car2 {
   width: 255px;
   height: 109px;
-  background-image: url('/img/img2/car2.png');
+  background-image: url('/img/{{themes_path}}/car2.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 24px;
@@ -122,7 +122,7 @@
 .animation-container .cycle {
   width: 92px;
   height: 95px;
-  background-image: url('/img/img2/cycle.png');
+  background-image: url('/img/{{themes_path}}/cycle.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 145px;
@@ -133,7 +133,7 @@
 .animation-container .truck {
   width: 258px;
   height: 103px;
-  background-image: url('/img/img2/truck.png');
+  background-image: url('/img/{{themes_path}}/truck.png');
   background-repeat: no-repeat;
   position: absolute;
   bottom: 145px;
@@ -215,7 +215,7 @@
               Check your inbox and verify account to complete registration.
             </p>
           </div>
-          <form action="/Login" method="post" style="display: none;" id="login_form">
+          <form action="/Login" method="post" style="display: {%if not r%}none{%endif%};" id="login_form">
             <div class="form-group">
               <label for="email">Email address</label>
               <div>
@@ -233,7 +233,7 @@
               <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
             </div>
           </form>
-          <form id="registration_form">
+          <form id="registration_form" {%if r%}style="display: none;"{%endif%}>
             <div class="form-group">
               <label for="email">Name*</label>
               <div>
