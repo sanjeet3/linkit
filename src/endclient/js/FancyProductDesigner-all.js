@@ -1168,6 +1168,41 @@ var FPDUtil =  {
 
 	},
 
+    createModal : function(htmlMessage, fullscreen, type) {
+
+      type = type === undefined ? '' : type;
+
+      var $body = $('body').addClass('fpd-overflow-hidden'),
+          fullscreenCSS = fullscreen ? 'fpd-fullscreen' : '';
+          html = '<div class="fpd-modal-internal fpd-modal-overlay"><div class="fpd-modal-wrapper fpd-shadow-3"> <div class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-left modal-close"><i class="ace-icon fa fa-arrow-left"></i> Back</div> <div class="fpd-modal-content" ></div></div></div>';
+
+      if($('.fpd-modal-internal').size() === 0) {
+
+          $body.append(html)
+          .children('.fpd-modal-internal:first').click(function(evt) {
+
+              $target = $(evt.target);
+              if($target.hasClass('fpd-modal-overlay')) {
+
+                  $target.find('.modal-close').click();
+
+              }
+
+          });
+
+      }
+
+      if(type === 'prompt') {
+          htmlMessage = '<input placeholder="'+htmlMessage+'" /><span class="fpd-btn"></span>';
+      }
+
+      $body.children('.fpd-modal-internal').attr('data-type', type).removeClass('fpd-fullscreen').addClass(fullscreenCSS)
+      .fadeIn(300).find('.fpd-modal-content').html(htmlMessage);
+
+      return $body.children('.fpd-modal-internal');
+
+  },	
+	
 	/**
 	 * Shows a message in the snackbar.
 	 *
@@ -5876,18 +5911,28 @@ var FPDActions = function(fpdInstance, $actions){
 
 			}
 			else if(action === 'preview-lightbox') {
+			 
+			    /*fpdInstance.getProductDataURL(function(dataURL) {
 
-				fpdInstance.getProductDataURL(function(dataURL) {
+                  var image = new Image();
+                  image.src = dataURL;
+
+                  image.onload = function() {
+                      FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);
+                  }
+
+              });*/
+ 
+				fpdInstance.getVerticalProductDataURL(function(dataURL) {
 
 					var image = new Image();
 					image.src = dataURL;
 
 					image.onload = function() {
-						FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);
+						FPDUtil.createModal('<img src="'+this.src+'" download="product.png" style="max-width: fit-content !important;"/>', true);
 					}
 
-				});
-
+				}); 
 			}
 			else if(action === 'save') {
 
@@ -8323,6 +8368,28 @@ var FancyProductDesigner = function(elem, opts) {
 			}
 
 		});
+		
+		//general close handler for modal
+        $body.on('click', '.modal-close', function(evt) {
+
+            var $this = $(this);
+
+            if($this.parents('.fpd-modal-product-designer').length) {
+                $body.addClass('fpd-modal-mode-active');
+            }
+
+            $this.parents('.fpd-modal-overlay').fadeOut(200, function() {
+                $this.removeClass('fpd-fullscreen');
+            });
+
+            $body.removeClass('fpd-overflow-hidden');
+
+            //modal product designer is closing
+            if($this.parents('.fpd-modal-product-designer:first').size() > 0) {
+                instance.deselectElement();
+            }
+
+        });
 
 		$body.on('mouseup touchend', function(evt) {
 
@@ -9364,6 +9431,64 @@ var FancyProductDesigner = function(elem, opts) {
 		_addCanvasImage(firstView);
 
 	};
+	
+	this.getVerticalProductDataURL = function(callback, backgroundColor, options) {
+
+      callback = typeof callback !== 'undefined' ? callback : function() {};
+      backgroundColor = typeof backgroundColor !== 'undefined' ? backgroundColor : 'transparent';
+      options = typeof options !== 'undefined' ? options : {};
+
+      //check
+      if(instance.viewInstances.length === 0) { callback('') }
+
+      $body.append('<canvas id="fpd-hidden-canvas"></canvas>');
+      var printCanvas = new fabric.Canvas('fpd-hidden-canvas', {containerClass: 'fpd-hidden fpd-hidden-canvas'}),
+          viewCount = 0;
+
+      function _addCanvasImage(viewInstance) {
+          var asd = printCanvas.getWidth();
+          if(viewInstance.options.stageHeight > printCanvas.getHeight()) {
+              printCanvas.setDimensions({height: viewInstance.options.stageHeight});
+          }
+
+          viewInstance.toDataURL(function(dataURL) {
+
+              fabric.Image.fromURL(dataURL, function(img) {
+
+                  printCanvas.add(img);
+
+                  if(viewCount > 0) {
+                      img.setLeft(printCanvas.getWidth());
+                      printCanvas.setDimensions({width: printCanvas.getWidth() + viewInstance.options.stageWidth});
+                  }
+
+                  viewCount++;
+                  if(viewCount < instance.viewInstances.length) {
+                      _addCanvasImage(instance.viewInstances[viewCount]);
+                  }
+                  else {
+                      callback(printCanvas.toDataURL(options));
+                      printCanvas.dispose();
+                      $body.children('.fpd-hidden-canvas, #fpd-hidden-canvas').remove();
+
+                      if(instance.currentViewInstance) {
+                          instance.currentViewInstance.resetCanvasSize();
+                      }
+
+                  }
+
+              });
+
+          }, backgroundColor, {}, instance.watermarkImg);
+
+      };
+
+      var firstView = instance.viewInstances[0];
+      printCanvas.setDimensions({width: firstView.options.stageWidth, height: firstView.options.stageHeight});
+      _addCanvasImage(firstView);
+
+  };
+
 
 	/**
 	 * Creates the views as data URL.

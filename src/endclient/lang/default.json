@@ -23,6 +23,7 @@
 		"grayscale": "Grayscale",
 		"sepia": "Sepia",
 		"sepia2": "Sepia Second",
+		"blur": "blur",
 		"align_left": "Align Left",
 		"align_top": "Align Top",
 		"align_right": "Align Right",
@@ -61,7 +62,7 @@
 		"start_guided_tour": "Start Guided Tour"
 	},
 	"modules": {
-		"products": "Swap Product",
+		"products": "Product",
 		"images": "Add Image",
 		"upload_zone": "Click or drop images here",
 		"facebook_select_album": "Select An Album",
@@ -69,6 +70,7 @@
 		"text_input_placeholder": "Enter some text",
 		"text_add_btn": "Add Text",
 		"designs": "Choose From Designs",
+		"frames": "Frames",
 		"designs_search_in": "Search in",
 		"manage_layers": "Manage Layers",
 		"images_agreement": "I have the rights to use the images.",

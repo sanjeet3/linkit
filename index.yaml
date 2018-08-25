@@ -26,6 +26,11 @@ indexes:
   - name: product
   - name: created_on
 
+- kind: ProductDesign
+  properties:
+  - name: product
+  - name: title
+
 - kind: SellerOrder
   properties:
   - name: seller

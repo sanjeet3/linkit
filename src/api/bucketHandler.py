@@ -58,4 +58,8 @@ def delete_bucket_file(bucket_key):
     logging.error(e) 
     return False   
       
-        
+def get_by_bucket_key(bucket_key):
+   #result = blobstore.get(bucket_key)  
+   #return images.Image(blob_key=bucket_key)       
+   return blobstore.BlobReader(blobstore.BlobKey(bucket_key)) 
+   

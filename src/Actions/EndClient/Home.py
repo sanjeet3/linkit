@@ -14,6 +14,7 @@ import logging, time
 from uuid import uuid1
 import json
 from src.api.baseapi import json_response, SUCCESS, ERROR
+from src.api.bucketHandler import get_by_bucket_key
 from src.api.datetimeapi import get_dt_by_country
 import datetime
 
@@ -25,6 +26,19 @@ from src.app_configration import config
 
 design_img_title = config.get('design_img_title')
 
+import webapp2
+import src.lib.external.cloudstorage as gcs
+class Imgage(webapp2.RequestHandler):
+  def get(self):
+    bucket_path = self.request.get('id')
+    try:
+      with gcs.open(bucket_path, 'r') as gcs_file:
+        contents = gcs_file.read()
+        gcs_file.close()
+        self.response.write(contents)
+    except Exception, e:
+      logging.error(e)
+      
 class ActivateAccount(ActionSupport):
   def get(self):     
     key = self.request.get('key')
@@ -363,11 +377,12 @@ class GetProductDesignor(ActionSupport):
         sub_cat_dict[e.category].append(e)
       else:
         sub_cat_dict[e.category]=[e]            
-     
+    fpd_product_list = ProductDesign.get_design_list(p.key) 
     self.response.out.write(template.render({'p': p,
                                              'key': self.request.get('key'), 
                                              'user_obj': self.client,
                                              'design_list': design_list,
+                                             'fpd_product_list': fpd_product_list,
                                              'sub_cat_dict': sub_cat_dict}))  
                                 
 

@@ -191,8 +191,10 @@ class ProductDesign(EndpointsModel):
   created_on = ndb.DateTimeProperty(auto_now_add=True)
   product = ndb.KeyProperty(Product)
   title = ndb.StringProperty(choices=product_design_title_choice)
-  top = ndb.StringProperty(default='')
-  left = ndb.StringProperty(default='') 
+  top = ndb.StringProperty(default='0')
+  left = ndb.StringProperty(default='0') 
+  scaleX = ndb.StringProperty(default='1') 
+  scaleY = ndb.StringProperty(default='1') 
   image_url = ndb.StringProperty(default='') 
   bucket_path = ndb.StringProperty(default='') 
   bucket_key = ndb.StringProperty(default='')  
@@ -203,7 +205,7 @@ class ProductDesign(EndpointsModel):
     
   @classmethod
   def get_design_list(cls, product):
-    return cls.query(cls.product==product).order(cls.created_on).fetch()  
+    return cls.query(cls.product==product).order(cls.title).fetch()  
   
 class SellerProduct(EndpointsModel):
   ''' Franchisor Product datastore '''
@@ -232,6 +234,28 @@ class SellerProduct(EndpointsModel):
   def get_product_by_master_key_for_client(cls, master_product):
     return cls.query(cls.master_product==master_product, cls.endclient_visible==True).fetch()
 
+SELLER_LADGER_BY = ['CLIENT', 'SELLER'] 
+class SellerLadger(EndpointsModel):
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  created_date = ndb.DateProperty(auto_now_add=True)
+  seller = ndb.KeyProperty(Seller)
+  client = ndb.KeyProperty(Client)
+  seller_name = ndb.StringProperty(default='')
+  seller_email = ndb.StringProperty(default='')
+  order = ndb.KeyProperty()
+  order_number = ndb.StringProperty(default='')
+  master_product = ndb.KeyProperty(Product)
+  order_by = ndb.StringProperty(default='CLIENT', choices=SELLER_LADGER_BY)
+  payment_ref = ndb.StringProperty(default='')
+  retail_price = ndb.FloatProperty(default=0.0) 
+  master_price = ndb.FloatProperty(default=0.0) 
+  qty = ndb.IntegerProperty(default=0) 
+  debit = ndb.FloatProperty(default=0.0) 
+  credit = ndb.FloatProperty(default=0.0) 
+  balance = ndb.FloatProperty(default=0.0)
+  
+  
+  
 class SellerOrder(EndpointsModel):
   '''Franchisor order Data Store model '''
   cancel = ndb.BooleanProperty(default=False) 
@@ -382,6 +406,7 @@ class DesignCategory(EndpointsModel):
   title = ndb.StringProperty(default='')
   img_url = ndb.StringProperty(repeated=True)
   bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
   
   @classmethod
   def get_list(cls):  
@@ -397,6 +422,7 @@ class DesignSubCategory(EndpointsModel):
   category_name = ndb.StringProperty(default='')
   img_url = ndb.StringProperty(repeated=True)
   bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
   
   @classmethod
   def get_list(cls):  

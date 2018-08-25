@@ -95,8 +95,11 @@ class GetProductPics(ActionSupport):
     for design in ProductDesign.get_design_list(product.key):
       design_list.append({'image_url': design.image_url,
                           'title': design.title,
+                          'scaleX': design.scaleX,
+                          'scaleY': design.scaleY,
                           'top': design.top,
-                          'left': design.left})   
+                          'left': design.left,
+                          'k': design.entityKey})   
     
     data_dict = {'img_list': img_list,
                  'bg_uri': product.bg_uri,
@@ -105,6 +108,41 @@ class GetProductPics(ActionSupport):
                  'design_list': design_list}
       
     return  json_response(self.response, data_dict, SUCCESS,'')
+
+
+class UpdateDesignSize(ActionSupport):
+  def post(self):
+    #design = ProductDesign()
+    key = self.request.get('key') 
+    design = ndb.Key(urlsafe=key).get()  
+    design_scallex = self.request.get('design_scallex') 
+    design_scalley = self.request.get('design_scalley') 
+    design_top = self.request.get('design_top') 
+    design_left = self.request.get('design_left') 
+    if design_left:
+      design.left = design_left
+    if design_scallex:      
+      design.scaleX = design_scallex
+    if design_scalley:
+      design.scaleY = design_scalley
+    if design_top:
+      design.top = design_top        
+    design.put()
+    
+    data_dict = {}
+    return json_response(self.response, data_dict, SUCCESS, 'Design size updated')
+
+class DeleteDesign(ActionSupport):  
+  def get(self):      
+    key = self.request.get('k') 
+    #design = ProductDesign()
+    design = ndb.Key(urlsafe=key).get()
+    if delete_bucket_file(design.bucket_key):
+      design.key.delete()  
+      return json_response(self.response, {'k': key}, SUCCESS, 'Design deleted')
+    else:
+      return json_response(self.response, {}, ERROR, 'Try again')      
+        
 
 class SaveProducts(ActionSupport):
   def post(self):          
@@ -768,6 +806,7 @@ class UploadDesignImage(ActionSupport):
     e = ndb.Key(urlsafe=key).get()
     e.img_url.append(serving_url)
     e.bucket_key.append(bucket_path)
+    e.bucket_path.append(bucket_path)
     e.put()
     return json_response(self.response, {}, SUCCESS, 'Success')
     

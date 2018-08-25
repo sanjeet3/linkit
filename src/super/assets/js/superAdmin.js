@@ -419,15 +419,44 @@ function getProductImageCallBack(r) {
     var h = [];
     for (var i = 0; i < design.length; i++) {
       var d = design[i];
-      h.push('<li><img alt="150x150" src="' + d.image_url
-          + '"><div class="tags"><span class="label label-warning arrowed-in">'
-          + d.title + '</span></div></li>');
+      h.push('<li id="');
+      h.push(d.k);
+      h.push('"><img alt="'+d.title+'" src="');
+      h.push(d.image_url);
+      h.push('"><div class="tags"><span class="label label-warning arrowed-in">');
+      h.push(d.title);
+      h.push('</span></div><div class="tools">');
+      h.push('<a title="Edit size" href="javascript:editDesignSize(');
+      h.push("'");
+      h.push(d.k);
+      h.push("'");
+      h.push(',');
+      h.push("'");
+      h.push(d.scaleX);
+      h.push("'");
+      h.push(',');
+      h.push("'");
+      h.push(d.scaleY);
+      h.push("'");
+      h.push(',');
+      h.push("'");
+      h.push(d.top);
+      h.push("'");
+      h.push(',');
+      h.push("'");
+      h.push(d.left);
+      h.push("'");
+      h.push(')"><i class="ace-icon fa fa-pencil"></i></a><a title="Delete" href="javascript:deleteDesign(');
+      h.push("'");
+      h.push(d.k);
+      h.push("'");
+      h.push(')"><i class="ace-icon fa fa-times red"></i></a></div></li>');
     }
 
     $('#product_design_img_list').html(h.join(''));
   }
   
-  if(r.data.bg_uri){
+  /*if(r.data.bg_uri){
     var h = [ '<a href="javascript:deleteImg(' ] 
     h.push("'")
     h.push(r.data.key)
@@ -438,8 +467,40 @@ function getProductImageCallBack(r) {
   } else {
     $('#product_bg_img').html('No background image available');
     $('#upload_product_bg_form').show();
-  }
+  }*/
 
+};
+
+function deleteDesign(k){
+  if(confirm('Delete this design?')){
+    getRequest('', '/superadmin/DeleteDesign?k='+k, 'deleteDesignCallBack'); 
+  }
+};
+
+function deleteDesignCallBack(r){
+ if(r.status=='SUCCESS') $('#'+r.data.k).remove();
+};
+
+
+function editDesignSize(k, scaleX, scaleY, top, left) {
+  openDialog('#editDesignSizeDailog');
+ 
+  $('#design_key').val(k);
+  $('#design_scallex').val(scaleX);
+  $('#design_scalley').val(scaleY);
+  $('#design_top').val(top);
+  $('#design_left').val(left);
+  
+};
+
+function editDesignSizePost(){
+  $("#editDesignSize_spin").show();
+  postRequest('editDesignSize_form','/superadmin/UpdateDesignSize','editDesignSizeCallBack');
+};
+
+function editDesignSizeCallBack(r){
+  $("#editDesignSize_spin").hide();
+  closeDialog('#editDesignSizeDailog');
 };
 
 function uploadProductBackground() { 

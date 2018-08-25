@@ -38,11 +38,12 @@ var curr_scroll_pos = 0;
 var browser_width = jQuery(document).width();
 
 var sprites = [ new sprite(jQuery(".animation-container .bus1"), 1, 3),
-    new sprite(jQuery(".animation-container .truck"), 1, 3.5),
+  new sprite(jQuery(".animation-container .truck"), 1, 3.5), 
     new sprite(jQuery(".animation-container .car1"), 1, 1.4),
     new sprite(jQuery(".animation-container .cycle"), 1, 5),
     new sprite(jQuery(".animation-container .taxi1"), -1, 2.2),
     new sprite(jQuery(".animation-container .bus2"), -1, 1.8),
+    new sprite(jQuery(".animation-container .truck2"), -1, 3.5),
     new sprite(jQuery(".animation-container .car2"), -1, 0.8) ];
 
 jQuery(window).scroll(

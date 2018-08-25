@@ -13,7 +13,8 @@
 /* Etalage container (large thumb + small thumbs): */
 #etalage{
 	display: none;
-	margin-bottom: 50px;
+	margin-bottom: 50px;    
+	height: -webkit-fill-available;
 }
 
 /* Large thumbnail: */
@@ -50,6 +51,7 @@
 #etalage .etalage_magnifier{
 	background: white;
 	border: 1px solid #eee;
+	    width: 100%;
 }
 
 /* Icon that will apear at the left bottom of the large thumbnail (optional): */

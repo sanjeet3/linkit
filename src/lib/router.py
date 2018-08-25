@@ -22,6 +22,7 @@ __route_list = [
     RedirectRoute(r'/SearchEvent', Home.GetEventView, name='GetEventView', strict_slash=True),
     RedirectRoute(r'/OrderStageFirst', Home.OrderStageFirst, name='Order stage 1', strict_slash=True),
     RedirectRoute(r'/PlaceOrder', Home.PlaceOrder, name='Place Order', strict_slash=True),
+    RedirectRoute(r'/Imgage', Home.Imgage, name='Place Order', strict_slash=True),
      
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
@@ -40,6 +41,8 @@ __route_list = [
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetEventList', SuperAdmin.GetEventList, name='SuperAdmin event list', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductPics', SuperAdmin.GetProductPics, name='SuperAdmin Products page', strict_slash=True),
+    RedirectRoute(r'/superadmin/UpdateDesignSize', SuperAdmin.UpdateDesignSize, name='SuperAdmin UpdateDesignSize', strict_slash=True),
+    RedirectRoute(r'/superadmin/DeleteDesign', SuperAdmin.DeleteDesign, name='SuperAdmin DeleteDesign', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductPicture', SuperAdmin.UploadProductPicture, name='SuperAdmin Upload Product Picture', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductDesign', SuperAdmin.UploadProductDesign, name='SuperAdmin Upload Product Design', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadProductBG', SuperAdmin.UploadProductBG, name='SuperAdmin Upload Product BG', strict_slash=True),

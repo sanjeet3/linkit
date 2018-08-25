@@ -528,7 +528,8 @@ span.dolor-left-grid{
 	display: block;
 	float: left;
 	margin: 0 3.6% 0 0;
-	width: 36.2%;
+	width: 36.2%;    
+	height: -webkit-fill-available;
 }
 .desc1 {
 	display: block;

@@ -266,7 +266,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 user-profile">
+      <div class="col-xs-12 user-profile" style="display: none;">
         <div class="widget-box transparent">
           <div class="widget-header widget-header-small">
             <h4 class="widget-title smaller">
@@ -282,7 +282,7 @@
           </div>
         </div>
         <form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
-          id="upload_product_bg_form" style="float: none;">
+          id="upload_product_bg_form" >
           <input type="hidden" name="key" id="product_key_input">
           <p>Upload Background Image</p>
           <div class="form-group">
@@ -359,6 +359,58 @@
     </form>
   </div>
 </div>
+<div id="editDesignSizeDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Edit Design Size</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#editDesignSizeDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="editDesignSize_form">
+      <input type="hidden" name="key" id="design_key">
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Width
+        </label>
+        <div class="col-sm-9">
+          <input type="number" name="design_scallex" id="design_scallex" class="form-control input-custom" step="0.05" max="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Height
+        </label>
+        <div class="col-sm-9">
+          <input type="number" name="design_scalley" id="design_scalley" class="form-control input-custom" step="0.05" max="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Margin Top
+        </label>
+        <div class="col-sm-9">
+          <input type="number" name="design_top" id="design_top" class="form-control input-custom" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Margin Left
+        </label>
+        <div class="col-sm-9">
+          <input type="number" name="design_left" id="design_left" class="form-control input-custom"  min="0">
+        </div>
+      </div> 
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="editDesignSizePost()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="editDesignSize_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#editDesignSizeDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
 <script type="text/javascript">
   getRequest('', '/superadmin/GetEventList', 'setEventListForProductPage')
 </script>
@@ -373,7 +425,7 @@
           '<div class="form-group file-input-container"><div class="col-sm-7"></div></div>'); */
 </script>
 <script type="text/javascript">
-  $(function() {
+ /*  $(function() {
     var frames = [ "super/assets/test/rad_zoom_001.jpg",
         "super/assets/test/rad_zoom_002.jpg",
         "super/assets/test/rad_zoom_003.jpg",
@@ -425,7 +477,7 @@
       enableCanvas : true
     });
 
-  });
+  }); */
 </script>
 <script>
   /*  pannellum.viewer('product_img_list_li_1', {
