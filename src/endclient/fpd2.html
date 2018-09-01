@@ -82,12 +82,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
             cat_list%}
             <div class="fpd-category" title="{{sc.title}}">
-              {%for img in sc.bucket_key%} <img src="/Imgage?id={{img}}"
+              {%for img in sc.img_url%} <img src="{{img}}"
                 title="{{sc.title}}{{loop.index}}"
                 data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.bucket_key%} <img src="/Imgage?id={{img}}"
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
               title="{{cat.title}}{{loop.index}}"
               data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
             {%endfor%}

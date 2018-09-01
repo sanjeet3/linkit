@@ -4227,7 +4227,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 					fabricImg = fabricImg.getSrc() === '' ? null : fabricImg;
 					_fabricImageLoaded(fabricImg, fabricParams, false);
 
-				}, {crossOrigin: 'anonymous'});
+				}, {crossOrigin: 'use-credentials'});
 
 			}
 
