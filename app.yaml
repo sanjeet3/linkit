@@ -1,10 +1,9 @@
-application: link-it-portal
-version: sept2018v1
 runtime: python27
 api_version: 1
 threadsafe: true
 
 handlers:
+#static dir handlers
 - url: /super/assets
   static_dir: src/super/assets  
   
@@ -34,8 +33,14 @@ handlers:
   
 - url: /light
   static_dir: src/endclient/light  
-    
+  
+- url: /test
+  static_dir: src/endclient/test  
 
+- url: /wp-content    
+  static_dir: src/wp-content
+
+#URL handler  
 - url: /taskqueue/.*
   script: src.Actions.taskqueue.app
   
