@@ -25,6 +25,7 @@ class ActionSupport(webapp2.RequestHandler):
     
     self.initialize(request, response)
     self.client = None
+    self.DEV = os.environ['SERVER_SOFTWARE'].startswith('Development')
     user_session = self.auth.get_user_by_session()  
     if user_session:
       self.client = Client.get_active_client_by_email(user_session['username'])

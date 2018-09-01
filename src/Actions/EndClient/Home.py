@@ -398,6 +398,7 @@ class GetProductDesignor(ActionSupport):
         sub_cat_dict[e.category]=[e]            
     fpd_product_list = ProductDesign.get_design_list(p.key) 
     self.response.out.write(template.render({'p': p,
+                                             'dev': self.DEV,
                                              'key': self.request.get('key'), 
                                              'user_obj': self.client,
                                              'design_list': design_list,
@@ -406,6 +407,7 @@ class GetProductDesignor(ActionSupport):
                                 
 class TestFPD(ActionSupport):
   def get(self):  
+    logging.info(self.DEV)
     design_list  = DesignCategory.get_list()
     sub_cat_dict = {}
     e=DesignSubCategory()  
@@ -416,7 +418,7 @@ class TestFPD(ActionSupport):
         sub_cat_dict[e.category]=[e]    
     template_path = 'endclient/fpd2.html'
     template = self.get_jinja2_env.get_template(template_path)          
-    self.response.out.write(template.render({
+    self.response.out.write(template.render({'dev': self.DEV,
                                              'design_list': design_list,
                                              'sub_cat_dict': sub_cat_dict}))  
     
