@@ -121,8 +121,8 @@ function viewProductDetailsCallBack(r) {
 };
 
 function backToProductList() {
-  $('#product-list-dom').show();
-  $('#product-detail-dom').hide();
+  $('#product_list_caontainer').show();
+  $('#product_order_caontainer').hide();
 };
 
 function changeProductViewImg(elm) {
@@ -171,7 +171,7 @@ function orderProductStage1() {
     return;
   }
   if (!pk) {
-    alert('Please select seller!');
+    alert('Seller not available!');
     return;
   }
   $('#selected_product_qty').val(qty);
@@ -201,6 +201,42 @@ function backFromOrderStageFirst() {
 function setOrderProdutQty(elm) {
   $('#selected_product_qty').val(elm.value);
 };
+
+function DirectOrder(){
+  var qty = $('#user-priece-qty').val();
+  var pk = $('#selected_seller_product').val();
+  if (!qty) {
+    alert('Quantity missing!');
+    return;
+  }
+  qty = parseInt(qty);
+  if (qty < 1) {
+    alert('Minmum quantity is 1!');
+    return;
+  }
+  if (!pk) {
+    alert('Seller missing!');
+    return;
+  }
+  
+  
+  $('#product_action_caontainer').hide();
+  $('#product_order_caontainer').show();
+  $('#product_order_caontainer')
+      .html(
+          '<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Please wait...</p></div>');
+
+  postRequest('product_order_form', '/PlaceOrder', 'DirectOrderCallback');
+};
+
+function DirectOrderCallback(r){
+  $('#product_order_caontainer').html(r.data.html);
+}
+
+function backToProductAction(){
+  $('#product_action_caontainer').show();
+  $('#product_order_caontainer').hide();
+}
 
 function orderPaymentStart() {
 
@@ -363,3 +399,34 @@ function searchEvent(){
 function searchEventCallBack(r){
   $('#event_list').html(r);
 }
+
+function getMyOrders(){
+  $('#order_list_caontainer').show();
+  $('#product_list_caontainer, #product_action_caontainer, #product_design_caontainer, #product_order_caontainer').hide();
+  $('#order_list_caontainer').html(
+  '<div style="width: 100%;text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading order list</p></div>');
+
+  getRequest('', '/GetMyOrders', 'getMyOrdersCallBack');
+};
+function getMyOrdersCallBack(r){
+  $('#order_list_caontainer').html(r);
+};
+
+
+function showOrderList(){
+  $('#order_list_dom').show();
+  $('#order_detail_dom').hide();
+};
+function getOrderDetails(k){
+  $('#order_list_dom').hide();
+  $('#order_detail_dom').show();
+  $('#order_detail_dom').html('<div style="width: 100%;text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading order details</p></div>');
+  getRequest('', '/GetMyOrderDetails?k='+k, 'getOrderDetailsCallBack');
+};
+function getOrderDetailsCallBack(r){
+  $('#order_detail_dom').html(r);
+};
+function showHistory(i){
+  $('#history_details>p').hide();
+  $('#history_'+i).show();
+};

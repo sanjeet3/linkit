@@ -1,8 +1,5 @@
 <div class="ord-dtl-stg-1">
-  <div class="col-sm-12">
-    <div class="prod-img">
-      <img class="img-responsive" src="/img/frozenbag1.png" id="product-view-img">
-    </div>
+  <div class="col-sm-6">
     <div class="prod-detail">
       <h4>{{product.code}}, {{product.name}}</h4>
       <p>
@@ -29,6 +26,11 @@
       <p>
         <strong>Description: </strong>{{product.description}}
       </p>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="prod-img">
+      <img class="img-responsive" src="{{order.image_url}}" id="product-view-img">
     </div>
   </div>
   <div class="col-sm-12 mt-10">

@@ -7,7 +7,7 @@ Created on 04-Jul-2018
 from src.Database import Product, Seller, SellerProduct, SellerOrder
 from src.Database import Client, ClientProductDesign, ProductDesign
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster
-from src.Database import DesignCategory, DesignSubCategory
+from src.Database import DesignCategory, DesignSubCategory, SellerLadger
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -242,12 +242,13 @@ class ProductView(ActionSupport):
 class GetProductDetails(ActionSupport):
   def get(self):
     p = ndb.Key(urlsafe=self.request.get('key')).get()
-    seller_dict = Seller.get_key_obj_dict()
-    seller_product_list = SellerProduct.get_product_by_master_key_for_client(p.key)
-    design_list = ProductDesign.get_design_list(p.key)
+    seller_dict = {}#Seller.get_key_obj_dict()
+    seller_product_list = []#SellerProduct.get_product_by_master_key_for_client(p.key)
+    design_list = []#ProductDesign.get_design_list(p.key)
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
     self.response.out.write(template.render({'p': p,
                                              'design_list': design_list,
+                                             'seller_product': SellerProduct.get_default_seller_product(p.key),
                                              'seller_product_list': seller_product_list,
                                              'seller_dict': seller_dict,
                                              'user_obj': self.client}))
@@ -290,7 +291,7 @@ class PlaceOrder(ActionSupport):
     design = ClientProductDesign()
     qty = int(self.request.get('qty'))   
     if qty < 1:
-      HTML= QUANTITY_ERROR.replace('[ONCLICK]', 'backFromOrderStageFirst()')  
+      HTML= QUANTITY_ERROR.replace('[ONCLICK]', 'backToProductAction()')  
       return json_response(self.response, {'html': HTML}, 'ERROR', 'Item quantity missing') 
      
     #client_name = self.request.get('client_name')
@@ -354,15 +355,33 @@ class PlaceOrder(ActionSupport):
                          'date': ldt.strftime('%d %b%Y'),
                          })
     order.history = json.dumps(history_list) 
-    order.put()
-    
-    
+    order = order.put().get()
+    master_amt = product.master_price*qty
+    cr = order.amount - master_amt
+    ladger = SellerLadger()
+    ladger.balance = cr
+    ladger.client = order.client
+    ladger.credit =  cr
+    #ladger.debit
+    ladger.master_price = product.master_price
+    ladger.master_product = product.master_product
+    ladger.order = order.key
+    ladger.order_by = 'CLIENT'
+    ladger.order_number = order.order_number
+    ladger.payment_ref = order.payment_ref
+    ladger.qty = qty
+    ladger.retail_price = product.retail_price
+    ladger.seller = seller.key
+    ladger.seller_email = seller.email
+    ladger.seller_name = seller.name
+    ladger.put()
+        
     data={'order': order,
           'product': product,
           'seller': seller}
     template = self.get_jinja2_env.get_template('endclient/order-success.html') 
     html_str = template.render(data)   
-    return json_response(self.response, {'html': html_str}, SUCCESS, 'Payment success')
+    return json_response(self.response, {'html': html_str}, SUCCESS, 'Order success')
 
 class GetProductDesignor(ActionSupport):
   def get(self): 
@@ -385,7 +404,22 @@ class GetProductDesignor(ActionSupport):
                                              'fpd_product_list': fpd_product_list,
                                              'sub_cat_dict': sub_cat_dict}))  
                                 
-
+class TestFPD(ActionSupport):
+  def get(self):  
+    design_list  = DesignCategory.get_list()
+    sub_cat_dict = {}
+    e=DesignSubCategory()  
+    for e in DesignSubCategory.get_list():
+      if e.category in sub_cat_dict:
+        sub_cat_dict[e.category].append(e)
+      else:
+        sub_cat_dict[e.category]=[e]    
+    template_path = 'endclient/fpd2.html'
+    template = self.get_jinja2_env.get_template(template_path)          
+    self.response.out.write(template.render({
+                                             'design_list': design_list,
+                                             'sub_cat_dict': sub_cat_dict}))  
+    
 class CreateDesign(ActionSupport):
   def get(self): 
     template_path = 'endclient/customDesign.html' #'endclient/fancy_product_designer.html'
@@ -438,3 +472,22 @@ class CreateDesign(ActionSupport):
     
     data_dict = {'id': design_obj.id}                        
     return json_response(self.response, data_dict, SUCCESS, 'Product design saved')                        
+
+
+class GetMyOrders(ActionSupport):
+  def get(self):
+    order_list=SellerOrder.get_client_filetered(self.client.key)
+    data = {'order_list': order_list}
+    template = self.get_jinja2_env.get_template('endclient/order-list.html') 
+    self.response.out.write(template.render(data))
+    
+class GetMyOrderDetails(ActionSupport):
+  def get(self):
+    order=ndb.Key(urlsafe=self.request.get('k')).get()
+    history = json.loads(order.history)
+    
+    data = {'order': order,
+            'seller':order.seller.get(),
+            'history': history}
+    template = self.get_jinja2_env.get_template('endclient/order_details.html') 
+    self.response.out.write(template.render(data))

@@ -5929,7 +5929,7 @@ var FPDActions = function(fpdInstance, $actions){
 					image.src = dataURL;
 
 					image.onload = function() {
-						FPDUtil.createModal('<img src="'+this.src+'" download="product.png" style="max-width: fit-content !important;"/>', true);
+						FPDUtil.createModal('<img src="'+this.src+'" download="product.png"/>', true);
 					}
 
 				}); 

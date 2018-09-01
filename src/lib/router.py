@@ -18,10 +18,12 @@ __route_list = [
     RedirectRoute(r'/CreateDesign', Home.CreateDesign, name='Create Product Design page', strict_slash=True),
     RedirectRoute(r'/GetProductDesignor', Home.GetProductDesignor, name='Get Product Designor page', strict_slash=True),
     RedirectRoute(r'/Product', Home.ProductView, name='View product page', strict_slash=True),
-    RedirectRoute(r'/GetProductDetails', Home.GetProductDetails, name='Get product details page', strict_slash=True),
     RedirectRoute(r'/SearchEvent', Home.GetEventView, name='GetEventView', strict_slash=True),
+    RedirectRoute(r'/TestFPD', Home.TestFPD, name='Test FPD', strict_slash=True),
     RedirectRoute(r'/OrderStageFirst', Home.OrderStageFirst, name='Order stage 1', strict_slash=True),
     RedirectRoute(r'/PlaceOrder', Home.PlaceOrder, name='Place Order', strict_slash=True),
+    RedirectRoute(r'/GetMyOrders', Home.GetMyOrders, name='Place Order', strict_slash=True),
+    RedirectRoute(r'/GetMyOrderDetails', Home.GetMyOrderDetails, name='Get My Order Details', strict_slash=True),
     RedirectRoute(r'/Imgage', Home.Imgage, name='Place Order', strict_slash=True),
      
     #Super Admin handlers Frenchise
@@ -61,6 +63,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/OrderSearch', SuperAdmin.OrderSearch, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/AssignProductToSeller', SuperAdmin.AssignProductToSeller, name='SuperAdmin AssignProductToSeller', strict_slash=True),
     RedirectRoute(r'/superadmin/GetSellerProduct', SuperAdmin.GetSellerProduct, name='SuperAdmin get Product of Seller', strict_slash=True),
+    RedirectRoute(r'/superadmin/Ledger', SuperAdmin.Ledger, name='SuperAdmin get Ledger of Seller', strict_slash=True),
     
     #Custom Designs
     RedirectRoute(r'/superadmin/CustomDesign', SuperAdmin.CustomDesign, name='SuperAdmin Custom designs', strict_slash=True),

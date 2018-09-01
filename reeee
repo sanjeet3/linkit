@@ -1,0 +1,194 @@
+{#
+<div id="order-stage-1" style="display: none;">
+  <div class="product-images-list">
+    <img class="img-responsive cursor active" id="product_img_1" src="/img/frozenbag1.png"
+      onclick="changeProductViewImg(this)"> <img class="img-responsive cursor"
+      id="product_img_2" src="/img/frozenbag2.png" onclick="changeProductViewImg(this)"> <img
+      class="img-responsive cursor" id="product_img_3" src="/img/frozenbag3.png"
+      onclick="changeProductViewImg(this)"> <img class="img-responsive cursor"
+      id="product_img_4" src="/img/frozenbag4.png" onclick="changeProductViewImg(this)">
+  </div>
+  <div class="product-img-preview">
+    <img class="img-responsive" src="/img/frozenbag1.png" id="product-view-img">
+  </div>
+  <div class="product-details-action">
+    <div id="prd-main-action">
+      <div class="prd-info-content">
+        <form id="product_order_form">
+          <input type="hidden" name="product" id="selected_seller_product"> <input
+            type="hidden" name="qty" id="selected_product_qty"><input type="hidden"
+            name="design_id" id="selected_design_id">
+        </form>
+        <h6 class="pull-left">{{p.code}}, {{p.name}}</h6>
+        <button type="button" onclick="backToProductList()"
+          class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right">
+          <i class="ace-icon fa fa-arrow-left"></i> Back
+        </button>
+        <hr style="clear: both;" />
+        <span class="space-4"></span>
+        <div class="prd-inf">
+          <div class="prd-inf-row">
+            <div class="prd-inf-title">Size:</div>
+            <div class="prd-inf-val">
+              <span>{{p.size}}</span>
+            </div>
+          </div>
+          <div class="prd-inf-row">
+            <div class="prd-inf-title">Category:</div>
+            <div class="prd-inf-val">
+              <span>{{p.category}}</span>
+            </div>
+          </div>
+          <div class="prd-inf-row">
+            <div class="prd-inf-title">Description:</div>
+            <div class="prd-inf-val">
+              <span>{{p.description}}</span>
+            </div>
+          </div>
+          <div class="prd-inf-row">
+            <div class="prd-inf-title">Seller & Price:</div>
+            <div class="prd-inf-val">
+              <span> {{seller_product_list|length}} Seller are selling this item </span>
+            </div>
+          </div>
+          <div class="prd-inf-row">
+            <div class="prd-inf-title">Quantity:</div>
+            <div class="prd-inf-val">
+              <input type="number" min="1" value="1" name="qty" id="user-priece-qty"
+                onchange="setOrderProdutQty(this)">
+            </div>
+          </div>
+          <div class="prd-inf-row" id="selected_seller_price_info"></div>
+          <div class="prd-inf-row" id="design_info">
+            <div class="prd-inf-title">Design Id:</div>
+            <div class="prd-inf-val">
+              <input type="text" value="" name="design_id" id="design_id"> <i
+                class="fa fa-bolt fa-2x" title="Create your design and use given design id here"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="center mt-10">
+        <a type="button" class="btn btn-info btn-mini" href="/CreateDesign?k={{p.entityKey}}"
+          target="_blank"> <i class="fa fa-pencil"></i> Create Design
+        </a> <span class="order-act">
+          <button type="button" class="btn btn-success btn-mini " onclick="orderProductStage1()">
+            <i class="fa fa-shopping-cart"></i> Order Now
+          </button>
+          <button type="button" class="btn btn-danger btn-mini" onclick="resetProductSeller()">
+            <i class="fa fa-times"></i> Cancel
+          </button>
+        </span> <span class="select-seller">
+          <button type="button" class="btn btn-info btn-mini" onclick="checkPriceForProduct()">Check
+            seller and price</button>
+        </span>
+      </div>
+    </div>
+    <div id="prd-seller-selection-dom" style="display: none;">
+      <div class="col-xs-12">
+        <div class="prd-seller-list">
+          {%for seller_product in seller_product_list%} {%set
+          seller=seller_dict[seller_product.seller]%}
+          <div class="media search-media">
+            <div class="media-left">
+              <a href="javascript:"> <img class="media-object" alt="{{seller.name}}"
+                src="{{seller.img_url or '/super/assets/images/avatars/avatar2.png'}}"
+                style="width: 72px; height: 72px;">
+              </a>
+            </div>
+            <div class="media-body">
+              <div>
+                <h4 class="media-heading">
+                  <a href="javascript:" class="blue">{{seller.name}} </a>
+                </h4>
+              </div>
+              <p>{{seller.person}}, {{seller.address}}</p>
+              <div class="search-actions text-center">
+                <span class="text-info">KES</span> <span class="blue bolder bigger-150">{{seller_product.retail_price}}</span>
+                <a class="btn btn-sm btn-block btn-info"
+                  href="javascript:selectProductSeller('{{seller_product.entityKey}}', '{{seller.name}}', {{seller_product.retail_price}})">Book
+                  it!</a>
+              </div>
+            </div>
+          </div>
+          {%endfor%} <a href="javascript:backCheckPriceForProduct()"
+            class="mt-10 btn btn-sm btn-white">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="order-stage-2" style="display: none;">
+  <div class="col-xs-12">
+    <div class="order-bg" id="order-detail-stage1"></div>
+  </div>
+</div>
+<div id="order-payment-stage" style="display: none;">
+  <div class="col-xs-12 mt-10">
+    <form id="order-payment-form" class=" form-horizontal">
+      <div class="form-group">
+        <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for=""> Your Name
+        </label>
+        <div class="col-lg-6 col-sm-12">
+          <input type="text" name="client_name" id="client_name" placeholder="Your name"
+            class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for=""> Your
+          Mobile Number </label>
+        <div class="col-lg-6 col-sm-12">
+          <input type="text" name="client_mobile" id="client_mobile"
+            placeholder="your mobile number" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for=""> Your Email
+        </label>
+        <div class="col-lg-6 col-sm-12">
+          <input type="text" placeholder="Order notification will send vai email"
+            name="client_email" id="client_email" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for="code"> Debit
+          Card Number </label>
+        <div class="col-lg-6 col-sm-12">
+          <input type="text" placeholder="Enter your 16 digit debit card number" name="card_number"
+            id="card_number" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class=" col-lg-2 col-sm-12 control-label no-padding-right" for="code"> Name
+          On Card</label>
+        <div class="col-lg-6 col-sm-12">
+          <input type="text" name="name_on_card" placeholder="Name on your card" id="name_on_card"
+            class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class=" col-lg-2 col-sm-4 control-label no-padding-right" for="code">CVV</label>
+        <div class="col-lg-2 col-sm-6">
+          <input type="password" name="cvv_number" id="cvv_number" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-lg-offset-3 col-md-9">
+          <button type="button" class="btn btn-success btn-mini " onclick="orderMakePayment()">
+            <i class="fa fa-money"></i> Process To Pay
+          </button>
+          <button type="button" onclick="backFromOrderStageFirst()"
+            class="btn btn-sm btn-primary btn-white btn-round btn-mini">
+            <i class="ace-icon fa fa-times"></i> cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="order-suucess" style="display: none;">
+  <div class="col-xs-12">
+    <div class="order-bg" id="order-suucess-details"></div>
+  </div>
+</div>
+#}

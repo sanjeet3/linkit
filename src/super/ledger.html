@@ -1,0 +1,77 @@
+
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-money"></i> <a href="javascript:">Ledger</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button type="button" onclick="" class="btn btn-default btn-mini" id="back_btn"
+      style="display: none;">
+      <i class="ace-icon fa fa-arrow-left bigger-110"></i>Back
+    </button>
+  </div>
+</div>
+<div class="page-content">
+  <div id="list-dom">
+    <div class="page-header">
+      <form class="form-inline" id="super-admin-order--search-form">
+        <select class="input-small" name="seller">
+          <option value="">--seller--</option> {%for s in seller_list%}
+          <option value="{{s.entityKey}}">{{s.name}}-{{s.person}}</option> {%endfor%}
+        </select>
+        <div class="input-daterange input-group">
+          <input type="text" class="date-input" name="start" id="start" value="{{dt}}"> <span
+            class="dt-arrow"> <i class="fa fa-exchange"></i>
+          </span> <input type="text" class="date-input" name="end" id="end" value="{{dt}}">
+        </div>
+        <button type="button" onclick="" class="btn btn-info btn-mini">
+          <i class="ace-icon fa fa-search bigger-110"></i>Search
+        </button>
+      </form>
+    </div>
+    <div class="row mt-10">
+      <div class="col-xs-12">
+        <table class="table  table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Date</th>              
+              <th>Seller</th>              
+              <th>Order No</th>              
+              <th>Product Price</th>              
+              <th>Qty</th>              
+              <th>Debit</th>              
+              <th>Credit</th>              
+              <th>Balance</th>              
+            </tr>
+          </thead>
+          <tbody>
+          {%for e in seller_ladger_list%}
+          <tr>
+            <td>{{e.created_date}}</td>
+            <td>{{e.seller_email}}</td> 
+            <td>{{e.order_number}}</td> 
+            <td>{{e.retail_price}}</td> 
+            <td>{{e.qty}}</td> 
+            <td>{{e.debit}}</td> 
+            <td>{{e.credit}}</td> 
+            <td>{{e.balance}}</td>  
+          </tr>
+          {%else%}
+          <tr>
+            <td colspan="10">No data available</td>
+          </tr>
+          {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $('.input-daterange').datepicker({
+    autoclose : true,
+    format : 'dd-mm-yyyy',
+  });
+</script>

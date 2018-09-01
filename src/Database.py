@@ -233,6 +233,9 @@ class SellerProduct(EndpointsModel):
   @classmethod
   def get_product_by_master_key_for_client(cls, master_product):
     return cls.query(cls.master_product==master_product, cls.endclient_visible==True).fetch()
+  @classmethod
+  def get_default_seller_product(cls, master_product):
+    return cls.query(cls.master_product==master_product, cls.endclient_visible==True).get()
 
 SELLER_LADGER_BY = ['CLIENT', 'SELLER'] 
 class SellerLadger(EndpointsModel):
@@ -254,8 +257,19 @@ class SellerLadger(EndpointsModel):
   credit = ndb.FloatProperty(default=0.0) 
   balance = ndb.FloatProperty(default=0.0)
   
-  
-  
+  @classmethod
+  def get_list(cls):
+    return cls.query().order(-cls.created_date).fetch(100)  
+      
+  @classmethod
+  def get_filtered_list(cls, from_date, to_date, seller=None):
+    q=cls.query().order(-cls.created_date)
+    if from_date and to_date:
+      q = q.filter(cls.created_date>=from_date, cls.created_date<=to_date)
+    if seller:
+      q = q.fileter(cls.seller==seller)             
+    return q.fetch()
+
 class SellerOrder(EndpointsModel):
   '''Franchisor order Data Store model '''
   cancel = ndb.BooleanProperty(default=False) 
@@ -298,6 +312,13 @@ class SellerOrder(EndpointsModel):
       q = q.filter(cls.seller.IN(seller_list))    
     return q
 
+  @classmethod
+  def get_client_filetered(cls, client, from_date=None, to_date=None): 
+    q = cls.query(cls.client==client).order(-cls.date)
+    if from_date and to_date:
+      q = q.filter(cls.date>=from_date, cls.date<=to_date)    
+    return q.fetch()    
+    
 class SellerOrderHistory(EndpointsModel):
   '''Franchisor order Data Store model ''' 
   created_on = ndb.DateTimeProperty(auto_now_add=True)

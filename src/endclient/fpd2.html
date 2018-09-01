@@ -1,0 +1,214 @@
+<!--A Design by W3layouts 
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Craftyourchoice</title>
+<link href="/light/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<!--theme-style-->
+<link href="/light/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!--//theme-style-->
+<link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script type="application/x-javascript">
+  
+  
+  
+  
+  
+  
+  
+    
+   addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }  
+
+
+
+
+
+
+
+</script>
+<!--fonts-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet'
+  type='text/css'>
+<!--//fonts-->
+<link rel="stylesheet" href="/light/css/etalage.css" type="text/css" media="all" />
+<!-- <script src="/light/js/jquery.min.js"></script> -->
+<!--script-->
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<!-- Google Webfonts -->
+<link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
+<!-- The CSS for the plugin itself - required -->
+<link rel="stylesheet" type="text/css" href="/css/fpd.css" />
+<!-- Optional - only when you would like to use custom fonts - optional -->
+<link rel="stylesheet" type="text/css" href="/test/css/jquery.fancyProductDesigner-fonts.css" />
+<link rel="stylesheet" type="text/css" href="/test/css/FancyProductDesigner-all.min.css" />
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <!--header-->
+  <div class="header">
+    <div class="bottom-header">
+      <div class="container">
+        <div class="header-bottom-left">
+          <div class="logo">
+            <a href="#"><img src="/img/Craftyourchoice.png" alt=" " style="height: 40px;" /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <div id="main-container">
+      <h3 id="clothing" style="float: left;">Create Product Design</h3>
+      <div id="product-designer" style="clear: both;"
+        class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
+        <div class="fpd-product" title="Left" data-thumbnail="/img/Product.png"> 
+         <!-- <span
+            title="Any Text"
+            data-parameters='{"boundingBox": "Base", "left": 326, "top": 232, "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}'>Default
+            Text</span> -->
+          <div class="fpd-product" title="Right" data-thumbnail="/img/Product.png">
+          </div>
+        </div>
+        <div class="fpd-design">
+          {%for cat in design_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}">
+              {%for img in sc.bucket_key%} <img src="/Imgage?id={{img}}"
+                title="{{sc.title}}{{loop.index}}"
+                data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.bucket_key%} <img src="/Imgage?id={{img}}"
+              title="{{cat.title}}{{loop.index}}"
+              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            {%endfor%}
+          </div>
+          {%endfor%}
+        </div>
+        <div class="fpd-frames">
+          <div class="fpd-category" title="Fram1">
+            <img src="" title="testing"
+              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- Include js files -->
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/super/assets/js/bootstrap-notify.js"></script>
+<script type="text/javascript" src="super/assets/js/algo.js"></script>
+<script src="/light/js/main.js"></script>
+<script src="/light/js/jquery.etalage.min.js"></script>
+<script src="/js/designAlgo.js" type="text/javascript"></script>
+<script src="/js/api.js" type="text/javascript"></script>
+<!-- The plugin itself - required -->
+<!-- <script src="/js/plugins.min.js" type="text/javascript"></script>  -->
+<!-- HTML5 canvas library - required -->
+<script src="/test/js/fabric.min.js" type="text/javascript"></script>
+<script src="/test/js/FancyProductDesigner-all.js" type="text/javascript"></script>
+<script type="text/javascript">
+  jQuery(document).ready(
+      function() {
+
+        var $yourDesigner = $('#product-designer'), pluginOpts = {
+          /* stageWidth : 1200, */
+          editorMode : true,
+          toolbarPlacement : "smart",
+          mainBarModules : [ 'images', 'text', 'designs', 'manage-layers' ],
+          actions : {
+            'top' : [ 'download', 'print', 'preview-lightbox' ],
+            'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
+            'bottom' : [ 'undo', 'redo' ],
+          },
+
+          fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
+              'Verdana', 'Geneva', 'Gorditas', 'Eczar', 'Roboto Mono',
+              'Poor Story', 'Titillium Web', 'Noto Serif', 'Work Sans',
+              'Chela One', 'Indie Flower', 'Inconsolata', 'Bitter',
+              'Libre Baskerville', 'Anton', 'Josefin Sans',
+              'Cormorant Unicase', 'Lobster', 'Arvo', 'Pacifico', 'Do Hyeon',
+              'Shadows Into Light', 'Dancing Script', 'Abril Fatface',
+              'Bree Serif', 'Coda Caption', 'Kanit', 'Acme',
+              'Gloria Hallelujah', 'Righteous', 'Rajdhani', 'Permanent Marker',
+              'Farsan', 'Great Vibes', 'Concert One', 'Poiret One', 'Satisfy',
+              'Courgette', 'Marck Script', 'Prata', 'Audiowide', 'Unica One',
+              'Julius Sans One', 'Ultra', 'Economica', 'IBM Plex Mono',
+              'Amaranth', 'Prosto One', 'Bangers', 'Shrikhand', 'Handlee',
+              'Boogaloo', 'Tangerine', 'Kalam', 'Sacramento',
+              'Architects Daughter', 'PT Mono', 'Bad Script', 'Special Elite',
+              'Libre Barcode 128 Text', 'Shadows Into Light Two',
+              'Cabin Sketch', 'Parisienne', 'Damion', 'Covered By Your Grace',
+              'Playball', 'Nothing You Could Do', 'Homemade Apple',
+              'Fugaz One', 'Rock Salt', 'Allura', 'Press Start 2P',
+              'Alex Brush', 'Black Ops One', 'Carter One', 'Just Another Hand',
+              'Fredericka the Great', 'Syncopate', 'Bungee Inline', 'Niconne',
+              'Coming Soon', 'Leckerli One', 'Galada', 'Caveat Brush',
+              'Pinyon Script', 'Cinzel Decorative', 'Mr Dafoe',
+              'Reenie Beanie', 'Italianno', 'Nanum Pen Script', 'Quantico',
+              'Skranji', 'Allerta Stencil', 'Grand Hotel', 'Yesteryear',
+              'Marvel', 'Freckle Face', 'Rochester', 'Nanum Brush Script',
+              'Alegreya SC', 'Annie Use Your Telescope', 'Faster One',
+              'Raleway Dots', 'Calligraffitti', 'Aclonica', 'Yatra One',
+              'Share Tech Mono', 'Graduate', 'Petit Formal Script',
+              'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
+              'IM Fell Double Pica', ],
+          customTextParameters : {
+            colors : true,
+            removable : true,
+            resizable : true,
+            draggable : true,
+            rotatable : true,
+            autoCenter : true,
+            boundingBox : "Base",
+            curvable : true,
+            curveReverse : true,
+          },
+          customImageParameters : {
+            removable : true,
+            colors : '#000',
+            autoCenter : true,
+            boundingBox : "Base",
+            minW : 1,
+            minH : 1,
+            maxW : 9900,
+            maxH : 9900,
+            filter : true,
+            uniScalingUnlockable : true,
+            advancedEditing : true,
+            editorMode : true,
+            availableFilters : [ 'grayscale', 'sepia', 'sepia2' ],
+
+          },
+          imageParameters : {  
+            filter : true,
+            availableFilters : [ 'grayscale', 'sepia', 'sepia2', 'blur',
+                'milk', 'purple', 'yellow', 'monocrome' ],
+            uniScalingUnlockable : true,
+            advancedEditing : true,
+          },
+          imageEditorSettings: {
+          masks: ['/wp-content/uploads/fpd-masks/circle.svg',
+                  '/wp-content/uploads/fpd-masks/heart.svg',
+                  '/wp-content/uploads/fpd-masks/hexagon.svg',
+                  '/wp-content/uploads/fpd-masks/star.svg',
+                 ],
+          },
+        };
+
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+
+      });
+</script>
+</html>

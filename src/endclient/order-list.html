@@ -1,0 +1,39 @@
+<div class="mt-10 mb-10">
+  <div id="order_list_dom">
+    <div class="mb-5">
+      <h4 class="pull-left">Your Orders </h4>
+      <button type="button" onclick="clientProductList()"
+        class="btn btn-sm btn-primary btn-round btn-mini pull-right">
+        <i class="ace-icon fa fa-arrow-left"></i> Back
+      </button>
+    </div>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Qty</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for e in order_list%}
+        <tr>
+          <td><a href="javascript:getOrderDetails('{{e.entityKey}}')"><img alt="{{e.name}}"
+              src="{{e.image_url}}" width="75px" height="75px"> {{e.code}}, {{e.name}}</a></td>
+          <td>{{e.date}}</td>
+          <td>{{e.amount}}</td>
+          <td>{{e.qty}}</td>
+          <td><a href="javascript:getOrderDetails('{{e.entityKey}}')">{{e.status}}</a></td>
+        </tr>
+        {%else%}
+        <tr>
+          <td colspan="10">No Order available</td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </div>
+  <div id="order_detail_dom" style="display: none;"></div>
+</div>

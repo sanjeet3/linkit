@@ -15,7 +15,7 @@ function clientGetProdCallBack(r) {
 
 function clientProductList() {
   $('#product_list_caontainer').show();
-  $('#product_action_caontainer').hide();
+  $('#product_action_caontainer, #order_list_caontainer, #product_order_caontainer').hide();
 }
 
 function backToProductAcitionDom() {

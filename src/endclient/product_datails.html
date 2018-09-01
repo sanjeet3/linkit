@@ -32,8 +32,10 @@
         <div class="clearfix"></div>
       </div>
       <b>Size:</b> {{p.size}}<br> <b>Category:</b> {{p.category}}<br> <b>UOM:</b>
-      {{p.uom}}<br> <b>Description:</b>{{p.description}}<br/><br/>{%if
-      seller_product_list|length==0%}
+      {{p.uom}}<br> <b>Description:</b>{{p.description}}<br/><br/>
+      {#
+      ----------------
+      {%if seller_product_list|length==0%}
       <p>No seller is selling this item</p>
       {%else%} <b>Quantity:</b>&nbsp;<input type="number" min="1" value="1" name="qty"
         id="user-priece-qty" onchange="setOrderProdutQty(this)"><br>
@@ -48,9 +50,29 @@
           {%endfor%}
         </form>
       </div>
+      {%endif%}
+      ------------------
+      #}
+      
+      {% if seller_product %}
+      <b>Quantity:</b>&nbsp;<input type="number" min="1" value="1" name="qty"
+        id="user-priece-qty" onchange="setOrderProdutQty(this)"><br>
+      <div id="selected_seller_price_info"></div>
+      <div class="share">
+        <form id="product_order_form">
+          <input type="hidden" name="qty" id="selected_product_qty" value="1"> <input
+            type="hidden" name="design_id" id="selected_design_id"> 
+            <input type="hidden" name="product" id="selected_seller_product"
+            value="{{seller_product.entityKey}}">
+            <b>Price: </b>{{seller_product.retail_price}} KES
+        </form>
+      </div>
+      
+      
+      <p>Maxpro will provide free delivery to you.</p>
       <div class="col-lg-12 text-center">
         <span class="order-act">
-          <button type="button" class="btn btn-success btn-mini " onclick="orderNow()">
+          <button type="button" class="btn btn-success btn-mini " onclick="DirectOrder()">
             <i class="fa fa-shopping-cart"></i> Order Now
           </button>
           <button type="button" class="btn btn-danger btn-mini" onclick="clientProductList()">
@@ -58,8 +80,8 @@
           </button>
         </span>
       </div>
-      {%endif%}
     </div>
+    {%endif%}
     {#
     <div class="desc1 span_3_of_2" id="seller_list" style="display: none;">
       {%for seller_product in seller_product_list%} {%set

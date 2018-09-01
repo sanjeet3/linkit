@@ -73,20 +73,20 @@
             
           },
            imageParameters : {
+             "z":1,"x":0,"y":0,"zChangeable":false,"scale":1, 
+             "removable":false,"draggable":false,"resizable":false,"rotatable":false,  
+           
             filter: true,
             availableFilters: ['grayscale', 'sepia', 'sepia2', 'blur', 'milk','purple','yellow','monocrome'],
             uniScalingUnlockable: true,
             advancedEditing: true, 
-          },
-          imageEditorSettings : {
-            masks : ['/img/fpd_mask/overlay.png'],
           },  
         };
         
         
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-      
-      
+        setTimeout(function(){ customizePluginSettings(); }, 3000);
+        
       });
 </script>
 <!-- Google Webfonts 110 -->

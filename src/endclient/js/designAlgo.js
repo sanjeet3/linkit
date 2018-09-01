@@ -9,7 +9,23 @@ title != "Base"*/
   });
 });*/
 var yourDesigner;
+function customizePluginSettings(){
 
+  console.log(yourDesigner)
+  if(yourDesigner.products.length){
+    if(yourDesigner.products[0].products.length){
+      for(var i=0; i<yourDesigner.products[0].products[0].length; i ++){
+        console.log(yourDesigner.products[0].products[0][i].options);
+        yourDesigner.products[0].products[0][i].options.editorMode=false;
+        yourDesigner.products[0].products[0][i].options.editorBoxParameters=[]
+        yourDesigner.products[0].products[0][i].options.cornerIconColor="#fff"
+          
+      }
+    }
+    
+    
+  }
+}
 function getYourDisignDetails() {
   var product = yourDesigner.getProduct();
   // console.log(JSON.stringify(product));

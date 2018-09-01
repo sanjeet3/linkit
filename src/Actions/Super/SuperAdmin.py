@@ -15,6 +15,7 @@ from src.Database import ProductDesign
 from src.Database import ProductCategory
 from src.Database import ProductUOM
 from src.Database import Seller
+from src.Database import SellerLadger
 from src.Database import SellerProduct
 from src.Database import SellerOrder
 from src.Database import SellerOrderHistory
@@ -809,4 +810,17 @@ class UploadDesignImage(ActionSupport):
     e.bucket_path.append(bucket_path)
     e.put()
     return json_response(self.response, {}, SUCCESS, 'Success')
+
+class Ledger(ActionSupport):
+  def get(self):    
+    seller_list = Seller.get_list()  
+    now = datetime.datetime.now() 
+    now = get_dt_by_country(now, 'KE')
+    today = now.strftime('%d-%m-%Y')
+    today_date = now.date()  
     
+    d = {'seller_list': seller_list,
+         'dt': today,
+         'seller_ladger_list': SellerLadger.get_filtered_list(today_date, today_date)}
+    template = self.get_jinja2_env.get_template('super/ledger.html')    
+    self.response.out.write(template.render(d)) 

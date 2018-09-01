@@ -33,6 +33,12 @@ indexes:
 
 - kind: SellerOrder
   properties:
+  - name: client
+  - name: date
+    direction: desc
+
+- kind: SellerOrder
+  properties:
   - name: seller
   - name: date
     direction: desc
