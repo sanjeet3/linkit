@@ -76,8 +76,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
           <div class="fpd-product" title="Right" data-thumbnail="/img/Product.png">
           </div>
         </div>
-        
-        {%if dev%}
+         
         <div class="fpd-design">
           {%for cat in design_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -97,27 +96,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
           {%endfor%}
         </div>
         
-        {%else%}
-        <div class="fpd-design">
-          {%for cat in design_list%}
-          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-            {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
-            cat_list%}
-            <div class="fpd-category" title="{{sc.title}}">
-              {%for img in sc.bucket_key%} <img src="/Imgage?id={{img}}"
-                title="{{sc.title}}{{loop.index}}"
-                data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-              {%endfor%}
-            </div>
-            {%endfor%} {%endif%} {%for img in cat.bucket_key%} <img src="/Imgage?id={{img}}"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
-          </div>
-          {%endfor%}
-        </div>
         
-        {%endif%}
         
         <div class="fpd-frames">
           <div class="fpd-category" title="Fram1">
