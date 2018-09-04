@@ -1557,7 +1557,7 @@ var FancyProductDesignerOptions = function() {
 		*/
 		replaceInitialElements: false,
 		/**
-		* If true lazy load will be used for the images in the "Designs" module and "Change Product" module.
+		* If true lazy load will be used for the images in the "Designs", "backgrounds" module and "Change Product" module.
 		*
 		* @property lazyLoad
 		* @for Options.defaults
@@ -1698,7 +1698,7 @@ var FancyProductDesignerOptions = function() {
 		* @type {Array}
 		* @default ['products', 'images', 'text', 'designs']
 		*/
-		mainBarModules: ['products', 'images', 'text', 'designs', 'manage-layers'],
+		mainBarModules: ['products', 'images', 'text', 'designs', 'backgrounds', 'manage-layers'],
 		/**
 		* Set the initial active module.
 		*
@@ -2365,7 +2365,7 @@ var FancyProductDesignerOptions = function() {
 			cornerSize: 24,
 			fill: false,
 			lockUniScaling: true,
-			pattern: false,
+			pattern: true,
 			top: 0,
 			left: 0,
 			angle: 0,
@@ -2702,6 +2702,8 @@ var FancyProductDesignerOptions = function() {
 			* @default true
 			*/
 			designs: true,
+			backgrounds: true,
+			
 			/**
 			* If true the user can add an own image.
 			*
@@ -7069,6 +7071,7 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 		$uploadZoneAddsPanel.find('.fpd-add-image').toggleClass('fpd-hidden', !Boolean(customAdds.uploads));
 		$uploadZoneAddsPanel.find('.fpd-add-text').toggleClass('fpd-hidden', !Boolean(customAdds.texts));
 		$uploadZoneAddsPanel.find('.fpd-add-design').toggleClass('fpd-hidden', !Boolean(customAdds.designs));
+		$uploadZoneAddsPanel.find('.fpd-add-background').toggleClass('fpd-hidden', !Boolean(customAdds.backgrounds));
 
 		if(fpdInstance.currentElement.price) {
 			$uploadZoneAddsPanel.find('[data-module="text"] .fpd-btn > .fpd-price')
@@ -7124,9 +7127,12 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 			else if(module === 'text') {
 				moduleInstance = new TextModule(fpdInstance, $moduleClone);
 			}
-			else if(module === 'designs') {
-				moduleInstance = new DesignsModule(fpdInstance, $moduleClone);
-			}
+            else if(module === 'designs') {
+              moduleInstance = new DesignsModule(fpdInstance, $moduleClone);
+            }
+            else if(module === 'backgrounds') {
+              moduleInstance = new BackgroundsModule(fpdInstance, $moduleClone);
+            }
 			else if(module === 'images') {
 				moduleInstance = new ImagesModule(fpdInstance, $moduleClone);
 			}
@@ -7148,7 +7154,7 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 		$content.append($modules.children('[data-module="secondary"]').clone());
 
 		//add upload zone modules
-		var uploadZoneModules = ['images', 'text', 'designs'];
+		var uploadZoneModules = ['images', 'text', 'designs', 'backgrounds'];
 		for(var i=0; i < uploadZoneModules.length; ++i) {
 
 			var module = uploadZoneModules[i],
@@ -7163,6 +7169,8 @@ var FPDMainBar = function(fpdInstance, $mainBar, $modules, $draggableDialog) {
 			}
 			else if(module === 'designs') {
 				moduleInstance = new DesignsModule(fpdInstance, $moduleClone);
+			} else if(module === 'backgrounds') {
+			  moduleInstance = new BackgroundsModule(fpdInstance, $moduleClone);
 			}
 			else if(module === 'images') {
 				moduleInstance = new ImagesModule(fpdInstance, $moduleClone);
@@ -7190,6 +7198,7 @@ FPDMainBar.availableModules = [
 	'images',
 	'text',
 	'designs',
+	'backgrounds',
 	'manage-layers',
 	'text-layers'
 ];
@@ -8816,6 +8825,320 @@ var DesignsModule = function(fpdInstance, $module) {
 	};
 
 	_initialize();
+
+};
+
+
+var BackgroundsModule = function(fpdInstance, $module) {
+
+  var instance = this,
+      searchInLabel = '',
+      $bghead = $module.find('.fpd-head'),
+      $bgscrollArea = $module.find('.fpd-scroll-area'),
+      $backgroundGrid = $module.find('.fpd-grid'),
+      lazyClass = fpdInstance.mainOptions.lazyLoad ? 'fpd-hidden' : '',
+      currentCategories = null,
+      categoriesUsed = false,
+      categoryLevelIndexes = [];
+
+  var _initialize = function() {
+
+      searchInLabel = fpdInstance.getTranslation('modules', 'backgrounds_search_in').toUpperCase();
+
+      $bghead.find('.fpd-input-search input').keyup(function() {
+
+          if(this.value == '') { //no input, display all
+              $backgroundGrid.children('.fpd-item').css('display', 'block');
+          }
+          else {
+              //hide all items
+              $backgroundGrid.children('.fpd-item').css('display', 'none');
+
+              //only show by input value
+              var searchq = this.value.toLowerCase().trim().split(" ");
+
+              $backgroundGrid.children('.fpd-item').filter(function(){
+
+                  var fullsearchc = 0,
+                      self = this;
+
+                  $.each( searchq, function( index, value ){
+                      fullsearchc += $(self).is("[data-search*='"+value+"']");
+                  });
+
+                  if(fullsearchc==searchq.length) {return 1;}
+
+              }).css('display', 'block');
+          }
+
+      });
+
+      $bghead.find('.fpd-back').click(function() {
+
+          if($backgroundGrid.children('.fpd-category').length > 0) {
+              categoryLevelIndexes.pop(); //remove last level index
+          }
+
+          //loop through design categories to receive parent category
+          var displayCategories = fpdInstance.backgroundArr,
+              parentCategory;
+
+          categoryLevelIndexes.forEach(function(levelIndex) {
+
+              parentCategory = displayCategories[levelIndex];
+              displayCategories = parentCategory.category;
+
+          });
+
+          currentCategories = displayCategories;
+
+          if(displayCategories) { //display first level categories
+              _displayCategories(currentCategories, parentCategory);
+          }
+
+          //only toggle categories for top level
+          if(parentCategory === undefined) {
+              instance.toggleCategories();
+          }
+
+      });
+
+      //when adding a product after products are set with productsSetup()
+      fpdInstance.$container.on('backgroundSet', function(evt, designs) {
+
+          if(!$.isArray(designs) || designs.length === 0) {
+              return;
+          }
+
+          if(designs[0].hasOwnProperty('source')) { //check if first object is a design image
+
+              $module.addClass('fpd-single-cat');
+              _displayDesigns(designs);
+
+          }
+          else {
+
+              if(designs.length > 1) { //display categories
+                  categoriesUsed = true;
+                  instance.toggleCategories();
+              }
+              else if(designs.length === 1 && designs[0].designs) { //display designs in category, if only one category exists
+                  $module.addClass('fpd-single-cat');
+                  _displayDesigns(designs[0].designs);
+              }
+
+
+          }
+
+      });
+
+  };
+
+  var _displayCategories = function(categories, parentCategory) {
+
+      $bgscrollArea.find('.fpd-grid').empty();
+      $bghead.find('.fpd-input-search input').val('');
+      $module.removeClass('fpd-designs-active').addClass('fpd-categories-active');
+
+      categories.forEach(function(category, i) {
+          _addDesignCategory(category);
+      });
+
+      //set category title
+      if(parentCategory) {
+          $bghead.find('.fpd-input-search input').attr('placeholder', searchInLabel + ' ' + parentCategory.title.toUpperCase());
+      }
+
+      FPDUtil.refreshLazyLoad($backgroundGrid, false);
+      FPDUtil.createScrollbar($bgscrollArea);
+
+  };
+
+  var _addDesignCategory = function(category) {
+
+      var thumbnailHTML = category.thumbnail ? '<picture data-img="'+category.thumbnail+'"></picture>' : '',
+          itemClass = category.thumbnail ? lazyClass : lazyClass+' fpd-title-centered',
+          $lastItem = $('<div/>', {
+                          'class': 'fpd-category fpd-item '+lazyClass,
+                          'data-search': category.title.toLowerCase(),
+                          'html': thumbnailHTML+'<span>'+category.title+'</span>'
+                      }).appendTo($backgroundGrid);
+
+      $lastItem.click(function(evt) {
+
+          var $this = $(this),
+              index = $this.parent().children('.fpd-item').index($this),
+              selectedCategory = currentCategories[index];
+
+          if(selectedCategory.category) {
+
+              categoryLevelIndexes.push(index);
+              currentCategories = selectedCategory.category;
+              _displayCategories(currentCategories, selectedCategory);
+
+          }
+          else {
+
+              _displayDesigns(selectedCategory.designs, selectedCategory.parameters);
+          }
+
+          $module.addClass('fpd-head-visible');
+          $bghead.find('.fpd-input-search input').attr('placeholder', searchInLabel + ' ' +$this.children('span').text().toUpperCase());
+
+      });
+
+      if(lazyClass === '' && category.thumbnail) {
+          FPDUtil.loadGridImage($lastItem.children('picture'), category.thumbnail);
+      }
+
+  };
+
+  var _displayDesigns = function(designObjects, categoryParameters) {
+
+      $bgscrollArea.find('.fpd-grid').empty();
+      $bghead.find('.fpd-input-search input').val('');
+      $module.removeClass('fpd-categories-active').addClass('fpd-designs-active');
+
+      var categoryParameters = categoryParameters ? categoryParameters : {};
+
+      designObjects.forEach(function(designObject) {
+
+          designObject.parameters = $.extend({}, categoryParameters, designObject.parameters);
+          _addGridDesign(designObject);
+
+      });
+
+      FPDUtil.refreshLazyLoad($backgroundGrid, false);
+      FPDUtil.createScrollbar($bgscrollArea);
+      FPDUtil.updateTooltip();
+
+  };
+
+  //adds a new design to the designs grid
+  var _addGridDesign = function(design) {
+
+      design.thumbnail = design.thumbnail === undefined ? design.source : design.thumbnail;
+
+      var $lastItem = $('<div/>', {
+                          'class': 'fpd-item '+lazyClass,
+                          'data-title': design.title,
+                          'data-source': design.source,
+                          'data-search': design.title.toLowerCase(),
+                          'html': '<picture data-img="'+design.thumbnail+'"></picture>'
+                      }).appendTo($backgroundGrid);
+
+      $lastItem.click(function(evt) {
+
+          var $this = $(this),
+              designParams = $this.data('parameters'),
+              currentImageParameters = fpdInstance.currentViewInstance.options.imageParameters,
+              params = $.extend({}, currentImageParameters, designParams),
+              source = $this.data('source'),
+              scaleX = designParams.scaleX || 1,
+              scaleY = designParams.scaleY || 1;
+
+          var image = new Image();
+
+          image.onload = function() {
+
+              var imageW = this.width,
+                  imageH = this.height;
+
+              if(params.resizeToW || params.resizeToH) {
+
+                  scaleX = scaleY = FPDUtil.getScalingByDimesions(
+                      imageW,
+                      imageH,
+                      params.resizeToW,
+                      params.resizeToH,
+                      params.scaleMode
+                  );
+
+              }
+
+              if(fpdInstance.mainOptions.fitImagesInCanvas) {
+
+                  var iconTolerance = fpdInstance.mainOptions.elementParameters.cornerSize;
+
+                  if((imageW * scaleX) + iconTolerance > fpdInstance.currentViewInstance.options.stageWidth
+                      || (imageH * scaleY) + iconTolerance > fpdInstance.currentViewInstance.options.stageHeight) {
+
+                      scaleX = scaleY = FPDUtil.getScalingByDimesions(
+                          imageW,
+                          imageH,
+                          fpdInstance.currentViewInstance.options.stageWidth - iconTolerance,
+                          fpdInstance.currentViewInstance.options.stageHeight - iconTolerance
+                      );
+
+                  }
+              }
+
+              designParams.isCustom = true;
+              designParams.scaleX = scaleX;
+              designParams.scaleY = scaleY;
+
+              fpdInstance.addElement('image', source, $this.data('title'), designParams);
+
+          };
+          image.src = source;
+
+
+      }).data('parameters', design.parameters);
+
+      if(lazyClass === '') {
+          FPDUtil.loadGridImage($lastItem.children('picture'), design.thumbnail);
+      }
+
+  };
+
+  this.toggleCategories = function() {
+
+      if(!categoriesUsed) {
+          return;
+      }
+
+      //reset to default view(head hidden, top-level cats are displaying)
+      $module.removeClass('fpd-head-visible');
+
+      currentCategories = fpdInstance.backgroundArr;
+      _displayCategories(currentCategories);
+
+      var catTitles = []; //stores category titles that are only visible for UZ or view
+      //element (upload zone) has design categories
+      if(fpdInstance.currentViewInstance) {
+
+          var element = fpdInstance.currentViewInstance.currentElement;
+          if(element && element.uploadZone && element.designCategories) {
+              catTitles = fpdInstance.currentViewInstance.currentElement.designCategories;
+          }
+          else {
+              catTitles = fpdInstance.currentViewInstance.options.designCategories;
+          }
+
+      }
+
+      //check for particular design categories
+      var $allCats = $backgroundGrid.find('.fpd-category');
+      if(catTitles.length > 0) {
+
+          var $visibleCats = $allCats.hide().filter(function() {
+              var title = $(this).children('span').text();
+              return $.inArray(title, catTitles) > -1;
+          }).show();
+
+          if($visibleCats.length === 1) {
+              $visibleCats.first().click();
+              $module.removeClass('fpd-head-visible');
+          }
+
+      }
+      else {
+          $allCats.show();
+      }
+
+  };
+
+  _initialize();
 
 };
 
@@ -10556,6 +10879,7 @@ var FancyProductDesigner = function(elem, opts) {
 		$body = $('body'),
 		$products,
 		$designs,
+		$backgrounds,
 		$elem,
 		$mainBar,
 		$stageLoader,
@@ -10590,6 +10914,15 @@ var FancyProductDesigner = function(elem, opts) {
 	 */
 	this.designs = [];
 
+
+    /**
+     * Array containing all added backgrounds.
+     *
+     * @property backgrounds
+     * @type Array
+     */
+    this.backgroundArr = [];
+    
 	/**
 	 * The current selected product category index.
 	 *
@@ -10829,10 +11162,12 @@ var FancyProductDesigner = function(elem, opts) {
 
 		instance.$container = $elem.data('instance', instance);
 
-		//save products and designs HTML
+		//save products and designs and background HTML
 		$products = $elem.children('.fpd-category').length > 0 ? $elem.children('.fpd-category').remove() : $elem.children('.fpd-product').remove();
 		$designs = $elem.find('.fpd-design > .fpd-category').length > 0 ? $elem.find('.fpd-design > .fpd-category') : $elem.find('.fpd-design > img');
+		$backgrounds = $elem.find('.fpd-background > .fpd-category').length > 0 ? $elem.find('.fpd-background > .fpd-category') : $elem.find('.fpd-background > img');
 		$elem.children('.fpd-design').remove();
+		$elem.children('.fpd-background').remove();
 
 		//add product designer into modal
 		if(instance.mainOptions.modalMode) {
@@ -11472,7 +11807,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 		})
 		//thumbnail preview effect
-		.on('mouseover mouseout mousemove', '[data-module="designs"] .fpd-item, [data-module="images"] .fpd-item, [data-module="products"] .fpd-item', function(evt) {
+		.on('mouseover mouseout mousemove', '[data-module="designs"] .fpd-item, [data-module="images"] .fpd-item, [data-module="products"] .fpd-item, [data-module="backgrounds"] .fpd-item', function(evt) {
 
 			var $this = $(this),
 				price = null;
@@ -11602,6 +11937,7 @@ var FancyProductDesigner = function(elem, opts) {
 
 		_createProductJSONFromHTML($products);
 		_createDesignJSONFromHTML($designs);
+		_createBackgroundJSONFromHTML($backgrounds);
 
 		//view lock handler
 		instance.$mainWrapper.on('click', '.fpd-modal-lock > .fpd-toggle-lock', function() {
@@ -11826,7 +12162,93 @@ var FancyProductDesigner = function(elem, opts) {
 		}
 
 	};
+    
+	//creates all backgrounds from HTML markup
+	var _createBackgroundJSONFromHTML = function($backgrounds) {
 
+	        var _loopBGCategory = function($backgroundCategories, pushToCat) {
+
+	            $backgroundCategories.each(function(index, cat) {
+
+	                var $bgcategory = $(cat),
+	                    bgcategoryObj = {title: $bgcategory.attr('title'), thumbnail: $bgcategory.data('thumbnail')};
+
+	                if($bgcategory.data('parameters')) {
+	                    bgcategoryObj.parameters = $bgcategory.data('parameters');
+	                }
+
+	                pushToCat ? pushToCat.push(bgcategoryObj) : instance.backgroundArr.push(bgcategoryObj);
+
+	                if($bgcategory.children('.fpd-category').length > 0) {
+
+	                    bgcategoryObj.category = [];
+	                    _loopBGCategory($bgcategory.children('.fpd-category'), bgcategoryObj.category);
+
+	                }
+	                else {
+
+	                    var bgImages = [];
+
+	                    $bgcategory.children('img').each(function(designIndex, img) {
+
+	                        var $img = $(img),
+	                            bgObj = {
+	                                source: $img.data('src') === undefined ? $img.attr('src') : $img.data('src'),
+	                                title: $img.attr('title'),
+	                                parameters: $img.data('parameters'),
+	                                thumbnail: $img.data('thumbnail')
+	                            };
+
+	                        bgImages.push(bgObj);
+
+	                    });
+
+	                    bgcategoryObj.designs = bgImages;
+
+	                }
+
+	            });
+
+	        };
+
+	        if($backgrounds.length > 0) {
+
+	            //check if categories are used or first category also includes sub-cats
+	            if($backgrounds.filter('.fpd-category').length > 1 || $backgrounds.filter('.fpd-category:first').children('.fpd-category').length > 0) {
+
+	                _loopBGCategory($backgrounds.filter('.fpd-category'));
+
+	            }
+	            else { //display single category or backgrounds without categories
+
+	                var $backgroundImages = $backgrounds;
+	                if($backgroundImages.hasClass('fpd-category')) {
+	                    $backgroundImages = $backgroundImages.children('img');
+	                }
+
+	                $backgroundImages.each(function(designIndex, img) {
+
+	                    var $img = $(img),
+	                        bgObj = {
+	                            source: $img.data('src') === undefined ? $img.attr('src') : $img.data('src'),
+	                            title: $img.attr('title'),
+	                            parameters: $img.data('parameters'),
+	                            thumbnail: $img.data('thumbnail')
+	                        };
+
+	                    instance.backgroundArr.push(bgObj);
+
+	                });
+
+	            }
+
+	            $backgrounds.remove();
+
+	            instance.setupBackgroundArr(instance.backgroundArr);
+	        }
+
+	 };
+	
 	//get category index by category name
 	var _getCategoryIndexInProducts = function(catName) {
 
@@ -12528,6 +12950,7 @@ var FancyProductDesigner = function(elem, opts) {
 				$nav = $mainBar.find('.fpd-navigation');
 
 			$nav.children('[data-module="designs"]').toggleClass('fpd-disabled', !viewOpts.customAdds.designs);
+			$nav.children('[data-module="backgrounds"]').toggleClass('fpd-disabled', !viewOpts.customAdds.backgrounds);
 			$nav.children('[data-module="images"]').toggleClass('fpd-disabled', !viewOpts.customAdds.uploads);
 			$nav.children('[data-module="text"]').toggleClass('fpd-disabled', !viewOpts.customAdds.texts);
 
@@ -12560,7 +12983,11 @@ var FancyProductDesigner = function(elem, opts) {
 		if(instance.moduleInstance_designs) {
 			instance.moduleInstance_designs.toggleCategories();
 		}
-
+         
+		if(instance.moduleInstance_backgrounds) {
+          instance.moduleInstance_backgrounds.toggleCategories();
+        }
+		
 		//toggle view locker
 		instance.$mainWrapper.children('.fpd-modal-lock')
 		.removeClass('fpd-animated')
@@ -13839,6 +14266,33 @@ var FancyProductDesigner = function(elem, opts) {
 
 	};
 
+	/**
+     * Set up the backgrounds with a JSON.
+     *
+     * @method setupBackgroundArr
+     * @param {Array} backgrounds An array containg the categories with backgrounds.
+     * @example [{
+     "title": "Category Title", "thumbnail": "Thumbnail of Category", "designs": [ARRAY OF ELEMENTS]},
+     {"title": "Category Title", "thumbnail": "Thumbnail of Category", "category": [
+            {"title": "Category Child", "thumbnail": "Thumbnail of Category", "designs": [ARRAY OF ELEMENTS]}
+     ]}
+]
+     */
+    this.setupBackgroundArr = function(bgArr) {
+
+        instance.backgroundArr = bgArr;
+
+        /**
+         * Gets fired as soon as backgrounds are set either from the HTML or added as JSON.
+         *
+         * @event FancyProductDesigner#backgroundSet
+         * @param {Event} event
+         * @param {Array} backgrounds - An array containing the backgroundArr.
+         */
+        $elem.trigger('backgroundSet', [instance.backgroundArr]);
+
+    };
+	
 	/**
 	 * Toggle the responsive behavior.
 	 *

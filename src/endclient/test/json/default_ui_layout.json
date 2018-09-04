@@ -9,7 +9,7 @@
 		"boundingBoxColor": "#005ede",
 		"outOfBoundaryColor": "#990000",
 		"cornerIconColor": "#000000",
-		"mainBarModules": ["products", "images", "text", "designs"],
+		"mainBarModules": ["products", "images", "text", "designs","backgrouds"],
 		"actions":  {
 			"top": ["download","print", "snap", "preview-lightbox"],
 			"right": ["magnify-glass", "zoom", "reset-product", "qr-code"],
