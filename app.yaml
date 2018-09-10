@@ -38,7 +38,10 @@ handlers:
   
 - url: /test
   static_dir: src/endclient/test  
-
+  
+- url: /photobook
+  static_dir: src/endclient/photobook  
+  
 - url: /wp-content    
   static_dir: src/wp-content
 

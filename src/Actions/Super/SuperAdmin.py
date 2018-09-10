@@ -4,6 +4,8 @@ Created on 04-Jul-2018
 @author: Sanjay Saini '''
 
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
+from src.api.baseapi import get_64bit_binary_string_from_int
+from src.api.baseapi import get_integer_from_binary_string
 from src.api.bucketHandler import upload_image_to_bucket, delete_bucket_file
 from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
@@ -24,6 +26,7 @@ from src.Database import Themes
 from src.Database import EventMaster
 from src.Database import DesignCategory
 from src.Database import DesignSubCategory
+from src.Database import UserModel, RoleModel, ROLE_LIST
 from src.lib.SABasehandler import ActionSupport
  
 import logging, datetime
@@ -824,3 +827,71 @@ class Ledger(ActionSupport):
          'seller_ladger_list': SellerLadger.get_filtered_list(today_date, today_date)}
     template = self.get_jinja2_env.get_template('super/ledger.html')    
     self.response.out.write(template.render(d)) 
+
+class UserAccount(ActionSupport):
+  def get(self):  
+    user_list = UserModel.get_list()  
+    d={'user_list': user_list,
+       'ROLE_LIST': ROLE_LIST}      
+    template = self.get_jinja2_env.get_template('super/user.html')    
+    self.response.out.write(template.render(d)) 
+  
+  def post(self): 
+    user_name = self.request.get('user_name')  
+    email = self.request.get('email').lower()  
+    role = self.request.get('role').upper()
+      
+    if not email or email.__len__()<5 or '@' not in email:
+      return json_response(self.response, {}, ERROR, 'Email invalid')
+    
+    if UserModel.get_by_email(email):
+      return json_response(self.response, {}, ERROR, 'Email exist')
+    e = UserModel()
+    e.email = email
+    e.name = user_name
+    e.role = role
+    e.put()
+    data_dict = {'user_name': user_name,
+                 'email': email,
+                 'role': role}
+    
+    return json_response(self.response, data_dict, SUCCESS, 'User account created')
+    
+class UpdateRoleSettings(ActionSupport): 
+  def post(self):     
+    role = self.request.get('role').upper() 
+    if not role or role not in ['ACCOUNT', 'DESIGN', 'PRODUCTION', 'STORE']:
+      return json_response(self.response, {}, ERROR, 'Role invalid')
+    e = RoleModel()
+    e = RoleModel.get_by_role(role)
+    e.acl = self.prepare_acl()
+    e.put()
+    
+    return json_response(self.response, {}, SUCCESS, 'Role setting updated')   
+
+  def prepare_acl(self):
+    
+    binary_string = ''   
+    binary_string += '1' if self.request.get('events') else '0'
+    binary_string += '1' if self.request.get('products') else '0'
+    binary_string += '1' if self.request.get('custom_design') else '0'
+    binary_string += '1' if self.request.get('seller') else '0'
+    binary_string += '1' if self.request.get('ledger') else '0'
+    binary_string += '1' if self.request.get('order') else '0'
+    binary_string += '1' if self.request.get('order_stage') else '0'
+    binary_string += '1' if self.request.get('themes') else '0' 
+    
+    binary_string = binary_string[::-1] #reverse binary string
+    acl = get_integer_from_binary_string(binary_string)
+    return acl  
+
+class GetRoleSettings(ActionSupport): 
+  def get(self):
+    role = self.request.get('role').upper()
+    e = RoleModel.get_by_role(role)
+    acl = get_64bit_binary_string_from_int(e.acl)
+    data_dict = {'acl': acl}
+    return json_response(self.response, data_dict, SUCCESS, 'Access right loaded')
+    
+    
+      

@@ -449,3 +449,40 @@ class DesignSubCategory(EndpointsModel):
   def get_list(cls):  
     return cls.query().order(cls.title)  
   
+ROLE_LIST = ['ADMIN', 'ACCOUNT', 'DESIGN', 'PRODUCTION', 'STORE']  
+class UserModel(EndpointsModel):
+  created_on = ndb.DateTimeProperty(auto_now_add=True)    
+  acl = ndb.IntegerProperty(default=0)   
+  name = ndb.StringProperty(default='')   
+  email = ndb.StringProperty(required=True)   
+  role = ndb.StringProperty(choices=ROLE_LIST)   
+  active = ndb.BooleanProperty(default=True)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.name).fetch()  
+
+  @classmethod
+  def get_by_role(cls, role):  
+    return cls.query(cls.role==role).fetch()  
+
+  @classmethod
+  def get_by_email(cls, email):  
+    return cls.query(cls.email==email).get()
+  @classmethod
+  def get_active_by_email(cls, email):  
+    return cls.query(cls.email==email, cls.active==True).get()
+
+class RoleModel(EndpointsModel):
+  created_on = ndb.DateTimeProperty(auto_now_add=True)    
+  acl = ndb.IntegerProperty(default=0) 
+  role = ndb.StringProperty(choices=['ACCOUNT', 'DESIGN', 'PRODUCTION', 'STORE'] ) 
+  
+  @classmethod
+  def get_by_role(cls, role):
+    r = cls.query(cls.role==role).get()
+    if not r:
+      r = RoleModel(role=role).put().get()        
+    return r 
+
+  

@@ -422,6 +422,25 @@ class TestFPD(ActionSupport):
                                              'design_list': design_list,
                                              'sub_cat_dict': sub_cat_dict}))  
     
+    
+class PhotoBookDesign(ActionSupport):
+  def get(self):  
+    logging.info(self.DEV)
+    design_list  = DesignCategory.get_list()
+    sub_cat_dict = {}
+    e=DesignSubCategory()  
+    for e in DesignSubCategory.get_list():
+      if e.category in sub_cat_dict:
+        sub_cat_dict[e.category].append(e)
+      else:
+        sub_cat_dict[e.category]=[e]    
+    template_path = 'endclient/photobook.html'
+    template = self.get_jinja2_env.get_template(template_path)          
+    self.response.out.write(template.render({'dev': self.DEV,
+                                             'design_list': design_list,
+                                             'sub_cat_dict': sub_cat_dict}))  
+        
+    
 class CreateDesign(ActionSupport):
   def get(self): 
     template_path = 'endclient/customDesign.html' #'endclient/fancy_product_designer.html'

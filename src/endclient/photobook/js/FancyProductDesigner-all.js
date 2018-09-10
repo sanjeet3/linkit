@@ -1666,7 +1666,7 @@ var FancyProductDesignerOptions = function() {
 		* @type {String | Object | Boolean}
 		* @default 'lang/default.json'
 		*/
-		langJSON: 'lang/default.json',
+		langJSON: 'photobook/default.json',
 		/**
 		* The color palette when the color wheel is displayed.
 		*

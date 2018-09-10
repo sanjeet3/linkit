@@ -1053,3 +1053,71 @@ function showTheme(title, key){
 function makeThemeLive(){
   getRequest('theme_live_form','/superadmin/SetupThemesLive', 'liveTheme')
 }
+
+function backUserList(){
+  $('#list-dom, #add_btn, #role_btn').show();
+  $('#bck-btn, #create-user-account-dom, #update-role-rights-dom').hide();
+  
+}
+
+function gotoRoles(){
+  $('#bck-btn, #update-role-rights-dom').show();
+  $('#role_btn, #add_btn, #list-dom').hide();
+  $('#update-role-rights_form')[0].reset();
+}
+
+function gotoUserCreate(){
+  $('#bck-btn, #create-user-account-dom').show();
+  $('#role_btn, #add_btn, #list-dom').hide();
+  $('#create_user_account_form')[0].reset();
+}
+
+function createUserAccount(){
+
+  var title = $('#user_name').val();
+  var email = $('#email').val();
+  if(!title){
+    showMSG('Name', 'warning'); return;
+  }
+   
+  if(!email){
+    showMSG('Email', 'warning'); return;
+  }
+  $('#save_spin').show();
+  postRequest('create_user_account_form', '/superadmin/UserAccount', 'createUserAccountCallBack');  
+  
+};
+
+function createUserAccountCallBack(r){
+  $('#save_spin').hide();
+  
+};
+
+function updateRoleAccess(){
+  r = $('#role_select').val();
+  if(!r){
+    showMSG('Select Role', 'warning'); return;
+  }
+  
+  postRequest('update-role-rights_form', '/superadmin/UpdateRoleSettings?role='+r, null);  
+}
+
+function getRoleSettings(elm){ 
+  $('#update-role-rights_form')[0].reset();
+  if(!elm.value){ return;} 
+  openDialog('#rolesettings');
+  getRequest('', '/superadmin/GetRoleSettings?role='+elm.value, 'getRoleSettingsCallBack');
+}
+function getRoleSettingsCallBack(r){
+  console.log(r.data.acl)
+  l = r.data.acl.length-1; 
+  closeDialog('#rolesettings');
+  $('#selected input:checkbox').each(function(i) {
+    if("1"==r.data.acl[l-i]){
+      $(this).attr('checked', true);
+    } else {
+      $(this).attr('checked', false);
+    }  
+  });
+  
+}

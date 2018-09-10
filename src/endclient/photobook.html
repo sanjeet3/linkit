@@ -38,16 +38,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet'
   type='text/css'>
 <!--//fonts-->
-<link rel="stylesheet" href="/light/css/etalage.css" type="text/css" media="all" />
-<!-- <script src="/light/js/jquery.min.js"></script> -->
-<!--script-->
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <!-- Google Webfonts -->
 <link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
 <!-- The CSS for the plugin itself - required -->
-<link rel="stylesheet" type="text/css" href="/test/css/FancyProductDesigner-all.min.css" />
+<link rel="stylesheet" type="text/css" href="/photobook/css/FancyProductDesigner-all.min.css" />
 <!-- Optional - only when you would like to use custom fonts - optional -->
-<link rel="stylesheet" type="text/css" href="/test/css/jquery.fancyProductDesigner-fonts.css" />
+<link rel="stylesheet" type="text/css" href="/photobook/css/jquery.fancyProductDesigner-fonts.css" />
 <!-- Google Webfonts 110 -->
 <link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
 </head>
@@ -66,13 +63,34 @@ License URL: http://creativecommons.org/licenses/by/3.0/
   </div>
   <div class="">
     <div id="main-container">
-      <h3 id="clothing" style="float: left;">Design T-Shirt Landscape A4</h3>
+      <h3 id="clothing" style="float: left;">Design Photobook</h3>
       <div id="product-designer" style="clear: both;"
-        class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-        <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
+        class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-outside">
+        <div class="fpd-product" title="Front Cover" data-thumbnail="/photobook/pbfront.jpg">
           <img src="/img/TshirtA4Landscape.png" title="Base"
             data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 20}' />
-        </div>
+            
+          <div class="fpd-product" title="First Page" data-thumbnail="/photobook/pbPage.jpg">
+            <img src="/img/TshirtA4Landscape.png" title="Base"
+               data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 20}' />
+          </div>
+          <div class="fpd-product" title="Second Page" data-thumbnail="/photobook/pbPage.jpg">
+            <img src="/img/TshirtA4Landscape.png" title="Base"
+               data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 20}' />
+          </div> 
+          <div class="fpd-product" title="Third Page" data-thumbnail="/photobook/pbPage.jpg">
+            <img src="/img/TshirtA4Landscape.png" title="Base"
+               data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 20}' />
+          </div> 
+          <div class="fpd-product" title="Ending Page" data-thumbnail="/photobook/lastpage.jfif">
+            <img src="/img/TshirtA4Landscape.png" title="Base"
+               data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 20}' />
+          </div> 
+          <div class="fpd-product" title="Back Cover" data-thumbnail="/photobook/pbBack.jpg">
+            <img src="/img/TshirtA4Landscape.png" title="Base"
+               data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 20}' />
+          </div> 
+        </div>  
         <div class="fpd-design">
           {%for cat in design_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -122,15 +140,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <script src="/js/jquery-ui.min.js" type="text/javascript"></script>
 <script src="/super/assets/js/bootstrap-notify.js"></script>
 <script type="text/javascript" src="super/assets/js/algo.js"></script>
-<script src="/light/js/main.js"></script>
-<script src="/light/js/jquery.etalage.min.js"></script>
-<script src="/js/designAlgo.js" type="text/javascript"></script>
 <script src="/js/api.js" type="text/javascript"></script>
 <!-- The plugin itself - required -->
 <!-- <script src="/js/plugins.min.js" type="text/javascript"></script>  -->
 <!-- HTML5 canvas library - required -->
-<script src="/test/js/fabric.min.js" type="text/javascript"></script>
-<script src="/test/js/FancyProductDesigner-all.js" type="text/javascript"></script>
+<script src="/photobook/js/fabric.min.js" type="text/javascript"></script>
+<script src="/photobook/js/FancyProductDesigner-all.js" type="text/javascript"></script>
 <script type="text/javascript">
   jQuery(document).ready(
       function() {
@@ -141,7 +156,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
           editorMode : true,
           fitImagesInCanvas: true,
           toolbarPlacement : "smart",
-          mainBarModules : [ 'images', 'text', 'designs', 'backgrounds',
+          mainBarModules : ['images', 'text', 'designs', 'backgrounds',
               'manage-layers', 'text-layers' ],
           actions : {
             'top' : [ 'download', 'print', 'preview-lightbox' ],

@@ -1,0 +1,174 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-user"></i> <a href="javascript:">User Account</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="gotoUserCreate()">
+      <i class="ace-icon fa fa-user-plus"></i> User
+    </button>
+    <button class="btn btn-success btn-minier" id="role_btn" onclick="gotoRoles()">
+      <i class="ace-icon fa fa-shield"></i> Roles
+    </button>
+    <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
+      onclick="backUserList()">
+      <i class="ace-icon fa fa-arrow-left"></i> Back
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <td>Email</td>
+            <td>Name</td>
+            <td>Role</td>
+            <td>Active</td>
+            <td>Edit</td>
+          </tr>
+        </thead>
+        <tbody id="user_table_body">
+          {%for e in user_list%}
+          <tr id="{{e.entityKey}}">
+            <td>{{e.email}}</td>
+            <td>{{e.name}}</td>
+            <td>{{e.role}}</td>
+            <td>{{e.active}}</td>
+            <td><div class="widget-toolbar no-border">
+                <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="ace-icon fa fa-cog"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                  <li><a href="javascript:userEdit('{{e.entityKey}}')">Edit Role</a></li>
+                </ul>
+              </div></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="create-user-account-dom" style="display: none;">
+    <div class="col-xs-12">
+      <h5>
+        <i class="ace-icon fa fa-user-plus"></i> Create new user account
+      </h5>
+      <form class="form-horizontal" role="form" id="create_user_account_form">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="user_name"> Name </label>
+          <div class="col-sm-4">
+            <input type="text" name="user_name" id="user_name" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right" for="email"> Email </label>
+          <div class="col-sm-4">
+            <input type="text" name="email" id="email" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">Role </label>
+          <div class="col-sm-4">
+            <select name="role" id="role" class="form-control"> {%for r in ROLE_LIST %}
+              <option value="{{r}}">{{r}}</option> {%endfor%}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="createUserAccount()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Submit <i id="save_spin"
+                class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn btn-minier" type="reset">
+              <i class="ace-icon fa fa-undo bigger-110"></i> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-10" id="update-role-rights-dom" style="display: none;">
+    <div class="col-xs-12">
+      <h5>
+        <i class="ace-icon fa fa-shield"></i>Update Role Access Rights
+      </h5>
+     <form class="form-horizontal">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right">Role </label>
+          <div class="col-sm-4">
+            <select name="role" id="role_select" class="form-control" onchange="getRoleSettings(this)">
+              <option value="">Select</option> {%for r in ['ACCOUNT', 'DESIGN', 'PRODUCTION',
+              'STORE'] %}
+              <option value="{{r}}">{{r}}</option> {%endfor%}
+            </select>
+          </div>
+        </div>
+      </form>  
+      <form class="form-horizontal" role="form" id="update-role-rights_form">
+        <label class="control-label bolder blue">Access Rights</label>
+        <div id="selected">
+          <div class="form-group">
+            <label> <input type="checkbox" id="events"
+              name="events" /> <span class="lbl"> Events</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="products"
+              name="products" /> <span class="lbl"> Products</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="custom_design"
+              name="custom_design" /> <span class="lbl"> Custom Design</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="seller"
+              name="seller" /> <span class="lbl"> Seller</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="ledger"
+              name="ledger" /> <span class="lbl"> Ledger</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="order"
+              name="order" /> <span class="lbl"> Order</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="order_stage"
+              name="order_stage" /> <span class="lbl"> Order Stage</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label> <input type="checkbox" id="themes"
+              name="themes" /> <span class="lbl"> Themes</span>
+            </label>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-1 col-md-9">
+              <button class="btn btn-info btn-minier" type="button" onclick="updateRoleAccess()">
+                <i class="ace-icon fa fa-check bigger-110"></i> Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div id="rolesettings" class="dialog-box">
+  <div class="dailog-header">
+    <span>Role Setting</span>
+  </div>
+  <div class="dialog-content text-center">Please Wait loading settings...</div>
+</div>

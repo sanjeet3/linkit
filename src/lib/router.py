@@ -21,6 +21,7 @@ __route_list = [
     RedirectRoute(r'/GetProductDetails', Home.GetProductDetails, name='Get product details page', strict_slash=True),
     RedirectRoute(r'/SearchEvent', Home.GetEventView, name='GetEventView', strict_slash=True),
     RedirectRoute(r'/FPD', Home.TestFPD, name='Test FPD', strict_slash=True),
+    RedirectRoute(r'/PhotoBookDesign', Home.PhotoBookDesign, name='Test FPD', strict_slash=True),
     RedirectRoute(r'/OrderStageFirst', Home.OrderStageFirst, name='Order stage 1', strict_slash=True),
     RedirectRoute(r'/PlaceOrder', Home.PlaceOrder, name='Place Order', strict_slash=True),
     RedirectRoute(r'/GetMyOrders', Home.GetMyOrders, name='Place Order', strict_slash=True),
@@ -30,6 +31,9 @@ __route_list = [
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
     RedirectRoute(r'/superadmin/test', SuperAdmin.Test, name='SuperAdmin Test', strict_slash=True),
+    RedirectRoute(r'/superadmin/UserAccount', SuperAdmin.UserAccount, name='SuperAdmin UserAccount', strict_slash=True),
+    RedirectRoute(r'/superadmin/UpdateRoleSettings', SuperAdmin.UpdateRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetRoleSettings', SuperAdmin.GetRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
    
     
     #Super Admin Seller
