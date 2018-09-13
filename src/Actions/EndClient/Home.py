@@ -214,6 +214,7 @@ class ProductView(ActionSupport):
     evt_key=self.request.get('evt')
     selected_cat = None
     product_list = []
+    product_cat_list = ProductCategory.get_list()
     
     if evt_key:
       product_list=Product.get_product_by_event([ndb.Key(urlsafe=evt_key)])  
@@ -234,6 +235,7 @@ class ProductView(ActionSupport):
     data = {'selected_cat': selected_cat,
             'category_list': category_list,
             'product_list': product_list,
+            'product_cat_list': product_cat_list,
             'user_obj': self.client}
     
     template = self.get_jinja2_env.get_template('endclient/product_view.html')    
@@ -501,6 +503,16 @@ class GetMyOrders(ActionSupport):
     data = {'order_list': order_list}
     template = self.get_jinja2_env.get_template('endclient/order-list.html') 
     self.response.out.write(template.render(data))
+
+class MyOrders(ActionSupport):
+  def get(self):
+    order_list=SellerOrder.get_client_filetered(self.client.key)
+    product_cat_list = ProductCategory.get_list()
+    data = {'order_list': order_list,
+            'product_cat_list': product_cat_list,
+            'user_obj': self.client}
+    template = self.get_jinja2_env.get_template('endclient/orders.html') 
+    self.response.out.write(template.render(data))
     
 class GetMyOrderDetails(ActionSupport):
   def get(self):
@@ -512,3 +524,17 @@ class GetMyOrderDetails(ActionSupport):
             'history': history}
     template = self.get_jinja2_env.get_template('endclient/order_details.html') 
     self.response.out.write(template.render(data))
+    
+class AboutUs(ActionSupport):
+  def get(self):
+    product_cat_list = ProductCategory.get_list()
+    template = self.get_jinja2_env.get_template('endclient/aboutus.html') 
+    self.response.out.write(template.render({'product_cat_list': product_cat_list}))
+
+class ContactUs(ActionSupport):
+  def get(self):
+    product_cat_list = ProductCategory.get_list()
+    template = self.get_jinja2_env.get_template('endclient/contactus.html') 
+    self.response.out.write(template.render({'product_cat_list': product_cat_list}))
+      
+          

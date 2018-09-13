@@ -1,6 +1,7 @@
 <div class="breadcrumbs ace-save-state" id="breadcrumbs">
   <ul class="breadcrumb">
-    <li><i class="ace-icon fa fa-map-signs"></i> <a href="javascript:">Order Stage Settings</a></li>
+    <li><i class="ace-icon fa fa-map-signs"></i> <a href="javascript:">Order Status
+        Settings</a></li>
   </ul>
   <!-- /.breadcrumb -->
   <div class="nav-search" id="nav-search"></div>
@@ -17,16 +18,21 @@
         </thead>
         <tbody id="order_stage_tbody">
           {%for d in stage_list%}
-          <tr>
+          <tr id="{{loop.index-1}}">
             <td><input type="number" min="1" name="index" value="{{loop.index}}"></td>
-            <td>{{d}}</td>
+            <td>{{d}}
+              <button class="btn btn-xs bigger btn-yellow pull-right" type="button"
+                onclick="gotoRenameOrderSatus({{loop.index-1}}, '{{d}}');">
+                <i class="ace-icon fa fa-pencil-square-o"></i>
+              </button>
+            </td>
           </tr>
           {%endfor%}
         </tbody>
-        
-        <tfoot style="{%if not stage_list%}display: none;{%endif%}" id="tbla_footer">
+        <tfoot style="" id="tbla_footer">
           <tr>
-            <td colspan="2"><button type="button" class="btn btn-danger btn-minier" onclick="updateOrderStage()">
+            <td colspan="2"><button type="button" class="btn btn-danger btn-minier"
+                onclick="updateOrderStage()">
                 Update <i id="upload_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
               </button></td>
           </tr>
@@ -57,5 +63,33 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+<div id="editOrderStatusDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Rename Order Status</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#editOrderStatusDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="update_order_stage_form">
+      <input type="hidden" name="index" value="" id="order_index">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right"> Status </label>
+        <div class="col-sm-9">
+          <input type="text" name="order_status" id="order_status" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="renameOrderStatus()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Update <i id="add_new_uom_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button"
+            onclick="closeDialog('#editOrderStatusDailog')">Close</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

@@ -1,0 +1,40 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><button class="btn btn-default btn-minier" onclick="backToDesignerSetup()">
+        <i class="ace-icon fa fa-times"></i> Close
+      </button></li>
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Backgrounds</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+</div>
+<div class="page-content">
+  <div class="col-xs-12">
+    <h4>Text Patterns</h4>
+    <form class="form-horizontal" role="form" id="text_pattern_form">
+      <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-4">
+          <input type="file" accept=".png" class="form-control input-custom"
+            id="imgage_file" name="pic">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-1 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="UploadPattern()">
+            <i class="ace-icon fa fa-upload bigger-110"></i> Upload <i id="save_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-bordered table-hover">
+      <tbody>
+      <tr id="pattern_row">
+      {%for img in img_url_list%}
+        <td><img alt="" src="{{img}}" height="60px" width="60px"></td>
+      {%endfor%}
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

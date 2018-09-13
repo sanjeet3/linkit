@@ -5,16 +5,20 @@ Created on 06-Apr-2017
 '''
 from src.Actions.EndClient import Home
 from src.Actions.Super import SuperAdmin
+from src.Actions.Super import DesignerSetup
 from src.Actions.franchisor import franchisor
 
 from webapp2_extras.routes import RedirectRoute
 
 __route_list = [
     RedirectRoute(r'/', Home.Home, name='Home page', strict_slash=True),
+    RedirectRoute(r'/AboutUs', Home.AboutUs, name='AboutUs page', strict_slash=True),
+    RedirectRoute(r'/ContactUs', Home.ContactUs, name='ContactUs page', strict_slash=True),
     RedirectRoute(r'/ActivateAccount', Home.ActivateAccount, name='ActivateAccount page', strict_slash=True),
     RedirectRoute(r'/Register', Home.Register, name='Register page', strict_slash=True),
     RedirectRoute(r'/Login', Home.Login, name='Login page', strict_slash=True),
     RedirectRoute(r'/Logout', Home.Logout, name='Logout page', strict_slash=True),
+    RedirectRoute(r'/Orders', Home.MyOrders, name='My orders page', strict_slash=True),
     RedirectRoute(r'/CreateDesign', Home.CreateDesign, name='Create Product Design page', strict_slash=True),
     RedirectRoute(r'/GetProductDesignor', Home.GetProductDesignor, name='Get Product Designor page', strict_slash=True),
     RedirectRoute(r'/Product', Home.ProductView, name='View product page', strict_slash=True),
@@ -34,7 +38,15 @@ __route_list = [
     RedirectRoute(r'/superadmin/UserAccount', SuperAdmin.UserAccount, name='SuperAdmin UserAccount', strict_slash=True),
     RedirectRoute(r'/superadmin/UpdateRoleSettings', SuperAdmin.UpdateRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
     RedirectRoute(r'/superadmin/GetRoleSettings', SuperAdmin.GetRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
-   
+    
+    #Designer Setup
+    RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/Backgrounds', DesignerSetup.Backgrounds, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/BGCategorySave', DesignerSetup.BGCategorySave, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/BGSubCategorySave', DesignerSetup.BGSubCategorySave, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadBGImage', DesignerSetup.UploadBGImage, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadPattern', DesignerSetup.UploadTextPattern, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadMasks', DesignerSetup.UploadMasks, name='SuperAdmin', strict_slash=True),
     
     #Super Admin Seller
     RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),
@@ -65,6 +77,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/EditOrderStage', SuperAdmin.EditOrderStage, name='SuperAdmin EditOrderStage', strict_slash=True),
     RedirectRoute(r'/superadmin/OrderStage', SuperAdmin.OrderStageView, name='SuperAdmin Order Stage view', strict_slash=True),
     RedirectRoute(r'/superadmin/OrderStageUpdate', SuperAdmin.OrderStageUpdated, name='SuperAdmin Order Stage view', strict_slash=True),
+    RedirectRoute(r'/superadmin/RenameOrderStatus', SuperAdmin.RenameOrderStatus, name='SuperAdmin Order Stage view', strict_slash=True),
     RedirectRoute(r'/superadmin/OrderSearch', SuperAdmin.OrderSearch, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/AssignProductToSeller', SuperAdmin.AssignProductToSeller, name='SuperAdmin AssignProductToSeller', strict_slash=True),
     RedirectRoute(r'/superadmin/GetSellerProduct', SuperAdmin.GetSellerProduct, name='SuperAdmin get Product of Seller', strict_slash=True),

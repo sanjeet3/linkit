@@ -983,7 +983,7 @@ function saveSubCategoryCB(r, fid){
 
 function UploadDesignImage() { 
   fileObj = $('#imgage_file')[0];
-  if (fileObj.files && fileObj.files[0]) { 
+  if (fileObj.files && fileObj.files[0] && $('#imgage_title').val()) { 
     postFormWithFile("upload_form", '/superadmin/UploadDesignImage', 'TC');
   }
 };
@@ -1121,3 +1121,162 @@ function getRoleSettingsCallBack(r){
   });
   
 }
+
+function gotoRenameOrderSatus(index, status){
+  openDialog('#editOrderStatusDailog');
+  $('#order_index').val(index);
+  $('#order_status').val(status);
+}
+
+function renameOrderStatus(){
+  if(!$('#order_status').val()){ return;}
+  postRequest('update_order_stage_form', '/superadmin/RenameOrderStatus', 'renameOrderStatusCB');
+}
+
+function renameOrderStatusCB(r){
+  
+  if(r.status=='SUCCESS'){
+    var tr = ['<td>'];
+    tr.push('<input type="number" min="1" name="index" value="');
+    tr.push(r.data.index+1);
+    tr.push('"></td><td>');
+    tr.push(r.data.order_status);
+    tr.push(' <button class="btn btn-xs bigger btn-yellow pull-right" type="button" onclick="gotoRenameOrderSatus(');
+    tr.push(r.data.index);
+    tr.push(',');
+    tr.push("'");
+    tr.push(r.data.order_status);
+    tr.push("'");
+    tr.push(');"><i class="ace-icon fa fa-pencil-square-o"></i></button></td>');
+    $('#'+r.data.index).html(tr.join(''));  
+    closeDialog('#editOrderStatusDailog')
+  }
+  
+}
+
+function GetActionDom(reqUrl, title){
+  
+  $.ajax({
+    url : reqUrl,
+    method : 'GET',
+    beforeSend : function(xhr) {
+      var h = loadingHtml.replace('[TITLE]', title);
+      $('#action_dom').html(h);
+      $('#action_dom').show();
+      $('#setup_main_menu').hide();
+    },
+    success : function(obj) {
+      $('#action_dom').html(obj)
+    },
+    error : function(obj) {
+      $('#action_dom').html(retryHtml);
+    },
+});
+  
+  
+};
+
+function backToDesignerSetup(){
+
+  $('#action_dom').hide();
+  $('#setup_main_menu').show();
+  
+}
+
+function saveBGCategory(){
+  var title = $('#title').val();
+  if(!title){
+    showMSG('Title', 'warning'); return;
+  }
+  
+  
+  postRequest('category_form', '/superadmin/BGCategorySave', 'saveBGCategoryCB');
+}
+
+function saveBGCategoryCB(r, fid){
+  tr = ['<tr><td>'];
+  tr.push(r.data.title);
+  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push("'");
+  tr.push(r.data.key);
+  tr.push("'");
+  tr.push(', ');
+  tr.push("'");
+  tr.push(r.data.title);
+  tr.push("'");
+  tr.push(')">Set Images</button> </td></tr>');
+  
+  $('#category_table').prepend(tr.join(''));
+  $('#selected_category').append($('<option>', {
+    value : r.data.key
+  }).text(r.data.title));
+}
+
+function saveBGSubCategory(){
+  var title = $('#sub_title').val();
+  var selected_category = $('#selected_category').val();
+  if(!title){
+    showMSG('Title', 'warning'); return;
+  }
+  if(!selected_category){
+    showMSG('No category selected', 'warning'); return;
+  }
+  
+  
+  postRequest('sub_category_form', '/superadmin/BGSubCategorySave', 'saveBGSubCategoryCB');
+  
+}
+
+
+function saveBGSubCategoryCB(r, fid){
+  tr = ['<tr><td>'];
+  tr.push(r.data.title);
+  tr.push('</td><td>');
+  tr.push(r.data.category)
+  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push("'");
+  tr.push(r.data.key);
+  tr.push("'");
+  tr.push(', ');
+  tr.push("'");
+  tr.push(r.data.title);
+  tr.push("'");
+  tr.push(')">Set Images</button> </td></tr>');
+  $('#sub_category_table').prepend(tr.join(''));
+  
+}
+
+function UploadBGImage() { 
+  fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0] && $('#imgage_title').val()) { 
+    postFormWithFile("upload_form", '/superadmin/UploadBGImage', 'TC');
+  }
+};
+
+function UploadPattern() { 
+  fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    postFormWithFile("text_pattern_form", '/superadmin/UploadPattern', 'UploadPatternCB');
+  }
+};
+
+function UploadPatternCB(r){
+  if(r.status=='SUCCESS'){
+    $('#pattern_row').prepend('<td><img width="60px" src="'+r.data.serving_url+'" height="60px"></td>');
+  }
+};
+
+function UploadMasks() { 
+  fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    postFormWithFile("masks_form", '/superadmin/UploadMasks', 'UploadMasksCB');
+  }
+};
+
+function UploadMasksCB(r){
+  if(r.status=='SUCCESS'){
+    $('#pattern_row').prepend('<td><img width="90px" src="'+r.data.serving_url+'" height="90px"></td>');
+  }
+};
+
+ 

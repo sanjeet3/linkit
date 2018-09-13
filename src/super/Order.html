@@ -3,7 +3,7 @@
 <link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
 <div class="breadcrumbs ace-save-state" id="breadcrumbs">
   <ul class="breadcrumb">
-    <li><i class="ace-icon fa fa-shopping-cart"></i> <a href="javascript:">Order</a></li>
+    <li><i class="ace-icon fa fa-shopping-cart"></i> <a href="javascript:">Orders</a></li>
   </ul>
   <!-- /.breadcrumb -->
   <div class="nav-search" id="nav-search">
@@ -17,7 +17,7 @@
   <div id="list-dom">
     <div class="page-header">
       <form class="form-inline" id="super-admin-order--search-form">
-        <select class="input-small" name="seller">
+        <select class="" name="seller" style="width: 25%;">
           <option value="">--seller--</option> {%for s in seller_list%}
           <option value="{{s.entityKey}}">{{s.name}}-{{s.person}}</option> {%endfor%}
         </select>
@@ -82,7 +82,7 @@
 </div>
 <div id="editOrderStatusDailog" class="dialog-box">
   <div class="dailog-header">
-    <span>Update Order Stage</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+    <span>Update Order Status</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
       onclick="closeDialog('#editOrderStatusDailog')"></i>
   </div>
   <div class="dialog-content">

@@ -10,16 +10,7 @@
 <link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="application/x-javascript">
-  
-  
-  
-  
-    
    addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }  
-
-
-
-
 </script>
 <!--fonts-->
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet'
@@ -41,38 +32,47 @@
   {% include 'endclient/navbar.html' %}
   <!---->
   <div class="container main-content" id="product_list_caontainer">
-    <div class="shoes-grid-left">
-      <div class="products">
-        <h5 class="latest-product">CATEGORY:</h5>
-        {%for cat in category_list%} <a
-          class="category-btn {%if cat.key==selected_cat%}active{%endif%}"
-          href="/Product?cat={{cat.entityKey}}">{{cat.name}}</a> {%endfor%}
-      </div>
-      <div class="product-left">
-        {% for p in product_list%}
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-20">
-          <div class="item-broder">
-            <a href="javascript:clientGetProd('{{p.entityKey}}')"><img style="height: 350px;"
-              class="img-responsive chain" src="{{p.image_url[0] or 'img/prod_default.png'}}"
-              alt=" " /></a> <span class="star"> </span>
-            <div class="grid-chain-bottom">
-              <h6 class="text-ovrflw">
-                <a href="javascript:">{{p.name}}</a>
-              </h6>
-              <div class="star-price text-center">
-                <a class="buy get-buy" href="javascript:clientGetProd('{{p.entityKey}}')">View</a>
-                <div class="clearfix"></div>
-              </div>
-            </div>
-          </div>
+    <div class="mt-10 mb-10">
+      <div id="order_list_dom">
+        <div class="mb-5">
+          <h4 class="pull-left">Your Orders</h4>
         </div>
-        {%endfor%}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Qty</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for e in order_list%}
+            <tr>
+              <td><a href="javascript:getOrderDetails('{{e.entityKey}}')"><img
+                  alt="{{e.name}}" src="{{e.image_url}}" width="75px" height="75px">
+                  {{e.code}}, {{e.name}}</a></td>
+              <td>{{e.date}}</td>
+              <td>{{e.amount}}</td>
+              <td>{{e.qty}}</td>
+              <td><a href="javascript:getOrderDetails('{{e.entityKey}}')">{{e.status}}</a></td>
+            </tr>
+            {%else%}
+            <tr>
+              <td colspan="10">No Order available</td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
       </div>
+      <div id="order_detail_dom" style="display: none;"></div>
     </div>
   </div>
   <div class="container main-content" id="product_action_caontainer" style="display: none;"></div>
   <div class="container main-content" id="product_design_caontainer" style="display: none;"></div>
-  <div class="container main-content" id="product_order_caontainer" style="display: none;margin-top: 20px;margin-bottom: 20px;"></div>
+  <div class="container main-content" id="product_order_caontainer"
+    style="display: none; margin-top: 20px; margin-bottom: 20px;"></div>
   <div class="container main-content" id="order_list_caontainer" style="display: none;"></div>
   <!--footer-->
   {% include 'endclient/footer.html' %}
@@ -88,10 +88,8 @@
 <script src="/js/designAlgo.js" type="text/javascript"></script>
 <script src="/js/api.js" type="text/javascript"></script>
 <!-- The plugin itself - required -->
-
 <!-- <script src="/js/plugins.min.js" type="text/javascript"></script>  -->
-
 <!-- HTML5 canvas library - required -->
-<script src="/js/fabric.min.js" type="text/javascript"></script> 
-<script src="/js/FancyProductDesigner-all.js" type="text/javascript"></script> 
+<script src="/js/fabric.min.js" type="text/javascript"></script>
+<script src="/js/FancyProductDesigner-all.js" type="text/javascript"></script>
 </html>

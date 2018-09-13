@@ -79,5 +79,8 @@ function createUserDisgnCallBack(r) {
   $('#pls_wait_design_saving').html(h);
   $('#selected_design_id').val(r.data.id);
   $('#design_id').val(r.data.id);
+  $('#design_id_text').html(r.data.id);
+  $('#design_paragraf').show();
+  $('#create_desgin_btn').hide();
 };
 

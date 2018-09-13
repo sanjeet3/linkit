@@ -514,7 +514,7 @@ class OrderStageView(ActionSupport):
     return json_response(self.response,
                          data_dict,
                          SUCCESS,
-                         'Stage saved')
+                         'Status saved')
 
     
 class OrderStageUpdated(ActionSupport):
@@ -531,7 +531,25 @@ class OrderStageUpdated(ActionSupport):
     return json_response(self.response,
                          {},
                          SUCCESS,
-                         'Stage updated')    
+                         'Status updated')    
+
+class RenameOrderStatus(ActionSupport):
+  def post(self):
+    index = int(self.request.get('index'))
+    order_status = self.request.get('order_status').upper()
+    
+    order_stage_obj = OrderStage.get_order_stage()
+    try:
+      order_stage_obj.name[index]=order_status
+      order_stage_obj.put()
+    except IndexError, msg:
+      logging.error(msg)
+              
+    return json_response(self.response,
+                         {'index': index,
+                          'order_status': order_status},
+                         SUCCESS,
+                         'Stage renamed')    
      
 class ThemesView(ActionSupport):
   def get(self): 
@@ -809,8 +827,9 @@ class UploadDesignImage(ActionSupport):
     key = self.request.get('key') 
     e = ndb.Key(urlsafe=key).get()
     e.img_url.append(serving_url)
-    e.bucket_key.append(bucket_path)
+    e.bucket_key.append(bucket_key)
     e.bucket_path.append(bucket_path)
+    e.img_title.append(self.request.get('title'))
     e.put()
     return json_response(self.response, {}, SUCCESS, 'Success')
 

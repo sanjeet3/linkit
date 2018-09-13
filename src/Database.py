@@ -428,6 +428,7 @@ class DesignCategory(EndpointsModel):
   img_url = ndb.StringProperty(repeated=True)
   bucket_key = ndb.StringProperty(repeated=True)
   bucket_path = ndb.StringProperty(repeated=True)
+  img_title = ndb.StringProperty(repeated=True)
   
   @classmethod
   def get_list(cls):  
@@ -444,11 +445,107 @@ class DesignSubCategory(EndpointsModel):
   img_url = ndb.StringProperty(repeated=True)
   bucket_key = ndb.StringProperty(repeated=True)
   bucket_path = ndb.StringProperty(repeated=True)
+  img_title = ndb.StringProperty(repeated=True)
   
   @classmethod
   def get_list(cls):  
     return cls.query().order(cls.title)  
+
+class BGCategory(EndpointsModel):
+  ''' Background category datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  title = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
+  img_title = ndb.StringProperty(repeated=True)
   
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.title)  
+        
+class BGSubCategory(EndpointsModel):
+  ''' Background sub-category datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  title = ndb.StringProperty(default='')
+  category = ndb.KeyProperty(BGCategory)
+  category_urlsafe = ndb.StringProperty(default='')
+  category_name = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
+  img_title = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.title) 
+
+class TextPatterns(EndpointsModel):
+  ''' Text Patterns datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_img_url_list(cls):
+    l = []
+    e = cls.query().get()
+    if e:
+      l = e.img_url        
+    return l 
+
+  @classmethod
+  def get_obj(cls):
+    e = cls.query().get()
+    if not e:
+      e = TextPatterns()      
+    return e
+
+class Masks(EndpointsModel):
+  ''' Text Patterns datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_img_url_list(cls):
+    l = []
+    e = cls.query().get()
+    if e:
+      l = e.img_url        
+    return l 
+
+  @classmethod
+  def get_obj(cls):
+    e = cls.query().get()
+    if not e:
+      e = Masks()      
+    return e
+
+class ProductCanvas(EndpointsModel):
+  ''' Text Patterns datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True) 
+  active = ndb.BooleanProperty(default=True)
+  product = ndb.KeyProperty(Product)
+  code = ndb.StringProperty(default='')
+  name = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(default='')
+  bucket_key = ndb.StringProperty()
+  bucket_path = ndb.StringProperty()
+  top = ndb.StringProperty(default='0')
+  left = ndb.StringProperty(default='0') 
+  preview_url = ndb.StringProperty(default='')
+  preview_key = ndb.StringProperty()
+
+  @classmethod
+  def get_obj(cls, product_key):
+    return cls.query(cls.product==product_key).get()
+
 ROLE_LIST = ['ADMIN', 'ACCOUNT', 'DESIGN', 'PRODUCTION', 'STORE']  
 class UserModel(EndpointsModel):
   created_on = ndb.DateTimeProperty(auto_now_add=True)    

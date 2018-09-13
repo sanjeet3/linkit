@@ -327,6 +327,7 @@ function orderMakePaymentCallBack(r) {
 function showLoginDom() {
   $('#login_form').show();
   $('#registration_form, #registeration_msg_dom').hide();
+  $(".signin-grid").animate({backgroundColor: "red"});
 }
 
 function showRegisterDom() {
