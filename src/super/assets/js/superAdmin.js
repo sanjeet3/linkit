@@ -1279,4 +1279,186 @@ function UploadMasksCB(r){
   }
 };
 
- 
+function UploadProductCanvas(){
+
+  var p = $('#selected_product').val();
+  if(!p){
+    showMSG('No Product selected', 'warning'); return;
+  }
+  
+  fileObj = $('#canvas_imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    postFormWithFile("product_canvas_form", '/superadmin/UploadProductCanvas?p='+p, 'UploadProductCanvasCB');
+  }
+}
+
+function UploadProductCanvasCB(r){
+  var dom = $('#preview_dom');
+  if(r.data.img_url){
+    $('#product_canvas_form').hide();
+    dom.append('<h5>Canvas</h5><img src="'+r.data.img_url+'"><br>');
+  }
+}
+function UploadProductPreviewCB(r){
+  var dom = $('#preview_dom');
+  if(r.data.preview_url){
+    $('#product_preview_form').hide();
+    dom.append('<h5>Preview</h5><img src="'+r.data.preview_url+'"><br>');
+  }
+}
+function UploadProductPreview(){
+  var p = $('#selected_product').val();
+  if(!p){
+    showMSG('No Product selected', 'warning'); return;
+  }
+  
+  fileObj = $('#preview_imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    postFormWithFile("product_preview_form", '/superadmin/UploadProductPreview?p='+p, 'UploadProductPreviewCB');
+  }
+}
+
+function getProductCanvasPrev(elm){
+  if(!elm.value){  $('#preview_dom').html('');return; }  
+  $('#preview_dom').html('<i class="fa fa-spinner fa-spin" ></i> Loading product canvas and preveiw...');
+  
+  getRequest('', '/superadmin/GetProductCanvasPrev?k='+elm.value, 'getProductCanvasPrevCB');
+};
+function getProductCanvasPrevCB(r){
+  var dom = $('#preview_dom');
+  dom.html('');
+  if(r.data.img_url){
+    $('#product_canvas_form').hide();
+    var h =['<h5>Canvas</h5><p class="cursor" onclick="editCanvasMargin('];
+    h.push("'");
+    h.push(r.data.k);
+    h.push("'");
+    h.push(',');
+    h.push(r.data.top);
+    h.push(',');
+    h.push(r.data.left);
+    h.push(')">Change Canvas Margin Top-Left</p><br><img height="100px" src="');
+    h.push(r.data.img_url);
+    h.push('"><br>');
+    dom.append(h.join(''));
+  } else{
+    $('#product_canvas_form').show();
+  }
+  if(r.data.preview_url){
+    $('#product_preview_form').hide();
+    editPreviewMargin
+    var h =['<h5>Preview</h5><p class="cursor" onclick="editPreviewMargin('];
+    h.push("'");
+    h.push(r.data.k);
+    h.push("'");
+    h.push(',');
+    h.push(r.data.preview_top);
+    h.push(',');
+    h.push(r.data.preview_left);
+    h.push(')">Change Preview Margin Top-Left</p><br><img height="100px" src="');
+    h.push(r.data.preview_url);
+    h.push('"><br>');
+    dom.append(h.join(''));
+  } else{
+    $('#product_preview_form').show();
+  }
+  
+};
+
+function getDesignOFCategory(elm){
+  
+  $('#selected input:checkbox').each(function(i) {
+      $(this).attr('checked', false);
+  });
+  if(!elm.value) {return;}
+  $('#selected').hide();
+  getRequest('', '/superadmin/GetMappingCustomDesign?cat='+elm.value, 'getDesignOFCategoryCB');  
+};
+
+function getDesignOFCategoryCB(r){
+  $('#selected').show();
+  for(i in r.data.mapping_list){
+    $('#'+r.data.mapping_list[i]).prop('checked', true);
+  }
+};
+
+function getBGOFCategory(elm){
+  
+  $('#selected input:checkbox').each(function(i) {
+      $(this).attr('checked', false);
+  });
+  if(!elm.value) {return;}
+  
+  $('#selected').hide();
+  getRequest('', '/superadmin/GetMappingBackground?cat='+elm.value, 'getBGOFCategoryCB');
+};
+
+function getBGOFCategoryCB(r){
+  for(i in r.data.mapping_list){
+    $('#'+r.data.mapping_list[i]).prop('checked', true);
+  }
+  $('#selected').show();
+};
+
+function saveDesignMappingCategory(){
+  var cat = $('#selected_category').val();
+  if(!cat){
+    showMSG('No Category selected', 'warning'); return;
+  }
+  $('#mapping_form')[0].reset();
+  $('#category_hidden').val(cat);
+  var designArr=[];
+  $('#selected input:checkbox:checked').each(function(i) {
+    designArr.push(this.id);
+  });
+  
+  $('#data_hidden').val(JSON.stringify(designArr));
+  
+  postRequest('mapping_form', '/superadmin/MappingCustomDesign', null);
+};
+
+
+function saveBGMappingCategory(){
+  var cat = $('#selected_category').val();
+  if(!cat){
+    showMSG('No Category selected', 'warning'); return;
+  }
+  $('#mapping_form')[0].reset();
+  $('#category_hidden').val(cat);
+  var designArr=[];
+  $('#selected input:checkbox:checked').each(function(i) {
+    designArr.push(this.id);
+  });
+  
+  $('#data_hidden').val(JSON.stringify(designArr));
+  
+  postRequest('mapping_form', '/superadmin/MappingBackground', null);
+};
+
+function editCanvasMargin(k , t, l){
+  openDialog('#changeCanvasMargin');
+  $('#product_key').val(k);
+  $('#edit_top').val(t);
+  $('#edit_left').val(l);
+}
+
+function updateCanvasMargin(){
+  postRequest('update_canvas_margin_form', '/superadmin/ChangeCanvasMargin', 'updateCanvasMarginCB');
+}
+function updateCanvasMarginCB(r){
+  closeDialog('#changeCanvasMargin');
+}
+
+function editPreviewMargin(k , t, l){
+  openDialog('#changePreviewMargin');
+  $('#preview_key').val(k);
+  $('#edit_preview_top').val(t);
+  $('#edit_preview_left').val(l);
+}
+
+function updatePreviewMargin(){
+  postRequest('update_Preview_margin_form', '/superadmin/ChangePreviewMargin', 'updatePreviewMarginCB');
+}
+function updatePreviewMarginCB(r){
+  closeDialog('#changePreviewMargin');
+}

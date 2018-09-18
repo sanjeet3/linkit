@@ -11,6 +11,34 @@ ERROR='ERROR'
 WARNING='WARNING'
 INFO='INFO'
 
+def authorize_access_request(indexList = []):
+    """
+    Parameterize the request instead of parsing the request directly.
+    Only the types specified will be added to the query parameters.
+
+    """
+    def wrapper(f):
+        def wrapped(self, *args):
+          permission_grantted = True  
+          for i in indexList:
+            if self.permission[i] == '0':
+              permission_grantted = False
+          
+          if permission_grantted:              
+            return f(self, *args)
+          else:
+            if self.request.method == 'GET':
+              self.abort(401)
+            else:
+              return json_response(self.response,
+                                   {},
+                                   'ERROR',
+                                   'Un-Authorize user')  
+        
+        return wrapped
+    return wrapper
+
+
 def json_response(response, data_dict={}, status=SUCCESS, message=''):  
   ''' Response json string '''
     

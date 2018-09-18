@@ -47,6 +47,16 @@ __route_list = [
     RedirectRoute(r'/superadmin/UploadBGImage', DesignerSetup.UploadBGImage, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadPattern', DesignerSetup.UploadTextPattern, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadMasks', DesignerSetup.UploadMasks, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/ProductCanvasSetup', DesignerSetup.ProductCanvasSetup, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetProductCanvasPrev', DesignerSetup.GetProductCanvasPrev, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadProductCanvas', DesignerSetup.UploadProductCanvas, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/ChangeCanvasMargin', DesignerSetup.ChangeCanvasMargin, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/ChangePreviewMargin', DesignerSetup.ChangePreviewMargin, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadProductPreview', DesignerSetup.UploadProductPreview, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/MappingCustomDesign', DesignerSetup.MappingCustomDesign, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetMappingCustomDesign', DesignerSetup.GetMappingCustomDesign, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/MappingBackground', DesignerSetup.MappingBackground, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetMappingBackground', DesignerSetup.GetMappingBackground, name='SuperAdmin', strict_slash=True),
     
     #Super Admin Seller
     RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),

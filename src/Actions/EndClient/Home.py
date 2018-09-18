@@ -7,7 +7,8 @@ Created on 04-Jul-2018
 from src.Database import Product, Seller, SellerProduct, SellerOrder
 from src.Database import Client, ClientProductDesign, ProductDesign
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster
-from src.Database import DesignCategory, DesignSubCategory, SellerLadger
+from src.Database import SellerLadger
+from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, BGCategory, BGSubCategory, Masks, TextPatterns 
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -388,23 +389,40 @@ class PlaceOrder(ActionSupport):
 class GetProductDesignor(ActionSupport):
   def get(self): 
     template_path = 'endclient/product_designor.html'
-    p = ndb.Key(urlsafe=self.request.get('key')).get() 
-    template = self.get_jinja2_env.get_template(template_path)   
-    design_list  = DesignCategory.get_list()
     sub_cat_dict = {}
-    e=DesignSubCategory()  
+    sub_bg_dict = {}  
+    p = ndb.Key(urlsafe=self.request.get('key')).get() 
+    template = self.get_jinja2_env.get_template(template_path)  
+ 
+    masks = Masks.get_img_url_list() 
+    patterns = TextPatterns.get_img_url_list()
+    canvas = ProductCanvas.get_obj(p.key)
+    design_list  = DesignCategory.get_mapping_list(p.category_key)
     for e in DesignSubCategory.get_list():
       if e.category in sub_cat_dict:
         sub_cat_dict[e.category].append(e)
       else:
         sub_cat_dict[e.category]=[e]            
-    fpd_product_list = ProductDesign.get_design_list(p.key) 
+    
+    sub_bg_list = BGSubCategory.get_list()
+    e = BGSubCategory()
+    for e in sub_bg_list:
+      if e.category in sub_bg_dict:  
+        sub_bg_dict[e.category].append(e)
+      else:
+        sub_bg_dict[e.category]=[e]      
+    
+             
     self.response.out.write(template.render({'p': p,
                                              'dev': self.DEV,
                                              'key': self.request.get('key'), 
-                                             'user_obj': self.client,
+                                             'user_obj': self.client, 
+                                             'canvas': canvas,
+                                             'masks': masks,
+                                             'patterns': patterns,
+                                             'sub_bg_list': sub_bg_list,
+                                             'sub_bg_dict': sub_bg_dict,
                                              'design_list': design_list,
-                                             'fpd_product_list': fpd_product_list,
                                              'sub_cat_dict': sub_cat_dict}))  
                                 
 class TestFPD(ActionSupport):

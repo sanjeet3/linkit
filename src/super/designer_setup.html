@@ -9,7 +9,9 @@
     <div class="col-xs-12">
       <h3 class="header smaller lighter blue">Upload product designer master data</h3>
       <p>
-        <span class="label label-lg label-pink arrowed-right cursor">Product Canvas+Preview</span> <span
+        <span class="label label-lg label-pink arrowed-right cursor"
+          onclick="GetActionDom('/superadmin/ProductCanvasSetup', 'Product Canvas & Preview Setup')">Product
+          Canvas+Preview</span> <span
           class="label label-lg label-yellow arrowed-in arrowed-in-right cursor"
           onclick="GetActionDom('/superadmin/CustomDesign', 'Design Variation')">Design
           Variation</span> <span class="label label-lg label-purple arrowed arrowed-right cursor"
@@ -24,7 +26,14 @@
     <div class="col-xs-12">
       <h3 class="header smaller lighter blue">Product category mapping with designer master
         data</h3>
-      <p></p>
+      <p>
+        <span
+          class="label label-lg label-yellow arrowed-right cursor"
+          onclick="GetActionDom('/superadmin/MappingCustomDesign', 'Design Variation Mapping')">Design
+          Variation Mapping</span> 
+        <span class="label label-lg label-purple arrowed arrowed-right cursor"
+          onclick="GetActionDom('/superadmin/MappingBackground', 'Backgrounds Mapping')">Backgrounds Mapping</span>  
+      </p>
     </div>
   </div>
 </div>

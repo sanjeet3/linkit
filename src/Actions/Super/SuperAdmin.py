@@ -53,7 +53,7 @@ class Home(ActionSupport):
     context['today_order_count'] = today_order_count
     context['month_order_count'] = month_order_count
     
-    
+    logging.info(self.permission)
     template = self.get_jinja2_env.get_template('super/base.html')    
     self.response.out.write(template.render(context))      
      
@@ -849,6 +849,8 @@ class Ledger(ActionSupport):
 
 class UserAccount(ActionSupport):
   def get(self):  
+    if self.user_obj.role != "ADMIN":
+      self.abort(401)      
     user_list = UserModel.get_list()  
     d={'user_list': user_list,
        'ROLE_LIST': ROLE_LIST}      
@@ -856,6 +858,8 @@ class UserAccount(ActionSupport):
     self.response.out.write(template.render(d)) 
   
   def post(self): 
+    if self.user_obj.role != "ADMIN":
+      self.abort(401)
     user_name = self.request.get('user_name')  
     email = self.request.get('email').lower()  
     role = self.request.get('role').upper()
@@ -869,6 +873,8 @@ class UserAccount(ActionSupport):
     e.email = email
     e.name = user_name
     e.role = role
+    r = RoleModel.get_by_role(role)
+    e.acl = r.acl
     e.put()
     data_dict = {'user_name': user_name,
                  'email': email,
@@ -877,11 +883,13 @@ class UserAccount(ActionSupport):
     return json_response(self.response, data_dict, SUCCESS, 'User account created')
     
 class UpdateRoleSettings(ActionSupport): 
-  def post(self):     
+  def post(self):  
+    if self.user_obj.role != "ADMIN":
+      self.abort(401)   
     role = self.request.get('role').upper() 
     if not role or role not in ['ACCOUNT', 'DESIGN', 'PRODUCTION', 'STORE']:
       return json_response(self.response, {}, ERROR, 'Role invalid')
-    e = RoleModel()
+
     e = RoleModel.get_by_role(role)
     e.acl = self.prepare_acl()
     e.put()

@@ -1,3 +1,5 @@
+application: link-it-portal
+version: 18sept2018
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -37,6 +39,9 @@ handlers:
 - url: /test
   static_dir: src/endclient/test  
   
+- url: /productdesigner
+  static_dir: src/endclient/productdesigner
+    
 - url: /photobook
   static_dir: src/endclient/photobook  
   

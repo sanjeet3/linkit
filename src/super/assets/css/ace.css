@@ -22820,3 +22820,12 @@ textarea.input-custom {
   border: 1px solid #dadada;
   padding: 10px;
 }
+
+.setup-head {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d; 
+  height: fit-content;
+  display: flex;
+  padding: 10px;
+}

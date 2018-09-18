@@ -429,11 +429,16 @@ class DesignCategory(EndpointsModel):
   bucket_key = ndb.StringProperty(repeated=True)
   bucket_path = ndb.StringProperty(repeated=True)
   img_title = ndb.StringProperty(repeated=True)
+  product_category = ndb.KeyProperty(repeated=True)
   
   @classmethod
   def get_list(cls):  
     return cls.query().order(cls.title)  
-        
+  
+  @classmethod
+  def get_mapping_list(cls, category):  
+    return cls.query(cls.product_category.IN([category])).order(cls.title)  
+      
 class DesignSubCategory(EndpointsModel):
   ''' Themes datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)
@@ -460,10 +465,16 @@ class BGCategory(EndpointsModel):
   bucket_key = ndb.StringProperty(repeated=True)
   bucket_path = ndb.StringProperty(repeated=True)
   img_title = ndb.StringProperty(repeated=True)
+  product_category = ndb.KeyProperty(repeated=True)
   
   @classmethod
   def get_list(cls):  
     return cls.query().order(cls.title)  
+
+  @classmethod
+  def get_mapping_list(cls, category):  
+    return cls.query(cls.product_category.IN([category])).order(cls.title)  
+        
         
 class BGSubCategory(EndpointsModel):
   ''' Background sub-category datastore '''
@@ -541,6 +552,8 @@ class ProductCanvas(EndpointsModel):
   left = ndb.StringProperty(default='0') 
   preview_url = ndb.StringProperty(default='')
   preview_key = ndb.StringProperty()
+  preview_top = ndb.StringProperty(default='0')
+  preview_left = ndb.StringProperty(default='0') 
 
   @classmethod
   def get_obj(cls, product_key):
@@ -582,4 +595,16 @@ class RoleModel(EndpointsModel):
       r = RoleModel(role=role).put().get()        
     return r 
 
-  
+  @classmethod
+  def _post_put_hook(self, future):
+    ''' update user acl in reference of role update '''
+    _role_obj = future.get_result().get()  
+    _e_list=[]
+    for u in UserModel.get_by_role(_role_obj.role):
+      u.acl = _role_obj.acl
+      _e_list.append(u)
+    if _e_list:
+      logging.info('updating_user_Acl %s' %(_e_list.__len__()))
+      ndb.put_multi(_e_list)
+              
+    

@@ -1,13 +1,101 @@
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
+<div id="main-container">
+  <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3>
+  <button type="button" onclick="backToProductAcitionDom()"
+    class="btn btn-sm btn-primary btn-white btn-round btn-mini mt-15 pull-right">
+    <i class="ace-icon fa fa-arrow-left"></i> Back
+  </button>
+  <div id="product-designer" style="clear: both;"
+    class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
+    {%if canvas%}
+    <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
+      <img src="{{canvas.img_url}}=s0" title="Base"
+        data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
+    </div>
+    {%else%}
+    <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
+      <img src="/img/Product.png" title="Base"
+        data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
+    </div>
+    {%endif%}
+    <div class="fpd-design">
+      {%for cat in design_list%}
+      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+        {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in cat_list%}
+        <div class="fpd-category" title="{{sc.title}}">
+          {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
+            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          {%endfor%}
+        </div>
+        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
+          title="{{cat.title}}{{loop.index}}"
+          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endfor%}
+      </div>
+      {%endfor%}
+    </div>
+    <div class="fpd-background">
+      {%for cat in sub_bg_list%}
+      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+        {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in cat_list%}
+        <div class="fpd-category" title="{{sc.title}}">
+          {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
+            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          {%endfor%}
+        </div>
+        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
+          title="{{cat.title}}{{loop.index}}"
+          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endfor%}
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+  <br />
+  <div class="fpd-clearfix text-center" style="margin-top: 15px;">
+    <div class="api-buttons fpd-container">
+      <h5>Help and tips:</h5>
+      <ol>
+        <li>Keyboard Control: Use arrow keys to move and backspace key to delete selected
+          element</li>
+      </ol>
+      <form id="create_product_design_form">
+        <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
+          name="layer" id="design_layer"> <input type="hidden" name="design_print"
+          id="design_print">
+        <button type="button" onclick="backToProductAcitionDom()" class="fpd-btn">
+          <i class="ace-icon fa fa-arrow-left"></i> Back
+        </button>
+        <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
+      </form>
+      <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
+        preparing your design...</p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"> 
+var canvasPreviewUrl = ''
+var preview_top = 0;
+var preview_left = 0;
+{%if canvas%}
+canvasPreviewUrl = '{{canvas.preview_url}}=s0';
+preview_top = '{{canvas.preview_top}}px';
+preview_left = '{{canvas.preview_left}}px';
 
-<script type="text/javascript">
+{%endif%}
+
   jQuery(document).ready(
       function() {
 
         var $yourDesigner = $('#product-designer'), pluginOpts = {
-          /* stageWidth : 1200, */
+          stageWidth : 1600,
+          stageHeight: 1200,
           editorMode : true,
+          fitImagesInCanvas: true,
           toolbarPlacement : "smart",
-          mainBarModules: ['images', 'text', 'designs', 'manage-layers'],
+          mainBarModules : [ 'images', 'text', 'designs', 'backgrounds',
+              'manage-layers', 'text-layers' ],
           actions : {
             'top' : [ 'download', 'print', 'preview-lightbox' ],
             'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
@@ -53,110 +141,40 @@
             rotatable : true,
             autoCenter : true,
             boundingBox : "Base",
-            curvable: true,
-            curveReverse: true,
+            curvable : true,
+            curveReverse : true,
           },
-          customImageParameters : { 
+          customImageParameters : {
             removable : true,
             colors : '#000',
             autoCenter : true,
-            boundingBox : "Base", 
-            minW: 1,
-            minH: 1,
-            maxW: 9900,
-            maxH: 9900,
-            filter: true,
-            uniScalingUnlockable: true,
-            advancedEditing: true, 
+            boundingBox : "Base",
+            minW : 1,
+            minH : 1,
+            maxW : 9900,
+            maxH : 9900,
+            filter : true,
+            uniScalingUnlockable : true,
+            advancedEditing : true,
             editorMode : true,
-            availableFilters: ['grayscale', 'sepia', 'sepia2'],
-            
           },
-           imageParameters : {
-             "z":1,"x":0,"y":0,"zChangeable":false,"scale":1, 
-             "removable":false,"draggable":false,"resizable":false,"rotatable":false,  
-           
-            filter: true,
-            availableFilters: ['grayscale', 'sepia', 'sepia2', 'blur', 'milk','purple','yellow','monocrome'],
-            uniScalingUnlockable: true,
-            advancedEditing: true, 
-          },  
+          imageParameters : {
+            filter : true,
+            uniScalingUnlockable : true,
+            advancedEditing : true,
+            /* uploadZone: true, */ 
+          },
+          imageEditorSettings : {
+            masks : [{%for img in masks%}{{img}},{%endfor%} ],
+          },
+          elementParameters : {
+            patterns : [{%for img in patterns%}{{img}},{%endfor%}],
+               
+          },
         };
-        
-        
+
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-        setTimeout(function(){ customizePluginSettings(); }, 3000);
-        
+
       });
-</script>
-<!-- Google Webfonts 110 -->
-<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
-<div id="main-container">
-  <h3 id="clothing" style="float: left;">Create Product Design</h3>
-  <button type="button" onclick="backToProductAcitionDom()"
-    class="btn btn-sm btn-primary btn-white btn-round btn-mini mt-15 pull-right">
-    <i class="ace-icon fa fa-arrow-left"></i> Back
-  </button>
-  <div id="product-designer" style="clear: both;"
-    class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-    
-    {%if fpd_product_list%}
-    {%set dsgn = fpd_product_list[0] %}
-    <div class="fpd-product" title="{{p.name}}" data-thumbnail="{{fpd_product_list[0].image_url}}">
-      <img src="/Imgage?id={{dsgn.bucket_path}}" title="Base" data-parameters='{"scaleX": {{dsgn.scaleX}}, "scaleY": {{dsgn.scaleY}}, "left": {{dsgn.left}}, "top": {{dsgn.top}}, "removable": false, "resizable": false }' />
-       <span title="Any Text" data-parameters='{"boundingBox": "Base", "left": 326, "top": 232, "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' >Default Text</span>
-        {%for dsgn in fpd_product_list%}
-        {%if loop.index != 1%}
-        <div class="fpd-product" title="{{dsgn.title}}" data-thumbnail="{{dsgn.image_url}}">
-          <img src="/Imgage?id={{dsgn.bucket_path}}" title="Base" data-parameters='{"scaleX": {{dsgn.scaleX}}, "scaleY": {{dsgn.scaleY}}, "left": {{dsgn.left}}, "top": {{dsgn.top}}, "resizable": false, "removable": false }' />
-        </div>
-        {%endif%}
-        {%endfor%}
-    </div>
-    {%endif%}
-    <div class="fpd-design">
-      {%for cat in design_list%}
-      <div class="fpd-category" title="{{cat.title}}"  data-thumbnail="">
-        {%if cat.key in sub_cat_dict%}
-        {%set cat_list=sub_cat_dict[cat.key]%}
-        {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}">
-          {%for img in sc.bucket_key%}
-          <img src="/Imgage?id={{img}}" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          {%endfor%}  
-        </div>
-        {%endfor%}
-        {%endif%}
-        {%for img in cat.bucket_key%} <img src="/Imgage?id={{img}}" title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-        {%endfor%}
-      </div>
-      {%endfor%}
-    </div>
-    
-    <div class="fpd-frames">
-      <div class="fpd-category" title="Fram1">
-      <img src="" title="testing"
-            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-      </div>
-    </div>
-    
-  </div>
-  <br />
-  <div class="fpd-clearfix text-center" style="margin-top: 15px;">
-    <div class="api-buttons fpd-container">
-      <form id="create_product_design_form">
-        <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
-          name="layer" id="design_layer"> <input type="hidden" name="design_print"
-          id="design_print">
-        <button type="button" onclick="backToProductAcitionDom()" class="fpd-btn">
-          <i class="ace-icon fa fa-arrow-left"></i> Back
-        </button>
-        <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
-      </form>
-      <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
-        preparing your design...</p>
-    </div>
-  </div>
-</div>
+      
+</script>      

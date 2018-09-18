@@ -1,0 +1,55 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><button class="btn btn-default btn-minier" onclick="backToDesignerSetup()">
+        <i class="ace-icon fa fa-times"></i> Close
+      </button></li>
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Design variation
+        mapping to product category setup</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+</div>
+<div class="page-content">
+  <div class="col-xs-12">
+    <h5>
+      <i class="ace-icon fa fa-shield"></i> Update Design variation map with product category
+    </h5>
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-1 control-label no-padding-right">Category </label>
+        <div class="col-sm-4">
+          <select name="category" id="selected_category" class="form-control" onchange="getBGOFCategory(this)">
+            <option value="">-select-</option> {%for c in cat_list%}
+            <option value="{{c.entityKey}}">{{c.name}}</option> {%endfor%}
+          </select>
+        </div>
+      </div>
+      <div id="selected">
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveBGMappingCategory()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Update
+            </button>
+          </div>
+        </div>
+        {%for e in bg_list%}
+        <div class="form-group">
+          <label class="col-sm-4 cursor"> <input type="checkbox" id="{{e.entityKey}}"
+            name="entity" /> <span class="lbl"> {{e.title}}</span>
+          </label>
+        </div>
+        {%endfor%}
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveBGMappingCategory()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Update
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form id="mapping_form">
+      <input type="hidden" name="category" id="category_hidden">
+      <input type="hidden" name="data" id="data_hidden">
+    </form>
+  </div>
+</div>

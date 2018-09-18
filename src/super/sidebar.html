@@ -10,6 +10,7 @@
  
   <!-- /.sidebar-shortcuts --> 
   <ul class="nav nav-list">
+    {%if user.role=="ADMIN"%}
     <li class="active"><a href="/superadmin"> <i class="menu-icon fa fa-tachometer"></i> <span
         class="menu-text"> Dashboard </span>
     </a> <b class="arrow"></b></li>           
@@ -24,10 +25,7 @@
     </a> <b class="arrow"></b></li>          
     <li class=""><a href="javascript:getWebPage('/superadmin/DesignerSetup',{'title':'Designer Setup', 'data':''})"> <i class="menu-icon fa fa-desktop"></i> <span
         class="menu-text"> Designer Setup </span>
-    </a> <b class="arrow"></b></li>         
-    <!-- <li class=""><a href="javascript:getWebPage('/superadmin/CustomDesign',{'title':'Designs Variation', 'data':''})"> <i class="menu-icon fa fa-picture-o"></i> <span
-        class="menu-text">Designs Variation</span>
-    </a> <b class="arrow"></b></li>  -->
+    </a> <b class="arrow"></b></li>          
     <li class=""><a
       href="javascript:getWebPage('/superadmin/Seller',{'title':'Sellers', 'data':''})"> <i
         class="menu-icon fa fa-sitemap"></i> <span class="menu-text"> Sellers </span>
@@ -47,7 +45,57 @@
     <li class=""><a
       href="javascript:getWebPage('/superadmin/Themes',{'title':'Themes Setting', 'data':''})"> <i
         class="menu-icon fa fa-area-chart"></i> <span class="menu-text"> Themes</span>
+    </a> <b class="arrow"></b></li>{%else%}
+    <li class="active"><a href="/superadmin"> <i class="menu-icon fa fa-tachometer"></i> <span
+        class="menu-text"> Dashboard </span>
+    </a> <b class="arrow"></b></li>
+    {%if permission[-1]=="1"%}
+    <li class=""><a href="javascript:getWebPage('/superadmin/Events',{'title':'Events', 'data':''})"> <i class="menu-icon fa fa-birthday-cake"></i> <span
+        class="menu-text"> Events </span>
+    </a> <b class="arrow"></b></li>
+    {%endif%} 
+    {%if permission[-2]=="1"%}           
+    <li class=""><a href="javascript:getWebPage('/superadmin/Products',{'title':'Products', 'data':''})"> <i class="menu-icon fa fa-picture-o"></i> <span
+        class="menu-text"> Products </span>
+    </a> <b class="arrow"></b></li> 
+    {%endif%} 
+    {%if permission[-3]=="1"%}         
+    <li class=""><a href="javascript:getWebPage('/superadmin/DesignerSetup',{'title':'Designer Setup', 'data':''})"> <i class="menu-icon fa fa-desktop"></i> <span
+        class="menu-text"> Designer Setup </span>
     </a> <b class="arrow"></b></li>   
+    {%endif%} 
+    {%if permission[-4]=="1"%}       
+    <li class=""><a
+      href="javascript:getWebPage('/superadmin/Seller',{'title':'Sellers', 'data':''})"> <i
+        class="menu-icon fa fa-sitemap"></i> <span class="menu-text"> Sellers </span>
+    </a> <b class="arrow"></b></li>
+    {%endif%} 
+    {%if permission[-5]=="1"%}
+    <li class=""><a
+      href="javascript:getWebPage('/superadmin/Ledger',{'title':'Seller Ledgers', 'data':''})"> <i
+        class="menu-icon fa fa-money"></i> <span class="menu-text"> Seller Ledgers </span>
+    </a> <b class="arrow"></b></li>
+    {%endif%} 
+    {%if permission[-6]=="1"%}
+    <li class=""><a
+      href="javascript:getWebPage('/superadmin/Order',{'title':'Orders', 'data':''})"> <i
+        class="menu-icon fa fa-shopping-cart"></i> <span class="menu-text"> Orders </span>
+    </a> <b class="arrow"></b></li>
+    {%endif%} 
+    {%if permission[-7]=="1"%}
+    <li class=""><a
+      href="javascript:getWebPage('/superadmin/OrderStage',{'title':'Order Status Setting', 'data':''})"> <i
+        class="menu-icon fa fa-map-signs"></i> <span class="menu-text"> Order Status</span>
+    </a> <b class="arrow"></b></li> 
+    {%endif%} 
+    {%if permission[-8]=="1"%}
+    <li class=""><a
+      href="javascript:getWebPage('/superadmin/Themes',{'title':'Themes Setting', 'data':''})"> <i
+        class="menu-icon fa fa-area-chart"></i> <span class="menu-text"> Themes</span>
+    </a> <b class="arrow"></b></li>
+    {%endif%}  
+    
+    {%endif%}   
   </ul>
   <!-- /.nav-list -->
   <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
