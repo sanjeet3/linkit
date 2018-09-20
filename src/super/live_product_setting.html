@@ -1,0 +1,62 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><button class="btn btn-default btn-minier" onclick="backToDesignerSetup()">
+        <i class="ace-icon fa fa-times"></i> Close
+      </button></li>
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Live Product Setup</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+</div>
+<div class="page-content">
+  <div class="col-xs-12">
+    <div class="setup-head">
+      <label class="col-sm-2 control-label">Select Product</label>
+      <div class="col-sm-4">
+        <select id="selected_product"
+          onchange="getRequest('','/superadmin/GetProductLiveInfo?k='+this.value, 'getLiveProductCB')">
+          <option value="">-select-</option> {%for e in live_product%}
+          <option value="{{e.entityKey}}">{{e.name}} {{e.code}}</option> {%endfor%}
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <form class="form-horizontal" id="product_live_data_form">
+      <input type="hidden" name="k" id="product_key">
+      <h4>Manage Live Product</h4>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Sequence</label>
+        <div class="col-sm-4">
+          <input type="number" name="sequence" id="sequence_number" class="form-control input-custom"
+            value="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Promo Text</label>
+        <div class="col-sm-4">
+          <input type="text" name="promo_text" id="promo_text" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group" id="imgage_file_dom">
+        <label class="col-sm-2 control-label">Promo Image</label>
+        <div class="col-sm-4">
+          <input type="file" accept=".png,.jpeg,.jpg" class="form-control input-custom" id="imgage_file"
+            name="pic">
+        </div>
+      </div>
+      <div class="form-group" id="bg_file_dom">
+        <label class="col-sm-2 control-label">Background Picture</label>
+        <div class="col-sm-4">
+          <input type="file" accept=".png,.jpeg,.jpg" class="form-control input-custom" id="bg_file"
+            name="bg">
+        </div>
+      </div>
+      <div id="imgage_file_prev"></div>
+      <div id="bg_prev"></div>
+      <div class="form-group">
+        <button type="button" class="btn btn-info btn-minier"
+          onclick="postFormWithFile('product_live_data_form', '/superadmin/GetProductLiveInfo', 'liveProductSettingCB')">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

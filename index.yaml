@@ -31,6 +31,16 @@ indexes:
   - name: seq_num
     direction: desc
 
+- kind: Product
+  properties:
+  - name: endclient_selection
+  - name: name
+
+- kind: Product
+  properties:
+  - name: endclient_selection
+  - name: promo_sequence
+
 - kind: ProductDesign
   properties:
   - name: product

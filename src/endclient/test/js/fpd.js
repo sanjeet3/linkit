@@ -8129,11 +8129,12 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
         //--- MASK
 
         if(options.masks && $.isArray(options.masks)) {
-
+            var x=1;
             options.masks.forEach(function(svgURL) {
-
-                var title = svgURL.split(/[\\/]/).pop(); //get basename
-                title = title.substr(0,title.lastIndexOf('.')); //remove extension
+                var title = 'Mask ' + x;
+                x++;
+                //var title = svgURL.split(/[\\/]/).pop(); //get basename
+                //title = title.substr(0,title.lastIndexOf('.')); //remove extension
 
                 $container.find('.fpd-mask-selection').append('<span data-mask="'+svgURL+'" class="fpd-tooltip" title="'+title+'" style="background-image: url('+svgURL+')"></span>')
             });

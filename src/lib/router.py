@@ -31,6 +31,8 @@ __route_list = [
     RedirectRoute(r'/GetMyOrders', Home.GetMyOrders, name='Place Order', strict_slash=True),
     RedirectRoute(r'/GetMyOrderDetails', Home.GetMyOrderDetails, name='Get My Order Details', strict_slash=True),
     RedirectRoute(r'/Imgage', Home.Imgage, name='Place Order', strict_slash=True),
+    
+    RedirectRoute(r'/DeleteBucketFile', DesignerSetup.DeleteBucketFile, name='DeleteBucketFile', strict_slash=True),
      
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
@@ -40,10 +42,18 @@ __route_list = [
     RedirectRoute(r'/superadmin/GetRoleSettings', SuperAdmin.GetRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
     
     #Designer Setup
+    RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/ProductLiveSetting', DesignerSetup.ProductLiveSetting, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetProductLiveSetting', DesignerSetup.GetProductLiveSetting, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetProductLiveInfo', DesignerSetup.GetProductLiveInfo, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/Backgrounds', DesignerSetup.Backgrounds, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/BGCategorySave', DesignerSetup.BGCategorySave, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/BGSubCategorySave', DesignerSetup.BGSubCategorySave, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/FramesView', DesignerSetup.FramesView, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/FrameCategorySave', DesignerSetup.FrameCategorySave, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/FrameSubCategorySave', DesignerSetup.FrameSubCategorySave, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/UploadFrameImage', DesignerSetup.UploadFrameImage, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadBGImage', DesignerSetup.UploadBGImage, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadPattern', DesignerSetup.UploadTextPattern, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadMasks', DesignerSetup.UploadMasks, name='SuperAdmin', strict_slash=True),

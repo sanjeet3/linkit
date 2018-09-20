@@ -1499,7 +1499,7 @@ var FancyProductDesignerOptions = function() {
         * @type {String}
         * @default 'templates/'
         */
-        templatesDirectory: 'test/templates/',
+        templatesDirectory: 'productdesigner/templates/',
         /**
         * To add photos from Facebook, you have to set your own Facebook API key.
         *
@@ -1535,7 +1535,7 @@ var FancyProductDesignerOptions = function() {
         * @type {Number}
         * @default 0.2
         */
-        zoomStep: 0.2,
+        zoomStep: 0.5,
         /**
         * The maximal zoom factor. Set it to 1 to hide the zoom feature in the user interface.
         *
@@ -1544,7 +1544,7 @@ var FancyProductDesignerOptions = function() {
         * @type {Number}
         * @default 3
         */
-        maxZoom: 3,
+        maxZoom: 6,
         /**
         * Set custom names for your hexdecimal colors. key=hexcode without #, value: name of the color.
         *
@@ -2283,7 +2283,7 @@ var FancyProductDesignerOptions = function() {
             * @for Options.defaults.elementParameters
             * @default 'inside'
             */
-            boundingBoxMode: 'inside',
+            boundingBoxMode: 'clipping',
             /**
             * Centers the element in the canvas or when it has a bounding box in the bounding box.
             *
@@ -8133,12 +8133,12 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
         //--- MASK
 
         if(options.masks && $.isArray(options.masks)) {
-
+            var x=1;
             options.masks.forEach(function(svgURL) {
-
-                var title = svgURL.split(/[\\/]/).pop(); //get basename
-                title = title.substr(0,title.lastIndexOf('.')); //remove extension
-
+              var title = 'Mask ' + x;
+              x++; 
+                /*var title = svgURL.split(/[\\/]/).pop(); //get basename
+                title = title.substr(0,title.lastIndexOf('.')); //remove extension*/
                 $container.find('.fpd-mask-selection').append('<span data-mask="'+svgURL+'" class="fpd-tooltip" title="'+title+'" style="background-image: url('+svgURL+')"></span>')
             });
 
@@ -12078,8 +12078,8 @@ var FancyProductDesigner = function(elem, opts) {
                     }
 
                     $view.children('img,span').each(function(k, element) {
-                        baseWidth=element.width-5;
-                        baseHeight=element.height-5;                 
+                        baseWidth=element.width/3;
+                        baseHeight=element.height/3;                 
                         var $element = $(element),
                             source;
 

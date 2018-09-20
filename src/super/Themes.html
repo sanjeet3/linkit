@@ -19,9 +19,9 @@
   </div>
   <!-- /.nav-search -->
 </div>
-<div class="page-content">
+<div class="page-content" id="setup_main_menu">
   <div class="row mt-10" id="list-dom">
-    <div class="col-xs-12">
+    <div class="col-md-6 col-xs-12">
       <table class="table  table-bordered table-hover">
         <thead>
           <tr>
@@ -42,6 +42,26 @@
         </tbody>
       </table>
     </div>
+    <div class="col-md-6 col-xs-12">
+      <table class="table  table-bordered table-hover" id="product_live">
+        <tbody>
+        {%for p in product_list%}
+          <tr>
+            <td>
+              <label class="cursor"><input type="checkbox" name="{{p.entityKey}}" {%if p.endclient_selection%}checked="checked"{%endif%}>
+              {{p.code}}-{{p.name}}
+              </label>  
+            </td>
+          </tr>
+        {%endfor%}
+        </tbody>
+      </table>
+      <button  type="button" class="btn btn-info btn-minier" onclick="liveProducts()">Live Products</button>
+      <button  type="button" class="btn btn-info btn-minier" onclick="GetActionDom('/superadmin/GetProductLiveSetting', 'Live Product Info')">Set Info</button>
+    </div>
+    <form id="product_live_form">
+      <input type="hidden" id="selected_product" name="data">
+    </form>
   </div>
   <div class="row mt-10" id="form-dom" style="display: none;">
     <div class="col-xs-12">
@@ -54,3 +74,4 @@
     </div>
   </div>
 </div>
+<div id="action_dom"></div>

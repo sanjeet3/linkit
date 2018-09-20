@@ -288,6 +288,9 @@
         </div>
         {%endif%}
       </div>
+      <div class="col-lg-12 slide-container" >
+      <img alt="" src="/img/Promo.png" width="100%">
+    </div>
       <div class="col-lg-12 col-xs-12 events-slide">
         <form id="event_search_form">
           <div class="col-lg-3 col-sm-3 col-xs-6">
@@ -386,6 +389,20 @@
         </div>
         {%endfor%}
       </div>
+      <div class="col-lg-12 col-xs-12 product-promo-slide"> 
+          {%for p in selected_product%}
+          <div class="col-lg-4 col-xs-12 mb-10">
+            <div class="mb-5 prd-sponcr" style="background-image: url({{ p.promo_img or '/img/product_top_default.jpg'}});"> 
+              {%if p.promo_text%}<div class="ribbon-wrapper-green"><div class="ribbon-green"><font style="font-size: 13px;">{{p.promo_text}}</font></div></div>{%endif%}
+            </div>
+            <div class="box-brdr product-promo-img-box pd-10 text-center" style="background-image: url({{p.promo_product_bg_img}});">
+              <img class="img-responsive product-promo-img" src="{{p.image_url[0] or 'img/prod_default.png'}}"
+                alt="{{p.name}}" /> 
+              <a class="on-get mt-5" style="display: inline-block;" href="/Product?key={{p.entityKey}}">GET NOW</a>
+            </div>
+          </div>
+          {%endfor%} 
+        </div> 
     </div>
   </section>
 </body>

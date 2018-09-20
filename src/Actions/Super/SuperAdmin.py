@@ -553,8 +553,10 @@ class RenameOrderStatus(ActionSupport):
      
 class ThemesView(ActionSupport):
   def get(self): 
-    themes_list = Themes.get_theme_list()  
-    context={'themes_list': themes_list
+    themes_list = Themes.get_theme_list() 
+    product_list = Product.get_selling_product_list()
+    context={'themes_list': themes_list,
+             'product_list': product_list,
              }
     template = self.get_jinja2_env.get_template('super/Themes.html')    
     self.response.out.write(template.render(context))  
@@ -861,7 +863,7 @@ class UserAccount(ActionSupport):
     if self.user_obj.role != "ADMIN":
       self.abort(401)
     user_name = self.request.get('user_name')  
-    email = self.request.get('email').lower()  
+    email = self.request.get('email').lower().strip()  
     role = self.request.get('role').upper()
       
     if not email or email.__len__()<5 or '@' not in email:

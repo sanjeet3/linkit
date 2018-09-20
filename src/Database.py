@@ -160,8 +160,15 @@ class Product(EndpointsModel):
   instock = ndb.BooleanProperty(default=True) 
   endclient_visible = ndb.BooleanProperty(default=False)
   bg_uri = ndb.StringProperty(default='')
-  bg_bckt_key= ndb.StringProperty(default='')
-
+  bg_bckt_key = ndb.StringProperty(default='')
+  endclient_selection = ndb.BooleanProperty(default=False)
+  promo_img = ndb.StringProperty(default='')
+  promo_buckt_key = ndb.StringProperty(default='')
+  promo_product_bg_img = ndb.StringProperty(default='')
+  promo_product_bg_key = ndb.StringProperty(default='')
+  promo_text = ndb.StringProperty(default='')
+  promo_sequence = ndb.IntegerProperty(default=0)
+  
   @classmethod
   def get_product_by_code(cls, code):
     return cls.query(cls.code==code).get()
@@ -169,6 +176,14 @@ class Product(EndpointsModel):
   @classmethod
   def get_product_by_event(cls, evnt_list):
     return cls.query(cls.event_list.IN(evnt_list))
+
+  @classmethod
+  def get_home_screen_product(cls):
+    return cls.query(cls.endclient_selection==True).order(cls.name).fetch()
+
+  @classmethod
+  def get_promo_product(cls):
+    return cls.query(cls.endclient_selection==True).order(cls.promo_sequence).fetch()
 
   @classmethod
   def get_selling_product_list(cls):
@@ -493,6 +508,43 @@ class BGSubCategory(EndpointsModel):
   def get_list(cls):  
     return cls.query().order(cls.title) 
 
+class FrameCategory(EndpointsModel):
+  ''' Background category datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  title = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
+  img_title = ndb.StringProperty(repeated=True)
+  product_category = ndb.KeyProperty(repeated=True)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.title)  
+
+  @classmethod
+  def get_mapping_list(cls, category):  
+    return cls.query(cls.product_category.IN([category])).order(cls.title)  
+        
+        
+class FrameSubCategory(EndpointsModel):
+  ''' Background sub-category datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  title = ndb.StringProperty(default='')
+  category = ndb.KeyProperty(FrameCategory)
+  category_urlsafe = ndb.StringProperty(default='')
+  category_name = ndb.StringProperty(default='')
+  img_url = ndb.StringProperty(repeated=True)
+  bucket_key = ndb.StringProperty(repeated=True)
+  bucket_path = ndb.StringProperty(repeated=True)
+  img_title = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(cls.title) 
+
 class TextPatterns(EndpointsModel):
   ''' Text Patterns datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)
@@ -550,11 +602,11 @@ class ProductCanvas(EndpointsModel):
   bucket_path = ndb.StringProperty()
   top = ndb.StringProperty(default='0')
   left = ndb.StringProperty(default='0') 
+  stage_height = ndb.StringProperty(default='780')
   preview_url = ndb.StringProperty(default='')
   preview_key = ndb.StringProperty()
   preview_top = ndb.StringProperty(default='0')
   preview_left = ndb.StringProperty(default='0') 
-
   @classmethod
   def get_obj(cls, product_key):
     return cls.query(cls.product==product_key).get()
@@ -581,7 +633,7 @@ class UserModel(EndpointsModel):
     return cls.query(cls.email==email).get()
   @classmethod
   def get_active_by_email(cls, email):  
-    return cls.query(cls.email==email, cls.active==True).get()
+    return cls.query(cls.email==email.lower(), cls.active==True).get()
 
 class RoleModel(EndpointsModel):
   created_on = ndb.DateTimeProperty(auto_now_add=True)    

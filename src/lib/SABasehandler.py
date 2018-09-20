@@ -11,6 +11,7 @@ import os
 import webapp2
 import jinja2
 from google.appengine.api import users
+import logging
 
 ALL_PERMISSION_BIN = '1111111111111111111111111111111111111111111111111111111111111111'
 
@@ -23,8 +24,8 @@ class ActionSupport(webapp2.RequestHandler):
     
     self.initialize(request, response)
     self.user = users.get_current_user()
-    unauthorize=True
-    self.user_obj = UserModel.get_active_by_email(self.user.email())
+    unauthorize=True 
+    self.user_obj = UserModel.get_active_by_email(self.user.email()) 
     if self.user_obj:
       if self.user_obj.role == "ADMIN":
         self.permission = ALL_PERMISSION_BIN  

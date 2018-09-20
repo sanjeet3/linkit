@@ -20,7 +20,7 @@ function clientProductList() {
 
 function backToProductAcitionDom() {
   $('#product_design_caontainer').hide();
-  $('#product_action_caontainer').show();
+  $('#product_action_caontainer, .navbar, .footer').show();
 
 }
 

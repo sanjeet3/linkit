@@ -28,12 +28,12 @@
       </div>
     </form>
     <table class="table table-bordered table-hover">
-      <tbody>
-      <tr id="pattern_row">
+      <tbody id="pattern_row">
       {%for img in img_url_list%}
+      <tr >
         <td><img alt="" src="{{img}}" height="90px" width="90px"></td>
-      {%endfor%}
       </tr>
+      {%endfor%}
       </tbody>
     </table>
   </div>

@@ -187,7 +187,8 @@ class Home(ActionSupport):
   def get(self): 
     product_cat_list = ProductCategory.get_list()
     e_list = EventMaster.get_client_view()
-    new_product = Product.get_latest_product_list(5)
+    new_product = Product.get_latest_product_list(10)
+    selected_product = Product.get_home_screen_product()
     th = Themes.get_theme()
     themes_path = th.title if th else 'theme1'
     template = self.get_jinja2_env.get_template('endclient/home.html')    
@@ -196,6 +197,7 @@ class Home(ActionSupport):
                                              'e_list': e_list,
                                              'r': self.request.get('r'),
                                              'new_product': new_product,
+                                             'selected_product': selected_product,
                                              'themes_path': themes_path}))
 
 class GetEventView(ActionSupport):

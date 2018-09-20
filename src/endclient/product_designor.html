@@ -10,7 +10,7 @@
     class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
     {%if canvas%}
     <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
-      <img src="{{canvas.img_url}}=s0" title="Base"
+      <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}" title="Base"
         data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
     </div>
     {%else%}
@@ -75,14 +75,16 @@
   </div>
 </div>
 <script type="text/javascript"> 
+$('.navbar, .footer').hide();
 var canvasPreviewUrl = ''
 var preview_top = 0;
 var preview_left = 0;
+var stage_height = 780;
 {%if canvas%}
 canvasPreviewUrl = '{{canvas.preview_url}}=s0';
 preview_top = '{{canvas.preview_top}}px';
 preview_left = '{{canvas.preview_left}}px';
-
+stage_height = {{canvas.stage_height}};
 {%endif%}
 
   jQuery(document).ready(
@@ -90,7 +92,7 @@ preview_left = '{{canvas.preview_left}}px';
 
         var $yourDesigner = $('#product-designer'), pluginOpts = {
           stageWidth : 1600,
-          stageHeight: 1200,
+          stageHeight: stage_height,
           editorMode : true,
           fitImagesInCanvas: true,
           toolbarPlacement : "smart",
@@ -165,10 +167,10 @@ preview_left = '{{canvas.preview_left}}px';
             /* uploadZone: true, */ 
           },
           imageEditorSettings : {
-            masks : [{%for img in masks%}{{img}},{%endfor%} ],
+            masks : [{%for img in masks%}'{{img}}',{%endfor%} ],
           },
           elementParameters : {
-            patterns : [{%for img in patterns%}{{img}},{%endfor%}],
+            patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
                
           },
         };
