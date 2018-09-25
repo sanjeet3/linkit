@@ -4,11 +4,11 @@ Created on 04-Jul-2018
 @author: Sanjay Saini
 '''
 
-from src.Database import Product, Seller, SellerProduct, SellerOrder
+from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory
 from src.Database import Client, ClientProductDesign, ProductDesign
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster
 from src.Database import SellerLadger
-from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, BGCategory, BGSubCategory, Masks, TextPatterns 
+from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, FrameCategory,FrameSubCategory, BGSubCategory, Masks, TextPatterns 
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -36,9 +36,10 @@ class Imgage(webapp2.RequestHandler):
       with gcs.open(bucket_path, 'r') as gcs_file:
         contents = gcs_file.read()
         gcs_file.close()
+        self.response.headers['Content-Type'] = "image/svg+xml"
         self.response.write(contents)
     except Exception, e:
-      logging.error(e)
+      logging.error(e) 
       
 class ActivateAccount(ActionSupport):
   def get(self):     
@@ -192,6 +193,7 @@ class Home(ActionSupport):
     th = Themes.get_theme()
     themes_path = th.title if th else 'theme1'
     template = self.get_jinja2_env.get_template('endclient/home.html')    
+    self.response.headers['Access-Control-Allow-Origin']='https://storage.googleapis.com'
     self.response.out.write(template.render({'product_cat_list': product_cat_list,
                                              'user_obj': self.client,
                                              'e_list': e_list,
@@ -242,6 +244,7 @@ class ProductView(ActionSupport):
             'user_obj': self.client}
     
     template = self.get_jinja2_env.get_template('endclient/product_view.html')    
+    self.response.headers['Access-Control-Allow-Origin']='https://storage.googleapis.com'
     self.response.out.write(template.render(data))
     
 class GetProductDetails(ActionSupport):
@@ -391,23 +394,34 @@ class PlaceOrder(ActionSupport):
 class GetProductDesignor(ActionSupport):
   def get(self): 
     template_path = 'endclient/product_designor.html'
+    sub_frame_dict = {}
     sub_cat_dict = {}
     sub_bg_dict = {}  
+    
     p = ndb.Key(urlsafe=self.request.get('key')).get() 
     template = self.get_jinja2_env.get_template(template_path)  
  
-    masks = Masks.get_img_url_list() 
+    masks = Masks.get_bucket_list()
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
+    
+    frame_list = FrameCategory.get_mapping_list(p.category_key)
+    for e in FrameSubCategory.get_list():
+      if e.category in sub_frame_dict:
+        sub_frame_dict[e.category].append(e)
+      else:
+        sub_frame_dict[e.category]=[e] 
+    
+    
     design_list  = DesignCategory.get_mapping_list(p.category_key)
     for e in DesignSubCategory.get_list():
       if e.category in sub_cat_dict:
         sub_cat_dict[e.category].append(e)
       else:
-        sub_cat_dict[e.category]=[e]            
-    
+        sub_cat_dict[e.category]=[e]    
+                
+    bg_list = BGCategory.get_mapping_list(p.category_key).fetch()
     sub_bg_list = BGSubCategory.get_list()
-    e = BGSubCategory()
     for e in sub_bg_list:
       if e.category in sub_bg_dict:  
         sub_bg_dict[e.category].append(e)
@@ -422,7 +436,9 @@ class GetProductDesignor(ActionSupport):
                                              'canvas': canvas,
                                              'masks': masks,
                                              'patterns': patterns,
-                                             'sub_bg_list': sub_bg_list,
+                                             'frame_list': frame_list,
+                                             'sub_frame_dict': sub_frame_dict,
+                                             'bg_list': bg_list,
                                              'sub_bg_dict': sub_bg_dict,
                                              'design_list': design_list,
                                              'sub_cat_dict': sub_cat_dict}))  

@@ -3,7 +3,7 @@
     <li><button class="btn btn-default btn-minier" onclick="backToDesignerSetup()">
         <i class="ace-icon fa fa-times"></i> Close
       </button></li>
-    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Backgrounds
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Frames
         mapping to product category setup</a></li>
   </ul>
   <!-- /.breadcrumb -->
@@ -11,13 +11,13 @@
 <div class="page-content">
   <div class="col-xs-12">
     <h5>
-      <i class="ace-icon fa fa-shield"></i> Update Background map with product category
+      <i class="ace-icon fa fa-shield"></i> Update Frames map with product category
     </h5>
     <form class="form-horizontal">
       <div class="form-group">
         <label class="col-sm-1 control-label no-padding-right">Category </label>
         <div class="col-sm-4">
-          <select name="category" id="selected_category" class="form-control" onchange="getBGOFCategory(this)">
+          <select name="category" id="selected_category" class="form-control" onchange="getFramesForCategory(this)">
             <option value="">-select-</option> {%for c in cat_list%}
             <option value="{{c.entityKey}}">{{c.name}}</option> {%endfor%}
           </select>
@@ -26,7 +26,7 @@
       <div id="selected">
         <div class="form-group">
           <div class="col-md-offset-1 col-md-9">
-            <button class="btn btn-info btn-minier" type="button" onclick="saveBGMappingCategory()">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveFrameMappingCategory()">
               <i class="ace-icon fa fa-check bigger-110"></i> Update
             </button>
           </div>
@@ -40,7 +40,7 @@
         {%endfor%}
         <div class="form-group">
           <div class="col-md-offset-1 col-md-9">
-            <button class="btn btn-info btn-minier" type="button" onclick="saveBGMappingCategory()">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveFrameMappingCategory()">
               <i class="ace-icon fa fa-check bigger-110"></i> Update
             </button>
           </div>

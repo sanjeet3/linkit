@@ -215,8 +215,8 @@ function closeDialog(dailogID) {
 };
 
 function showFormDom(){ 
-  $('#bck-btn, #form-dom').show();
-  $('#add_btn, #list-dom').hide();
+  $('#bck-btn, #form-dom, #save_btn').show();
+  $('#add_btn, #list-dom, #edit_btn').hide();
 };
 
 function showListDom() {

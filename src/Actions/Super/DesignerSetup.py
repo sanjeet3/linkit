@@ -4,7 +4,7 @@ Created on 12-Sep-2018
 @author: Sanjay Saini
 '''
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
-from src.api.bucketHandler import upload_image_to_bucket, delete_bucket_file
+from src.api.bucketHandler import upload_file, delete_bucket_file
 from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
 from src.Database import FrameCategory, FrameSubCategory
 from src.Database import TextPatterns, Masks, ProductCanvas, Product
@@ -12,6 +12,8 @@ from src.lib.SABasehandler import ActionSupport
 
 import cgi    
 from google.appengine.ext import ndb
+from google.appengine.ext import blobstore
+from google.appengine.api import images
 import json
 import logging
 
@@ -24,27 +26,37 @@ class Home(ActionSupport):
 class DesinerDemo(ActionSupport):
   def get(self):
     template_path = 'super/product_designor_demo.html'  
+    sub_frame_dict = {} 
     template = self.get_jinja2_env.get_template(template_path)  
     p = ndb.Key(urlsafe=self.request.get('product')).get()  
     sub_cat_dict = {}
     sub_bg_dict = {}  
-    masks = Masks.get_img_url_list() 
+    masks = Masks.get_bucket_list() 
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
+    
+    frame_list = FrameCategory.get_mapping_list(p.category_key)
+    for e in FrameSubCategory.get_list():
+      if e.category in sub_frame_dict:
+        sub_frame_dict[e.category].append(e)
+      else:
+        sub_frame_dict[e.category]=[e] 
+    
+    
     design_list  = DesignCategory.get_mapping_list(p.category_key)
     for e in DesignSubCategory.get_list():
       if e.category in sub_cat_dict:
         sub_cat_dict[e.category].append(e)
       else:
-        sub_cat_dict[e.category]=[e]            
-    
+        sub_cat_dict[e.category]=[e]    
+                
+    bg_list = BGCategory.get_mapping_list(p.category_key).fetch()
     sub_bg_list = BGSubCategory.get_list()
-    e = BGSubCategory()
     for e in sub_bg_list:
       if e.category in sub_bg_dict:  
         sub_bg_dict[e.category].append(e)
       else:
-        sub_bg_dict[e.category]=[e]      
+        sub_bg_dict[e.category]=[e]        
     
              
     self.response.out.write(template.render({'p': p,
@@ -52,10 +64,13 @@ class DesinerDemo(ActionSupport):
                                              'canvas': canvas,
                                              'masks': masks,
                                              'patterns': patterns,
-                                             'sub_bg_list': sub_bg_list,
+                                             'sub_frame_dict': sub_frame_dict,
+                                             'sub_cat_dict': sub_cat_dict,
                                              'sub_bg_dict': sub_bg_dict,
+                                             'frame_list': frame_list,
                                              'design_list': design_list,
-                                             'sub_cat_dict': sub_cat_dict}))  
+                                             'bg_list': bg_list,
+                                             }))  
       
 class Backgrounds(ActionSupport):   
   def get(self):   
@@ -81,13 +96,16 @@ class UploadTextPattern(ActionSupport):
                            'Select image file')    
             
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/designer_textptrn/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
       return json_response(self.response, {}, WARNING, 'Try again')   
-    
-    
       
     e = TextPatterns.get_obj()
     e.img_url.append(serving_url)
@@ -112,13 +130,20 @@ class UploadMasks(ActionSupport):
                            'Select image file')    
             
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/designer_masks/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')   
-    
-    
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path) 
+      if self.DEV: 
+        serving_url = images.get_serving_url(bucket_key)
+      else:
+        file_name = file_name.replace(' ', '%20').lower()  
+        serving_url = 'https://storage.googleapis.com/designer_masks/%s' %(file_name) 
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again') 
       
     e = Masks.get_obj()
     e.img_url.append(serving_url)
@@ -167,12 +192,16 @@ class UploadBGImage(ActionSupport):
     e = ndb.Key(urlsafe=key).get()
             
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/designer_backgrounds/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')   
-    
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again') 
     
     key = self.request.get('key') 
     e = ndb.Key(urlsafe=key).get()
@@ -231,13 +260,25 @@ class UploadFrameImage(ActionSupport):
     e = ndb.Key(urlsafe=key).get()
             
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/designer_frames/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')   
-    
-    
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      logging.info('create_gs_key')  
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      logging.info(bucket_key)
+      logging.info('serving_url')
+      if self.DEV: 
+        serving_url = images.get_serving_url(bucket_key)
+      else:
+        file_name = file_name.replace(' ', '%20').lower()  
+        serving_url = 'https://storage.googleapis.com/designer_frames/%s' %(file_name)  
+      logging.info(serving_url)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again') 
+  
     key = self.request.get('key') 
     e = ndb.Key(urlsafe=key).get()
     e.img_url.append(serving_url)
@@ -287,12 +328,17 @@ class UploadProductCanvas(ActionSupport):
       
     product_key = ndb.Key(urlsafe=self.request.get('p'))
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/designer_canvas/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')  
-    
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again') 
+      
     e = ProductCanvas.get_obj(product_key) 
     if not e:
       p=product_key.get()  
@@ -344,10 +390,15 @@ class UploadProductPreview(ActionSupport):
     preview_top = self.request.get('preview_top')
     preview_left = self.request.get('preview_left')
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/designer_preview/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
       return json_response(self.response, {}, WARNING, 'Try again')  
     
     e = ProductCanvas.get_obj(product_key) 
@@ -439,6 +490,43 @@ class MappingBackground(ActionSupport):
       ndb.put_multi(ndb_list)  
     return json_response(self.response, {}, SUCCESS, 'Success')
 
+class MappingFrame(ActionSupport):
+  def get(self):    
+    cat_list = ProductCategory.get_list()  
+    bg_list = FrameCategory.get_list()
+    d = {'cat_list': cat_list, 'bg_list': bg_list}  
+    template = self.get_jinja2_env.get_template('super/frame_mapping.html')    
+    self.response.out.write(template.render(d)) 
+
+  def post(self): 
+    category = ndb.Key(urlsafe=self.request.get('category') ) 
+    key_list = json.loads( self.request.get('data') )  
+    design_key = [ndb.Key(urlsafe=k) for k in key_list]
+    logging.info(design_key)
+    logging.info(category)
+    ndb_list = []
+    for e in FrameCategory.get_list():
+      if e.key in design_key:
+        if category not in e.product_category:         
+          e.product_category.append(category)
+          ndb_list.append(e)
+      elif category in e.product_category:
+        e.product_category.remove(category)         
+        ndb_list.append(e)
+        
+    if ndb_list:
+      ndb.put_multi(ndb_list)  
+    return json_response(self.response, {}, SUCCESS, 'Success')
+
+class GetMappingFrame(ActionSupport):
+  def get(self):    
+    mapping_list = []  
+    category = ndb.Key(urlsafe=self.request.get('cat'))
+    for e in FrameCategory.get_mapping_list(category):
+      mapping_list.append(e.entityKey) 
+
+    return json_response(self.response, {'mapping_list': mapping_list}, SUCCESS, 'Success') 
+
 class ProductLiveSetting(ActionSupport):
   def post(self):
     e_list = []
@@ -489,23 +577,33 @@ class GetProductLiveInfo(ActionSupport):
     file_obj = self.request.get("pic", None)     
     if not p.promo_img and  isinstance(image_file, cgi.FieldStorage):        
       file_name = image_file.filename    
-      bucket_path = '/productpromo/%s' %(file_name)
+      bucket_path = '/product_sponsor/%s' %(file_name)
       bucket_path = bucket_path.lower()
-      serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-      if serving_url:
+      serving_url = ''
+      upload_file(file_obj, bucket_path)
+      try:
+        bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+        serving_url = images.get_serving_url(bucket_key)
         p.promo_img=serving_url
         p.promo_buckt_key=bucket_key
+      except Exception, msg:
+        logging.error(msg)   
         
     image_file = self.request.POST.get("bg", None)
     file_obj = self.request.get("bg", None)  
     if not p.promo_product_bg_img and  isinstance(image_file, cgi.FieldStorage):        
       file_name = image_file.filename    
-      bucket_path = '/productpromo/%s' %(file_name)
+      bucket_path = '/product_bg/%s' %(file_name)
       bucket_path = bucket_path.lower()
-      serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-      if serving_url:
+      upload_file(file_obj, bucket_path)
+      try:
+        bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+        serving_url = images.get_serving_url(bucket_key)
         p.promo_product_bg_img=serving_url
         p.promo_product_bg_key=bucket_key
+      except Exception, msg:
+        logging.error(msg)
+        
        
     p.put()
     return json_response(self.response, {}, SUCCESS, '')

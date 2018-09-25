@@ -582,6 +582,14 @@ class Masks(EndpointsModel):
     if e:
       l = e.img_url        
     return l 
+  
+  @classmethod
+  def get_bucket_list(cls):
+    l = []
+    e = cls.query().get()
+    if e:
+      l = e.bucket_path        
+    return l 
 
   @classmethod
   def get_obj(cls):

@@ -4,6 +4,9 @@
 <title>Craftyourchoice</title>
 <!-- Google Webfonts -->
 <link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
+<!-- Google Webfonts 110 -->
+<link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
 <!-- The CSS for the plugin itself - required -->
 <link rel="stylesheet" type="text/css" href="/productdesigner/css/FancyProductDesigner-all.min.css" />
 <!-- Optional - only when you would like to use custom fonts - optional -->
@@ -14,54 +17,76 @@
   <div class="container" id="product_design_caontainer" style="width: 100%;">
     <div id="main-container">
       <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3> 
-      <div id="product-designer" style="clear: both;"
-        class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-        {%if canvas%}
-        <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
-          <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}" title="Base"
-            data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
-        </div>
-        {%else%}
-        <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
-          <img src="/img/Product.png" title="Base"
-            data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
-        </div>
-        {%endif%}
-        <div class="fpd-design">
-          {%for cat in design_list%}
-          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-            {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
-            cat_list%}
-            <div class="fpd-category" title="{{sc.title}}">
-              {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
-                data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-              {%endfor%}
-            </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
-          </div>
+      
+  <div id="product-designer" style="clear: both;"
+    class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
+    {%if canvas%}
+    <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
+      <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}" title="Base"
+        data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
+    </div>
+    {%else%}
+    <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
+      <img src="/img/Product.png" title="Base"
+        data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
+    </div>
+    {%endif%}
+    
+    <div class="fpd-design">
+      {%for cat in design_list%}
+      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+        {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in cat_list%}
+        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           {%endfor%}
         </div>
-        <div class="fpd-background">
-          {%for cat in sub_bg_list%}
-          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-            {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in
-            cat_list%}
-            <div class="fpd-category" title="{{sc.title}}">
-              {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
-                data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-              {%endfor%}
-            </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
-          </div>
-          {%endfor%}
-        </div>
+        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
+          title="{{cat.title}}{{loop.index}}"
+          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endfor%}
       </div>
+      {%endfor%}
+    </div>
+    
+    <div class="fpd-background">
+      {%for cat in bg_list%} 
+      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+        {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in cat_list%}
+        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          {%endfor%}
+        </div>
+        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
+          title="{{cat.title}}{{loop.index}}"
+          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endfor%}
+      </div>
+      {%endfor%}
+    </div>
+    
+    <div class="fpd-frame"> 
+      {%for cat in frame_list%}
+      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+        
+        {%if cat.key in sub_frame_dict%} 
+          {%set cat_list=sub_frame_dict[cat.key]%} 
+          {%for sc in cat_list%}
+          <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+            {%for img in sc.img_url%}
+            <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}" data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            {%endfor%}
+          </div>
+          {%endfor%}
+        {%endif%}  
+        {%for img in cat.img_url%}  
+        <img src="{{img}}" title="{{cat.img_title[loop.index-1]}}" data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
+        {%endfor%}
+      </div>
+      {%endfor%}
+    </div>
+  </div>
       <br />
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
@@ -86,11 +111,12 @@
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>
 <script src="/js/jquery-ui.min.js" type="text/javascript"></script>
-
+ 
 <!-- HTML5 canvas library - required -->
 <script src="/productdesigner/js/jquery-mousewheel.js" type="text/javascript"></script>
-<script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script>
-<script src="/productdesigner/js/fpd.js" type="text/javascript"></script>
+<script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script> 
+<script src="/productdesigner/js/fancyDesigner.js" type="text/javascript"></script> 
+
 <script type="text/javascript">  
 var canvasPreviewUrl = ''
 var preview_top = 0;
@@ -103,98 +129,97 @@ preview_left = '{{canvas.preview_left}}px';
 stage_height = {{canvas.stage_height}};
 {%endif%}
 
-  jQuery(document).ready(
-      function() {
+jQuery(document).ready(
+    function() {
 
-        var $yourDesigner = $('#product-designer'), pluginOpts = {
-          stageWidth : 1600,
-          stageHeight: stage_height,
+      var $yourDesigner = $('#product-designer'), pluginOpts = {
+        stageWidth : 1600,
+        stageHeight: stage_height,
+        editorMode : true,
+        fitImagesInCanvas: true,
+        toolbarPlacement : "smart",
+        mainBarModules : [ 'images', 'text', 'designs', 'backgrounds', 'frames',
+            'manage-layers', 'text-layers' ],
+        actions : {
+          'top' : [ 'download', 'print', 'preview-lightbox' ],
+          'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
+          'bottom' : [ 'undo', 'redo' ],
+        },
+
+        fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
+            'Verdana', 'Geneva', 'Gorditas', 'Eczar', 'Roboto Mono',
+            'Poor Story', 'Titillium Web', 'Noto Serif', 'Work Sans',
+            'Chela One', 'Indie Flower', 'Inconsolata', 'Bitter',
+            'Libre Baskerville', 'Anton', 'Josefin Sans',
+            'Cormorant Unicase', 'Lobster', 'Arvo', 'Pacifico', 'Do Hyeon',
+            'Shadows Into Light', 'Dancing Script', 'Abril Fatface',
+            'Bree Serif', 'Coda Caption', 'Kanit', 'Acme',
+            'Gloria Hallelujah', 'Righteous', 'Rajdhani', 'Permanent Marker',
+            'Farsan', 'Great Vibes', 'Concert One', 'Poiret One', 'Satisfy',
+            'Courgette', 'Marck Script', 'Prata', 'Audiowide', 'Unica One',
+            'Julius Sans One', 'Ultra', 'Economica', 'IBM Plex Mono',
+            'Amaranth', 'Prosto One', 'Bangers', 'Shrikhand', 'Handlee',
+            'Boogaloo', 'Tangerine', 'Kalam', 'Sacramento',
+            'Architects Daughter', 'PT Mono', 'Bad Script', 'Special Elite',
+            'Libre Barcode 128 Text', 'Shadows Into Light Two',
+            'Cabin Sketch', 'Parisienne', 'Damion', 'Covered By Your Grace',
+            'Playball', 'Nothing You Could Do', 'Homemade Apple',
+            'Fugaz One', 'Rock Salt', 'Allura', 'Press Start 2P',
+            'Alex Brush', 'Black Ops One', 'Carter One', 'Just Another Hand',
+            'Fredericka the Great', 'Syncopate', 'Bungee Inline', 'Niconne',
+            'Coming Soon', 'Leckerli One', 'Galada', 'Caveat Brush',
+            'Pinyon Script', 'Cinzel Decorative', 'Mr Dafoe',
+            'Reenie Beanie', 'Italianno', 'Nanum Pen Script', 'Quantico',
+            'Skranji', 'Allerta Stencil', 'Grand Hotel', 'Yesteryear',
+            'Marvel', 'Freckle Face', 'Rochester', 'Nanum Brush Script',
+            'Alegreya SC', 'Annie Use Your Telescope', 'Faster One',
+            'Raleway Dots', 'Calligraffitti', 'Aclonica', 'Yatra One',
+            'Share Tech Mono', 'Graduate', 'Petit Formal Script',
+            'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
+            'IM Fell Double Pica', ],
+        customTextParameters : {
+          colors : true,
+          removable : true,
+          resizable : true,
+          draggable : true,
+          rotatable : true,
+          autoCenter : true,
+          boundingBox : "Base",
+          curvable : true,
+          curveReverse : true,
+        },
+        customImageParameters : {
+          removable : true,
+          colors : '#000',
+          autoCenter : true,
+          boundingBox : "Base",
+          minW : 1,
+          minH : 1,
+          maxW : 9900,
+          maxH : 9900,
+          filter : true,
+          uniScalingUnlockable : true,
+          advancedEditing : true,
           editorMode : true,
-          fitImagesInCanvas: true,
-          toolbarPlacement : "smart",
-          mainBarModules : [ 'images', 'text', 'designs', 'backgrounds',
-              'manage-layers', 'text-layers' ],
-          actions : {
-            'top' : [ 'download', 'print', 'preview-lightbox' ],
-            'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
-            'bottom' : [ 'undo', 'redo' ],
-          },
+        },
+        imageParameters : {
+          filter : true,
+          uniScalingUnlockable : true,
+          advancedEditing : true,
+          /* uploadZone: true, */ 
+        },
+        imageEditorSettings : {
+          masks : [{%for img in masks%}'/Imgage?id={{img}}',{%endfor%} ],
+        },
+        elementParameters : {
+          patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
+             
+        },
+      };
 
-          fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
-              'Verdana', 'Geneva', 'Gorditas', 'Eczar', 'Roboto Mono',
-              'Poor Story', 'Titillium Web', 'Noto Serif', 'Work Sans',
-              'Chela One', 'Indie Flower', 'Inconsolata', 'Bitter',
-              'Libre Baskerville', 'Anton', 'Josefin Sans',
-              'Cormorant Unicase', 'Lobster', 'Arvo', 'Pacifico', 'Do Hyeon',
-              'Shadows Into Light', 'Dancing Script', 'Abril Fatface',
-              'Bree Serif', 'Coda Caption', 'Kanit', 'Acme',
-              'Gloria Hallelujah', 'Righteous', 'Rajdhani', 'Permanent Marker',
-              'Farsan', 'Great Vibes', 'Concert One', 'Poiret One', 'Satisfy',
-              'Courgette', 'Marck Script', 'Prata', 'Audiowide', 'Unica One',
-              'Julius Sans One', 'Ultra', 'Economica', 'IBM Plex Mono',
-              'Amaranth', 'Prosto One', 'Bangers', 'Shrikhand', 'Handlee',
-              'Boogaloo', 'Tangerine', 'Kalam', 'Sacramento',
-              'Architects Daughter', 'PT Mono', 'Bad Script', 'Special Elite',
-              'Libre Barcode 128 Text', 'Shadows Into Light Two',
-              'Cabin Sketch', 'Parisienne', 'Damion', 'Covered By Your Grace',
-              'Playball', 'Nothing You Could Do', 'Homemade Apple',
-              'Fugaz One', 'Rock Salt', 'Allura', 'Press Start 2P',
-              'Alex Brush', 'Black Ops One', 'Carter One', 'Just Another Hand',
-              'Fredericka the Great', 'Syncopate', 'Bungee Inline', 'Niconne',
-              'Coming Soon', 'Leckerli One', 'Galada', 'Caveat Brush',
-              'Pinyon Script', 'Cinzel Decorative', 'Mr Dafoe',
-              'Reenie Beanie', 'Italianno', 'Nanum Pen Script', 'Quantico',
-              'Skranji', 'Allerta Stencil', 'Grand Hotel', 'Yesteryear',
-              'Marvel', 'Freckle Face', 'Rochester', 'Nanum Brush Script',
-              'Alegreya SC', 'Annie Use Your Telescope', 'Faster One',
-              'Raleway Dots', 'Calligraffitti', 'Aclonica', 'Yatra One',
-              'Share Tech Mono', 'Graduate', 'Petit Formal Script',
-              'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
-              'IM Fell Double Pica', ],
-          customTextParameters : {
-            colors : true,
-            removable : true,
-            resizable : true,
-            draggable : true,
-            rotatable : true,
-            autoCenter : true,
-            boundingBox : "Base",
-            curvable : true,
-            curveReverse : true,
-          },
-          customImageParameters : {
-            removable : true,
-            colors : '#000',
-            autoCenter : true,
-            boundingBox : "Base",
-            minW : 1,
-            minH : 1,
-            maxW : 9900,
-            maxH : 9900,
-            filter : true,
-            uniScalingUnlockable : true,
-            advancedEditing : true,
-            editorMode : true,
-          },
-          imageParameters : {
-            filter : true,
-            uniScalingUnlockable : true,
-            advancedEditing : true,
-            /* uploadZone: true, */ 
-          },
-          imageEditorSettings : {
-            masks : [{%for img in masks%}'{{img}}',{%endfor%} ],
-          },
-          elementParameters : {
-            patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
-            boundingBoxMode: 'clipping',   
-          },
-          
-        };
+      yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
 
-        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-
-      });
+    });
       
 </script>      
 </html>

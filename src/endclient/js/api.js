@@ -326,12 +326,12 @@ function orderMakePaymentCallBack(r) {
 
 function showLoginDom() {
   $('#login_form').show();
-  $('#registration_form, #registeration_msg_dom').hide();
+  $('#registration_form, #registeration_msg_dom, #registration_dom').hide();
   $(".signin-grid").animate({backgroundColor: "red"});
 }
 
 function showRegisterDom() {
-  $('#registration_form').show();
+  $('#registration_form, #registration_dom').show();
   $('#login_form, #registeration_msg_dom').hide();
 }
 

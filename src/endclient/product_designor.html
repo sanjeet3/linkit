@@ -19,34 +19,57 @@
         data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
     </div>
     {%endif%}
+    
     <div class="fpd-design">
       {%for cat in design_list%}
       <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
         {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}">
-          {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
+        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
             data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           {%endfor%}
         </div>
-        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
+        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
           title="{{cat.title}}{{loop.index}}"
           data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
         {%endfor%}
       </div>
       {%endfor%}
     </div>
+    
     <div class="fpd-background">
-      {%for cat in sub_bg_list%}
+      {%for cat in bg_list%} 
       <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
         {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}">
-          {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.title}}{{loop.index}}"
+        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
             data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           {%endfor%}
         </div>
-        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
+        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
           title="{{cat.title}}{{loop.index}}"
           data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endfor%}
+      </div>
+      {%endfor%}
+    </div>
+    
+    <div class="fpd-frame"> 
+      {%for cat in frame_list%}
+      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+        
+        {%if cat.key in sub_frame_dict%} 
+          {%set cat_list=sub_frame_dict[cat.key]%} 
+          {%for sc in cat_list%}
+          <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+            {%for img in sc.img_url%}
+            <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}" data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            {%endfor%}
+          </div>
+          {%endfor%}
+        {%endif%}  
+        {%for img in cat.img_url%}  
+        <img src="{{img}}" title="{{cat.img_title[loop.index-1]}}" data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
         {%endfor%}
       </div>
       {%endfor%}
@@ -96,7 +119,7 @@ stage_height = {{canvas.stage_height}};
           editorMode : true,
           fitImagesInCanvas: true,
           toolbarPlacement : "smart",
-          mainBarModules : [ 'images', 'text', 'designs', 'backgrounds',
+          mainBarModules : [ 'images', 'text', 'designs', 'backgrounds', 'frames',
               'manage-layers', 'text-layers' ],
           actions : {
             'top' : [ 'download', 'print', 'preview-lightbox' ],
@@ -167,7 +190,7 @@ stage_height = {{canvas.stage_height}};
             /* uploadZone: true, */ 
           },
           imageEditorSettings : {
-            masks : [{%for img in masks%}'{{img}}',{%endfor%} ],
+            masks : [{%for img in masks%}'/Imgage?id={{img}}',{%endfor%} ],
           },
           elementParameters : {
             patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],

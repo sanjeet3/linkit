@@ -21,7 +21,7 @@ class ActionSupport(webapp2.RequestHandler):
   '''
   
   def __init__(self, request, response):
-    
+    self.DEV = os.environ['SERVER_SOFTWARE'].startswith('Development')
     self.initialize(request, response)
     self.user = users.get_current_user()
     unauthorize=True 

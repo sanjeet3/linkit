@@ -50,6 +50,39 @@ def upload_image_to_bucket(file_obj, bucket_path):
   
   return '', ''
 
+
+def upload_file(file_obj, bucket_path): 
+  """upload file to bucket.
+
+    The retry_params specified in the open call will override the default
+    retry params for this particular file handle.
+
+    Arguments:
+      file_obj: file object
+      bucket_path: file name
+      
+    Return:
+      str: image serving url
+      str: bucket key  
+  """
+  content_type = mimetypes.guess_type(bucket_path)[0]
+  logging.info('uploading_file_to_bucket %s, %s ' %(bucket_path, content_type))
+    
+  if not content_type:
+    logging.warning('Mimetype not guessed for: %s', bucket_path)
+            
+  write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+  try:
+    with gcs.open(bucket_path,
+                  'w',
+                  content_type=content_type,
+                  options={b'x-goog-acl': b'public-read'}) as f:
+      f.write(file_obj)
+  except Exception, e:
+    logging.error('Blob write failed for %s, exception: %s. Additional info was logged' % (bucket_path, str(e)))
+  
+  return '', ''
+
 def delete_bucket_file(bucket_key):
   try:  
     blobstore.delete(bucket_key)

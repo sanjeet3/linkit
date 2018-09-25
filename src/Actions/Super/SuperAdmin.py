@@ -6,7 +6,7 @@ Created on 04-Jul-2018
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.baseapi import get_64bit_binary_string_from_int
 from src.api.baseapi import get_integer_from_binary_string
-from src.api.bucketHandler import upload_image_to_bucket, delete_bucket_file
+from src.api.bucketHandler import upload_file, delete_bucket_file
 from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
@@ -29,10 +29,11 @@ from src.Database import DesignSubCategory
 from src.Database import UserModel, RoleModel, ROLE_LIST
 from src.lib.SABasehandler import ActionSupport
  
-import logging, datetime
+import json, logging, datetime
 import cgi    
 from google.appengine.ext import ndb
-import json
+from google.appengine.ext import blobstore
+from google.appengine.api import images
 
 design_img_title = config.get('design_img_title')
 
@@ -146,7 +147,63 @@ class DeleteDesign(ActionSupport):
       return json_response(self.response, {'k': key}, SUCCESS, 'Design deleted')
     else:
       return json_response(self.response, {}, ERROR, 'Try again')      
-        
+
+class EditProducts(ActionSupport):
+  def get(self):
+    key = self.request.get('k')
+    p = ndb.Key(urlsafe=key).get()
+    data_dict = {'code':p.code,
+    'name': p.name,
+    'size':p.size,
+    'category': p.category_key.urlsafe() if p.category_key else '',
+    'price': p.price,
+    'uom': p.uom_key.urlsafe() if p.uom_key else '',
+    'description': p.description,
+    'product_key': p.entityKey,
+    'event_urlsafe': p.event_urlsafe,
+    }
+    
+    return  json_response(self.response, data_dict, SUCCESS, '')
+      
+  def post(self):          
+    name=self.request.get('name')
+    size=self.request.get('size')
+    price=float(self.request.get('price'))
+    category=self.request.get('category')
+    uom=self.request.get('uom')
+    event_list = self.request.get_all('event')
+    description=self.request.get('description') 
+    
+    key = self.request.get('k')  
+    p = ndb.Key(urlsafe=key).get()
+    p.description=description
+    p.name=name
+    p.price=price
+    p.size=size
+    if category:
+      e=ndb.Key(urlsafe=category).get()
+      p.category=e.name
+      p.category_key=e.key
+      category=e.name
+    if uom:
+      e=ndb.Key(urlsafe=uom).get()
+      p.uom=e.name
+      p.uom_key=e.key
+      uom=e.name
+    if event_list:
+      p.event_list = [ ndb.Key(urlsafe=k) for k in event_list ]
+      p.event_urlsafe = event_list          
+    p=p.put().get()   
+    data_dict={'code':p.code,
+    'name': name,
+    'size':size,
+    'category': category,
+    'price': price,
+    'uom': uom,
+    'description': description,
+    'key': p.entityKey, 
+    }
+    return  json_response(self.response, data_dict, SUCCESS, 'Product %s updated' %(name))        
 
 class SaveProducts(ActionSupport):
   def post(self):          
@@ -407,11 +464,19 @@ class UploadProductPicture(ActionSupport):
                            'Select image file')    
         
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
-    bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')    
+    bucket_path = '/product_pictures/%s' %(file_name)
+    bucket_path = bucket_path.lower()  
+  
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again')  
+  
+   
     product.image_url.append(serving_url)
     product.bucket_path.append(bucket_path)
     product.bucket_key.append(bucket_key)
@@ -446,9 +511,15 @@ class UploadProductDesign(ActionSupport):
     file_name = image_file.filename    
     bucket_path = '/productpromo/design/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again')    
+
     design = ProductDesign()
     design.product = product_key
     design.bucket_key = bucket_key
@@ -479,16 +550,9 @@ class UploadProductBG(ActionSupport):
                            'Select image file')     
         
     file_name = image_file.filename    
-    bucket_path = '/productpromo/bg/%s' %(file_name)
-    bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')
-    product.bg_uri = serving_url
-    product.bg_bckt_key = bucket_key
-    product.put() 
+   
     return json_response(self.response, 
-                         {'bg_uri': serving_url, },
+                         {'bg_uri': '', },
                          SUCCESS,
                          'Product background uploaded')  
     
@@ -609,7 +673,7 @@ class ThemesPicsUploading(ActionSupport):
     logging.info(msg)   
     bucket_path = '/productpromo/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
+    serving_url, bucket_key = '', ''
     if not serving_url:
       return json_response(self.response, {}, WARNING, 'Try again')
   
@@ -692,9 +756,14 @@ class EventView(ActionSupport):
                            'Select image file')
     file_name = image_file.filename    
     bucket_path = '/productpromo/%s' %(file_name)
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, 'WARNING', 'Try again')    
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again')
     
     e = EventMaster()
     if all_age:  
@@ -763,11 +832,9 @@ class UploadTest(ActionSupport):
     file_name = image_file.filename    
     bucket_path = '/swamigi/script/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again') 
+    upload_file(file_obj, bucket_path)
     return json_response(self.response, 
-                         {'serving_url': serving_url, },
+                         {'serving_url': 'serving_url', },
                          SUCCESS,
                          'Product background uploaded')  
     
@@ -821,9 +888,14 @@ class UploadDesignImage(ActionSupport):
     file_name = image_file.filename    
     bucket_path = '/productpromo/%s' %(file_name)
     bucket_path = bucket_path.lower()
-    serving_url, bucket_key = upload_image_to_bucket(file_obj, bucket_path)
-    if not serving_url:
-      return json_response(self.response, {}, WARNING, 'Try again')   
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again')  
     
     
     key = self.request.get('key') 

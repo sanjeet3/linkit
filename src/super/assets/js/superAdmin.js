@@ -58,7 +58,11 @@ function saveProductCallBack(obj, fID) {
   tr.push("'");
   tr.push(obj.data.key);
   tr.push("'");
-  tr.push(')">Setup Images</a></li> </ul> </div></td> </tr>');
+  tr.push(')">Setup Images</a></li><li><a href="javascript:getProductEdit(');
+  tr.push("'");
+  tr.push(obj.data.key);
+  tr.push("'");
+  tr.push(')">Edit</a></li></ul> </div></td> </tr>');
   $('#product_table_body').prepend(tr.join(''));
   $('#' + fID)[0].reset();
 };
@@ -1281,7 +1285,7 @@ function UploadBGImage() {
 function UploadFrameImage() { 
   fileObj = $('#imgage_file')[0];
   if (fileObj.files && fileObj.files[0] && $('#imgage_title').val()) { 
-    postFormWithFile("upload_form", '/superadmin/UploadBGImage', 'TC');
+    postFormWithFile("upload_form", '/superadmin/UploadFrameImage', 'TC');
   }
 };
 
@@ -1432,6 +1436,17 @@ function getDesignOFCategoryCB(r){
   }
 };
 
+function getFramesForCategory(elm){
+  
+  $('#selected input:checkbox').each(function(i) {
+      $(this).attr('checked', false);
+  });
+  if(!elm.value) {return;}
+  
+  $('#selected').hide();
+  getRequest('', '/superadmin/GetMappingFrame?cat='+elm.value, 'getBGOFCategoryCB');
+};
+
 function getBGOFCategory(elm){
   
   $('#selected input:checkbox').each(function(i) {
@@ -1483,6 +1498,23 @@ function saveBGMappingCategory(){
   $('#data_hidden').val(JSON.stringify(designArr));
   
   postRequest('mapping_form', '/superadmin/MappingBackground', null);
+};
+
+function saveFrameMappingCategory(){
+  var cat = $('#selected_category').val();
+  if(!cat){
+    showMSG('No Category selected', 'warning'); return;
+  }
+  $('#mapping_form')[0].reset();
+  $('#category_hidden').val(cat);
+  var designArr=[];
+  $('#selected input:checkbox:checked').each(function(i) {
+    designArr.push(this.id);
+  });
+  
+  $('#data_hidden').val(JSON.stringify(designArr));
+  
+  postRequest('mapping_form', '/superadmin/MappingFrame', null);
 };
 
 function editCanvasMargin(k , t, l, stage_height){
@@ -1628,3 +1660,89 @@ function deleteCanvasPrevImgCB(r) {
     $('#canvas_prev_dom').remove();
   }
 };
+
+function getProductEdit(k){
+  showFormDom();
+  $('#loading_product_to_edit').show();
+  $('#product_form').hide();
+  getRequest('', '/superadmin/EditProducts?k='+k, 'getProductEditCB');
+};
+
+function getProductEditCB(r){
+  var d = r.data;
+  $('#loading_product_to_edit').hide();
+  $('#product_form').show();
+  $('#product_key').val(d.product_key);
+  $('#code').val(d.code);
+  $('#name').val(d.name);
+  $('#size').val(d.size);
+  $('#price').val(d.price);
+  $('#description').val(d.description);
+  $('#category').val(d.category);
+  $('#uom').val(d.uom);
+  
+  //selecting multiselect
+  opts = $('#event > option');
+  for (index = 0; index < opts.length; index++) {
+    opt = opts[index];
+    if (d.event_urlsafe.indexOf(opt.value) >= 0) {
+      $(opt).prop('selected', true);
+    } else {
+      $(opt).prop('selected', false);
+    }
+  }   
+
+  $('#loading_product_to_edit, #save_btn').hide();
+  $('#product_form, #edit_btn').show();
+};
+
+function editProduct() {
+  if (!$('#name').val()) {
+    showMSG('Please enter name of product', 'warning');
+    return;
+  }
+  if (!$('#price').val() || $('#price').val() == '0.0') {
+    showMSG('Please enter price of product', 'warning');
+    return;
+  }
+  if (!$('#category').val()) {
+    showMSG('Please enter category of product', 'warning');
+    return;
+  }
+
+  $('#edit_product_spin').show();
+  postRequest('product_form', '/superadmin/EditProducts', 'editProductCB')
+};
+
+function editProductCB(obj) {
+  $('#edit_product_spin').hide(); 
+  var tr = [ "<td>" ];
+  tr.push(obj.data.code);
+  tr.push('</td><td>');
+  tr.push(obj.data.name);
+  tr.push('</td><td>');
+  tr.push(obj.data.category);
+  tr.push('</td><td>');
+  tr.push(obj.data.uom);
+  tr.push('</td><td>');
+  tr.push(obj.data.price);
+  tr.push('</td><td>');
+  tr.push(obj.data.size);
+  tr.push('</td><td>');
+  tr.push(obj.data.description);
+  tr.push('</td><td><div class="widget-toolbar no-border"> <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"');
+  tr.push(' aria-expanded="false"><i class="ace-icon fa fa-cog"></i></button><ul ');
+  tr.push(' class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">');
+  tr.push('<li><a href="javascript:imgSetupProduct(');
+  tr.push("'");
+  tr.push(obj.data.key);
+  tr.push("'");
+  tr.push(')">Setup Images</a></li><li><a href="javascript:getProductEdit(');
+  tr.push("'");
+  tr.push(obj.data.key);
+  tr.push("'");
+  tr.push(')">Edit</a></li></ul> </div></td> </tr>');
+  $('#'+obj.data.key).html(tr.join(''));
+}
+
+

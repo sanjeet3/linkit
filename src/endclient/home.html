@@ -389,7 +389,10 @@
         </div>
         {%endfor%}
       </div>
-      <div class="col-lg-12 col-xs-12 product-promo-slide"> 
+    </div>  
+    <div class="row">
+    <div class="row">  
+      <div class="col-lg-12 col-xs-12 product-promo-slide" style="padding-left: 0; padding-right: 0;"> 
           {%for p in selected_product%}
           <div class="col-lg-4 col-xs-12 mb-10">
             <div class="mb-5 prd-sponcr" style="background-image: url({{ p.promo_img or '/img/product_top_default.jpg'}});"> 
@@ -403,6 +406,7 @@
           </div>
           {%endfor%} 
         </div> 
+    </div>
     </div>
   </section>
 </body>

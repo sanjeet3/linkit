@@ -67,6 +67,8 @@ __route_list = [
     RedirectRoute(r'/superadmin/GetMappingCustomDesign', DesignerSetup.GetMappingCustomDesign, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/MappingBackground', DesignerSetup.MappingBackground, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/GetMappingBackground', DesignerSetup.GetMappingBackground, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/MappingFrame', DesignerSetup.MappingFrame, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetMappingFrame', DesignerSetup.GetMappingFrame, name='SuperAdmin', strict_slash=True),
     
     #Super Admin Seller
     RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),
@@ -89,6 +91,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/SaveProductCategory', SuperAdmin.SaveProductsCategory, name='SuperAdmin SaveProductCategory', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProductUOM', SuperAdmin.SaveProductsUOM, name='SuperAdmin SaveProductUOM', strict_slash=True),
     RedirectRoute(r'/superadmin/SaveProduct', SuperAdmin.SaveProducts, name='SuperAdmin save Products action', strict_slash=True),
+    RedirectRoute(r'/superadmin/EditProducts', SuperAdmin.EditProducts, name='SuperAdmin Edit Products action', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadTest', SuperAdmin.UploadTest, name='SuperAdmin UploadTest', strict_slash=True),
     #Super Admin order
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
