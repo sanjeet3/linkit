@@ -22829,3 +22829,15 @@ textarea.input-custom {
   display: flex;
   padding: 10px;
 }
+.design-img-box{
+  float:left;
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  border: 1px solid black;
+}
+
+.design-img-box>img{
+  width: 98%;
+  max-height: 90%;
+}

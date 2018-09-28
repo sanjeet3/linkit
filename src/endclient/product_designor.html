@@ -190,7 +190,15 @@ stage_height = {{canvas.stage_height}};
             /* uploadZone: true, */ 
           },
           imageEditorSettings : {
-            masks : [{%for img in masks%}'/Imgage?id={{img}}',{%endfor%} ],
+            masks : [
+              '/wp-content/masks/circle.svg',
+              '/wp-content/masks/heart.svg',
+              '/wp-content/masks/star.svg',
+              '/wp-content/masks/hexagon.svg',
+              '/wp-content/masks/3_box_frame.svg',
+              '/wp-content/masks/1_box_frame.svg',
+              
+              ],
           },
           elementParameters : {
             patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],

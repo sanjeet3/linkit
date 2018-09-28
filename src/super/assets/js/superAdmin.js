@@ -1745,4 +1745,45 @@ function editProductCB(obj) {
   $('#'+obj.data.key).html(tr.join(''));
 }
 
+function deleteDesignerImg(k,bk, bp){
+  var uri = '/DeleteBucketFile?k='+k+'&bucket_key='+bk+'&selection=DESINGERUPLOAD&bucket_path='+bp;
+  getRequest('',uri, 'deleteDesignerImgCB');
+}
+function deleteDesignerImgCB(r) {
+  if(r.status=="SUCCESS"){
+    $('#img_box_'+r.data.i).remove();
+  }
+}
+
+function showDesignerImgae(k){
+  openDialog('#designerImagesDailog');
+  $('#result_dom').html('<h4>Please wait...');
+  getRequest('','/superadmin/GetDesignerImgaes?k='+k,'showDesignerImgaeCB');
+}
+function showDesignerImgaeCB(r){
+  var h = [];
+  for(var i=0; i<r.data.img_url.length; i++){
+    h.push('<div class="design-img-box" id="img_box_');
+    h.push(i);
+    h.push('"> <img src="');
+    h.push(r.data.img_url[i]);
+    h.push('"><br><button class="btn btn-danger btn-minier" onclick="deleteDesignerImg(');
+    h.push("'");
+    h.push(r.data.k);
+    h.push("'");
+    h.push(',');
+    h.push("'");
+    h.push(r.data.bucket_key[i]);
+    h.push("'");
+    h.push(',');
+    h.push("'");
+    h.push(r.data.bucket_path[i]);
+    h.push("'");
+    h.push(')">Delete</button> </div>');
+    
+  }
+  
+  $('#result_dom').html(h.join(''));
+}
+
 

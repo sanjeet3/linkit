@@ -44,6 +44,7 @@ __route_list = [
     #Designer Setup
     RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetDesignerImgaes', DesignerSetup.GetDesignerImgaes, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/ProductLiveSetting', DesignerSetup.ProductLiveSetting, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductLiveSetting', DesignerSetup.GetProductLiveSetting, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductLiveInfo', DesignerSetup.GetProductLiveInfo, name='SuperAdmin DesignerSetup page', strict_slash=True),

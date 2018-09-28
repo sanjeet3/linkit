@@ -1,5 +1,5 @@
 application: link-it-portal
-version: 18sept2018v1
+version: 24sept2018
 runtime: python27
 api_version: 1
 threadsafe: true

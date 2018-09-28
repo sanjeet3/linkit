@@ -15,14 +15,9 @@
           class="label label-lg label-yellow arrowed-in arrowed-in-right cursor"
           onclick="GetActionDom('/superadmin/CustomDesign', 'Design Variation')">Design
           Variation</span> <span class="label label-lg label-purple arrowed arrowed-right cursor"
-          onclick="GetActionDom('/superadmin/Backgrounds', 'Backgrounds')">Backgrounds</span>
-           <span
+          onclick="GetActionDom('/superadmin/Backgrounds', 'Backgrounds')">Backgrounds</span> <span
           class="label label-lg label-info arrowed-in-right arrowed-in cursor"
-          onclick="GetActionDom('/superadmin/FramesView', 'Frames')">Frames</span>
-          
-           <span
-          class="label label-lg label-gray arrowed-in-right arrowed cursor"
-          onclick="GetActionDom('/superadmin/UploadMasks', 'Masks')">Masks</span> <span
+          onclick="GetActionDom('/superadmin/FramesView', 'Frames')">Frames</span> <span
           class="label label-lg label-success arrowed cursor"
           onclick="GetActionDom('/superadmin/UploadPattern', 'Text-Patterns')">Text-Patterns</span>
       </p>
@@ -35,11 +30,20 @@
           onclick="GetActionDom('/superadmin/MappingCustomDesign', 'Design Variation Mapping')">Design
           Variation Mapping</span> <span class="label label-lg label-purple arrowed arrowed-right cursor"
           onclick="GetActionDom('/superadmin/MappingBackground', 'Backgrounds Mapping')">Backgrounds
-          Mapping</span><span
-          class="label label-lg label-info arrowed-in-right arrowed-in cursor"
+          Mapping</span><span class="label label-lg label-info arrowed-in-right arrowed-in cursor"
           onclick="GetActionDom('/superadmin/MappingFrame', 'Frames')">Frames Mapping</span>
       </p>
     </div>
   </div>
 </div>
 <div id="action_dom"></div>
+<div id="designerImagesDailog" class="dialog-box dialog-vw-97">
+  <div class="dailog-header">
+    <span>Uploaded Image files</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#designerImagesDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <div class="col-sm-12" id="result_dom"></div>
+  </div>
+  <button onclick="closeDialog('#designerImagesDailog')" type="button" class="btn btn-default">Close</button>
+</div>

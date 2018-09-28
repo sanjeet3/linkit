@@ -608,10 +608,22 @@ class GetProductLiveInfo(ActionSupport):
     p.put()
     return json_response(self.response, {}, SUCCESS, '')
 
+class GetDesignerImgaes(ActionSupport): 
+  def get(self):
+    k = self.request.get('k')  
+    e = ndb.Key(urlsafe=k).get()
+    d= {'k': k,
+        'img_url': e.img_url,
+        'bucket_key': e.bucket_key,
+        'bucket_path': e.bucket_path}  
+    return json_response(self.response, d, SUCCESS, '')  
+          
+
 PRODUCTPROMO ='PRODUCTPROMO'
 PRODUCTPROMOBG='PRODUCTPROMOBG'
 CANVASIMG='CANVASIMG'
 CANVASPREV='CANVASPREV'
+DESINGERUPLOAD='DESINGERUPLOAD'
 class DeleteBucketFile(ActionSupport): 
   def get(self):
     self.status = ERROR  
@@ -619,6 +631,7 @@ class DeleteBucketFile(ActionSupport):
     k = self.request.get('k')
     self.e = ndb.Key(urlsafe=k).get()
     self.bucket_key = self.request.get('bucket_key')
+    self.index = 0
     selection = self.request.get('selection').upper()
     if selection==PRODUCTPROMO:
       self.product_promo()
@@ -627,9 +640,26 @@ class DeleteBucketFile(ActionSupport):
     elif selection==CANVASIMG:
       self.product_cavan()
     elif selection==CANVASPREV:
-      self.product_preview_canvas()            
-    return json_response(self.response, {'k': k}, self.status, self.msg)
+      self.product_preview_canvas()
+    elif selection==DESINGERUPLOAD:
+      self.remove_designer_upload()                  
+    return json_response(self.response, {'k': k, 'i': self.index}, self.status, self.msg)
   
+  def remove_designer_upload(self):
+    bucket_path = self.request.get('bucket_path')  
+    if delete_bucket_file(self.bucket_key):
+      try:
+        i = self.e.bucket_path.index(bucket_path)
+        self.index = i
+        self.e.img_url.pop(i)
+        self.e.bucket_key.pop(i)
+        self.e.bucket_path.pop(i)
+        self.e.put()
+        self.status=SUCCESS
+        self.msg='Image file removed'
+      except Exception, msg:
+        logging.error(msg)
+             
   def product_promo(self):
     if delete_bucket_file(self.bucket_key):
       self.status=SUCCESS
