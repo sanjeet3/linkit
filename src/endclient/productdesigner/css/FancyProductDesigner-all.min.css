@@ -3934,6 +3934,17 @@
     max-height: 300px
 }
 
+.frame-pattern-wrapper {
+    position: fixed;
+    top: 12px;
+    bottom: 0;
+    z-index: 100000;
+    text-align: center;
+    width: 100%;
+    height: fit-content;
+}
+
+
 .fpd-container .fpd-btn,
 .fpd-modal-wrapper .fpd-btn {
     cursor: pointer;

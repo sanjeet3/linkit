@@ -7,8 +7,7 @@ title != "Base"*/
   $.post("php/save_image.php", {
     base64_image : dataURL
   });
-});*/
-var yourDesigner;
+});*/ 
 function customizePluginSettings(){
 
   console.log(yourDesigner)
