@@ -3,6 +3,7 @@
 //----------------------------------
 var baseWidth=0; var baseHeight = 0;
 var yourDesigner=null;
+var designJson = [], loadReadyDesign=false;
 if(fabric.version === '1.6.7') {
 
     fabric.Object.prototype.setCoords = function() {
@@ -3808,7 +3809,18 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         instance.stage.renderAll();
 
     };
+    
+    //position seletec image to frame
+    var placeImageNearFrame = function(object, left, top){
 
+      object.setPositionByOrigin(new fabric.Point(left, top), 'center', 'center');
+
+      instance.stage.renderAll();
+      object.setCoords();
+
+      _checkContainment(object);
+    };
+    
     //center object
     var _centerObject = function(object, hCenter, vCenter, boundingBox) {
 
@@ -3993,6 +4005,57 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         var clipRect = _this.clippingRect;
 
+        ctx.save();
+
+        var m = _this.calcTransformMatrix(),
+            iM = fabric.util.invertTransform(m);
+
+        ctx.transform.apply(ctx, iM);
+        ctx.beginPath();
+        ctx.rect(
+            clipRect.left,
+            clipRect.top,
+            clipRect.width * scale,
+            clipRect.height * scale
+        );
+        ctx.fillStyle = 'transparent';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+    };
+    
+    //defines the clipping area from svg
+    var _setSVGClip = function(element) {
+        var d1 = instance.svgModel._objects[element.svgModelIndex].getPointByOrigin('left', 'top');
+        console.log(d1)
+        var bbCoords = {
+            left: instance.svgModel.aCoords.tl.x,
+            top: instance.svgModel.aCoords.tl.y,
+            width: instance.svgModel.width, 
+            height: instance.svgModel.height,
+        }
+        console.log(bbCoords);
+        if(bbCoords) {
+
+            element.clippingRect = bbCoords;
+            element.clipTo = function(ctx) {
+              _drawClipRect(ctx, this);
+            };
+
+        }
+
+    };
+
+    //draws the clipping img to svg
+    var _drawClipRect = function (ctx, _this, scale) {
+
+        scale = scale === undefined ? 1 : scale;
+
+        var clipRect = _this.clippingRect;
+        console.log(instance.svgModel)
+        console.log(_this)
+        console.log(clipRect);
         ctx.save();
 
         var m = _this.calcTransformMatrix(),
@@ -4266,9 +4329,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 var svgUrl = url;
-                if(params.svg){
+                /*if(params.svg){
                   svgUrl = '/Imgage?id='+ params.svg;
-                }
+                }*/
                 fabric.loadSVGFromURL(svgUrl, function(objects, options) {
 
                     //if objects is null, svg is loaded from external server with cors disabled
@@ -4327,59 +4390,24 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
                     //if src is empty, image is loaded from external server with cors disabled
                     fabricImg = fabricImg.getSrc() === '' ? null : fabricImg;
-                    
-                    if(instance.svgModel && instance.svgModelReady){
-                      var patternImage = fabricImg; 
-                      if(patternImage.height > instance.svgModel._objects[instance.svgModelIndex].height){
-                        patternImage.scaleToHeight(instance.svgModel._objects[instance.svgModelIndex].height);
-                      } else if(patternImage.width > instance.svgModel._objects[instance.svgModelIndex].width) {
-                        patternImage.scaleToWidth(instance.svgModel._objects[instance.svgModelIndex].width);
-                      }
-                      
-                      if( instance.svgModel._objects[instance.svgModelIndex].width > patternImage.getScaledWidth() ) {
-                        patternImage.scaleToWidth(instance.svgModel._objects[instance.svgModelIndex].width);
-                      }
-                      
-                      var patternSourceCanvas = new fabric.StaticCanvas();
-                      patternSourceCanvas.add(patternImage);
-                      patternSourceCanvas.setDimensions({
-                        width: patternImage.getScaledWidth(),
-                        height: patternImage.getScaledHeight()
-                      });
-                      patternSourceCanvas.renderAll();
-                      var pattern = new fabric.Pattern({
-                          source: patternSourceCanvas.getElement(),
-                          
-                        },
-                        function(patternObj) {
-                          instance.svgModel._objects[instance.svgModelIndex].fill = patternObj;
-                          instance.svgModelIndex++;
-                          if(instance.svgModelIndex==instance.svgModel._objects.length) {
-                            instance.svgModelReady=false;
-                            FPDUtil.framePatternMessage('<p>Your frame is ready kindly resize frame to see all pictures</p>');
-                          } else {
-                            var h=['<p>Picture loaded to frame '];
-                            h.push(instance.svgModelIndex);
-                            h.push(' of ');
-                            h.push(instance.svgModel._objects.length);
-                            h.push('<br>To see changes resize your frame!</p>');
-                            FPDUtil.framePatternMessage(h.join(''));
-                          } 
-                      }); 
-
-                      //instance.svgModel.canvas.trigger('object:scaling', {target: instance.svgModel});
-                      /*var modifiedParameters = {};
-                      modifiedParameters.scaleX = 1;
-                      modifiedParameters.scaleY = 1;
-                      yourDesigner.trigger('elementModify', [instance.svgModel, modifiedParameters]);*/
-                      /*instance.svgModel.render();  
-                      instance.svgModel._updateObjectsACoords();
-                      instance.svgModel.bringToFront();
-                      instance.svgModel._updateCacheCanvas();*/
-                      //instance.stage.renderAll();
-                    } else {
-                      _fabricImageLoaded(fabricImg, fabricParams, false);
+                    if(fabricParams.minDPI !=undefined && instance.svgModelReady){
+                      fabricParams.svgModelIndex = instance.svgModelIndex;
+                      fabricParams.autoCenter=false
+                      instance.svgModelIndex++;
+                      if(instance.svgModelIndex==instance.svgModel._objects.length) {
+                        instance.svgModelReady=false;
+                        FPDUtil.framePatternMessage('<p>Your frame is ready with all pictures</p>');
+                      } else {
+                        var h=['<p>Picture loaded to frame '];
+                        h.push(instance.svgModelIndex);
+                        h.push(' of ');
+                        h.push(instance.svgModel._objects.length);
+                        h.push('</p>');
+                        FPDUtil.framePatternMessage(h.join(''));
+                      } 
                     }
+                    console.log(fabricParams)
+                    _fabricImageLoaded(fabricImg, fabricParams, false);
 
                 }, {crossOrigin: 'Anonymous'});
 
@@ -4858,9 +4886,12 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             }
 
         }
-
-        //clip element
-        if((parameters.boundingBox && parameters.boundingBoxMode === 'clipping') || parameters.hasUploadZone) {
+        
+        if(element.svgModelIndex != undefined){
+          console.log(instance.svgModel);
+          _setSVGClip(element);
+        } else if((parameters.boundingBox && parameters.boundingBoxMode === 'clipping') || parameters.hasUploadZone) {
+          //clip element
             _clipElement(element);
         }
 
@@ -12448,6 +12479,15 @@ var FancyProductDesigner = function(elem, opts) {
             }
 
             firstProductCreated = instance.mainOptions.modalMode && evt.type === 'modalDesignerOpen';
+            if(loadReadyDesign!=false){
+              loadReadyDesign=false   
+              setTimeout(function(){
+                yourDesigner.loadProduct(designJson);
+              }, 1000);
+
+              
+            }            
+            
 
         });
 
