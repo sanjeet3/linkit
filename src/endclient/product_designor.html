@@ -216,8 +216,11 @@ stage_height = {{canvas.stage_height}};
           },
         };
 
+        {%if redayDesign%}
+        designJson = {{redayDesign.design_json|safe}}
+        loadReadyDesign=true;
+        {%endif%}
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-
       });
       
 </script>      

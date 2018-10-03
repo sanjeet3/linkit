@@ -654,3 +654,29 @@ a.banner-matter {
 .ribbon-green:after {
   right: 0;
 }
+
+.ready-design-box{
+  cursor: pointer;
+  float:left;
+  width: 350px;
+  height: 200px;
+  margin: 15px;
+  border: 1px solid #a6a6a6;
+  position: relative;
+}
+
+.ready-design-box:hover{
+  -webkit-box-shadow: 0px 0px 8px #2196f3e6;
+  -moz-box-shadow: 0px 0px 8px #2196f3e6;
+  box-shadow: 0px 0px 8px #2196f3e6; 
+}
+
+.ready-design-box img {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}

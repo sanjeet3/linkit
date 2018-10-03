@@ -16,77 +16,83 @@
 <body style="height: 100%; width: 100%">
   <div class="container" id="product_design_caontainer" style="width: 100%;">
     <div id="main-container">
-      <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3> 
-      
-  <div id="product-designer" style="clear: both;"
-    class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-    {%if canvas%}
-    <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
-      <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}" title="Base"
-        data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
-    </div>
-    {%else%}
-    <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
-      <img src="/img/Product.png" title="Base"
-        data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
-    </div>
-    {%endif%}
-    
-    <div class="fpd-design">
-      {%for cat in design_list%}
-      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-        {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          {%endfor%}
+      <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3>
+      <div id="product-designer" style="clear: both;"
+        class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
+        {%if canvas%}
+        <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
+          <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
+            title="Base"
+            data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
         </div>
-        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-          title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-        {%endfor%}
-      </div>
-      {%endfor%}
-    </div>
-    
-    <div class="fpd-background">
-      {%for cat in bg_list%} 
-      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-        {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          {%endfor%}
+        {%else%}
+        <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
+          <img src="/img/Product.png" title="Base"
+            data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
         </div>
-        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-          title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-        {%endfor%}
-      </div>
-      {%endfor%}
-    </div>
-    
-    <div class="fpd-frame"> 
-      {%for cat in frame_list%}
-      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-        
-        {%if cat.key in sub_frame_dict%} 
-          {%set cat_list=sub_frame_dict[cat.key]%} 
-          {%for sc in cat_list%}
-          <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-            {%for img in sc.img_url%}
-            <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}" data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+        {%endif%}
+        <div class="fpd-design">
+          {%for cat in design_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+                data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
+              title="{{cat.title}}{{loop.index}}"
+              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
             {%endfor%}
           </div>
           {%endfor%}
-        {%endif%}  
-        {%for img in cat.img_url%}  
-        <img src="{{img}}" title="{{cat.img_title[loop.index-1]}}" data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
-        {%endfor%}
+        </div>
+        <div class="fpd-background">
+          {%for cat in bg_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+                data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
+              title="{{cat.title}}{{loop.index}}"
+              data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            {%endfor%}
+          </div>
+          {%endfor%}
+        </div>
+        <div class="fpd-frame">
+          {%for cat in frame_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_frame_dict%} {%set cat_list=sub_frame_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+              {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}"
+                data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
+              title="{{cat.img_title[loop.index-1]}}"
+              data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
+            {%endfor%}
+          </div>
+          {%endfor%}
+        </div>
+        {#<div class="fpd-frame">
+          <div class="fpd-category" title="Frame Mock" data-thumbnail="">
+            <img src="/wp-content/3_box_frame.svg" title="Frame"
+              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          </div>
+          <div class="fpd-category" title="Frame test" data-thumbnail="">
+            <img src="/wp-content/3_box_frame.svg" title="Frame"
+              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          </div>
+        </div>#}
       </div>
-      {%endfor%}
-    </div>
-  </div>
       <br />
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
@@ -96,10 +102,14 @@
               element</li>
           </ol>
           <form id="create_product_design_form">
-            <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
-              name="layer" id="design_layer"> <input type="hidden" name="design_print"
-              id="design_print">
-            <button type="button" class="fpd-btn" onclick="alert('Create Ready design')">Save Design</button>
+          
+            <input type="hidden" name="code" value="{{p.code}}">
+            <input type="hidden" name="name" value="{{p.name}}">
+            <input type="hidden" name="product" value="{{key}}">
+            <textarea style="display: none;" name="design_print" id="design_print"></textarea>
+            <textarea style="display: none;" name="layer" id="design_layer"></textarea>
+            <button type="button" class="fpd-btn" onclick="createReadyDesign()">Create
+              Ready Design</button>
           </form>
           <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
             preparing your design...</p>
@@ -111,12 +121,11 @@
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>
 <script src="/js/jquery-ui.min.js" type="text/javascript"></script>
- 
 <!-- HTML5 canvas library - required -->
 <script src="/productdesigner/js/jquery-mousewheel.js" type="text/javascript"></script>
-<script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script> 
-<script src="/productdesigner/js/fancyDesigner.js" type="text/javascript"></script> 
-
+<script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script>
+<script src="/productdesigner/js/fancyDesigner2.js" type="text/javascript"></script>
+<script src="/super/assets/js/algo.js"></script>
 <script type="text/javascript">  
 var canvasPreviewUrl = ''
 var preview_top = 0;
@@ -209,7 +218,15 @@ jQuery(document).ready(
           /* uploadZone: true, */ 
         },
         imageEditorSettings : {
-          masks : [{%for img in masks%}'/Imgage?id={{img}}',{%endfor%} ],
+          masks : [
+            '/wp-content/masks/circle.svg',
+            '/wp-content/masks/heart.svg',
+            '/wp-content/masks/star.svg',
+            '/wp-content/masks/hexagon.svg',
+            '/wp-content/masks/3_box_frame.svg',
+            '/wp-content/masks/1_box_frame.svg',
+            
+            ],
         },
         elementParameters : {
           patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
@@ -221,5 +238,5 @@ jQuery(document).ready(
 
     });
       
-</script>      
+</script>
 </html>

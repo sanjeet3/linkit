@@ -225,3 +225,30 @@ function showListDom() {
 	
 };
 
+function createReadyDesign(){
+  var product = yourDesigner.getProduct();
+  productDesignLayer = product[0].elements;
+  if (productDesignLayer.length < 2) {
+    alert('No changes detected');
+    return;
+  }
+  if (!confirm('Do you wish to save this design?'))
+    return;
+
+  $('#create_product_design_form').hide();
+  $('#pls_wait_design_saving').show();
+  $('#design_layer').val(JSON.stringify(product));
+  yourDesigner.getProductDataURL(function(dataURL) {
+    $('#design_print').val(dataURL);
+
+    postRequest('create_product_design_form', '/DesinerDemo',
+        'createReadyDesignCB');
+  });
+};
+
+
+function createReadyDesignCB(r){
+  $('#create_product_design_form').show();
+  $('#pls_wait_design_saving').hide();
+  alert("Ready design saved");
+};

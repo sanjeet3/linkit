@@ -7,7 +7,7 @@ from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.bucketHandler import upload_file, delete_bucket_file
 from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
 from src.Database import FrameCategory, FrameSubCategory
-from src.Database import TextPatterns, Masks, ProductCanvas, Product
+from src.Database import TextPatterns, Masks, ProductCanvas, Product, ReadyDesignTemplate
 from src.lib.SABasehandler import ActionSupport
 
 import cgi    
@@ -24,6 +24,22 @@ class Home(ActionSupport):
     self.response.out.write(template.render(context))  
      
 class DesinerDemo(ActionSupport):
+  def post(self):
+    '''Create ready design templates ''' 
+    p = ndb.Key(urlsafe=self.request.get('product'))                     
+    design_print = self.request.get('design_print')
+    layer = self.request.get('layer')    
+    name = self.request.get('name')    
+    code = self.request.get('code')    
+    e = ReadyDesignTemplate()   
+    e.code = code
+    e.design_json = layer
+    e.design_prev = design_print
+    e.name = name
+    e.product = p
+    e.put()
+    return json_response(self.response, { }, SUCCESS,'Ready design created')
+    
   def get(self):
     template_path = 'super/product_designor_demo.html'  
     sub_frame_dict = {} 
@@ -31,7 +47,6 @@ class DesinerDemo(ActionSupport):
     p = ndb.Key(urlsafe=self.request.get('product')).get()  
     sub_cat_dict = {}
     sub_bg_dict = {}  
-    masks = Masks.get_bucket_list() 
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
     
@@ -56,13 +71,11 @@ class DesinerDemo(ActionSupport):
       if e.category in sub_bg_dict:  
         sub_bg_dict[e.category].append(e)
       else:
-        sub_bg_dict[e.category]=[e]        
-    
+        sub_bg_dict[e.category]=[e]      
              
     self.response.out.write(template.render({'p': p,
-                                             'key': self.request.get('key'),   
+                                             'key': self.request.get('product'),   
                                              'canvas': canvas,
-                                             'masks': masks,
                                              'patterns': patterns,
                                              'sub_frame_dict': sub_frame_dict,
                                              'sub_cat_dict': sub_cat_dict,

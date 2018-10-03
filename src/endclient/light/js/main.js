@@ -24,14 +24,14 @@ function backToProductAcitionDom() {
 
 }
 
-function goToProductDesign(key) {
+function goToProductDesign(key, redayDesign) {
   $('#product_design_caontainer').show();
   $('#product_action_caontainer').hide();
   $('#product_design_caontainer')
       .html(
           '<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;"><i class="fa fa-spinner fa-spin fa-2x"></i><br><p>Loading product design creator</p></div>');
   yourDesigner = null;
-  getRequest('', '/GetProductDesignor?key=' + key, 'goToProductDesignCallBack');
+  getRequest('', '/GetProductDesignor?key=' + key + '&redayDesign=' + redayDesign, 'goToProductDesignCallBack');
 };
 
 function goToProductDesignCallBack(r) {

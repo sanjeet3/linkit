@@ -643,6 +643,23 @@ class UserModel(EndpointsModel):
   def get_active_by_email(cls, email):  
     return cls.query(cls.email==email.lower(), cls.active==True).get()
 
+class ReadyDesignTemplate(EndpointsModel):
+  ''' Text Patterns datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
+  product = ndb.KeyProperty(Product)
+  code = ndb.StringProperty(default='')
+  name = ndb.StringProperty(default='')
+  design_prev = ndb.TextProperty(default='')
+  design_json = ndb.TextProperty(default='')
+
+  @classmethod
+  def get_list(cls):  
+    return cls.query().order(-cls.created_on).fetch()  
+  @classmethod
+  def get_ready_design_list(cls, product):  
+    return cls.query(cls.product==product).order(-cls.created_on).fetch()  
+
 class RoleModel(EndpointsModel):
   created_on = ndb.DateTimeProperty(auto_now_add=True)    
   acl = ndb.IntegerProperty(default=0) 

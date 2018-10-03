@@ -56,6 +56,12 @@ indexes:
   - name: product
   - name: title
 
+- kind: ReadyDesignTemplate
+  properties:
+  - name: product
+  - name: created_on
+    direction: desc
+
 - kind: SellerOrder
   properties:
   - name: client

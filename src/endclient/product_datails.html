@@ -38,7 +38,7 @@
           onchange="setOrderProdutQty(this)"> <br />Maxpro will provide free delivery to
         you.<br />
         <br /> {%if user_obj%}<a class="now-get" id="create_desgin_btn"
-          href="javascript:goToProductDesign('{{p.entityKey}}')">Create Design</a>
+          href="javascript:goToProductDesign('{{p.entityKey}}', '')">Create Design</a>
         <p id="design_paragraf" style="display: none;">
           <b>Design Id: </b> <font id="design_id_text"></font>
         </p>
@@ -57,6 +57,14 @@
     {%endif%}
     <div class="clearfix"></div>
   </div>
+</div>
+<div class="col-lg-12">
+<h3>Choose from ready designs</h3>
+{%for d in design_list%}
+<div class="ready-design-box" onclick="goToProductDesign('{{p.entityKey}}', '{{d.entityKey}}')">
+  <img alt="" src="{{d.design_prev}}">
+</div> 
+{%endfor%}
 </div>
 <script>
   jQuery(document).ready(function($) {

@@ -3857,7 +3857,44 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         _checkContainment(object);
 
     };
+    
+    //center frame object with respesct of there top,left
+    var _centerFrameObject = function(object, hCenter, vCenter, boundingBox) {
 
+        var cp = object.getCenterPoint(),
+            left = cp.x,
+            top = cp.y;
+
+        if(hCenter) {
+
+            if(boundingBox) {
+                left = boundingBox.left + boundingBox.width * 0.25 + object.aCoords.tl.x;
+            }
+            else {
+                left = instance.options.stageWidth * 0.5;
+            }
+
+        }
+
+        if(vCenter) {
+            if(boundingBox) {
+                top = boundingBox.top + boundingBox.height * 0.25 + object.aCoords.tl.y;
+            }
+            else {
+                top = instance.options.stageHeight * 0.5;
+            }
+
+        }
+
+        object.setPositionByOrigin(new fabric.Point(left, top), 'center', 'center');
+
+        instance.stage.renderAll();
+        object.setCoords();
+
+        _checkContainment(object);
+
+    };
+    
     //loads custom fonts
     var _renderOnFontLoaded = function(fontName, element) {
 
@@ -4027,15 +4064,23 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
     
     //defines the clipping area from svg
     var _setSVGClip = function(element) {
-        var d1 = instance.svgModel._objects[element.svgModelIndex].getPointByOrigin('left', 'top');
-        console.log(d1)
+        var frameBox = instance.getElementByID(element.svgid);
+        /*if(!frameBox){
+          _clipElement(element)
+          return;
+        }*/ 
+        
+        element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.width*0.25, frameBox.aCoords.tl.y+frameBox.height*0.25), 'center', 'center');
+        
+        var topLeftPoint = frameBox.getPointByOrigin('left', 'top');
+
         var bbCoords = {
-            left: instance.svgModel.aCoords.tl.x,
-            top: instance.svgModel.aCoords.tl.y,
-            width: instance.svgModel.width, 
-            height: instance.svgModel.height,
-        }
-        console.log(bbCoords);
+            left: topLeftPoint.x,
+            top: topLeftPoint.y,
+            width: frameBox.width * frameBox.scaleX,
+            height: frameBox.height * frameBox.scaleY
+        };
+        
         if(bbCoords) {
 
             element.clippingRect = bbCoords;
@@ -4052,10 +4097,20 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         scale = scale === undefined ? 1 : scale;
 
-        var clipRect = _this.clippingRect;
-        console.log(instance.svgModel)
-        console.log(_this)
-        console.log(clipRect);
+        var clipRect = _this.clippingRect,
+        frameBox = instance.getElementByID(_this.svgid);
+        if(!frameBox){
+          _clipElement(_this); 
+          return;
+        }
+        var topLeftPoint = frameBox.getPointByOrigin('left', 'top');
+
+        var bbCoords = {
+            left: topLeftPoint.x,
+            top: topLeftPoint.y,
+            width: frameBox.width * frameBox.scaleX,
+            height: frameBox.height * frameBox.scaleY
+        }; 
         ctx.save();
 
         var m = _this.calcTransformMatrix(),
@@ -4064,10 +4119,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         ctx.transform.apply(ctx, iM);
         ctx.beginPath();
         ctx.rect(
-            clipRect.left,
-            clipRect.top,
-            clipRect.width * scale,
-            clipRect.height * scale
+            topLeftPoint.x,
+            topLeftPoint.y,
+            frameBox.width * frameBox.scaleX,
+            frameBox.height * frameBox.scaleY
         );
         ctx.fillStyle = 'transparent';
         ctx.fill();
@@ -4329,39 +4384,27 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 var svgUrl = url;
-                /*if(params.svg){
+                if(params.svg){
                   svgUrl = '/Imgage?id='+ params.svg;
-                }*/
+                }
                 fabric.loadSVGFromURL(svgUrl, function(objects, options) {
 
-                    //if objects is null, svg is loaded from external server with cors disabled
-                    var svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
-                                         
-                    if(objects && !params.fill) {
-                        params.colors = [];
-                        for(var i=0; i < objects.length; ++i) {
-                            var color = tinycolor(objects[i].fill);
-                            params.colors.push(color.toHexString());
-                        }
-                        params.svgFill = params.colors;
-                    }
+                  if(objects){
+                    fabricParams.frameCenter=true;
+                    for(var i = 0; i < objects.length; i++) {
+                      var timeStamp = Date.now().toString() + '_' +i;
+                      var opt={crossOrigin: options.crossOrigin,
+                        svgUid: timeStamp,
+                        toBeParsed: false,
+                        };
 
-                    if(!fabricParams.fill) {
-                        delete fabricParams['fill'];
+                      fabricParams.id=timeStamp;
+                      fabricParams.title=timeStamp;
+                      var svgGroup = new fabric.Group([objects[i]], opt);
+                      _fabricImageLoaded(svgGroup, fabricParams, true,{})
                     }
+                  }
                     
-                    if(svgGroup._objects){
-                      instance.svgModel = svgGroup;
-                      instance.svgModelSigle=false;
-                      instance.svgModelReady=true;
-                      instance.svgModelIndex=0;
-                    } else {
-                      instance.svgModel = svgGroup;
-                      instance.svgModelSigle=true;
-                      instance.svgModelReady=true;
-                      instance.svgModelIndex=-1;
-                    }
-                    _fabricImageLoaded(svgGroup, fabricParams, true, {svgFill: params.svgFill});
 
                 });
 
@@ -4390,23 +4433,6 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
                     //if src is empty, image is loaded from external server with cors disabled
                     fabricImg = fabricImg.getSrc() === '' ? null : fabricImg;
-                    if(fabricParams.minDPI !=undefined && instance.svgModelReady){
-                      fabricParams.svgModelIndex = instance.svgModelIndex;
-                      fabricParams.autoCenter=false
-                      instance.svgModelIndex++;
-                      if(instance.svgModelIndex==instance.svgModel._objects.length) {
-                        instance.svgModelReady=false;
-                        FPDUtil.framePatternMessage('<p>Your frame is ready with all pictures</p>');
-                      } else {
-                        var h=['<p>Picture loaded to frame '];
-                        h.push(instance.svgModelIndex);
-                        h.push(' of ');
-                        h.push(instance.svgModel._objects.length);
-                        h.push('</p>');
-                        FPDUtil.framePatternMessage(h.join(''));
-                      } 
-                    }
-                    console.log(fabricParams)
                     _fabricImageLoaded(fabricImg, fabricParams, false);
 
                 }, {crossOrigin: 'Anonymous'});
@@ -4854,8 +4880,12 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         delete parameters['paths']; //no paths in parameters
         element.setOptions(parameters);
-
-        if(parameters.autoCenter) {
+        
+        if(parameters.frameCenter!=undefined) {
+            // set top, left for each frame
+            instance.centerFrame(true, true, element);
+        } else if(parameters.autoCenter) {
+            //put element on canvas Base center
             instance.centerElement(true, true, element);
         }
 
@@ -4887,8 +4917,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         }
         
-        if(element.svgModelIndex != undefined){
-          console.log(instance.svgModel);
+        if(element.minDPI != undefined && instance.svgModel){
+          element.svgid = instance.svgModel;
           _setSVGClip(element);
         } else if((parameters.boundingBox && parameters.boundingBoxMode === 'clipping') || parameters.hasUploadZone) {
           //clip element
@@ -5387,6 +5417,23 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         _centerObject(element, h, v, instance.getBoundingBoxCoords(element));
         element.autoCenter = false;
+
+    };
+    
+    /**
+     * Centers an element horizontal or/and vertical.
+     *
+     * @method centerFrame
+     * @param {Boolean} h Center horizontal.
+     * @param {Boolean} v Center vertical.
+     * @param {fabric.Object} [element] The element to center. If not set, it centers the current selected element.
+     */
+    this.centerFrame = function(h, v, element) {
+
+        element = typeof element === 'undefined' ? instance.stage.getActiveObject() : element;
+
+        _centerFrameObject(element, h, v, instance.getBoundingBoxCoords(element));
+        element.frameCenter = false;
 
     };
 
@@ -12079,7 +12126,13 @@ var FancyProductDesigner = function(elem, opts) {
                 evt.preventDefault();
 
                 if(element && instance.currentViewInstance) {
-
+                     // frame svgUid obj on select click evt
+                     if(element.svgUid!=undefined){
+                       instance.currentViewInstance.svgModel = element.svgUid;
+                     } else {
+                       instance.currentViewInstance.svgModel = null;
+                     }
+                  
                     //upload zone is selected
                     if(element.uploadZone && !instance.mainOptions.editorMode) {
 
@@ -12125,7 +12178,8 @@ var FancyProductDesigner = function(elem, opts) {
 
                     instance.toolbar.toggle(false);
                     $body.children('.fpd-element-toolbar').find('input').spectrum('destroy');
-
+                    instance.currentViewInstance.svgModel = null;
+                    
                 }
 
             })

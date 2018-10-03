@@ -7,7 +7,7 @@ Created on 04-Jul-2018
 from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory
 from src.Database import Client, ClientProductDesign, ProductDesign
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster
-from src.Database import SellerLadger
+from src.Database import SellerLadger, ReadyDesignTemplate
 from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, FrameCategory,FrameSubCategory, BGSubCategory, Masks, TextPatterns 
 from src.lib.ECBasehandler import ActionSupport
  
@@ -252,7 +252,7 @@ class GetProductDetails(ActionSupport):
     p = ndb.Key(urlsafe=self.request.get('key')).get()
     seller_dict = {}#Seller.get_key_obj_dict()
     seller_product_list = []#SellerProduct.get_product_by_master_key_for_client(p.key)
-    design_list = []#ProductDesign.get_design_list(p.key)
+    design_list = ReadyDesignTemplate.get_ready_design_list(p.key) #ProductDesign.get_design_list(p.key)
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
     self.response.out.write(template.render({'p': p,
                                              'design_list': design_list,
@@ -397,11 +397,12 @@ class GetProductDesignor(ActionSupport):
     sub_frame_dict = {}
     sub_cat_dict = {}
     sub_bg_dict = {}  
-    
+    redayDesign=None
+    redayDesignKey=self.request.get('redayDesign')
     p = ndb.Key(urlsafe=self.request.get('key')).get() 
     template = self.get_jinja2_env.get_template(template_path)  
- 
-    masks = Masks.get_bucket_list()
+    if redayDesignKey:
+      redayDesign = ndb.Key(urlsafe=redayDesignKey).get()    
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
     
@@ -430,11 +431,11 @@ class GetProductDesignor(ActionSupport):
     
              
     self.response.out.write(template.render({'p': p,
+                                             'redayDesign': redayDesign,
                                              'dev': self.DEV,
                                              'key': self.request.get('key'), 
                                              'user_obj': self.client, 
                                              'canvas': canvas,
-                                             'masks': masks,
                                              'patterns': patterns,
                                              'frame_list': frame_list,
                                              'sub_frame_dict': sub_frame_dict,

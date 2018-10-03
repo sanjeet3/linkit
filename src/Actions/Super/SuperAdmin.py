@@ -709,12 +709,17 @@ class ThemesPicsUploading(ActionSupport):
                          data_dict,
                          SUCCESS,
                          '')  
-         
-class Test(ActionSupport):    
+import webapp2         
+class Test(webapp2.RequestHandler):    
   def get(self): 
     #bucket_key = 'encoded_gs_file:cHJvZHVjdHByb21vL2JnL3dvb2Rlbl9ib3guanBn'  
     #s = delete_bucket_file(bucket_key)
     #logging.info(s)
+    e = UserModel()
+    e.email='sainisanjeet3@gmail.com'
+    e.name='Ballu'
+    e.role='ADMIN'
+    #e.put()
     self.response.out.write('200')
                   
 class DeleteProductBG(ActionSupport):    
