@@ -662,6 +662,11 @@
 					<span class="fpd-mask-cancel fpd-btn fpd-dark"><span class="fpd-icon-close"></span></span>
 					<span class="fpd-mask-save fpd-btn"><span class="fpd-icon-done"></span></span>
 				</div>
+        <div class="col-lg-12" style="padding: 10px 0px 8px 0px;">
+          <b>Choose mask border color: </b>
+          <input type="color" id="mask_color_selctor" name="mask_color_selctor"
+               value="#2ecc71" style="height: 25px;" />
+        </div>
 
 			</div>
 
@@ -669,15 +674,15 @@
 			<div data-id="filters" class="fpd-content-filters"></div>
 
 			<!-- COLOR MANIPULATION -->
-			<div data-id="color-manipulation" class="fpd-content-color-manipulation fpd-clearfix">
+			<div data-id="color-manipulation" class="fpd-content-color-manipulation fpd-clearfix" id="fpd-color-manipulation">
 
 				<div class="fpd-left fpd-filter-brightness">
-					<div class="fpd-switch-container fpd-left" data-enabled="true" data-disabled="false" data-filter="Brightness">
+					<div class="fpd-switch-container fpd-left fpd-enabled" data-enabled="true" data-disabled="false" data-filter="Brightness">
 						<div class="fpd-switch-bar"></div>
 						<div class="fpd-switch-toggle"></div>
 					</div>
 					<label data-defaulttext="Brightness">image_editor.brightness</label>
-					<div class="fpd-range-tooltip">
+					<div class="fpd-range-tooltip fpd-enabled">
 						<span data-defaulttext="Brightness">image_editor.brightness</span>
 						<input type="range" name="brightness" class="fpd-input-range" value="0" min="-1" max="1" step="0.01" />
 						<div class="fpd-tooltip"></div>
@@ -685,12 +690,12 @@
 				</div>
 
 				<div class="fpd-left fpd-filter-contrast">
-					<div class="fpd-switch-container fpd-left" data-enabled="true" data-disabled="false"  data-filter="Contrast">
+					<div class="fpd-switch-container fpd-left fpd-enabled" data-enabled="true" data-disabled="false"  data-filter="Contrast">
 						<div class="fpd-switch-bar"></div>
 						<div class="fpd-switch-toggle"></div>
 					</div>
 					<label data-defaulttext="Contrast">image_editor.contrast</label>
-					<div class="fpd-range-tooltip">
+					<div class="fpd-range-tooltip fpd-enabled">
 						<span data-defaulttext="Contrast">image_editor.contrast</span>
 						<input type="range" name="contrast" class="fpd-input-range" value="0" min="-1" max="1" step="0.01" />
 						<div class="fpd-tooltip"></div>
@@ -698,12 +703,12 @@
 				</div>
 
 				<div class="fpd-left fpd-filter-remove-white">
-					<div class="fpd-switch-container fpd-left" data-enabled="true" data-disabled="false" data-filter="RemoveWhite" >
+					<div class="fpd-switch-container fpd-left fpd-enabled" data-enabled="true" data-disabled="false" data-filter="RemoveWhite" >
 						<div class="fpd-switch-bar"></div>
 						<div class="fpd-switch-toggle"></div>
 					</div>
 					<label data-defaulttext="Remove White">image_editor.remove_white</label>
-					<div class="fpd-range-tooltip">
+					<div class="fpd-range-tooltip fpd-enabled">
 						<span data-defaulttext="Distance">image_editor.remove_white_distance</span>
 						<input type="range" class="fpd-input-range" name="distance" value="0" min="0" max="1" step="0.01" />
 						<div class="fpd-tooltip"></div>

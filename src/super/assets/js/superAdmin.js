@@ -1786,4 +1786,17 @@ function showDesignerImgaeCB(r){
   $('#result_dom').html(h.join(''));
 }
 
+function deleteCategory(k, entity){
+  postRequest('','/superadmin/DeleteCategory?k='+k+'&entity='+entity,'deleteCategoryCB')
+}
+
+function deleteSubCategory(k){
+  postRequest('','/superadmin/DeleteSUBCategory?k='+k,'deleteCategoryCB')
+}
+function deleteCategoryCB(r){
+  if(r.status=="SUCCESS"){
+    $('#'+r.data.k).remove();
+  }
+}
+
 

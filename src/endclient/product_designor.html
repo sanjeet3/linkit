@@ -11,12 +11,12 @@
     {%if canvas%}
     <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
       <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}" title="Base"
-        data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
+        data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
     </div>
     {%else%}
     <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
       <img src="/img/Product.png" title="Base"
-        data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
+        data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
     </div>
     {%endif%}
     
@@ -43,12 +43,12 @@
         {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in cat_list%}
         <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
           {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            data-parameters='{"background_layer": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           {%endfor%}
         </div>
         {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
           title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          data-parameters='{"background_layer": true,"removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
         {%endfor%}
       </div>
       {%endfor%}
@@ -129,7 +129,7 @@ stage_height = {{canvas.stage_height}};
           editorMode : true,
           fitImagesInCanvas: true,
           toolbarPlacement : "smart",
-          mainBarModules : [ 'images', 'text', 'designs', 'backgrounds', 'frames',
+          mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
               'manage-layers', 'text-layers' ],
           actions : {
             'top' : [ 'download', 'print', 'preview-lightbox' ],
@@ -205,9 +205,9 @@ stage_height = {{canvas.stage_height}};
               '/wp-content/masks/heart.svg',
               '/wp-content/masks/star.svg',
               '/wp-content/masks/hexagon.svg',
-              '/wp-content/masks/3_box_frame.svg',
-              '/wp-content/masks/1_box_frame.svg',
-              
+              '/wp-content/masks/arches.svg',
+              '/wp-content/masks/atomic.svg',
+              '/wp-content/masks/flame.svg',
               ],
           },
           elementParameters : {

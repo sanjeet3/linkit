@@ -706,5 +706,73 @@ class DeleteBucketFile(ActionSupport):
       self.e.preview_url=''           
       self.e.preview_key=''           
       self.e.put()   
-          
+
+CLIP_ART='CLIP_ART'
+FRAMES='FRAMES'
+BACKGROUNDS='BACKGROUNDS'     
+    
+class DeleteCategory(ActionSupport): 
+  def post(self):
+    self.status = ERROR  
+    self.msg='Delete all categories and uploaded images'  
+    k = self.request.get('k')
+    k_type = self.request.get('entity')
+    self.e = ndb.Key(urlsafe=k).get()
+    if k_type==CLIP_ART:
+      self.clipart_deletion()    
+    elif k_type==FRAMES:
+      self.frame_deletion()
+    elif k_type==BACKGROUNDS:
+      self.backgound_deletion()
+            
+    return json_response(self.response, {'k': k}, self.status, self.msg)
+
+  def clipart_deletion(self):
+    e_query = DesignSubCategory.query_by_category(self.e.key)
+    if e_query.count()!=0:
+      self.msg='Delete sub-category first'
+    elif self.e.img_url:
+      self.msg='Delete uploaded images first'
+    else:          
+      self.e.key.delete()  
+      self.status=SUCCESS
+      self.msg='Deletion completed'
+    
+  def frame_deletion(self):
+    e_query = FrameSubCategory.query_by_category(self.e.key)
+    if e_query.count()!=0:
+      self.msg='Delete sub-category first'
+    elif self.e.img_url:
+      self.msg='Delete uploaded images first'
+    else:          
+      self.e.key.delete()  
+      self.status=SUCCESS
+      self.msg='Deletion completed'
+      
+  def backgound_deletion(self):  
+    e_query = BGSubCategory.query_by_category(self.e.key)
+    if e_query.count()!=0:
+      self.msg='Delete sub-category first'
+    elif self.e.img_url:
+      self.msg='Delete uploaded images first'
+    else:          
+      self.e.key.delete()  
+      self.status=SUCCESS
+      self.msg='Deletion completed'
+
+class DeleteSUBCategory(ActionSupport): 
+  def post(self):
+    self.status = ERROR  
+    self.msg='Delete all categories and uploaded images'  
+    k = self.request.get('k')
+    self.e = ndb.Key(urlsafe=k).get()
+    if self.e.img_url:
+      self.msg='Delete uploaded images first'
+    else:          
+      self.e.key.delete()  
+      self.status=SUCCESS
+      self.msg='Deletion completed'
+            
+    return json_response(self.response, {'k': k}, self.status, self.msg)
+ 
         

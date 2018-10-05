@@ -70,6 +70,8 @@ __route_list = [
     RedirectRoute(r'/superadmin/GetMappingBackground', DesignerSetup.GetMappingBackground, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/MappingFrame', DesignerSetup.MappingFrame, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/GetMappingFrame', DesignerSetup.GetMappingFrame, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/DeleteCategory', DesignerSetup.DeleteCategory, name='SuperAdmin', strict_slash=True),
+    RedirectRoute(r'/superadmin/DeleteSUBCategory', DesignerSetup.DeleteSUBCategory, name='SuperAdmin', strict_slash=True),
     
     #Super Admin Seller
     RedirectRoute(r'/superadmin/Seller', SuperAdmin.Frenchise, name='SuperAdmin Frenchise page', strict_slash=True),

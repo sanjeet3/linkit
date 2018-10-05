@@ -470,6 +470,10 @@ class DesignSubCategory(EndpointsModel):
   @classmethod
   def get_list(cls):  
     return cls.query().order(cls.title)  
+  
+  @classmethod
+  def query_by_category(cls, category):  
+    return cls.query(cls.category==category)  
 
 class BGCategory(EndpointsModel):
   ''' Background category datastore '''
@@ -506,7 +510,11 @@ class BGSubCategory(EndpointsModel):
   
   @classmethod
   def get_list(cls):  
-    return cls.query().order(cls.title) 
+    return cls.query().order(cls.title)   
+  
+  @classmethod
+  def query_by_category(cls, category):  
+    return cls.query(cls.category==category)
 
 class FrameCategory(EndpointsModel):
   ''' Background category datastore '''
@@ -543,7 +551,11 @@ class FrameSubCategory(EndpointsModel):
   
   @classmethod
   def get_list(cls):  
-    return cls.query().order(cls.title) 
+    return cls.query().order(cls.title)   
+  
+  @classmethod
+  def query_by_category(cls, category):  
+    return cls.query(cls.category==category)
 
 class TextPatterns(EndpointsModel):
   ''' Text Patterns datastore '''

@@ -23,12 +23,12 @@
         <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
           <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
-            data-parameters='{"isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
+            data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
         </div>
         {%else%}
         <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
           <img src="/img/Product.png" title="Base"
-            data-parameters='{"isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
+            data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
         </div>
         {%endif%}
         <div class="fpd-design">

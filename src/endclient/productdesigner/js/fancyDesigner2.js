@@ -3087,9 +3087,15 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             if(!element) {
                 return;
             }
-
+            
+            if(element.background_layer!=undefined){
+              instance.setElementParameters( {z: 1}, element, false ); 
+            } else{
+              
+            
             //check for other topped elements
             _bringToppedElementsToFront();
+            }
 
             if(element.isCustom && !element.hasUploadZone && !element.replace) {
                 element.copyable = element.originParams.copyable = true;
@@ -6564,7 +6570,10 @@ var FPDToolbar = function($uiElementToolbar, fpdInstance) {
                     );
 
                 imageEditor.loadImage(source);
-
+                var fpdgSwitchList = $('#fpd-color-manipulation .fpd-switch-container');
+                for(var i=0; i<fpdgSwitchList.length; i++){
+                  $(fpdgSwitchList[i]).toggleClass('fpd-enabled');
+                }
             }
 
 
@@ -8206,6 +8215,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
         canvasHeight = 0,
         $canvasContainer = $container.children('.fpd-image-editor-main'),
         fabricCanvas,
+        svgGroup,
         customMaskEnabled = false,
         clippingObject = null,
         fabricImage,
@@ -8322,12 +8332,9 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
         //--- MASK
 
         if(options.masks && $.isArray(options.masks)) {
-            var x=1;
             options.masks.forEach(function(svgURL) {
-              var title = 'Mask ' + x;
-              x++; 
-                /*var title = svgURL.split(/[\\/]/).pop(); //get basename
-                title = title.substr(0,title.lastIndexOf('.')); //remove extension*/
+                var title = svgURL.split(/[\\/]/).pop(); //get basename
+                title = title.substr(0,title.lastIndexOf('.')); //remove extension
                 $container.find('.fpd-mask-selection').append('<span data-mask="'+svgURL+'" class="fpd-tooltip" title="'+title+'" style="background-image: url('+svgURL+')"></span>')
             });
 
@@ -8357,7 +8364,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
                 fabric.loadSVGFromURL(mask, function(objects, options) {
 
                     //if objects is null, svg is loaded from external server with cors disabled
-                    var svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
+                    svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
 
                     fabricCanvas.add(svgGroup);
 
@@ -8396,7 +8403,19 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
 
 
         });
-
+        // mask color change callback  
+        $container.on('change', '#mask_color_selctor', function(e) {
+          var clr = e.target.value;
+          borderColor=clr;
+          fabricMaskOptions.cornerColor=clr;
+          fabricMaskOptions.borderColor=clr; 
+          if(svgGroup){
+            svgGroup.cornerColor=borderColor;
+            svgGroup.borderColor=borderColor;
+            svgGroup.set('stroke', borderColor);
+            fabricCanvas.renderAll();
+          }
+        });
         //mask: cancel, save
         $container.on('click', '.fpd-mask-cancel, .fpd-mask-save', function() {
 
@@ -8494,7 +8513,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
             if(!fabricImage) {
                 return false;
             }
-
+            console.log('cliocked');
             var $this = $(this),
                 filterType = $this.data('filter');
 
@@ -10005,14 +10024,25 @@ var LayersModule = {
         //destroy all color pickers and empty list
         $container.find('.fpd-current-color').spectrum('destroy');
         $container.find('.fpd-list').empty();
-
+        var textElm=[], allEml=[];
+        
         fpdInstance.getElements(fpdInstance.currentViewIndex).forEach(function(element) {
 
-            if(element.isEditable) {
-                _appendLayerItem(element);
+            if(element.isEditable && element.title!="Base") {
+                if(element.text !=undefined){
+                  textElm.push(element);   
+                }else{
+                  allEml.push(element);
+                }
             }
 
         });
+        for(var i=0; i<textElm.length; i++){
+          _appendLayerItem(textElm[i]);
+        }
+        for(var i=0; i<allEml.length; i++){
+          _appendLayerItem(allEml[i]);
+        }
 
         FPDUtil.createScrollbar($container.find('.fpd-scroll-area'));
 
