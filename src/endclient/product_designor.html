@@ -26,12 +26,12 @@
         {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in cat_list%}
         <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
           {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           {%endfor%}
         </div>
         {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
           title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
         {%endfor%}
       </div>
       {%endfor%}

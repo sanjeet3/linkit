@@ -730,6 +730,10 @@ var FPDUtil =  {
             return 'text';
         }
 
+        if(element.clipart==true) {
+          return 'png';
+      }
+        
         if(!element.source) {
             return false;
         }
@@ -4254,7 +4258,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         else {
             params = $.extend({}, instance.options.elementParameters, instance.options.imageParameters, params);
         }
-
+        /*if(params.clipart!=undefined){
+          params.fill=true;
+        }*/
         var pushTargetObject = false,
             targetObject = null;
 
