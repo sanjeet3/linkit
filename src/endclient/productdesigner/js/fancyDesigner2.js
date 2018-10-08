@@ -3878,7 +3878,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         if(hCenter) {
 
             if(boundingBox) {
-                left = boundingBox.left + boundingBox.width * 0.25 + object.aCoords.tl.x;
+                left = boundingBox.left + boundingBox.width * 0.1 + object.aCoords.tl.x;
             }
             else {
                 left = instance.options.stageWidth * 0.5;
@@ -3888,7 +3888,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         if(vCenter) {
             if(boundingBox) {
-                top = boundingBox.top + boundingBox.height * 0.25 + object.aCoords.tl.y;
+                top = boundingBox.top + boundingBox.height * 0.4 + object.aCoords.tl.y;
             }
             else {
                 top = instance.options.stageHeight * 0.5;
@@ -4072,23 +4072,55 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
     };
     
+    var setFrameLockMode = function(frameBox, a, b, opacity){
+      frameBox.advancedEditing = b;
+      frameBox.copyable = b;              
+      frameBox.draggable = b;             
+      frameBox.isEditable = b;                
+      frameBox.lockMovementX = a;
+      frameBox.lockMovementY = a;
+      frameBox.lockRotation = a;
+      frameBox.lockScalingX = a;
+      frameBox.lockScalingY = a;
+      frameBox.lockUniScaling = a;
+      frameBox.locked = a;            
+      frameBox.opacity = opacity;               
+      frameBox.removable = b;
+      frameBox.rotatable = b;             
+      frameBox.selectable = b;                
+      frameBox.uniScalingUnlockable = b;              
+      frameBox.originParams.advancedEditing = b;
+      frameBox.originParams.copyable = b;
+      frameBox.originParams.draggable = b;
+      frameBox.originParams.evented = b; 
+      frameBox.originParams.filter = b;   
+      frameBox.originParams.lockUniScaling = a;
+      frameBox.originParams.locked = a; 
+      frameBox.originParams.opacity = opacity ;  
+      frameBox.originParams.removable = b; 
+      frameBox.originParams.resizable = b; 
+      frameBox.originParams.rotatable = b;  
+      frameBox.originParams.selectable = b; 
+      frameBox.originParams.uniScalingUnlockable = b;
+      return frameBox;
+    }
+    
     //defines the clipping area from svg
     var _setSVGClip = function(element) {
         var frameBox = instance.getElementByID(element.svgid);
-        /*if(!frameBox){
-          _clipElement(element)
-          return;
-        }*/ 
+        if(frameBox){
+          frameBox = setFrameLockMode(frameBox, true, false, 0);
+        }
         
-        element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.width*0.25, frameBox.aCoords.tl.y+frameBox.height*0.25), 'center', 'center');
-        
+        element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.getScaledWidth()*0.5, frameBox.aCoords.tl.y+frameBox.getScaledHeight()*0.5), 'center', 'center');
+        frameBox.seletedImg=element.id;
         var topLeftPoint = frameBox.getPointByOrigin('left', 'top');
 
         var bbCoords = {
             left: topLeftPoint.x,
             top: topLeftPoint.y,
-            width: frameBox.width * frameBox.scaleX,
-            height: frameBox.height * frameBox.scaleY
+            width: frameBox.getScaledWidth(),
+            height: frameBox.getScaledHeight()
         };
         
         if(bbCoords) {
@@ -4118,8 +4150,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         var bbCoords = {
             left: topLeftPoint.x,
             top: topLeftPoint.y,
-            width: frameBox.width * frameBox.scaleX,
-            height: frameBox.height * frameBox.scaleY
+            width: frameBox.getScaledWidth(),
+            height: frameBox.getScaledHeight()
         }; 
         ctx.save();
 
@@ -4131,8 +4163,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         ctx.rect(
             topLeftPoint.x,
             topLeftPoint.y,
-            frameBox.width * frameBox.scaleX,
-            frameBox.height * frameBox.scaleY
+            frameBox.getScaledWidth(),
+            frameBox.getScaledHeight()
         );
         ctx.fillStyle = 'transparent';
         ctx.fill();
@@ -4396,9 +4428,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 var svgUrl = url;
-                if(params.svg){
+                /*if(params.svg){
                   svgUrl = '/Imgage?id='+ params.svg;
-                }
+                }*/
                 fabric.loadSVGFromURL(svgUrl, function(objects, options) {
 
                   if(objects){
@@ -4413,6 +4445,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                       fabricParams.id=timeStamp;
                       fabricParams.title=timeStamp;
                       var svgGroup = new fabric.Group([objects[i]], opt);
+                      fabricParams.scaleX = baseWidth/options.width;
+                      fabricParams.scaleY = baseHeight/options.height;
+                       
                       _fabricImageLoaded(svgGroup, fabricParams, true,{})
                     }
                   }
@@ -4612,6 +4647,12 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
           instance.svgModelReady=false;
           instance.svgModelSigle=false;
           instance.svgModelIndex=-1;
+        }
+        if(element.svgid!=undefined){
+          var frameBox = instance.getElementByID(element.svgid);
+          if(frameBox){
+            frameBox = setFrameLockMode(frameBox, false, true, 1);
+          }
         }
         instance.stage.remove(element);
 
@@ -8222,6 +8263,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
         $canvasContainer = $container.children('.fpd-image-editor-main'),
         fabricCanvas,
         svgGroup,
+        maskPlacedFlag = false,
         customMaskEnabled = false,
         clippingObject = null,
         fabricImage,
@@ -8376,22 +8418,23 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
 
                     svgGroup.setOptions($.extend({}, fabricMaskOptions, {opacity: 1, fill: "rgba(0,0,0,0)"}));
                     if(fabricCanvas.width > fabricCanvas.height) {
-                        svgGroup.scaleToHeight((fabricCanvas.height - 80) / instance.responsiveScale);
+                        svgGroup.scaleToHeight((fabricCanvas.height - 180) / instance.responsiveScale);
                     }
                     else {
-                        svgGroup.scaleToWidth((fabricCanvas.width - 80) / instance.responsiveScale);
+                        svgGroup.scaleToWidth((fabricCanvas.width - 180) / instance.responsiveScale);
                     }
-
+                     var strokeWidth = $('#mask_border_size').val();
+                     strokeWidth = strokeWidth?strokeWidth:3;
                     if(fabric.version === '1.6.7') { //Fabric 1.6.7
-                        svgGroup.getObjects()[0].set('stroke', borderColor).set('strokeWidth', 3 / svgGroup.scaleX);
+                        svgGroup.getObjects()[0].set('stroke', borderColor).set('strokeWidth', strokeWidth / svgGroup.scaleX);
                     }
                     else {
-                        svgGroup.set('stroke', borderColor).set('strokeWidth', 3 / svgGroup.scaleX);
+                        svgGroup.set('stroke', borderColor).set('strokeWidth', strokeWidth / svgGroup.scaleX);
                     }
 
                     clippingObject = svgGroup;
                     _resizeCanvas();
-
+                    maskPlacedFlag=false; 
                     svgGroup.left = 0;
                     svgGroup.top = 0;
                     svgGroup.setPositionByOrigin(new fabric.Point(canvasWidth * 0.5, canvasHeight * 0.5), 'center', 'center');
@@ -8409,7 +8452,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
 
 
         });
-        // mask color change callback  
+        // mask border color change callback  
         $container.on('change', '#mask_color_selctor', function(e) {
           var clr = e.target.value;
           borderColor=clr;
@@ -8422,6 +8465,39 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
             fabricCanvas.renderAll();
           }
         });
+        
+            
+        // mask border size change callback  
+        $container.on('change', '#mask_border_size', function(e) {
+          var strokeWidth = e.target.value;
+          if(svgGroup){
+            strokeWidth = strokeWidth ? strokeWidth/svgGroup.scaleX : 3/svgGroup.scaleX;
+            svgGroup.set('strokeWidth', strokeWidth);
+            fabricCanvas.renderAll();
+          }
+        });
+
+        
+        // mask border size change callback  
+        $container.on('change', '#use_mask_broder', function(e) {
+          var useBorder = e.target.checked;
+          if(svgGroup && maskPlacedFlag){
+            var strokeWidth = $('#mask_border_size').val();
+            strokeWidth = strokeWidth?strokeWidth:3;
+            strokeWidth = strokeWidth ? strokeWidth/svgGroup.scaleX : 3/svgGroup.scaleX;
+            console.log(strokeWidth);
+            console.log(useBorder);
+            if(useBorder){
+              svgGroup.set('strokeWidth', strokeWidth);
+            }else{
+              svgGroup.set('strokeWidth', 0);  
+            }
+            fabricCanvas.renderAll();
+          }
+        });
+        
+        
+        
         //mask: cancel, save
         $container.on('click', '.fpd-mask-cancel, .fpd-mask-save', function() {
 
@@ -8437,14 +8513,17 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
             if(clippingObject) {
 
                 if($(this).hasClass('fpd-mask-save')) {
-
                     _resizeCanvas();
-
-                    clippingObject.set('strokeWidth', 0);
+                    maskPlacedFlag=true;
+                    if($('#use_mask_broder').prop("checked") == false){
+                      clippingObject.set('strokeWidth', 0);
+                    }
                     fabricCanvas.clipTo = function(ctx) {
                       clippingObject.render(ctx);
                     };
 
+                } else {
+                  maskPlacedFlag=false;
                 }
 
                 fabricCanvas.remove(clippingObject);
@@ -14451,19 +14530,31 @@ var FancyProductDesigner = function(elem, opts) {
                 imageParts = this.src.split('.'),
                 scaleX = currentCustomImageParameters.scaleX || 1,
                 scaleY = currentCustomImageParameters.scaleY || 1;
-             
-                if(baseHeight>0 && imageH>baseHeight) { 
-                  scaleY=baseHeight/imageH
-                }
-                if(baseWidth>0 && imageW>baseWidth) { 
-                  scaleX=baseWidth/imageW;
-                }
+                if(instance.currentViewInstance.svgModel){
+                  var frameBox = instance.getElementByID(instance.currentViewInstance.svgModel);  
+                  var h=frameBox.getScaledHeight(), w=frameBox.getScaledWidth();
+                  //h=h?h:frameBox.height;
+                  //w=w?w:frameBox.width;
+                  if(h < imageH) { 
+                    scaleY=h/imageH
+                  }
+                  if(w < imageW) { 
+                    scaleX=w/imageW;
+                  }
+                } else {
+                  if(baseHeight>0 && imageH>baseHeight) { 
+                    scaleY=baseHeight/imageH
+                  }
+                  if(baseWidth>0 && imageW>baseWidth) { 
+                    scaleX=baseWidth/imageW;
+                  }
+                  if(scaleX>scaleY){
+                    scaleX=scaleY;
+                  } else if(scaleY>scaleX) {
+                    scaleY=scaleX;
+                  }
+                } 
                 
-                if(scaleX>scaleY){
-                  scaleX=scaleY;
-                } else if(scaleY>scaleX) {
-                  scaleY=scaleX;
-                }
                 
             if(!FPDUtil.checkImageDimensions(instance, imageW, imageH)) {
                 instance.toggleSpinner(false);
