@@ -623,6 +623,7 @@ class ProductCanvas(EndpointsModel):
   top = ndb.StringProperty(default='0')
   left = ndb.StringProperty(default='0') 
   stage_height = ndb.StringProperty(default='780')
+  stage_width = ndb.StringProperty(default='780')
   preview_url = ndb.StringProperty(default='')
   preview_key = ndb.StringProperty()
   preview_top = ndb.StringProperty(default='0')

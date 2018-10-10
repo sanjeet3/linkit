@@ -1,140 +1,293 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Craftyourchoice</title>
+<link rel="shortcut icon" type="image/png" href="/img/fevicon.png"/>
+<link rel="stylesheet" href="/css/api.css">
+<link href="/light/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<!--theme-style-->
+<link href="/light/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!--//theme-style-->
+<link rel="stylesheet" href="/super/assets/font-awesome/4.5.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--fonts-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet'
+  type='text/css'>
+<!--//fonts-->
+<link rel="stylesheet" href="/light/css/etalage.css" type="text/css" media="all" />
+<!-- <script src="/light/js/jquery.min.js"></script> -->
+<!--script-->
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<!-- Google Webfonts -->
+<link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
 <!-- Google Webfonts 110 -->
 <link href='/css/googlefonts.css' rel='stylesheet' type='text/css'>
-<div id="main-container">
-  <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3>
-  <button type="button" onclick="backToProductAcitionDom()"
-    class="btn btn-sm btn-primary btn-white btn-round btn-mini mt-15 pull-right">
-    <i class="ace-icon fa fa-arrow-left"></i> Back
-  </button>
-  <div id="product-designer" style="clear: both;"
-    class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-    {%if canvas%}
-    <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
-      <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}" title="Base"
-        data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
-    </div>
-    {%else%}
-    <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
-      <img src="/img/Product.png" title="Base"
-        data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
-    </div>
-    {%endif%}
-    
-    <div class="fpd-design">
-      {%for cat in design_list%}
-      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-        {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          {%endfor%}
-        </div>
-        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-          title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-        {%endfor%}
+<!-- The CSS for the plugin itself - required -->
+<link rel="stylesheet" type="text/css" href="/productdesigner/css/FancyProductDesigner-all.min.css" />
+<!-- Optional - only when you would like to use custom fonts - optional -->
+<link rel="stylesheet" type="text/css"
+  href="/productdesigner/css/jquery.fancyProductDesigner-fonts.css" />
+</head>
+<body style="height: 100%; width: 100%">
+  <!--navbar-->
+  {% include 'endclient/navbar.html' %}
+  <!---->
+  {%if not user_obj%}
+  <div class="container main-content" id="login_form"
+    style="z-index: 10; background-color: aliceblue; display: none;">
+    <div class="mt-20">
+      <div class="col-lg-4 col-xs-12 mb-20">
+        <form action="/Login" method="post">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <div>
+              <input type="email" class="form-control" id="email" name="email" required="required">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pwd">Password</label>
+            <div>
+              <input type="password" name="password" class="form-control" id="pwd" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success pull-left">Login</button>
+            <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
+          </div>
+        </form>
       </div>
-      {%endfor%}
     </div>
-    
-    <div class="fpd-background">
-      {%for cat in bg_list%} 
-      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-        {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in cat_list%}
-        <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-          {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-            data-parameters='{"background_layer": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          {%endfor%}
+  </div>
+  <div class="container main-content" id="registration_dom"
+    style="z-index: 10; background-color: aliceblue; display: none;">
+    <div class="col-lg-4 col-xs-12 mt-20">
+      <form id="registration_form">
+        <div class="form-group">
+          <label for="email">Name*</label>
+          <div>
+            <input type="text" class="form-control" id="name" name="name" required="required">
+          </div>
         </div>
-        {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-          title="{{cat.title}}{{loop.index}}"
-          data-parameters='{"background_layer": true,"removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-        {%endfor%}
+        <div class="form-group">
+          <label for="email">Email address*</label>
+          <div>
+            <input type="email" class="form-control" id="user_email" name="email"
+              required="required">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password*</label>
+          <div>
+            <input type="password" name="password" class="form-control" id="password" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="pwd">Confirm Password*</label>
+          <div>
+            <input type="password" name="confirm-password" class="form-control"
+              id="confirm-password" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Contact Number</label>
+          <div>
+            <input type="text" class="form-control" id="contact" name="contact" required="required">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="checkbox">
+            <label><input type="checkbox" name="term_condition" id="term_condition"
+              style="left: 2vw;"> Accept Term & conditions</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="checkbox">
+            <label><input type="checkbox" name="recieved_offers" id="recieved_offers"
+              style="left: 2vw;"> Get alert for new offers</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-success pull-left" onclick="register()">Sign-Up</button>
+          <button type="button" class="btn btn-info pull-right" onclick="showLoginDom()">Sign-in</button>
+        </div>
+      </form>
+      <div class="col-lg-12 col-xs-12text-center" id="registeration_msg_dom" style="display: none;">
+        <p>
+          Verification mail will sent to your registered email <span id="email_text"></span>, Check
+          your inbox and verify account to complete registration.
+        </p>
       </div>
-      {%endfor%}
     </div>
-    
-    <div class="fpd-frame"> 
-      {%for cat in frame_list%}
-      <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
-        
-        {%if cat.key in sub_frame_dict%} 
-          {%set cat_list=sub_frame_dict[cat.key]%} 
-          {%for sc in cat_list%}
-          <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-            {%for img in sc.img_url%}
-            <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}" data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+  </div>
+  {%endif%}
+  <div class="container main-content" id="product_design_caontainer" style="bottom: 0 !important;">
+    <div id="set_frame_mask_dom" class="text-center frame-mask-action-dom" style="display: none;">
+      <input type="hidden" id="frame_id" name="frame">
+      <input type="hidden" id="pic_id" name="pic">
+      <span class="btn btn-sm btn-success btn-round btn-mini" style="margin-top: 3%;" id="set_frame_mask_btn"><span class="fpd-icon-done"></span> Save Frame</span>
+    </div>
+    <div id="main-container">
+      <h3 id="clothing" style="float: left;">{{p.name}} Designer</h3>
+      <button type="button" onclick="window.history.go(-1); return false;"
+        class="btn btn-sm btn-primary btn-round btn-mini mt-15 mr-5 pull-right" style="margin-left: 5px;">
+        <i class="ace-icon fa fa-arrow-left"></i> Back
+      </button>
+      <button type="button" {#onclick="window.location='/CreateYourDesign'" #} id="save_design_btn"
+        class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
+        <i class="ace-icon fa fa-save"></i> Save
+      </button>
+      <div id="product-designer" style="clear: both;"
+        class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
+        {%if canvas%}
+        <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
+          <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
+            title="Base"
+            data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}} }' />
+        </div>
+        {%else%}
+        <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
+          <img src="/img/Product.png" title="Base"
+            data-parameters='{"product_canvas": true, "left": 525, "top": 400}' />
+        </div>
+        {%endif%}
+        <div class="fpd-design">
+          {%for cat in design_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+                data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
+              title="{{cat.title}}{{loop.index}}"
+              data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
             {%endfor%}
           </div>
           {%endfor%}
-        {%endif%}  
-        {%for img in cat.img_url%}  
-        <img src="{{img}}" title="{{cat.img_title[loop.index-1]}}" data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
-        {%endfor%}
+        </div>
+        <div class="fpd-background">
+          {%for cat in bg_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+                data-parameters='{"background_layer": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
+              title="{{cat.title}}{{loop.index}}"
+              data-parameters='{"background_layer": true,"removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            {%endfor%}
+          </div>
+          {%endfor%}
+        </div>
+        <div class="fpd-frame">
+          {%for cat in frame_list%}
+          <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
+            {%if cat.key in sub_frame_dict%} {%set cat_list=sub_frame_dict[cat.key]%} {%for sc in
+            cat_list%}
+            <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
+              {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}"
+                data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%endfor%}
+            </div>
+            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
+              title="{{cat.img_title[loop.index-1]}}"
+              data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
+            {%endfor%}
+          </div>
+          {%endfor%}
+        </div>
+        {#<div class="fpd-frame">
+          <div class="fpd-category" title="Frame Mock" data-thumbnail="">
+            <img src="/wp-content/3_box_frame.svg" title="Frame"
+              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          </div>
+          <div class="fpd-category" title="Frame test" data-thumbnail="">
+            <img src="/wp-content/3_box_frame.svg" title="Frame"
+              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+          </div>
+        </div>
+        #}
       </div>
-      {%endfor%}
+      <br />
+      <div class="fpd-clearfix text-center" style="margin-top: 15px;">
+        <div class="api-buttons fpd-container">
+          <h5>Help and tips:</h5>
+          <ol>
+            <li>Keyboard Control: Use arrow keys to move and backspace key to delete selected
+              element</li>
+          </ol>
+          <form id="create_product_design_form">
+            <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
+              name="layer" id="design_layer"> <input type="hidden" name="design_print"
+              id="design_print"> {#
+            <button type="button" onclick="backToProductAcitionDom()" class="fpd-btn">
+              <i class="ace-icon fa fa-arrow-left"></i> Back
+            </button>
+            <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
+            #}
+          </form>
+          <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
+            preparing your design...</p>
+        </div>
+      </div>
+      <div class="fpd-loader-wrapper" id="frame-loader" style="display: none;"><div class="fpd-loader"><div class="fpd-loader-circle"></div><span class="fpd-loader-text" data-defaulttext="Initializing Product Designer">Please wait...</span></div></div>
     </div>
-    
-    {#<div class="fpd-frame">
-      <div class="fpd-category" title="Frame Mock" data-thumbnail="">
-        <img src="/wp-content/3_box_frame.svg" title="Frame" data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-      </div>
-      <div class="fpd-category" title="Frame test" data-thumbnail="">
-        <img src="/wp-content/3_box_frame.svg" title="Frame" data-parameters='{"svg": "/wp-content/3_box_frame.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-      </div>
-    </div>#}
-    
   </div>
-  <br />
-  <div class="fpd-clearfix text-center" style="margin-top: 15px;">
-    <div class="api-buttons fpd-container">
-      <h5>Help and tips:</h5>
-      <ol>
-        <li>Keyboard Control: Use arrow keys to move and backspace key to delete selected
-          element</li>
-      </ol>
-      <form id="create_product_design_form">
-        <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
-          name="layer" id="design_layer"> <input type="hidden" name="design_print"
-          id="design_print">
-        <button type="button" onclick="backToProductAcitionDom()" class="fpd-btn">
-          <i class="ace-icon fa fa-arrow-left"></i> Back
-        </button>
-        <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
-      </form>
-      <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
-        preparing your design...</p>
-    </div>
-  </div>
-</div>
-<script type="text/javascript"> 
-$('.navbar, .footer').hide();
-var canvasPreviewUrl = ''
-var preview_top = 0;
-var preview_left = 0;
-var stage_height = 780;
+</body>
+<!-- Include js files -->
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/productdesigner/js/jquery-mousewheel.js" type="text/javascript"></script>
+<script src="/productdesigner/js/preview.js" type="text/javascript"></script>
+<script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script>
+<script src="/productdesigner/js/fancyDesigner2.js" type="text/javascript"></script>
+<script src="/js/api.js" type="text/javascript"></script>
+<script type="text/javascript">  
+window.addEventListener("beforeunload", function (e) {
+    
+}); 
+
+window.onbeforeunload = function () {
+  // This will happen before leaving the page
+  var confirmationMessage =  'If you leave before saving, your changes will be lost.';
+  if(document.activeElement && document.activeElement.id != "save_design_btn")
+  return confirmationMessage;
+}
+
+var canvasPreviewUrl = '',
+preview_top = 0,
+preview_left = 0,
+stage_height = 780,
+stage_width=780;
 {%if canvas%}
-canvasPreviewUrl = '{{canvas.preview_url}}=s0';
+canvasPreviewUrl = {%if canvas.preview_url%}'{{canvas.preview_url}}=s0'{%else%}''{%endif%};
 preview_top = '{{canvas.preview_top}}px';
 preview_left = '{{canvas.preview_left}}px';
 stage_height = {{canvas.stage_height}};
+stage_width = {{canvas.stage_width}};
 {%endif%}
 
   jQuery(document).ready(
       function() {
 
         var $yourDesigner = $('#product-designer'), pluginOpts = {
-          stageWidth : 1600,
-          stageHeight: stage_height,
+          stageWidth : stage_width, 
+          stageHeight: stage_height, 
           editorMode : true,
           fitImagesInCanvas: true,
-          toolbarPlacement : "smart",
+          /* toolbarPlacement : "inside-top", */
           mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
-              'manage-layers', 'text-layers' ],
+              'manage-layers'],
           actions : {
-            'top' : [ 'download', 'print', 'preview-lightbox' ],
-            'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
-            'bottom' : [ 'undo', 'redo' ],
+            'top' : [ ],
+            'right' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
+            'bottom' : [],
           },
 
           fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
@@ -188,16 +341,13 @@ stage_height = {{canvas.stage_height}};
             minH : 1,
             maxW : 9900,
             maxH : 9900,
-            filter : true,
-            uniScalingUnlockable : true,
+            filter : true, 
             advancedEditing : true,
             editorMode : true,
           },
           imageParameters : {
-            filter : true,
-            uniScalingUnlockable : true,
-            advancedEditing : true,
-            /* uploadZone: true, */ 
+            filter : true, 
+            advancedEditing : true, 
           },
           imageEditorSettings : {
             masks : [
@@ -222,5 +372,5 @@ stage_height = {{canvas.stage_height}};
         {%endif%}
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
       });
-      
-</script>      
+ 
+</script>

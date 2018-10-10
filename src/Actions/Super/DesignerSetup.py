@@ -323,6 +323,7 @@ class GetProductCanvasPrev(ActionSupport):
            'k': e.entityKey,
            'top': e.top,
            'left': e.left,
+           'stage_width': e.stage_width,
            'stage_height': e.stage_height,
            'preview_left': e.preview_left,
            'preview_top': e.preview_top,
@@ -365,6 +366,7 @@ class UploadProductCanvas(ActionSupport):
     e.top = self.request.get('top')
     e.left = self.request.get('left')
     e.stage_height = self.request.get('stage_height')
+    e.stage_width = self.request.get('stage_width')
     e.put()
     return json_response(self.response, {'img_url': serving_url}, SUCCESS, 'Success')
 
@@ -374,10 +376,11 @@ class ChangeCanvasMargin(ActionSupport):
     top = self.request.get('top')
     left = self.request.get('left')
     stage_height = self.request.get('stage_height')
-    
+    stage_width = self.request.get('stage_width')
     canvas.top = top
     canvas.left = left
     canvas.stage_height = stage_height
+    canvas.stage_width = stage_width
     canvas.put()       
     return json_response(self.response, {}, SUCCESS, 'Success')
 

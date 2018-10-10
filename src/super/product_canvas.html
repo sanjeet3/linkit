@@ -29,22 +29,29 @@
       <form class="form-horizontal" id="product_canvas_form">
         <h4>Product Canvas Upload</h4>
         <div class="form-group">
+          <label class="col-sm-2 control-label">Canvas Height Px</label>
+          <div class="col-sm-4">
+            <input type="number" class="form-control input-custom" step="10" name="stage_height"
+              value="780" onchange="halfMargin(this.value, '#canvas_top')">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Canvas Width Px</label>
+          <div class="col-sm-4">
+            <input type="number" class="form-control input-custom" step="10" name="stage_width"
+              value="780" onchange="halfMargin(this.value, '#canvas_left')" >
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-sm-2 control-label">Top</label>
           <div class="col-sm-4">
-            <input type="number" class="form-control input-custom" step="10" name="top" value="360">
+            <input type="number" class="form-control input-custom" step="10" name="top" value="390" id="canvas_top">
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">Left</label>
           <div class="col-sm-4">
-            <input type="number" class="form-control input-custom" step="10" name="left" value="400">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">Canvas Height</label>
-          <div class="col-sm-4">
-            <input type="number" class="form-control input-custom" step="50" name="stage_height"
-              value="780">
+            <input type="number" class="form-control input-custom" step="10" name="left" value="390" id="canvas_left">
           </div>
         </div>
         <div class="form-group">
@@ -109,6 +116,20 @@
     <form class="form-horizontal mx-w-99" role="form" id="update_canvas_margin_form">
       <input type="hidden" name="key" value="" id="product_key">
       <div class="form-group">
+        <label class="col-sm-4 control-label no-padding-right">Canvas Height Px</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control input-custom" step="10" name="stage_height"
+            id="stage_height" onchange="halfMargin(this.value, '#edit_top')">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-4 control-label no-padding-right">Canvas Height Px</label>
+        <div class="col-sm-8">
+          <input type="number" class="form-control input-custom" step="10" name="stage_width"
+            id="stage_width" onchange="halfMargin(this.value, '#edit_left')">
+        </div>
+      </div>
+      <div class="form-group">
         <label class="col-sm-4 control-label no-padding-right"> Top </label>
         <div class="col-sm-8">
           <input type="number" name="top" id="edit_top" class="form-control input-custom">
@@ -118,13 +139,6 @@
         <label class="col-sm-4 control-label no-padding-right"> Left </label>
         <div class="col-sm-8">
           <input type="number" name="left" id="edit_left" class="form-control input-custom">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-4 control-label no-padding-right">Canvas Height</label>
-        <div class="col-sm-8">
-          <input type="number" class="form-control input-custom" step="50" name="stage_height"
-            id="stage_height">
         </div>
       </div>
       <div class="form-group">

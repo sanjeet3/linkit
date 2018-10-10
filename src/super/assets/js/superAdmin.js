@@ -1315,6 +1315,10 @@ function UploadMasksCB(r){
   }
 };
 
+function halfMargin(a, id){
+  $(id).val(a/2);
+}
+
 function UploadProductCanvas(){
 
   var p = $('#selected_product').val();
@@ -1375,6 +1379,8 @@ function getProductCanvasPrevCB(r){
     h.push(r.data.left);
     h.push(',');
     h.push(r.data.stage_height);
+    h.push(',');
+    h.push(r.data.stage_width);
     h.push(')">Change Canvas Margin Top-Left and Height</p><br><img height="100px" src="');
     h.push(r.data.img_url);
     h.push('"><button type="button" class="btn btn-danger btn-minier"onclick="deleteCanvasImg(');
@@ -1517,12 +1523,13 @@ function saveFrameMappingCategory(){
   postRequest('mapping_form', '/superadmin/MappingFrame', null);
 };
 
-function editCanvasMargin(k , t, l, stage_height){
+function editCanvasMargin(k , t, l, stage_height, stage_width){
   openDialog('#changeCanvasMargin');
   $('#product_key').val(k);
   $('#edit_top').val(t);
   $('#edit_left').val(l);
   $('#stage_height').val(stage_height);
+  $('#stage_width').val(stage_width);
   
 }
 

@@ -15,6 +15,11 @@
 </head>
 <body style="height: 100%; width: 100%">
   <div class="container" id="product_design_caontainer" style="width: 100%;">
+    <div id="set_frame_mask_dom" class="text-center frame-mask-action-dom" style="display: none;">
+      <input type="hidden" id="frame_id" name="frame">
+      <input type="hidden" id="pic_id" name="pic">
+      <span class="btn btn-sm btn-success btn-round btn-mini" style="margin-top: 3%;" id="set_frame_mask_btn"><span class="fpd-icon-done"></span> Save Frame</span>
+    </div>
     <div id="main-container">
       <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3>
       <div id="product-designer" style="clear: both;"
@@ -23,12 +28,12 @@
         <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
           <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
-            data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": {{canvas.left}}, "top": {{canvas.top}}, "colors": "#d59211", "price": 0}' />
+            data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}} }' />
         </div>
         {%else%}
         <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
           <img src="/img/Product.png" title="Base"
-            data-parameters='{"evented": false,"locked": true, "isEditable": false, "left": 525, "top": 400, "colors": "#d59211", "price": 0}' />
+            data-parameters='{"product_canvas": true, "left": 525, "top": 400, }' />
         </div>
         {%endif%}
         <div class="fpd-design">
@@ -147,8 +152,8 @@ jQuery(document).ready(
         editorMode : true,
         fitImagesInCanvas: true,
         toolbarPlacement : "smart",
-        mainBarModules : [ 'images', 'text', 'designs', 'backgrounds', 'frames',
-            'manage-layers', 'text-layers' ],
+        mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
+          'manage-layers'],
         actions : {
           'top' : [ 'download', 'print', 'preview-lightbox' ],
           'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],

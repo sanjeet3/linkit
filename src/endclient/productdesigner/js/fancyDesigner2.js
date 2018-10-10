@@ -4073,7 +4073,13 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
     };
     
     var setFrameLockMode = function(frameBox, a, b, opacity){
-      frameBox.advancedEditing = b;
+      if(a){
+        $('.fpd-element-toolbar').hide();
+      }else{
+        $('.fpd-element-toolbar').show();
+      }
+      frameBox.evented=b;
+      /*frameBox.advancedEditing = b;
       frameBox.copyable = b;              
       frameBox.draggable = b;             
       frameBox.isEditable = b;                
@@ -4101,14 +4107,15 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       frameBox.originParams.resizable = b; 
       frameBox.originParams.rotatable = b;  
       frameBox.originParams.selectable = b; 
-      frameBox.originParams.uniScalingUnlockable = b;
+      frameBox.originParams.uniScalingUnlockable = b;*/
       return frameBox;
     }
     
     //defines the clipping area from svg
     var _setSVGClip = function(element) {
-        var frameBox = instance.getElementByID(element.svgid);
+      var frameBox = instance.getElementByID(element.svgid);
         if(frameBox){
+          instance.deselectElement();
           frameBox = setFrameLockMode(frameBox, true, false, 0);
         }
         
@@ -4172,6 +4179,16 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         ctx.restore();
 
     };
+    
+
+    // set picture evented false
+    $('#set_frame_mask_dom').on('click', '#set_frame_mask_btn', function() {
+      var pic_id = $('#pic_id').val();
+      var elem = instance.getElementByID(pic_id);
+      elem.evented=false;
+      instance.stage.renderAll();
+      $('#set_frame_mask_dom').hide();
+    });
 
     var _elementHasUploadZone = function(element) {
 
@@ -4347,7 +4364,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         if(type == 'image' || type == 'path' || type == FPDPathGroupName) {
 
             fabricParams.crossOrigin = 'anonymous';
-            fabricParams.lockUniScaling = instance.options.editorMode ? false : !fabricParams.uniScalingUnlockable;
+            fabricParams.lockUniScaling = true;
+            fabricParams.uniScalingUnlockable = true;
 
             if(!FPDUtil.isXML(source)) {
                 var splitURLParams = source.split('?'); //remove url parameters
@@ -4363,7 +4381,39 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     $.extend(params, {
                         originParams: $.extend({}, params, originParams)
                     });
-
+                    
+                    if(params.product_canvas!=undefined||params.background_layer!=undefined){ 
+                      params.advancedEditing = false;
+                      params.copyable = false;              
+                      params.draggable = false;             
+                      params.isEditable = false;                
+                      params.lockMovementX = true;
+                      params.lockMovementY = true;
+                      params.lockRotation = true;
+                      params.lockScalingX = true;
+                      params.lockScalingY = true;
+                      params.lockUniScaling = true;
+                      params.locked = true;            
+                      params.rotatable = false;             
+                      params.resizable = false;             
+                      params.originParams.evented = false; 
+                      params.evented=false;
+                      params.selectable = false;  
+                      params.zChangeable=false;
+                      if(params.product_canvas!=undefined){
+                      params.opacity = 0.2;               
+                      params.removable = false;
+                      params.originParams.opacity = 0.2 ;  
+                      params.originParams.removable = false; 
+                      }
+                      params.originParams.selectable = false; 
+                      params.originParams.advancedEditing = false;
+                      params.originParams.copyable = false;
+                      params.originParams.draggable = false;
+                      params.originParams.filter = false;   
+                      params.originParams.resizable = false; 
+                      params.originParams.rotatable = false;  
+                    } 
                     fabricImage.setOptions(params);
                     instance.setElementParameters(params, fabricImage, false);
                     instance.stage.add(fabricImage);
@@ -4419,7 +4469,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             }
             //load svg from url
             else if($.inArray('svg', source.split('.')) != -1) {
-
+                $('#frame-loader').fadeIn(300);
                 var timeStamp = Date.now().toString(),
                     _loadFromScript = instance.options._loadFromScript ? instance.options._loadFromScript : '',
                     url = _loadFromScript + source;
@@ -4428,9 +4478,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 var svgUrl = url;
-                /*if(params.svg){
+                if(params.svg){
                   svgUrl = '/Imgage?id='+ params.svg;
-                }*/
+                }
                 fabric.loadSVGFromURL(svgUrl, function(objects, options) {
 
                   if(objects){
@@ -4451,7 +4501,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                       _fabricImageLoaded(svgGroup, fabricParams, true,{})
                     }
                   }
-                    
+                  $('#frame-loader').stop().fadeOut(300);  
 
                 });
 
@@ -4651,7 +4701,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         if(element.svgid!=undefined){
           var frameBox = instance.getElementByID(element.svgid);
           if(frameBox){
-            frameBox = setFrameLockMode(frameBox, false, true, 1);
+            frameBox = setFrameLockMode(frameBox, true, true, 1);
           }
         }
         instance.stage.remove(element);
@@ -6919,13 +6969,20 @@ var FPDToolbar = function($uiElementToolbar, fpdInstance) {
 
             $uiElementToolbar.css({
                 left: posLeft,
-                top: topOffset
+                top: 1//topOffset
             });
 
         }
 
         $uiElementToolbar.toggleClass('fpd-show', showHide);
-
+        if(element.type=='i-text'){
+          $uiElementToolbar.css({
+            width: 500,
+            left: posLeft-150
+            });
+        }
+        
+        
     };
 
     this.updateUIValue = function(tool, value) {
@@ -7697,17 +7754,22 @@ var FPDActions = function(fpdInstance, $actions){
         else if(action === 'preview-lightbox') {
 
             fpdInstance.getProductDataURL(function(dataURL) {
-
+              /*var h = ['<div class="preview-container">'];
+              h.push('<canvas id="prev-canvas"></canvas></div>');
+              FPDUtil.createModal(h.join(''), true);
+              //preveiwMug(dataURL, '');
+              setTimeout(function(){ preveiwMug(dataURL, ''); }, 400);*/
+                
                 var image = new Image();
-                image.src = dataURL;
-
+                image.src = dataURL; 
                 image.onload = function() {
-                   /* FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);*/
+                    FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);
                   var h = ['<div class="preview-container">'];
                   h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
                   h.push('<img class="preview-imgB1" style="left: '+preview_left+', top: '+preview_top+'" src="'+this.src+'" download="product.png" /></div>');
                   h = h.join('');
                   FPDUtil.createModal(h, true);
+                  
                 }
 
             });
@@ -9189,7 +9251,7 @@ var BackgroundsModule = function(fpdInstance, $module) {
       currentCategories = null,
       categoriesUsed = false,
       categoryLevelIndexes = [];
-
+  
   var _initialize = function() {
 
       searchInLabel = fpdInstance.getTranslation('modules', 'backgrounds_search_in').toUpperCase();
@@ -12244,10 +12306,18 @@ var FancyProductDesigner = function(elem, opts) {
                      // frame svgUid obj on select click evt
                      if(element.svgUid!=undefined){
                        instance.currentViewInstance.svgModel = element.svgUid;
+                       $('.fpd-element-toolbar').hide();
                      } else {
                        instance.currentViewInstance.svgModel = null;
+                       $('.fpd-element-toolbar').show();
                      }
                   
+                     if(element.svgid!=undefined){
+                       $('#set_frame_mask_dom').show();
+                       $('#pic_id').val(element.id);
+                     } else {
+                       $('#set_frame_mask_dom').hide();
+                     }
                     //upload zone is selected
                     if(element.uploadZone && !instance.mainOptions.editorMode) {
 
@@ -12283,7 +12353,9 @@ var FancyProductDesigner = function(elem, opts) {
 
                     if(instance.mainOptions.openTextInputOnSelect && FPDUtil.getType(element.type) === 'text' && element.editable) {
 
-                        $elementToolbar.find('.fpd-tool-edit-text').click();
+                       $elementToolbar.find('.fpd-tool-edit-text').click();
+                    } else if (element.type=='image' && element.resizable){
+                      $elementToolbar.find('.fpd-tool-transform').click();
                     }
 
                     _updateEditorBox(element);
@@ -14548,14 +14620,14 @@ var FancyProductDesigner = function(elem, opts) {
                   if(baseWidth>0 && imageW>baseWidth) { 
                     scaleX=baseWidth/imageW;
                   }
-                  if(scaleX>scaleY){
-                    scaleX=scaleY;
-                  } else if(scaleY>scaleX) {
-                    scaleY=scaleX;
-                  }
+                  
                 } 
                 
-                
+                if(scaleX>scaleY){
+                  scaleX=scaleY;
+                } else if(scaleY>scaleX) {
+                  scaleY=scaleX;
+                }
             if(!FPDUtil.checkImageDimensions(instance, imageW, imageH)) {
                 instance.toggleSpinner(false);
                 return false;

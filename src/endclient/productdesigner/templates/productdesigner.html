@@ -1,6 +1,6 @@
 <div>
 	<!-- Toolbar when an element is selected -->
-	<div class="fpd-element-toolbar fpd-visibility">
+	<div class="fpd-element-toolbar fpd-visibility" style="top: 10px;">
 
 		<div class="fpd-common-tools fpd-row fpd-clearfix">
 			<div class="fpd-tool-fill fpd-tooltip" data-panel="fill" data-defaulttext="Fill" title="toolbar.fill">
@@ -135,17 +135,17 @@
 
 			<div class="fpd-panel-transform">
 
-				<div class="fpd-tool-scaleX fpd-tool-scale fpd-slider-group fpd-clearfix">
+				<div class="fpd-tool-scaleX fpd-tool-scale fpd-slider-group fpd-clearfix" style="margin-top: 0px !important">
 					<span class="fpd-icon-scaleX"></span>
 				    <input class="fpd-slider-number fpd-number" type="number" value="1" step="0.01" min="0" max="5" data-control="scaleX" />
 				    <div class="fpd-range-wrapper">
 					     <input class="fpd-slider-range" type="range" value="1" step="0.01" min="0" max="5" data-control="scaleX" />
 				    </div>
 			    </div>
-			    <div class="fpd-tool-uniscaling-locker fpd-tool-scale fpd-toggle" data-control="lockUniScaling" data-enabled="true" data-disabled="false">
+			    <div class="fpd-tool-uniscaling-locker fpd-tool-scale fpd-toggle" data-control="lockUniScaling" data-enabled="true" data-disabled="false" style="">
 					<span class="fpd-icon-unlocked"></span>
 				</div>
-			    <div class="fpd-tool-scaleY fpd-tool-scale fpd-slider-group fpd-clearfix">
+			    <div class="fpd-tool-scaleY fpd-tool-scale fpd-slider-group fpd-clearfix" style="margin-top: 0 !important;  margin-bottom: 0 !important;">
 					<span class="fpd-icon-scaleY"></span>
 				    <input class="fpd-slider-number fpd-number" type="number" value="1" step="0.01" min="0" max="5" data-control="scaleY" />
 				    <div class="fpd-range-wrapper">
@@ -153,7 +153,7 @@
 				    </div>
 			    </div>
 
-			    <div class="fpd-tool-angle fpd-slider-group fpd-clearfix">
+			    <div class="fpd-tool-angle fpd-slider-group fpd-clearfix" style="    margin-top: 3px !important;">
 					<span class="fpd-icon-rotate-right"></span>
 				    <input class="fpd-slider-number fpd-number" type="number" value="1" step="1" min="0" max="359" data-control="angle" />
 				    <div class="fpd-range-wrapper">
@@ -665,7 +665,10 @@
         <div class="col-lg-12" style="padding: 10px 0px 8px 0px;">
           <b>Choose mask border color: </b>
           <input type="color" id="mask_color_selctor" name="mask_color_selctor"
-               value="#2ecc71" style="height: 25px;" />
+               value="#2ecc71" style="height: 25px;" /> &nbsp;&nbsp;&nbsp;<b>Border size: </b>
+          <input type="number" id="mask_border_size" name="mask_border_size"
+               value="3" min="3" max="500" style="height: 25px;" />     
+          &nbsp;&nbsp;&nbsp;<label><input id="use_mask_broder" type="checkbox" name="use_mask_broder"  checked="checked" style="-webkit-appearance: checkbox;-moz-appearance: checkbox;"> Alow mask border </label>    
         </div>
 
 			</div>
