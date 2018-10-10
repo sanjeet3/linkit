@@ -1,6 +1,8 @@
 //----------------------------------
 // ------- Fabric.js Methods ----------
 //----------------------------------
+let lastClientX;
+let lastClientY;
 var baseWidth=0; var baseHeight = 0;
 var yourDesigner=null;
 var designJson = [], loadReadyDesign=false;
@@ -3319,6 +3321,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                 if(opts.target == undefined) {
                     instance.deselectElement();
                 }
+                lastClientX = opts.e.clientX;
+                lastClientY = opts.e.clientY;
 
             },
             'mouse:up': function(opts) {
@@ -3381,6 +3385,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             'object:moving': function(opts) {
 
                 modifiedType = 'moving';
+                if(opts.target.startPanning && opts.e) {
+                  opts.target.startPanning.left = opts.target.left + opts.target.startPanning.deltaX;
+                  opts.target.startPanning.top = opts.target.top + opts.target.startPanning.deltaY; 
+                }
 
                 if(!opts.target.lockMovementX || !opts.target.lockMovementY) {
                     _snapToGrid(opts.target);
@@ -4185,7 +4193,13 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
     $('#set_frame_mask_dom').on('click', '#set_frame_mask_btn', function() {
       var pic_id = $('#pic_id').val();
       var elem = instance.getElementByID(pic_id);
-      elem.evented=false;
+      var frameBox = instance.getElementByID(elem.svgid);
+      frameBox.evented=false; 
+      frameBox.deltaY= elem.top-frameBox.top; 
+      frameBox.deltaX= elem.left-frameBox.left; 
+      elem.evented=true;
+      elem.startPanning=frameBox;
+      frameBox.opacity=0; 
       instance.stage.renderAll();
       $('#set_frame_mask_dom').hide();
     });
@@ -12312,7 +12326,7 @@ var FancyProductDesigner = function(elem, opts) {
                        $('.fpd-element-toolbar').show();
                      }
                   
-                     if(element.svgid!=undefined){
+                     if(element.svgid!=undefined && !element.startPanning){
                        $('#set_frame_mask_dom').show();
                        $('#pic_id').val(element.id);
                      } else {
