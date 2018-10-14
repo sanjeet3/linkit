@@ -5,7 +5,8 @@ let lastClientX;
 let lastClientY;
 var baseWidth=0; var baseHeight = 0;
 var yourDesigner=null;
-var designJson = [], loadReadyDesign=false;
+var designJson = [], loadReadyDesign=false, loadFPDUrl='', loadFPCCB='';
+
 if(fabric.version === '1.6.7') {
 
     fabric.Object.prototype.setCoords = function() {
@@ -480,7 +481,9 @@ fabric.Text.prototype._constrainScale = function(value) {
 
 };
 fabric.Object.prototype._drawControl = function(control, ctx, methodName, left, top) {
-
+    if(this.startPanning && control !='bl'){
+      return;
+    }
     var size = this.cornerSize,
         iconOffset = 4,
         iconSize = size - (iconOffset*2),
@@ -3386,8 +3389,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
                 modifiedType = 'moving';
                 if(opts.target.startPanning && opts.e) {
-                  opts.target.startPanning.left = opts.target.left + opts.target.startPanning.deltaX;
-                  opts.target.startPanning.top = opts.target.top + opts.target.startPanning.deltaY; 
+                  opts.target.startPanning.left = opts.target.left - opts.target.startPanning.deltaX;
+                  opts.target.startPanning.top = opts.target.top - opts.target.startPanning.deltaY; 
                 }
 
                 if(!opts.target.lockMovementX || !opts.target.lockMovementY) {
@@ -3886,7 +3889,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         if(hCenter) {
 
             if(boundingBox) {
-                left = boundingBox.left + boundingBox.width * 0.1 + object.aCoords.tl.x;
+                left = (object.aCoords.tl.x-5)*object.scaleX;
             }
             else {
                 left = instance.options.stageWidth * 0.5;
@@ -3896,19 +3899,17 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
         if(vCenter) {
             if(boundingBox) {
-                top = boundingBox.top + boundingBox.height * 0.4 + object.aCoords.tl.y;
+                top = (boundingBox.oCoords.tr.corner.tl.y/4) +  (object.aCoords.tl.y*object.scaleY);
             }
             else {
                 top = instance.options.stageHeight * 0.5;
             }
 
         }
-
-        object.setPositionByOrigin(new fabric.Point(left, top), 'center', 'center');
-
+        console.log('Top:'+top+', left: '+left) 
+        object.setPositionByOrigin(new fabric.Point(left, top), 'left', 'top');
         instance.stage.renderAll();
         object.setCoords();
-
         _checkContainment(object);
 
     };
@@ -4087,6 +4088,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         $('.fpd-element-toolbar').show();
       }
       frameBox.evented=b;
+      frameBox.opacity = opacity;               
       /*frameBox.advancedEditing = b;
       frameBox.copyable = b;              
       frameBox.draggable = b;             
@@ -4098,7 +4100,6 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       frameBox.lockScalingY = a;
       frameBox.lockUniScaling = a;
       frameBox.locked = a;            
-      frameBox.opacity = opacity;               
       frameBox.removable = b;
       frameBox.rotatable = b;             
       frameBox.selectable = b;                
@@ -4124,7 +4125,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       var frameBox = instance.getElementByID(element.svgid);
         if(frameBox){
           instance.deselectElement();
-          frameBox = setFrameLockMode(frameBox, true, false, 0);
+          frameBox = setFrameLockMode(frameBox, true, false, 1);
         }
         
         element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.getScaledWidth()*0.5, frameBox.aCoords.tl.y+frameBox.getScaledHeight()*0.5), 'center', 'center');
@@ -4199,7 +4200,17 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       frameBox.deltaX= elem.left-frameBox.left; 
       elem.evented=true;
       elem.startPanning=frameBox;
-      frameBox.opacity=0; 
+      frameBox.opacity=0;
+      elem.copyable = false;               
+      elem.draggable = false;               
+      elem.isEditable = false;    
+      elem.lockRotation = true;
+      elem.lockScalingX = true;
+      elem.lockScalingY = true;
+      elem.lockUniScaling = true;         
+      elem.removable = true;         
+      elem.rotatable = false;             
+      elem.resizable = false;      
       instance.stage.renderAll();
       $('#set_frame_mask_dom').hide();
     });
@@ -4496,8 +4507,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                   svgUrl = '/Imgage?id='+ params.svg;
                 }
                 fabric.loadSVGFromURL(svgUrl, function(objects, options) {
-
                   if(objects){
+                    var x=stage_width/options.width, y=stage_height/options.height;
+                    if(x>y) y=x;
+                    if(y>x) x=y;
                     fabricParams.frameCenter=true;
                     for(var i = 0; i < objects.length; i++) {
                       var timeStamp = Date.now().toString() + '_' +i;
@@ -4505,20 +4518,16 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         svgUid: timeStamp,
                         toBeParsed: false,
                         };
-
                       fabricParams.id=timeStamp;
                       fabricParams.title=timeStamp;
                       var svgGroup = new fabric.Group([objects[i]], opt);
-                      fabricParams.scaleX = baseWidth/options.width;
-                      fabricParams.scaleY = baseHeight/options.height;
-                       
+                      fabricParams.scaleX = x;
+                      fabricParams.scaleY = y;
                       _fabricImageLoaded(svgGroup, fabricParams, true,{})
                     }
                   }
                   $('#frame-loader').stop().fadeOut(300);  
-
                 });
-
             }
             //load png/jpeg from url
             else {
@@ -5548,8 +5557,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
     this.centerFrame = function(h, v, element) {
 
         element = typeof element === 'undefined' ? instance.stage.getActiveObject() : element;
-
-        _centerFrameObject(element, h, v, instance.getBoundingBoxCoords(element));
+        _centerFrameObject(element, h, v, instance.getElementByTitle("Base"));
         element.frameCenter = false;
 
     };
@@ -6672,12 +6680,21 @@ var FPDToolbar = function($uiElementToolbar, fpdInstance) {
 
             if(fpdInstance.currentViewInstance && fpdInstance.currentViewInstance.currentElement && fpdInstance.currentViewInstance.currentElement.source) {
 
+                if(fpdInstance.currentViewInstance.currentElement.svgid){
+                  var advanceEditorHtml = $(fpdInstance.translatedUI).children('#advance_editor_2_stage').clone(),
+                  maskEnable = false;
+                } else {
+                  var advanceEditorHtml = $(fpdInstance.translatedUI).children('#advance_editor_3_stage').clone(),
+                  maskEnable = true;
+                  
+                } 
                 var source = fpdInstance.currentViewInstance.currentElement.source,
-                    $modal = FPDUtil.showModal($(fpdInstance.translatedUI).children('.fpd-image-editor-container').clone(), true),
+                    $modal = FPDUtil.showModal(advanceEditorHtml, true),
                     imageEditor = new FPDImageEditor(
                         $modal.find('.fpd-image-editor-container'),
                         fpdInstance.currentViewInstance.currentElement,
-                        fpdInstance
+                        fpdInstance,
+                        maskEnable
                     );
 
                 imageEditor.loadImage(source);
@@ -8326,7 +8343,7 @@ FPDActions.rulerHorImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAe
 FPDActions.rulerVerImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABkCAYAAACRiYAFAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAAA40lEQVRoBe2UwQ3CUBTD+KzUYXvpSHQmECzgIlk8CbnXRonqvGZt2/a4DTz3gcxPZME/Ix/q/0e99n1/Xv3M4zjOq1rSrZaLEFnv+48tkugTakRkCVouiyT6dNWIyBKE2iKJPmOoWy7sxhKMdVywVSH6hBoRWYKWyyKJPl01IrIEobZIos8Y6pYLu7EEYx0XbFWIPqFGRJag5bJIok9XjYgsQagtkugzhrrlwm4swVjHBVsVok+oEZElaLkskujTVSMiSxBqiyT6jKFuubAbSzDWccFWhegTakRkCb5aLiv07fMCuAVB+Jp9DBgAAAAASUVORK5CYII=';
 
 
-var FPDImageEditor = function($container, targetElement, fpdInstance) {
+var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable) {
 
     'use strict';
 
@@ -8455,7 +8472,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance) {
 
         //--- MASK
 
-        if(options.masks && $.isArray(options.masks)) {
+        if(maskEnable && options.masks && $.isArray(options.masks)) {
             options.masks.forEach(function(svgURL) {
                 var title = svgURL.split(/[\\/]/).pop(); //get basename
                 title = title.substr(0,title.lastIndexOf('.')); //remove extension
@@ -12736,10 +12753,8 @@ var FancyProductDesigner = function(elem, opts) {
             firstProductCreated = instance.mainOptions.modalMode && evt.type === 'modalDesignerOpen';
             if(loadReadyDesign!=false){
               loadReadyDesign=false   
-              setTimeout(function(){
-                yourDesigner.loadProduct(designJson);
-              }, 1000);
-
+              //console.log('fetching saved design');
+              //getRequest('', loadFPDUrl, loadFPCCB);
               
             }            
             

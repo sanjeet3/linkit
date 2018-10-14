@@ -3025,7 +3025,7 @@
 .fpd-actions-wrapper>.fpd-action-btn:hover,
 .fpd-actions-wrapper>.fpd-action-btn.fpd-active,
 .fpd-thumbnail-preview>.fpd-preview-price {
-    background-color: #1a1a1a
+    background-color: #1a1a1a; color: white !important;
 }
 
 .fpd-container .fpd-primary-text-color,

@@ -657,7 +657,6 @@ a.banner-matter {
 }
 
 .ready-design-box{
-  cursor: pointer;
   float:left;
   width: 350px;
   height: 200px;
@@ -680,4 +679,63 @@ a.banner-matter {
     right: 0;
     bottom: 0;
     width: 100%;
+} 
+
+.button { 
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+  padding: 12px 12px;
+  text-align: center;
+  color: white;
+  border: solid 2px white;
+  z-index: 1;
+}
+.button:hover{
+  background: #03a9f4bf;
+}
+a.button:hover{
+  color: white;
+  text-decoration: none;
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease;
+}
+
+#modal-background{
+    width: 100%;
+    height: inherit;
+    background-color: #000000bd;
+    position: absolute;
+    top: 0;
+    display: none;
+    z-index: 10000;
+    text-align: center;
+}
+
+#modal-content{
+   background-color: #FFFFFF;
+   width: 97vw;
+   position: absolute;
+   top: 50px;
+   left: 1vw;
+   z-index: 100;
+   margin-bottom: 10px;
+}
+
+.ready-design-box:hover .button {
+  opacity: 1;
+}
+.ready-design-box:hover .overlay {
+  display: block;
+  background: rgba(0, 0, 0, .3);
 }

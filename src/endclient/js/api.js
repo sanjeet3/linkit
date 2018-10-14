@@ -431,3 +431,19 @@ function showHistory(i){
   $('#history_details>p').hide();
   $('#history_'+i).show();
 };
+
+
+function showImageModel(imageurl){
+   $('#modal-content').html('<img style="max-width:100%;" src="' + imageurl+'">');
+   $('#modal-background').fadeIn();
+   $('#product_action_caontainer').hide();
+   $('#modal-background').click(function(){
+     closeModal();
+   });
+
+};
+
+function closeModal(){
+$('#modal-background').fadeOut();
+$('#product_action_caontainer').show();
+}

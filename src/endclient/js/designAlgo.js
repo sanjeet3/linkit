@@ -8,49 +8,44 @@ title != "Base"*/
     base64_image : dataURL
   });
 });*/ 
-function customizePluginSettings(){
 
-  console.log(yourDesigner)
-  if(yourDesigner.products.length){
-    if(yourDesigner.products[0].products.length){
-      for(var i=0; i<yourDesigner.products[0].products[0].length; i ++){
-        console.log(yourDesigner.products[0].products[0][i].options);
-        yourDesigner.products[0].products[0][i].options.editorMode=false;
-        yourDesigner.products[0].products[0][i].options.editorBoxParameters=[]
-        yourDesigner.products[0].products[0][i].options.cornerIconColor="#fff"
-          
-      }
-    }
-    
-    
-  }
-}
-function getYourDisignDetails() {
-  var product = yourDesigner.getProduct();
-  // console.log(JSON.stringify(product));
-  var elm = product[0].elements;
-  console.log(elm);
-  var base64_image_design = ''
-  yourDesigner.getProductDataURL(function(dataURL) {
-    base64_image_design = dataURL;
-    /*
-     * console.log(base64_image_design); $('#output_dom').append('<img
-     * src="'+dataURL+'"><br>'); for(var i=0; i<elm.length; i++){
-     * if(fram.type=="image" && title=="Base"){ continue; } var fram = elm[i];
-     * var h=''; if(fram.type=="image"){ h='<img src="'+fram.source+'"><br>' }
-     * else { h='<font style="font-family:
-     * '+fram.parameters.fontFamily+';font-size:'+fram.parameters.fontSize+'">'+fram.source+'</font><br>' }
-     * $('#output_dom').append(h);
-     *  }
-     */
-  });
-
+function getRequest(formID, url, callback) {
+    var formData = [];
+    try{
+      formData = $("#" + formID).serializeArray();
+    } catch {}  
+    // Ajax call
+    $.get(url, $.param(formData), function(obj) {
+        if (callback != null) {
+            var callbackMethod = eval(callback);
+            callbackMethod(obj, formID);
+        } 
+    });
 };
 
-var productDesignLayer = [];
+function postRequest(formID, url, callback) {
+    var formData = $("#" + formID).serializeArray();
+    $("button").attr("disabled", true); 
+    // Ajax call
+    $.ajax({
+        url : url,
+        data : $.param(formData),
+        dataType : 'json',
+        method : 'POST',
+        success : function(obj) { 
+            if (callback != null) {
+                var callbackMethod = eval(callback);
+                callbackMethod(obj, formID);
+            }
+             
+            $("button").attr("disabled", false);
+        }
+    });
+}; 
+
+
+var productDesignLayer = [],layer='';
 function createUserDisgn() {
-  if (!confirm('Do you wish to save this design?'))
-    return;
 
   var product = yourDesigner.getProduct();
   productDesignLayer = product[0].elements;
@@ -60,26 +55,115 @@ function createUserDisgn() {
     return;
   }
 
-  $('#create_product_design_form').hide();
+  if (!confirm('Do you wish to save this design?'))
+    return;
+   
   $('#pls_wait_design_saving').show();
-  $('#design_layer').val(JSON.stringify(productDesignLayer));
+  layer=JSON.stringify(product);
+  //$('#design_layer').val(JSON.stringify(product));
   yourDesigner.getProductDataURL(function(dataURL) {
-    $('#design_print').val(dataURL);
+    
+    //$('#design_print').val(dataURL);
+    var block = dataURL.split(";");
+    // Get the content type of the image
+    var contentType = block[0].split(":")[1];// In this case "image/gif"
+    // get the real base64 content of the file
+    var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
+    // Convert it to a blob to upload
+    var blob = b64toBlob(realData, contentType);
+     
+    /*postRequest('create_product_design_form', '/CreateDesign',
+        'createUserDisgnCallBack');*/
+     
+    var formData = new FormData();
+    formData.append('layer', layer);
+    formData.append('design_print2', blob);
+    formData.append('product', $('#product_key').val());
+    formData.append('design_key', $('#design_key').val());
 
-    postRequest('create_product_design_form', '/CreateDesign',
-        'createUserDisgnCallBack');
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/CreateDesign', true);
+
+    xhr.onreadystatechange = function(r) {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(r)
+            console.log(this)
+            var r = JSON.parse(this.response);
+            $('#design_key').val(r.data.design_key); 
+            $('#pls_wait_design_saving').hide();
+       }
+    }; 
+
+    xhr.send(formData);
+    
+    
   });
 
 };
 
 function createUserDisgnCallBack(r) {
-  var h = 'Your design is ready<br>Design Id: ' + r.data.id
+  /*var h = 'Your design is ready<br>Design Id: ' + r.data.id
           + ' <br><button type="button" class="fpd-btn" onclick="backToProductAcitionDom()">Continue</button>';
   $('#pls_wait_design_saving').html(h);
   $('#selected_design_id').val(r.data.id);
   $('#design_id').val(r.data.id);
   $('#design_id_text').html(r.data.id);
   $('#design_paragraf').show();
-  $('#create_desgin_btn').hide();
+  $('#create_desgin_btn').hide();*/
+  $('#pls_wait_design_saving').hide();
+  $('#design_key').val(r.data.design_key);
+  
 };
+
+function b64toBlob(b64Data, contentType, sliceSize) {
+  contentType = contentType || '';
+  sliceSize = sliceSize || 512;
+
+  var byteCharacters = atob(b64Data);
+  var byteArrays = [];
+
+  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+  }
+
+var blob = new Blob(byteArrays, {type: contentType});
+return blob;
+}
+
+function getReadyDesingJsonCB(r){
+  console.log(r.data);
+  alert(r.message);
+}
+
+function loadFPDJsonRecursive(designJson){
+  if(yourDesigner){
+    $('#msg_div').html('<h4>Initializing Designer!</h4>');
+    yourDesigner.loadProduct(designJson, true);
+    $('#pls_wait_design_loadind').hide();
+  } else {    
+    $('#msg_div').html('<h4>Plaese wait rendring designer data!</h4>');
+    setTimeout(loadFPDJsonRecursive(designJson), 500);
+  }
+}
+
+function getSavedDesingJsonCB(r){
+  if(!r.data.contents){
+    $('#msg_div').html('<h4>Please refresh your browser!</h4>')
+    return;
+  }
+  $('#msg_div').html('<h4>Parsing Desiner Data!</h4>');
+  var designJson = JSON.parse(r.data.contents);
+  console.log(designJson);
+  loadFPDJsonRecursive(designJson);
+  
+}
 

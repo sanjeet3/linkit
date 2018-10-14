@@ -132,116 +132,112 @@
 <script src="/productdesigner/js/fancyDesigner2.js" type="text/javascript"></script>
 <script src="/super/assets/js/algo.js"></script>
 <script type="text/javascript">  
-var canvasPreviewUrl = ''
-var preview_top = 0;
-var preview_left = 0;
-var stage_height = 780;
+var canvasPreviewUrl = '',
+preview_top = 0,
+preview_left = 0,
+stage_height = 780,
+stage_width=780;
 {%if canvas%}
-canvasPreviewUrl = '{{canvas.preview_url}}=s0';
+canvasPreviewUrl = {%if canvas.preview_url%}'{{canvas.preview_url}}=s0'{%else%}''{%endif%};
 preview_top = '{{canvas.preview_top}}px';
 preview_left = '{{canvas.preview_left}}px';
 stage_height = {{canvas.stage_height}};
+stage_width = {{canvas.stage_width}};
 {%endif%}
 
-jQuery(document).ready(
-    function() {
+  jQuery(document).ready(
+      function() {
 
-      var $yourDesigner = $('#product-designer'), pluginOpts = {
-        stageWidth : 1600,
-        stageHeight: stage_height,
-        editorMode : true,
-        fitImagesInCanvas: true,
-        toolbarPlacement : "smart",
-        mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
-          'manage-layers'],
-        actions : {
-          'top' : [ 'download', 'print', 'preview-lightbox' ],
-          'right' : [ 'magnify-glass', 'zoom', 'reset-product', 'qr-code' ],
-          'bottom' : [ 'undo', 'redo' ],
-        },
-
-        fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
-            'Verdana', 'Geneva', 'Gorditas', 'Eczar', 'Roboto Mono',
-            'Poor Story', 'Titillium Web', 'Noto Serif', 'Work Sans',
-            'Chela One', 'Indie Flower', 'Inconsolata', 'Bitter',
-            'Libre Baskerville', 'Anton', 'Josefin Sans',
-            'Cormorant Unicase', 'Lobster', 'Arvo', 'Pacifico', 'Do Hyeon',
-            'Shadows Into Light', 'Dancing Script', 'Abril Fatface',
-            'Bree Serif', 'Coda Caption', 'Kanit', 'Acme',
-            'Gloria Hallelujah', 'Righteous', 'Rajdhani', 'Permanent Marker',
-            'Farsan', 'Great Vibes', 'Concert One', 'Poiret One', 'Satisfy',
-            'Courgette', 'Marck Script', 'Prata', 'Audiowide', 'Unica One',
-            'Julius Sans One', 'Ultra', 'Economica', 'IBM Plex Mono',
-            'Amaranth', 'Prosto One', 'Bangers', 'Shrikhand', 'Handlee',
-            'Boogaloo', 'Tangerine', 'Kalam', 'Sacramento',
-            'Architects Daughter', 'PT Mono', 'Bad Script', 'Special Elite',
-            'Libre Barcode 128 Text', 'Shadows Into Light Two',
-            'Cabin Sketch', 'Parisienne', 'Damion', 'Covered By Your Grace',
-            'Playball', 'Nothing You Could Do', 'Homemade Apple',
-            'Fugaz One', 'Rock Salt', 'Allura', 'Press Start 2P',
-            'Alex Brush', 'Black Ops One', 'Carter One', 'Just Another Hand',
-            'Fredericka the Great', 'Syncopate', 'Bungee Inline', 'Niconne',
-            'Coming Soon', 'Leckerli One', 'Galada', 'Caveat Brush',
-            'Pinyon Script', 'Cinzel Decorative', 'Mr Dafoe',
-            'Reenie Beanie', 'Italianno', 'Nanum Pen Script', 'Quantico',
-            'Skranji', 'Allerta Stencil', 'Grand Hotel', 'Yesteryear',
-            'Marvel', 'Freckle Face', 'Rochester', 'Nanum Brush Script',
-            'Alegreya SC', 'Annie Use Your Telescope', 'Faster One',
-            'Raleway Dots', 'Calligraffitti', 'Aclonica', 'Yatra One',
-            'Share Tech Mono', 'Graduate', 'Petit Formal Script',
-            'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
-            'IM Fell Double Pica', ],
-        customTextParameters : {
-          colors : true,
-          removable : true,
-          resizable : true,
-          draggable : true,
-          rotatable : true,
-          autoCenter : true,
-          boundingBox : "Base",
-          curvable : true,
-          curveReverse : true,
-        },
-        customImageParameters : {
-          removable : true,
-          colors : '#000',
-          autoCenter : true,
-          boundingBox : "Base",
-          minW : 1,
-          minH : 1,
-          maxW : 9900,
-          maxH : 9900,
-          filter : true,
-          uniScalingUnlockable : true,
-          advancedEditing : true,
+        var $yourDesigner = $('#product-designer'), pluginOpts = {
+          stageWidth : stage_width, 
+          stageHeight: stage_height, 
           editorMode : true,
-        },
-        imageParameters : {
-          filter : true,
-          uniScalingUnlockable : true,
-          advancedEditing : true,
-          /* uploadZone: true, */ 
-        },
-        imageEditorSettings : {
-          masks : [
-            '/wp-content/masks/circle.svg',
-            '/wp-content/masks/heart.svg',
-            '/wp-content/masks/star.svg',
-            '/wp-content/masks/hexagon.svg',
-            '/wp-content/masks/3_box_frame.svg',
-            '/wp-content/masks/1_box_frame.svg',
-            
-            ],
-        },
-        elementParameters : {
-          patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
-             
-        },
-      };
+          fitImagesInCanvas: true,
+          mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
+              'manage-layers'],
+          actions : {
+            'top' : [ ],
+            'right' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
+            'bottom' : [],
+          },
 
-      yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-
-    });
-      
+          fonts : [ 'Arial', 'Fearless', 'Helvetica', 'Times New Roman',
+              'Verdana', 'Geneva', 'Gorditas', 'Eczar', 'Roboto Mono',
+              'Poor Story', 'Titillium Web', 'Noto Serif', 'Work Sans',
+              'Chela One', 'Indie Flower', 'Inconsolata', 'Bitter',
+              'Libre Baskerville', 'Anton', 'Josefin Sans',
+              'Cormorant Unicase', 'Lobster', 'Arvo', 'Pacifico', 'Do Hyeon',
+              'Shadows Into Light', 'Dancing Script', 'Abril Fatface',
+              'Bree Serif', 'Coda Caption', 'Kanit', 'Acme',
+              'Gloria Hallelujah', 'Righteous', 'Rajdhani', 'Permanent Marker',
+              'Farsan', 'Great Vibes', 'Concert One', 'Poiret One', 'Satisfy',
+              'Courgette', 'Marck Script', 'Prata', 'Audiowide', 'Unica One',
+              'Julius Sans One', 'Ultra', 'Economica', 'IBM Plex Mono',
+              'Amaranth', 'Prosto One', 'Bangers', 'Shrikhand', 'Handlee',
+              'Boogaloo', 'Tangerine', 'Kalam', 'Sacramento',
+              'Architects Daughter', 'PT Mono', 'Bad Script', 'Special Elite',
+              'Libre Barcode 128 Text', 'Shadows Into Light Two',
+              'Cabin Sketch', 'Parisienne', 'Damion', 'Covered By Your Grace',
+              'Playball', 'Nothing You Could Do', 'Homemade Apple',
+              'Fugaz One', 'Rock Salt', 'Allura', 'Press Start 2P',
+              'Alex Brush', 'Black Ops One', 'Carter One', 'Just Another Hand',
+              'Fredericka the Great', 'Syncopate', 'Bungee Inline', 'Niconne',
+              'Coming Soon', 'Leckerli One', 'Galada', 'Caveat Brush',
+              'Pinyon Script', 'Cinzel Decorative', 'Mr Dafoe',
+              'Reenie Beanie', 'Italianno', 'Nanum Pen Script', 'Quantico',
+              'Skranji', 'Allerta Stencil', 'Grand Hotel', 'Yesteryear',
+              'Marvel', 'Freckle Face', 'Rochester', 'Nanum Brush Script',
+              'Alegreya SC', 'Annie Use Your Telescope', 'Faster One',
+              'Raleway Dots', 'Calligraffitti', 'Aclonica', 'Yatra One',
+              'Share Tech Mono', 'Graduate', 'Petit Formal Script',
+              'East Sea Dokdo', 'Love Ya Like A Sister', 'Kurale',
+              'IM Fell Double Pica', ],
+          customTextParameters : {
+            colors : true,
+            removable : true,
+            resizable : true,
+            draggable : true,
+            rotatable : true,
+            autoCenter : true,
+            boundingBox : "Base",
+            curvable : true,
+            curveReverse : true,
+          },
+          customImageParameters : {
+            removable : true,
+            colors : '#000',
+            autoCenter : true,
+            boundingBox : "Base",
+            minW : 1,
+            minH : 1,
+            maxW : 9900,
+            maxH : 9900,
+            filter : true, 
+            advancedEditing : true,
+            editorMode : true,
+          },
+          imageParameters : {
+            filter : true, 
+            advancedEditing : true, 
+          },
+          imageEditorSettings : {
+            masks : [
+              '/wp-content/masks/circle.svg',
+              '/wp-content/masks/heart.svg',
+              '/wp-content/masks/star.svg',
+              '/wp-content/masks/hexagon.svg',
+              '/wp-content/masks/arches.svg',
+              '/wp-content/masks/atomic.svg',
+              '/wp-content/masks/flame.svg',
+              ],
+          },
+          elementParameters : {
+            patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
+               
+          },
+        };
+ 
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+      });
 </script>
 </html>

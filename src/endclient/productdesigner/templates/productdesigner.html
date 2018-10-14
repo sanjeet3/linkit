@@ -642,39 +642,16 @@
 		</div>
 	</div><!-- Draggable Dialog -->
 
-	<div class="fpd-image-editor-container">
+	<div class="fpd-image-editor-container" id="advance_editor_2_stage">
 
 		<div class="fpd-image-editor-menu">
-			<span data-id="mask" class="fpd-active" data-defaulttext="Mask">image_editor.mask</span>
-			<span data-id="filters" data-defaulttext="Filters">image_editor.filters</span>
+			<span data-id="filters" data-defaulttext="Filters" class="fpd-active">image_editor.filters</span>
 			<span data-id="color-manipulation" data-defaulttext="Color Manipulation">image_editor.color_manipulation</span>
 		</div>
 
 		<div class="fpd-tab-content">
-
-			<!-- MASK -->
-			<div data-id="mask" class="fpd-content-mask fpd-active">
-
-				<div class="fpd-mask-selection">
-					<span data-mask="custom-rect" class="fpd-tooltip" data-defaulttext="Custom Cropping" title="image_editor.custom_cropping"><span class="fpd-icon-crop"></span></span>
-				</div>
-				<div class="fpd-mask-tools">
-					<span class="fpd-mask-cancel fpd-btn fpd-dark"><span class="fpd-icon-close"></span></span>
-					<span class="fpd-mask-save fpd-btn"><span class="fpd-icon-done"></span></span>
-				</div>
-        <div class="col-lg-12" style="padding: 10px 0px 8px 0px;">
-          <b>Choose mask border color: </b>
-          <input type="color" id="mask_color_selctor" name="mask_color_selctor"
-               value="#2ecc71" style="height: 25px;" /> &nbsp;&nbsp;&nbsp;<b>Border size: </b>
-          <input type="number" id="mask_border_size" name="mask_border_size"
-               value="3" min="3" max="500" style="height: 25px;" />     
-          &nbsp;&nbsp;&nbsp;<label><input id="use_mask_broder" type="checkbox" name="use_mask_broder"  checked="checked" style="-webkit-appearance: checkbox;-moz-appearance: checkbox;"> Alow mask border </label>    
-        </div>
-
-			</div>
-
 			<!-- FILTERS -->
-			<div data-id="filters" class="fpd-content-filters"></div>
+			<div data-id="filters" class="fpd-content-filters fpd-active"></div>
 
 			<!-- COLOR MANIPULATION -->
 			<div data-id="color-manipulation" class="fpd-content-color-manipulation fpd-clearfix" id="fpd-color-manipulation">
@@ -730,7 +707,94 @@
 		</div>
 
 	</div>
+  <div class="fpd-image-editor-container" id="advance_editor_3_stage">
 
+    <div class="fpd-image-editor-menu">
+      <span data-id="mask" class="fpd-active" data-defaulttext="Mask">image_editor.mask</span>
+      <span data-id="filters" data-defaulttext="Filters">image_editor.filters</span>
+      <span data-id="color-manipulation" data-defaulttext="Color Manipulation">image_editor.color_manipulation</span>
+    </div>
+
+    <div class="fpd-tab-content">
+
+      <!-- MASK -->
+      <div data-id="mask" class="fpd-content-mask fpd-active">
+
+        <div class="fpd-mask-selection">
+          <span data-mask="custom-rect" class="fpd-tooltip" data-defaulttext="Custom Cropping" title="image_editor.custom_cropping"><span class="fpd-icon-crop"></span></span>
+        </div>
+        <div class="fpd-mask-tools">
+          <span class="fpd-mask-cancel fpd-btn fpd-dark"><span class="fpd-icon-close"></span></span>
+          <span class="fpd-mask-save fpd-btn"><span class="fpd-icon-done"></span></span>
+        </div>
+        <div class="col-lg-12" style="padding: 10px 0px 8px 0px;">
+          <b>Choose mask border color: </b>
+          <input type="color" id="mask_color_selctor" name="mask_color_selctor"
+               value="#2ecc71" style="height: 25px;" /> &nbsp;&nbsp;&nbsp;<b>Border size: </b>
+          <input type="number" id="mask_border_size" name="mask_border_size"
+               value="3" min="3" max="500" style="height: 25px;" />     
+          &nbsp;&nbsp;&nbsp;<label><input id="use_mask_broder" type="checkbox" name="use_mask_broder"  checked="checked" style="-webkit-appearance: checkbox;-moz-appearance: checkbox;"> Alow mask border </label>    
+        </div>
+
+      </div>
+
+      <!-- FILTERS -->
+      <div data-id="filters" class="fpd-content-filters"></div>
+
+      <!-- COLOR MANIPULATION -->
+      <div data-id="color-manipulation" class="fpd-content-color-manipulation fpd-clearfix" id="fpd-color-manipulation">
+
+        <div class="fpd-left fpd-filter-brightness">
+          <div class="fpd-switch-container fpd-left fpd-enabled" data-enabled="true" data-disabled="false" data-filter="Brightness">
+            <div class="fpd-switch-bar"></div>
+            <div class="fpd-switch-toggle"></div>
+          </div>
+          <label data-defaulttext="Brightness">image_editor.brightness</label>
+          <div class="fpd-range-tooltip fpd-enabled">
+            <span data-defaulttext="Brightness">image_editor.brightness</span>
+            <input type="range" name="brightness" class="fpd-input-range" value="0" min="-1" max="1" step="0.01" />
+            <div class="fpd-tooltip"></div>
+          </div>
+        </div>
+
+        <div class="fpd-left fpd-filter-contrast">
+          <div class="fpd-switch-container fpd-left fpd-enabled" data-enabled="true" data-disabled="false"  data-filter="Contrast">
+            <div class="fpd-switch-bar"></div>
+            <div class="fpd-switch-toggle"></div>
+          </div>
+          <label data-defaulttext="Contrast">image_editor.contrast</label>
+          <div class="fpd-range-tooltip fpd-enabled">
+            <span data-defaulttext="Contrast">image_editor.contrast</span>
+            <input type="range" name="contrast" class="fpd-input-range" value="0" min="-1" max="1" step="0.01" />
+            <div class="fpd-tooltip"></div>
+          </div>
+        </div>
+
+        <div class="fpd-left fpd-filter-remove-white">
+          <div class="fpd-switch-container fpd-left fpd-enabled" data-enabled="true" data-disabled="false" data-filter="RemoveWhite" >
+            <div class="fpd-switch-bar"></div>
+            <div class="fpd-switch-toggle"></div>
+          </div>
+          <label data-defaulttext="Remove White">image_editor.remove_white</label>
+          <div class="fpd-range-tooltip fpd-enabled">
+            <span data-defaulttext="Distance">image_editor.remove_white_distance</span>
+            <input type="range" class="fpd-input-range" name="distance" value="0" min="0" max="1" step="0.01" />
+            <div class="fpd-tooltip"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="fpd-image-editor-main"></div>
+
+    <div class="fpd-action-buttons">
+      <span class="fpd-action-restore fpd-btn fpd-dark" data-defaulttext="Restore Original">image_editor.restore</span>
+      <span class="fpd-action-save fpd-btn" data-defaulttext="Save">image_editor.save</span>
+    </div>
+
+  </div>
 </div>
 
 

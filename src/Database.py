@@ -348,14 +348,23 @@ class ClientProductDesign(EndpointsModel):
   client = ndb.KeyProperty(Client)
   product = ndb.KeyProperty(Product)
   product_code = ndb.StringProperty(default='')
+  json_bucket_path = ndb.StringProperty(default='')
+  json_bucket_key = ndb.StringProperty(default='')
   design_id = ndb.StringProperty(default='')
-  design_prev = ndb.TextProperty(default='')
+  design_prev_url = ndb.TextProperty(default='')
+  design_prev_key = ndb.TextProperty(default='')
+  design_prev_path = ndb.TextProperty(default='')
   layer_list = ndb.TextProperty(repeated=True)
   layer_ext_list = ndb.TextProperty(repeated=True)
 
   @classmethod
   def get_by_design_id(cls, design_id):
     e = cls.query(cls.design_id==design_id).get()      
+    return e
+
+  @classmethod
+  def get_client_design(cls, client, product):
+    e = cls.query(cls.client==client, cls.product==product).fetch()      
     return e
   
 class OrderStage(EndpointsModel):

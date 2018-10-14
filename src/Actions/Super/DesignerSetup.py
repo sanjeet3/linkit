@@ -103,6 +103,7 @@ class UploadTextPattern(ActionSupport):
   def post(self):
     image_file = self.request.POST.get("pic", None)
     file_obj = self.request.get("pic", None)     
+    logging.info(type(file_obj))
     if not isinstance(image_file, cgi.FieldStorage):        
       return json_response(self.response, { },
                            ERROR,

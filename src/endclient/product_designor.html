@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>Craftyourchoice</title>
-<link rel="shortcut icon" type="image/png" href="/img/fevicon.png"/>
+<link rel="shortcut icon" type="image/png" href="/img/fevicon.png" />
 <link rel="stylesheet" href="/css/api.css">
 <link href="/light/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
@@ -14,10 +14,6 @@
 <!--fonts-->
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet'
   type='text/css'>
-<!--//fonts-->
-<link rel="stylesheet" href="/light/css/etalage.css" type="text/css" media="all" />
-<!-- <script src="/light/js/jquery.min.js"></script> -->
-<!--script-->
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 <!-- Google Webfonts -->
 <link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
@@ -35,7 +31,7 @@
   <!---->
   {%if not user_obj%}
   <div class="container main-content" id="login_form"
-    style="z-index: 10; background-color: aliceblue; display: none;">
+    style="z-index: 99999; background-color: aliceblue; display: none;">
     <div class="mt-20">
       <div class="col-lg-4 col-xs-12 mb-20">
         <form action="/Login" method="post">
@@ -60,7 +56,7 @@
     </div>
   </div>
   <div class="container main-content" id="registration_dom"
-    style="z-index: 10; background-color: aliceblue; display: none;">
+    style="z-index: 99999; background-color: aliceblue; display: none;">
     <div class="col-lg-4 col-xs-12 mt-20">
       <form id="registration_form">
         <div class="form-group">
@@ -121,26 +117,41 @@
     </div>
   </div>
   {%endif%}
-  <div class="container main-content" id="product_design_caontainer" style="bottom: 0 !important;">
-    <div id="set_frame_mask_dom" class="text-center frame-mask-action-dom" style="display: none;">
-      <input type="hidden" id="frame_id" name="frame">
-      <input type="hidden" id="pic_id" name="pic">
-      <span class="btn btn-sm btn-success btn-round btn-mini" style="margin-top: 3%;" id="set_frame_mask_btn"><span class="fpd-icon-done"></span> Save Frame</span>
+  <div class="container main-content" id="product_design_caontainer"
+    style="bottom: 0 !important; padding-left: 0;">
+    <div id="set_frame_mask_dom" class="frame-mask-action-dom" style="display: none;">
+      <input type="hidden" id="frame_id" name="frame"> <input type="hidden" id="pic_id"
+        name="pic"> <span class="btn btn-sm btn-success btn-round btn-mini"
+        style="margin-top: 3%;" id="set_frame_mask_btn"><span class="fpd-icon-done"></span>
+        Save Frame</span>
+    </div>
+    <div id="pls_wait_design_saving" class="saving-design" style="display: none;">
+      <div class="reveal-modal">
+        <h3>Please wait saving your design...</h3>
+      </div>
+    </div>
+    <div id="pls_wait_design_loadind" class="saving-design" style="display: none;">
+      <div class="reveal-modal" id="msg_div">
+        <h3>Please wait loading designer files...</h3>
+      </div>
     </div>
     <div id="main-container">
       <h3 id="clothing" style="float: left;">{{p.name}} Designer</h3>
       <button type="button" onclick="window.history.go(-1); return false;"
-        class="btn btn-sm btn-primary btn-round btn-mini mt-15 mr-5 pull-right" style="margin-left: 5px;">
+        class="btn btn-sm btn-primary btn-round btn-mini mt-15 mr-5 pull-right"
+        style="margin-left: 5px;">
         <i class="ace-icon fa fa-arrow-left"></i> Back
       </button>
-      <button type="button" {#onclick="window.location='/CreateYourDesign'" #} id="save_design_btn"
+      {%if user_obj%}
+      <button type="button" onclick="createUserDisgn()" id="save_design_btn"
         class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
         <i class="ace-icon fa fa-save"></i> Save
       </button>
+      {%endif%}
       <div id="product-designer" style="clear: both;"
         class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
         {%if canvas%}
-        <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
+        <div class="fpd-product" title="Base" data-thumbnail="">
           <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
             data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}} }' />
@@ -202,10 +213,15 @@
           </div>
           {%endfor%}
         </div>
-        {#<div class="fpd-frame">
+        {#
+        <div class="fpd-frame">
           <div class="fpd-category" title="Frame Mock" data-thumbnail="">
-            <img src="/wp-content/3_box_frame.svg" title="Frame"
+            <img src="/wp-content/3_box_frame.svg" title="3 Frame"
               data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            <img src="/wp-content/4_box.svg" title="4 Frame"
+              data-parameters='{"svg": "/wp-content/4_box.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            <img src="/wp-content/7_box.svg" title="7 Frame"
+              data-parameters='{"svg": "/wp-content/1_box.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />    
           </div>
           <div class="fpd-category" title="Frame test" data-thumbnail="">
             <img src="/wp-content/3_box_frame.svg" title="Frame"
@@ -222,23 +238,23 @@
             <li>Keyboard Control: Use arrow keys to move and backspace key to delete selected
               element</li>
           </ol>
-          <form id="create_product_design_form">
-            <input type="hidden" name="product" value="{{key}}"> <input type="hidden"
-              name="layer" id="design_layer"> <input type="hidden" name="design_print"
-              id="design_print"> {#
-            <button type="button" onclick="backToProductAcitionDom()" class="fpd-btn">
-              <i class="ace-icon fa fa-arrow-left"></i> Back
-            </button>
-            <button type="button" class="fpd-btn" onclick="createUserDisgn()">Save Design</button>
-            #}
-          </form>
-          <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
-            preparing your design...</p>
         </div>
       </div>
-      <div class="fpd-loader-wrapper" id="frame-loader" style="display: none;"><div class="fpd-loader"><div class="fpd-loader-circle"></div><span class="fpd-loader-text" data-defaulttext="Initializing Product Designer">Please wait...</span></div></div>
+      <div class="fpd-loader-wrapper" id="frame-loader" style="display: none;">
+        <div class="fpd-loader">
+          <div class="fpd-loader-circle"></div>
+          <span class="fpd-loader-text" data-defaulttext="Initializing Product Designer">Please
+            wait...</span>
+        </div>
+      </div>
     </div>
   </div>
+  <form id="create_product_design_form" style="display: none;">
+    <input type="hidden" name="product" id="product_key" value="{{key}}">
+    <textarea name="layer" id="design_layer"></textarea>
+    <input type="hidden" name="design_print" id="design_print"> <input type="hidden"
+      name="design_key" id="design_key" value="{{saveDesignKey}}">
+  </form>
 </body>
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>
@@ -281,12 +297,11 @@ stage_width = {{canvas.stage_width}};
           stageHeight: stage_height, 
           editorMode : true,
           fitImagesInCanvas: true,
-          /* toolbarPlacement : "inside-top", */
           mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
               'manage-layers'],
           actions : {
-            'top' : [ ],
-            'right' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
+            'right' : [ ],
+            'top' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
             'bottom' : [],
           },
 
@@ -366,11 +381,22 @@ stage_width = {{canvas.stage_width}};
           },
         };
 
-        {%if redayDesign%}
-        designJson = {{redayDesign.design_json|safe}}
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+        setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
+        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'60px'});}, 2000);
+        {%if redayDesignKey%} 
+        $('#pls_wait_design_loadind').show();
+        loadFPDUrl='/GetReadyDesingJson?key='+'{{redayDesignKey}}';
+        loadFPCCB='getReadyDesingJsonCB';
         loadReadyDesign=true;
         {%endif%}
-        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+        {%if saveDesignKey%}
+        $('#pls_wait_design_loadind').show(); 
+        loadFPDUrl='/GetSavedDesingJson?key='+'{{saveDesignKey}}';
+        loadFPCCB='getSavedDesingJsonCB';
+        loadReadyDesign=true;
+        {%endif%}
       });
  
 </script>
+<script src="/js/designAlgo.js" type="text/javascript"></script>

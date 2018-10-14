@@ -83,6 +83,48 @@ def upload_file(file_obj, bucket_path):
   
   return '', ''
 
+def write_urlecoded_png_img(data, bucket_path): 
+  """upload file to bucket.
+
+    The retry_params specified in the open call will override the default
+    retry params for this particular file handle.
+
+    Arguments:
+      data: urlecode base64
+      bucket_path: file name
+       
+  """ 
+      
+  try:
+    with gcs.open(bucket_path,
+                  'w',
+                  content_type='image/png',
+                  options={b'x-goog-acl': b'public-read'}) as f:
+      f.write(data)
+  except Exception, e:
+    logging.error('Blob write failed for %s, exception: %s. Additional info was logged' % (bucket_path, str(e)))
+  
+def upload_text_file(data, bucket_path): 
+  """upload file to bucket.
+
+    The retry_params specified in the open call will override the default
+    retry params for this particular file handle.
+
+    Arguments:
+      data: urlecode base64
+      bucket_path: file name
+       
+  """ 
+      
+  try:
+    with gcs.open(bucket_path,
+                  'w',
+                  content_type='text/plain',
+                  options={b'x-goog-acl': b'public-read'}) as f:
+      f.write(data)
+  except Exception, e:
+    logging.error('Blob write failed for %s, exception: %s. Additional info was logged' % (bucket_path, str(e)))  
+
 def delete_bucket_file(bucket_key):
   try:  
     blobstore.delete(bucket_key)

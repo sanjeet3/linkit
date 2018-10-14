@@ -15,15 +15,18 @@ import logging, time
 from uuid import uuid1
 import json
 from src.api.baseapi import json_response, SUCCESS, ERROR
-from src.api.bucketHandler import get_by_bucket_key
+from src.api.bucketHandler import get_by_bucket_key, write_urlecoded_png_img, upload_text_file
 from src.api.datetimeapi import get_dt_by_country
 import datetime
 
 from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
+from google.appengine.ext import blobstore
+from google.appengine.api import images
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
 from src.app_configration import config
+import base64
 
 design_img_title = config.get('design_img_title')
 
@@ -40,6 +43,19 @@ class Imgage(webapp2.RequestHandler):
         self.response.write(contents)
     except Exception, e:
       logging.error(e) 
+
+class GetBucketFile(webapp2.RequestHandler):
+  def get(self):
+    bucket_path = self.request.get('id')
+    try:
+      with gcs.open(bucket_path, 'r') as gcs_file:
+        contents = gcs_file.read()
+        gcs_file.close()
+        self.response.headers['Content-Type'] = "image/svg+xml"
+        self.response.write(contents)
+    except Exception, e:
+      logging.error(e) 
+
       
 class ActivateAccount(ActionSupport):
   def get(self):     
@@ -249,13 +265,17 @@ class ProductView(ActionSupport):
     
 class GetProductDetails(ActionSupport):
   def get(self):
+    save_design_list = []  
     p = ndb.Key(urlsafe=self.request.get('key')).get()
     seller_dict = {}#Seller.get_key_obj_dict()
     seller_product_list = []#SellerProduct.get_product_by_master_key_for_client(p.key)
     design_list = ReadyDesignTemplate.get_ready_design_list(p.key) #ProductDesign.get_design_list(p.key)
+    if self.client:
+      save_design_list = ClientProductDesign.get_client_design(self.client.key, p.key)
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
     self.response.out.write(template.render({'p': p,
                                              'design_list': design_list,
+                                             'save_design_list': save_design_list,
                                              'seller_product': SellerProduct.get_default_seller_product(p.key),
                                              'seller_product_list': seller_product_list,
                                              'seller_dict': seller_dict,
@@ -397,12 +417,11 @@ class GetProductDesignor(ActionSupport):
     sub_frame_dict = {}
     sub_cat_dict = {}
     sub_bg_dict = {}  
-    redayDesign=None
     redayDesignKey=self.request.get('redayDesign')
+    saveDesignKey=self.request.get('saveDesign')
     p = ndb.Key(urlsafe=self.request.get('key')).get() 
-    template = self.get_jinja2_env.get_template(template_path)  
-    if redayDesignKey:
-      redayDesign = ndb.Key(urlsafe=redayDesignKey).get()    
+    template = self.get_jinja2_env.get_template(template_path)   
+    
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
     
@@ -431,7 +450,8 @@ class GetProductDesignor(ActionSupport):
     
              
     self.response.out.write(template.render({'p': p,
-                                             'redayDesign': redayDesign,
+                                             'saveDesignKey': saveDesignKey,
+                                             'redayDesignKey': redayDesignKey, 
                                              'dev': self.DEV,
                                              'key': self.request.get('key'), 
                                              'user_obj': self.client, 
@@ -479,7 +499,27 @@ class PhotoBookDesign(ActionSupport):
                                              'design_list': design_list,
                                              'sub_cat_dict': sub_cat_dict}))  
         
+
+class GetReadyDesign(ActionSupport):
+  def get(self):
+    data_dict = {}  
+    return json_response(self.response, data_dict, SUCCESS, 'Ready design loaded')
+
+class GetSavedDesign(ActionSupport):
+  def get(self):
+    data_dict = {}  
+    e = ndb.Key(urlsafe=self.request.get('key')).get() 
+    e.json_bucket_key
+    try:
+      with gcs.open(e.json_bucket_path, 'r') as gcs_file:
+        contents = gcs_file.read()
+        gcs_file.close()
+        data_dict['contents']=contents.decode('utf8')
+    except Exception, msg:
+      logging.error(msg)        
     
+    return json_response(self.response, data_dict, SUCCESS, 'Saved design loaded')
+
 class CreateDesign(ActionSupport):
   def get(self): 
     template_path = 'endclient/customDesign.html' #'endclient/fancy_product_designer.html'
@@ -492,45 +532,45 @@ class CreateDesign(ActionSupport):
               'user_obj': self.client} 
     return self.response.out.write(template.render(html_dta))
     
-  def post(self): 
-    layer_list = []
-    layer_ext_list = []  
+  def post(self):  
     p = Product()  
     p = ndb.Key(urlsafe=self.request.get('product')).get()                          
-    design_print = self.request.get('design_print')
+    design_print = self.request.get('design_print2')
     layer = self.request.get('layer')
-    layer_json = json.loads(layer)
-    for data in layer_json:
-      layr_type=data['type']
-      title = data['title']  
-      if layr_type =="image" and title in design_img_title:
-        continue    
-      source = data['source']
-      if layr_type =="image":
-        layer_list.append('<img src="%s">' %(source))
-        layer_ext_list.append('image')   
-      else:
-        parameters= data['parameters']
-        fontSize = parameters['fontSize']
-        fontFamily = parameters['fontFamily']
-        r= '<font style="font-family: %s;font-size: %spx">%s</font>' %(fontFamily, fontSize, source)
-        layer_list.append(r)
-        layer_ext_list.append('text')
-        
-      logging.info(data['type'])  
-        
-    design_obj = ClientProductDesign()                    
+    layer=layer.encode('utf8')
+     
+    logging.info(layer.__len__())
+    
+    #layer_json = json.loads(layer)   
+    if self.request.get('design_key'):
+      design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
+    else:        
+      design_obj = ClientProductDesign()                    
     design_obj.client = self.client.key
     design_obj.product_code = p.code
-    design_obj.product = p.key
-    design_obj.design_prev = design_print
-    design_obj.layer_ext_list =layer_ext_list
-    design_obj.layer_list = layer_list
+    design_obj.product = p.key 
     design_obj = design_obj.put().get()
-    design_obj.design_id = str(design_obj.id)
-    design_obj.put()
-    
-    data_dict = {'id': design_obj.id}                        
+    bucket_path = '/designer_textptrn/%s/preview/%s/%s' %(self.client.id, p.code, design_obj.id)
+    write_urlecoded_png_img(design_print, bucket_path) 
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+    design_obj.design_prev_url = serving_url
+    design_obj.design_prev_key = bucket_key
+    design_obj.design_prev_path = bucket_path
+    bucket_path = '/designer_textptrn/%s/json/%s/%s' %(self.client.id, p.code, design_obj.id)
+    upload_text_file(layer, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)
+    design_obj.json_bucket_key = bucket_key
+    design_obj.json_bucket_path = bucket_path
+    design_obj.put()  
+    data_dict = {'id': design_obj.id, 'design_key': design_obj.entityKey}                        
     return json_response(self.response, data_dict, SUCCESS, 'Product design saved')                        
 
 
@@ -574,4 +614,25 @@ class ContactUs(ActionSupport):
     template = self.get_jinja2_env.get_template('endclient/contactus.html') 
     self.response.out.write(template.render({'product_cat_list': product_cat_list}))
       
-          
+     
+     
+''' Fetch FPD JSON    
+    layer = self.request.get('layer')
+    layer_json = json.loads(layer)
+    layer_json = layer_json[0]['elements']
+    for data in layer_json:
+      layr_type=data['type']
+      title = data['title']  
+      if layr_type =="image" and title in design_img_title:
+        continue    
+      source = data['source']
+      if layr_type =="image":
+        layer_list.append('<img src="%s">' %(source))
+        layer_ext_list.append('image')   
+      else:
+        parameters= data['parameters']
+        fontSize = parameters['fontSize']
+        fontFamily = parameters['fontFamily']
+        r= '<font style="font-family: %s;font-size: %spx">%s</font>' %(fontFamily, fontSize, source)
+        layer_list.append(r)
+        layer_ext_list.append('text')     '''
