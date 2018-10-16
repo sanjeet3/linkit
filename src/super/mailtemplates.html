@@ -1,0 +1,126 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-envelope "></i> <a href="javascript:">Email Template Setup</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+</div>
+<div class="page-content" id="email_setup">
+  <div class="row mt-10">
+    <div class="col-lg-8 col-xs-12 col-sm-12">
+      <h3 class="header smaller lighter blue">Email Templates</h3>
+      <div class="form-group">
+        <label class="col-sm-4 control-label no-padding-right" for="code"> Choose Template </label>
+        <div class="col-sm-8">
+          <select id="choose_templates" class="form-control">
+            <option value="Account Verification">Account Verification</option>
+            <option value="News Latter">News Latter</option>
+            <option value="On Design Save">On Design Save</option>
+            <option value="On Order">On Order</option>
+            <option value="Order Updates">Order Updates</option>
+            <option value="Ladger">Ladger</option>
+          </select>
+        </div>
+      </div>
+      <h4>Insert Content:</h4>
+      <form class="form-horizontal" role="form" id="email_form">
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="price"> content </label>
+          <div class="col-sm-9">
+            <select id="choose_tag" class="form-control input-custom">
+              <option value="custom">Custom Text</option>
+              <option value="h">Main Heading</option>
+              <option value="subh">Sub Heading</option>
+              <option value="para">Paragraph</option>
+              <option value="link">Link</option>
+              <option value="img_lg">Full Image</option>
+              <option value="img_sm">Small Image</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="url_dom">
+          <label class="col-sm-3 control-label no-padding-right">URL</label>
+          <div class="col-sm-9">
+            <input class="form-control input-custom" type="text" id="url_val">
+          </div>
+        </div>
+        <div class="form-group" id="url_dom">
+          <label class="col-sm-3 control-label no-padding-right">Text</label>
+          <div class="col-sm-9">
+            <textarea rows="5" class="form-control input-custom" id="para_val"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Font Size</label>
+          <div class="col-sm-9">
+            <input class="form-control input-custom" type="number" min="4" max="28" value="12"
+              id="font_size">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Font Color</label>
+          <div class="col-sm-2">
+            <input id="font_color" type="color" style="padding: 0px;">
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-info btn-minier" type="button" onclick="insertToTemplate()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Insert
+          </button>
+        </div>
+      </form>
+      <div id="output_dom"
+        style="font-family: Arial, sans-serif; color: #444444; min-height: 200px;"
+        bgcolor="#E4E6E9" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
+         
+      </div>
+    </div>
+    <div class="col-lg-4 col-xs-12 col-sm-12">
+      <h3 class="header smaller lighter blue">Email images uploads</h3>
+      <form class="form-horizontal" role="form" id="upload_form">
+        <p>Upload mail images</p>
+        <div class="form-group">
+          <div class="col-sm-9">
+            <input type="file" name="pic" id="imgage_file" accept=".png,.jpg,.png,.jpeg" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-1 col-md-9">
+            <button class="btn btn-info btn-minier" type="button" onclick="uploadEmailImage()">
+              <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
+                id="save_product_pic_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+function insertToTemplate(){
+  var type = $('#choose_tag').val(),
+  link = $('#url_val').val(),
+  text = $('#para_val').val(),
+  fs = $('#font_size').val(),
+  fc = $('#font_color').val();
+  
+  h='<div class="drag-vertical"><p class="pull-left" style="width: 98%; font-size:'+fs+'; font-color:'+fc+'">'+text+'</p> <i class="ace-icon fa fa-times class="pull-right"></i></div>'
+  $('#output_dom').append(h);
+  //$( ".drag-vertical" ).draggable({ axis: "y" });  
+  $("i.fa-times").on('click', function(e) {
+    $(this).closest('div.drag-vertical').remove();
+  });
+  
+}
+$("#output_dom").sortable({
+  
+  axis: "y",
+  revert: true,
+  scroll: false,
+  placeholder: "sortable-placeholder",
+  cursor: "move"
+
+});
+</script>
+

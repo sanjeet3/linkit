@@ -25,100 +25,9 @@
 <link rel="stylesheet" type="text/css"
   href="/productdesigner/css/jquery.fancyProductDesigner-fonts.css" />
 </head>
-<body style="height: 100%; width: 100%">
-  <!--navbar-->
-  {% include 'endclient/navbar.html' %}
-  <!---->
-  {%if not user_obj%}
-  <div class="container main-content" id="login_form"
-    style="z-index: 99999; background-color: aliceblue; display: none;">
-    <div class="mt-20">
-      <div class="col-lg-4 col-xs-12 mb-20">
-        <form action="/Login" method="post">
-          <div class="form-group">
-            <label for="email">Email address</label>
-            <div>
-              <input type="email" class="form-control" id="email" name="email" required="required">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwd">Password</label>
-            <div>
-              <input type="password" name="password" class="form-control" id="pwd" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-success pull-left">Login</button>
-            <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="container main-content" id="registration_dom"
-    style="z-index: 99999; background-color: aliceblue; display: none;">
-    <div class="col-lg-4 col-xs-12 mt-20">
-      <form id="registration_form">
-        <div class="form-group">
-          <label for="email">Name*</label>
-          <div>
-            <input type="text" class="form-control" id="name" name="name" required="required">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="email">Email address*</label>
-          <div>
-            <input type="email" class="form-control" id="user_email" name="email"
-              required="required">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Password*</label>
-          <div>
-            <input type="password" name="password" class="form-control" id="password" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Confirm Password*</label>
-          <div>
-            <input type="password" name="confirm-password" class="form-control"
-              id="confirm-password" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="email">Contact Number</label>
-          <div>
-            <input type="text" class="form-control" id="contact" name="contact" required="required">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="checkbox">
-            <label><input type="checkbox" name="term_condition" id="term_condition"
-              style="left: 2vw;"> Accept Term & conditions</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="checkbox">
-            <label><input type="checkbox" name="recieved_offers" id="recieved_offers"
-              style="left: 2vw;"> Get alert for new offers</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <button type="button" class="btn btn-success pull-left" onclick="register()">Sign-Up</button>
-          <button type="button" class="btn btn-info pull-right" onclick="showLoginDom()">Sign-in</button>
-        </div>
-      </form>
-      <div class="col-lg-12 col-xs-12text-center" id="registeration_msg_dom" style="display: none;">
-        <p>
-          Verification mail will sent to your registered email <span id="email_text"></span>, Check
-          your inbox and verify account to complete registration.
-        </p>
-      </div>
-    </div>
-  </div>
-  {%endif%}
+<body style="height: 100%; width: 100%">  
   <div class="container main-content" id="product_design_caontainer"
-    style="bottom: 0 !important; padding-left: 0;">
+    style="bottom: 0 !important; padding-left: 0;top:0 !important;">
     <div id="set_frame_mask_dom" class="frame-mask-action-dom" style="display: none;">
       <input type="hidden" id="frame_id" name="frame"> <input type="hidden" id="pic_id"
         name="pic"> <span class="btn btn-sm btn-success btn-round btn-mini"
@@ -162,6 +71,7 @@
             data-parameters='{"product_canvas": true, "left": 525, "top": 400}' />
         </div>
         {%endif%}
+        {%if 'design' in designer_module%}
         <div class="fpd-design">
           {%for cat in design_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -179,6 +89,8 @@
           </div>
           {%endfor%}
         </div>
+        {%endif%}
+        {%if 'backgrounds' in designer_module%}
         <div class="fpd-background">
           {%for cat in bg_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -196,6 +108,8 @@
           </div>
           {%endfor%}
         </div>
+        {%endif%}
+        {%if 'frames' in designer_module%}
         <div class="fpd-frame">
           {%for cat in frame_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -213,6 +127,7 @@
           </div>
           {%endfor%}
         </div>
+        {%endif%}
         {#
         <div class="fpd-frame">
           <div class="fpd-category" title="Frame Mock" data-thumbnail="">
@@ -224,13 +139,11 @@
               data-parameters='{"svg": "/wp-content/1_box.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />    
           </div>
           <div class="fpd-category" title="Frame test" data-thumbnail="">
-            <img src="/wp-content/3_box_frame.svg" title="Frame"
-              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+            <img src="/wp-content/2_hexagon.svg" title="Tow Hexagone"
+              data-parameters='{"svg": "/wp-content/2_hexagon.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           </div>
-        </div>
-        #}
-      </div>
-      <br />
+        </div>#}
+      </div> 
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
           <h5>Help and tips:</h5>
@@ -280,7 +193,15 @@ var canvasPreviewUrl = '',
 preview_top = 0,
 preview_left = 0,
 stage_height = 780,
-stage_width=780;
+stage_width=780,
+main_bar_module=[];
+{%for m in designer_module%}
+main_bar_module.push('{{m}}');
+{%else%}
+main_bar_module = ['images', 'frames', 'backgrounds', 'text', 'designs'];
+{%endfor%}
+main_bar_module.push('manage-layers');
+
 {%if canvas%}
 canvasPreviewUrl = {%if canvas.preview_url%}'{{canvas.preview_url}}=s0'{%else%}''{%endif%};
 preview_top = '{{canvas.preview_top}}px';
@@ -297,8 +218,7 @@ stage_width = {{canvas.stage_width}};
           stageHeight: stage_height, 
           editorMode : true,
           fitImagesInCanvas: true,
-          mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
-              'manage-layers'],
+          mainBarModules : main_bar_module,
           actions : {
             'right' : [ ],
             'top' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
@@ -383,7 +303,7 @@ stage_width = {{canvas.stage_width}};
 
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
         setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
-        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'60px'});}, 2000);
+        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000);
         {%if redayDesignKey%} 
         $('#pls_wait_design_loadind').show();
         loadFPDUrl='/GetReadyDesingJson?key='+'{{redayDesignKey}}';

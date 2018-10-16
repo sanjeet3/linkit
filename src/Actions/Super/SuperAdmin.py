@@ -34,6 +34,7 @@ import cgi
 from google.appengine.ext import ndb
 from google.appengine.ext import blobstore
 from google.appengine.api import images
+from src.Actions.taskqueue import mail_sender
 
 design_img_title = config.get('design_img_title')
 
@@ -708,19 +709,7 @@ class ThemesPicsUploading(ActionSupport):
     return json_response(self.response,
                          data_dict,
                          SUCCESS,
-                         '')  
-import webapp2         
-class Test(webapp2.RequestHandler):    
-  def get(self): 
-    #bucket_key = 'encoded_gs_file:cHJvZHVjdHByb21vL2JnL3dvb2Rlbl9ib3guanBn'  
-    #s = delete_bucket_file(bucket_key)
-    #logging.info(s)
-    e = UserModel()
-    e.email='sainisanjeet3@gmail.com'
-    e.name='Ballu'
-    e.role='ADMIN'
-    #e.put()
-    self.response.out.write('200')
+                         '')
                   
 class DeleteProductBG(ActionSupport):    
   def get(self): 
@@ -999,5 +988,16 @@ class GetRoleSettings(ActionSupport):
     data_dict = {'acl': acl}
     return json_response(self.response, data_dict, SUCCESS, 'Access right loaded')
     
-    
-      
+class MailTemplates(ActionSupport):    
+  def get(self):
+    d={}  
+    template = self.get_jinja2_env.get_template('super/mailtemplates.html')    
+    self.response.out.write(template.render(d))     
+
+import webapp2         
+body='''
+<h2>test</h2>'''
+class Test(webapp2.RequestHandler):    
+  def get(self):  
+    mail_sender('appboxtechnologies@gmail.com', 'subject', body)
+    self.response.out.write('200')      

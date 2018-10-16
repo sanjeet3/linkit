@@ -46,6 +46,8 @@ __route_list = [
     #Designer Setup
     RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/DesignerModuleSetup', DesignerSetup.DesignerModuleSetup, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/DesignerLoginAccess', DesignerSetup.DesignerLoginAccess, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetDesignerImgaes', DesignerSetup.GetDesignerImgaes, name='SuperAdmin', strict_slash=True),
     RedirectRoute(r'/superadmin/ProductLiveSetting', DesignerSetup.ProductLiveSetting, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/GetProductLiveSetting', DesignerSetup.GetProductLiveSetting, name='SuperAdmin DesignerSetup page', strict_slash=True),
@@ -80,6 +82,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/CreateSeller', SuperAdmin.SaveFrenchise, name='SuperAdmin create frenchise action', strict_slash=True),
    
     #Super Admin Product
+    RedirectRoute(r'/superadmin/MailTemplates', SuperAdmin.MailTemplates, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Themes', SuperAdmin.ThemesView, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/SetupThemesLive', SuperAdmin.SetupThemesLive, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Events', SuperAdmin.EventView, name='SuperAdmin EventView page', strict_slash=True),

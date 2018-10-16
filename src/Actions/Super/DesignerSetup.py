@@ -6,7 +6,7 @@ Created on 12-Sep-2018
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.bucketHandler import upload_file, delete_bucket_file
 from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
-from src.Database import FrameCategory, FrameSubCategory
+from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin
 from src.Database import TextPatterns, Masks, ProductCanvas, Product, ReadyDesignTemplate
 from src.lib.SABasehandler import ActionSupport
 
@@ -19,9 +19,55 @@ import logging
 
 class Home(ActionSupport):
   def get(self):
-    context = {}  
+    p_list = Product.get_product_list()
+    context = {'p_list': p_list,
+               'AllowDesignerOffLogin': AllowDesignerOffLogin.get_obj().allow}  
     template = self.get_jinja2_env.get_template('super/designer_setup.html')    
     self.response.out.write(template.render(context))  
+
+class DesignerLoginAccess(ActionSupport):
+  def get(self):
+    e = AllowDesignerOffLogin.get_obj()      
+    if self.request.get('allow'):
+      e.allow=True
+    else:      
+      e.allow=False
+    e.put()      
+    
+    return json_response(self.response, {}, SUCCESS, 'Settings updated')
+    
+class DesignerModuleSetup(ActionSupport):
+  def get(self):
+    product_key = ndb.Key(urlsafe=self.request.get('product_key'))
+    e = ProductCanvas.get_obj(product_key)
+    data_dict = {'designer_module': [] }
+    if e and e.designer_module:
+      data_dict['designer_module'] = e.designer_module    
+          
+    return json_response(self.response, data_dict, SUCCESS, '')      
+  
+  def post(self):
+    designer_module = []  
+    product_key = ndb.Key(urlsafe=self.request.get('product_key'))
+    e = ProductCanvas.get_obj(product_key)
+    if not e:
+      p = product_key.get()  
+      e = ProductCanvas(product=product_key, name=p.name, code=p.code)  
+    
+    if self.request.get('images'):  
+      designer_module.append('images')    
+    if self.request.get('frames'):  
+      designer_module.append('frames')    
+    if self.request.get('backgrounds'):  
+      designer_module.append('backgrounds')    
+    if self.request.get('text'):  
+      designer_module.append('text')    
+    if self.request.get('designs'):  
+      designer_module.append('designs')     
+      
+    e.designer_module = designer_module    
+    e.put()
+    return json_response(self.response, {}, SUCCESS, '')
      
 class DesinerDemo(ActionSupport):
   def post(self):

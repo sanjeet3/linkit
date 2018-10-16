@@ -22841,3 +22841,14 @@ textarea.input-custom {
   width: 98%;
   max-height: 90%;
 }
+
+.drag-vertical {
+  cursor: n-resize;
+  padding: 5px;
+  border: 1px dotted;
+  margin-bottom: 10px;
+}
+.drag-vertical i {
+  cursor: pointer;
+  font-size: inherit;
+}  

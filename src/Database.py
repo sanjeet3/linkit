@@ -637,6 +637,8 @@ class ProductCanvas(EndpointsModel):
   preview_key = ndb.StringProperty()
   preview_top = ndb.StringProperty(default='0')
   preview_left = ndb.StringProperty(default='0') 
+  designer_module = ndb.StringProperty(repeated=True)
+  
   @classmethod
   def get_obj(cls, product_key):
     return cls.query(cls.product==product_key).get()
@@ -706,4 +708,15 @@ class RoleModel(EndpointsModel):
       logging.info('updating_user_Acl %s' %(_e_list.__len__()))
       ndb.put_multi(_e_list)
               
-    
+class AllowDesignerOffLogin(ndb.Model):
+  allow = ndb.BooleanProperty(default=False)
+  
+  @classmethod
+  def get_obj(cls):
+    e = cls.query().get()
+    if not e:
+      e = AllowDesignerOffLogin().put().get()
+    return e
+      
+        
+        

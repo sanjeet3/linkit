@@ -113,8 +113,8 @@
             <input type="hidden" name="product" value="{{key}}">
             <textarea style="display: none;" name="design_print" id="design_print"></textarea>
             <textarea style="display: none;" name="layer" id="design_layer"></textarea>
-            <button type="button" class="fpd-btn" onclick="createReadyDesign()">Create
-              Ready Design</button>
+            <!-- <button type="button" class="fpd-btn" onclick="createReadyDesign()">Create
+              Ready Design</button> -->
           </form>
           <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
             preparing your design...</p>
@@ -156,8 +156,8 @@ stage_width = {{canvas.stage_width}};
           mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
               'manage-layers'],
           actions : {
-            'top' : [ ],
-            'right' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
+            'right' : [ ],
+            'top' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
             'bottom' : [],
           },
 
@@ -236,8 +236,9 @@ stage_width = {{canvas.stage_width}};
                
           },
         };
- 
+
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
+        setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
       });
 </script>
 </html>

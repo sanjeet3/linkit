@@ -5,7 +5,7 @@ Created on 04-Jul-2018
 '''
 
 from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory
-from src.Database import Client, ClientProductDesign, ProductDesign
+from src.Database import Client, ClientProductDesign, ProductDesign, AllowDesignerOffLogin
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster
 from src.Database import SellerLadger, ReadyDesignTemplate
 from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, FrameCategory,FrameSubCategory, BGSubCategory, Masks, TextPatterns 
@@ -274,6 +274,7 @@ class GetProductDetails(ActionSupport):
       save_design_list = ClientProductDesign.get_client_design(self.client.key, p.key)
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
     self.response.out.write(template.render({'p': p,
+                                             'AllowDesignerOffLogin': AllowDesignerOffLogin.get_obj().allow,
                                              'design_list': design_list,
                                              'save_design_list': save_design_list,
                                              'seller_product': SellerProduct.get_default_seller_product(p.key),
@@ -417,14 +418,16 @@ class GetProductDesignor(ActionSupport):
     sub_frame_dict = {}
     sub_cat_dict = {}
     sub_bg_dict = {}  
+    designer_module = [] #['images', 'frames', 'backgrounds', 'text', 'designs']
     redayDesignKey=self.request.get('redayDesign')
     saveDesignKey=self.request.get('saveDesign')
     p = ndb.Key(urlsafe=self.request.get('key')).get() 
-    template = self.get_jinja2_env.get_template(template_path)   
-    
+    template = self.get_jinja2_env.get_template(template_path)    
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
-    
+    logging.info(canvas)
+    if canvas:
+      designer_module = canvas.designer_module    
     frame_list = FrameCategory.get_mapping_list(p.category_key)
     for e in FrameSubCategory.get_list():
       if e.category in sub_frame_dict:
@@ -450,6 +453,7 @@ class GetProductDesignor(ActionSupport):
     
              
     self.response.out.write(template.render({'p': p,
+                                             'designer_module': designer_module,
                                              'saveDesignKey': saveDesignKey,
                                              'redayDesignKey': redayDesignKey, 
                                              'dev': self.DEV,

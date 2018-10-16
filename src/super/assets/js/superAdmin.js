@@ -1806,4 +1806,39 @@ function deleteCategoryCB(r){
   }
 }
 
+function getDesignerModule(k){
+  $('#update_designer_module_btn').hide();
+  if(!k){
+    return;
+  }  
+  getRequest('design_module_access_form', '/superadmin/DesignerModuleSetup', 'getDesignerModuleCB');
+  
+}
+
+function getDesignerModuleCB(r){
+  $('#module_selection input:checkbox').each(function(i) {
+    if(r.data.designer_module.indexOf(this.name) > -1){
+      $(this).attr('checked', true);
+    } else {
+      $(this).attr('checked', false);
+    } 
+  });
+  $('#update_designer_module_btn').show();
+}
+
+function setDesignerModule(){
+  if(!$('#selected_product').val()){
+    return;
+  }
+  
+  postRequest('design_module_access_form', '/superadmin/DesignerModuleSetup', null);
+};
+
+function AllowDesignerOffLogin(){
+  var allow = '';
+  if($('#AllowDesignerOffLogin').is(":checked")){
+    allow='Yes'
+  }  
+  getRequest('', '/superadmin/DesignerLoginAccess?allow='+allow, null)
+};
 

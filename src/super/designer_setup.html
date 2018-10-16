@@ -7,6 +7,13 @@
 <div class="page-content" id="setup_main_menu">
   <div class="row mt-10">
     <div class="col-xs-12">
+      <h3 class="header smaller lighter blue">Allow create design without login</h3>
+      <p>
+        <label><input type="checkbox" name="allow" id="AllowDesignerOffLogin" {%if AllowDesignerOffLogin%}checked{%endif%}> Allow</label>
+      </p>
+      <button class="btn btn-info btn-minier" type="button" onclick="AllowDesignerOffLogin()">Update</button>
+    </div>
+    <div class="col-xs-12">
       <h3 class="header smaller lighter blue">Upload product designer master data</h3>
       <p>
         <span class="label label-lg label-pink arrowed-right cursor"
@@ -33,6 +40,49 @@
           Mapping</span><span class="label label-lg label-info arrowed-in-right arrowed-in cursor"
           onclick="GetActionDom('/superadmin/MappingFrame', 'Frames')">Frames Mapping</span>
       </p>
+    </div>
+    <div class="col-xs-12">
+      <h3 class="header smaller lighter blue">Designer module access setup</h3>
+      <p>Select product and give module access for designer</p>
+      <div class="col-xs-12 col-sm-5">
+        <form class="form-horizontal" id="design_module_access_form">
+          <div class="form-group">
+            <select onchange="getDesignerModule(this.value)" name="product_key" id="selected_product">
+              <option value="">select-product</option> {%for p in p_list%}
+              <option value="{{p.entityKey}}">{{p.name}}</option> {%endfor%}
+            </select>
+          </div>
+          <div class="control-group" id="module_selection">
+            <label class="control-label bolder blue">Designer Module</label>
+            <div class="checkbox">
+              <label> <input name="images" type="checkbox"> <span class="lbl">
+                  Image upload</span>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label> <input name="frames" type="checkbox"> <span class="lbl">Frames</span>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label> <input name="backgrounds" type="checkbox"> <span class="lbl">Background</span>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label> <input name="text" type="checkbox"> <span class="lbl">Text</span>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label> <input name="designs" type="checkbox"> <span class="lbl">Design
+                  Variation</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <br />
+            <button style="display: none;" onclick="setDesignerModule()" class="btn btn-info btn-minier" type="button" id="update_designer_module_btn">Update</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

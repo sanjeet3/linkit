@@ -3389,8 +3389,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
                 modifiedType = 'moving';
                 if(opts.target.startPanning && opts.e) {
-                  opts.target.startPanning.left = opts.target.left - opts.target.startPanning.deltaX;
-                  opts.target.startPanning.top = opts.target.top - opts.target.startPanning.deltaY; 
+                  //opts.target.startPanning.left = opts.target.left - opts.target.startPanning.deltaX;
+                  //opts.target.startPanning.top = opts.target.top - opts.target.startPanning.deltaY; 
+                  opts.target.startPanning.left = opts.target.left + opts.target.startPanning.deltaX;
+                  opts.target.startPanning.top = opts.target.top + opts.target.startPanning.deltaY; 
                 }
 
                 if(!opts.target.lockMovementX || !opts.target.lockMovementY) {
@@ -4144,13 +4146,25 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             element.clippingRect = bbCoords;
             element.clipTo = function(ctx) {
               _drawClipRect(ctx, this);
+              //_renderCliping(ctx, this);
             };
 
         }
 
     };
-
-    //draws the clipping img to svg
+   
+   var _renderCliping = function(ctx, _this, scale){
+     var frameBox = instance.getElementByID(_this.svgid);
+     if(!frameBox){
+       _clipElement(_this); 
+       return;
+     }
+     
+     frameBox.render(ctx);
+     
+   } 
+    
+    //draws the clipping img to svg ract
     var _drawClipRect = function (ctx, _this, scale) {
 
         scale = scale === undefined ? 1 : scale;
@@ -4195,7 +4209,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       var pic_id = $('#pic_id').val();
       var elem = instance.getElementByID(pic_id);
       var frameBox = instance.getElementByID(elem.svgid);
-      frameBox.evented=false; 
+      /*frameBox.evented=false; 
       frameBox.deltaY= elem.top-frameBox.top; 
       frameBox.deltaX= elem.left-frameBox.left; 
       elem.evented=true;
@@ -4210,7 +4224,15 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       elem.lockUniScaling = true;         
       elem.removable = true;         
       elem.rotatable = false;             
-      elem.resizable = false;      
+      elem.resizable = false;*/ 
+
+      elem.deltaY= elem.top-frameBox.top; 
+      elem.deltaX= elem.left-frameBox.left; 
+      elem.evented=false; 
+      frameBox.startPanning=elem; 
+      frameBox.evented=true; 
+      frameBox.opacity=0; 
+      
       instance.stage.renderAll();
       $('#set_frame_mask_dom').hide();
     });
@@ -4521,6 +4543,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                       fabricParams.id=timeStamp;
                       fabricParams.title=timeStamp;
                       var svgGroup = new fabric.Group([objects[i]], opt);
+                      //var svgD = new fabric.Group([objects[i]], opt);
+                      //var svgGroup = new fabric.util.groupSVGElements([objects[i]], opt);
+                      //svgGroup.svgUid=timeStamp;
+                      //svgGroup.svgD=svgD;
                       fabricParams.scaleX = x;
                       fabricParams.scaleY = y;
                       _fabricImageLoaded(svgGroup, fabricParams, true,{})
@@ -14642,6 +14668,13 @@ var FancyProductDesigner = function(elem, opts) {
                   if(w < imageW) { 
                     scaleX=w/imageW;
                   }
+
+                  if(scaleX<scaleY){
+                    scaleX=scaleY;
+                  } else if(scaleY<scaleX) {
+                    scaleY=scaleX;
+                  }
+                  
                 } else {
                   if(baseHeight>0 && imageH>baseHeight) { 
                     scaleY=baseHeight/imageH
@@ -14649,14 +14682,14 @@ var FancyProductDesigner = function(elem, opts) {
                   if(baseWidth>0 && imageW>baseWidth) { 
                     scaleX=baseWidth/imageW;
                   }
-                  
+
+                  if(scaleX>scaleY){
+                    scaleX=scaleY;
+                  } else if(scaleY>scaleX) {
+                    scaleY=scaleX;
+                  }
                 } 
                 
-                if(scaleX>scaleY){
-                  scaleX=scaleY;
-                } else if(scaleY>scaleX) {
-                  scaleY=scaleX;
-                }
             if(!FPDUtil.checkImageDimensions(instance, imageW, imageH)) {
                 instance.toggleSpinner(false);
                 return false;

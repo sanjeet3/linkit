@@ -160,8 +160,14 @@
             </div>
             <b>Quantity:</b>&nbsp;<input type="number" min="1" value="1" name="qty"
               id="user-priece-qty" onchange="setOrderProdutQty(this)"> <br />Maxpro will
-            provide free delivery to you.<br /> <br /> <a class="now-get" id="create_desgin_btn"
+            provide free delivery to you.<br /> <br /> 
+            {%if not AllowDesignerOffLogin and not user_obj%}
+            <a class="now-get" id="create_desgin_btn"
+              href="javascript:alert('Please login to create your design')">Create Design</a>
+            {%else%}
+            <a class="now-get" id="create_desgin_btn"
               href="/GetProductDesignor?key={{p.entityKey}}">Create Design</a>
+              {%endif%}
             <p id="design_paragraf" style="display: none;">
               <b>Design Id: </b> <font id="design_id_text"></font>
             </p>

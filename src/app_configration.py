@@ -16,7 +16,7 @@ config={
     'send_mail_developer': True,
     
     # default email as sender
-    'emailsender': 'sainisanjeet3@gmail.com', 
+    'emailsender': 'craftyourchoice@gmail.com', 
     
     'app_lang': 'en',
     'design_img_title': ['BASE', 'LEFT', 'CENTER', 'RIGHT'],
