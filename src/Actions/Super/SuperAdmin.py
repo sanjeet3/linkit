@@ -11,7 +11,7 @@ from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
-from src.Database import Client, ClientProductDesign
+from src.Database import Client, MailUploads, MailTemplateModel
 from src.Database import Product
 from src.Database import ProductDesign
 from src.Database import ProductCategory
@@ -987,12 +987,75 @@ class GetRoleSettings(ActionSupport):
     acl = get_64bit_binary_string_from_int(e.acl)
     data_dict = {'acl': acl}
     return json_response(self.response, data_dict, SUCCESS, 'Access right loaded')
-    
+
+class GetMailTemplates(ActionSupport):    
+  def get(self):
+    template_type=self.request.get('t')  
+    message = 'Create new template'
+    data_dict ={'key': '', 'template_type': template_type}
+    e=MailTemplateModel.get_template(template_type)
+    if e:
+      data_dict['key'] = e.entityKey    
+      data_dict['template'] = e.template    
+      data_dict['codeline_html'] = e.codeline_html  
+      message = 'Template loads'  
+    return json_response(self.response, data_dict, SUCCESS, message)
+
+  def post(self):
+    template_type=self.request.get('template_type')  
+    key=self.request.get('key')  
+    codeline=self.request.get('codeline')  
+    template=self.request.get('template')   
+    e = MailTemplateModel(template_type=template_type)
+    if key:
+      e = ndb.Key(urlsafe=key).get()
+     
+    e.codeline_html = codeline
+    e.template = template  
+    e = e.put().get()
+    data_dict = {'key': e.entityKey}
+    return json_response(self.response, data_dict, SUCCESS, 'Mail template saved')      
+
 class MailTemplates(ActionSupport):    
   def get(self):
-    d={}  
+    MAIL_TEMPLATE_CHOICES = config.get('MAIL_TEMPLATE_CHOICES')  
+    d={'upload_list': MailUploads.get_list(),
+       'MAIL_TEMPLATE_CHOICES': MAIL_TEMPLATE_CHOICES,}  
     template = self.get_jinja2_env.get_template('super/mailtemplates.html')    
     self.response.out.write(template.render(d))     
+    
+  def post(self):
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')    
+        
+    file_name = image_file.filename    
+    bucket_path = '/mail_upload/%s' %(file_name)
+    bucket_path = bucket_path.lower()  
+  
+    serving_url = ''
+    upload_file(file_obj, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, WARNING, 'Try again')  
+  
+    e = MailUploads()
+    e.serving_url = serving_url
+    e.bucket_key = bucket_key
+    e.bucket_path = bucket_path
+    e.put()
+    return json_response(self.response, {'serving_url': serving_url 
+                                         },
+                         SUCCESS, 'uploads')  
+
+
+        
 
 import webapp2         
 body='''

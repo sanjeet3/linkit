@@ -22847,6 +22847,8 @@ textarea.input-custom {
   padding: 5px;
   border: 1px dotted;
   margin-bottom: 10px;
+  display: table;
+  width: 100%;
 }
 .drag-vertical i {
   cursor: pointer;

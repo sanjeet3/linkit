@@ -12780,7 +12780,7 @@ var FancyProductDesigner = function(elem, opts) {
             if(loadReadyDesign!=false){
               loadReadyDesign=false   
               //console.log('fetching saved design');
-              //getRequest('', loadFPDUrl, loadFPCCB);
+              getRequest('', loadFPDUrl, loadFPCCB);
               
             }            
             
@@ -13538,7 +13538,7 @@ var FancyProductDesigner = function(elem, opts) {
 
         var viewImageURL = instance.mainOptions._loadFromScript ? instance.mainOptions._loadFromScript + view.thumbnail : view.thumbnail;
 
-        instance.$viewSelectionWrapper.append('<div class="fpd-shadow-1 fpd-item fpd-tooltip" title="'+view.title+'"><picture style="background-image: url('+viewImageURL+');"></picture></div>')
+        instance.$viewSelectionWrapper.append('<div class="fpd-shadow-1 fpd-item fpd-tooltip" title="'+view.elements[0].parameters.name+'"><picture style="background-image: url('+viewImageURL+');"></picture></div>')
         .children('div:last').click(function(evt) {
 
             instance.selectView(instance.$viewSelectionWrapper.children('div').index($(this)));

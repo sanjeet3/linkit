@@ -507,6 +507,16 @@ class PhotoBookDesign(ActionSupport):
 class GetReadyDesign(ActionSupport):
   def get(self):
     data_dict = {}  
+    e = ndb.Key(urlsafe=self.request.get('key')).get() 
+    e.json_bucket_key
+    try:
+      with gcs.open(e.json_bucket_path, 'r') as gcs_file:
+        contents = gcs_file.read()
+        gcs_file.close()
+        data_dict['contents']=contents.decode('utf8')
+    except Exception, msg:
+      logging.error(msg)        
+    
     return json_response(self.response, data_dict, SUCCESS, 'Ready design loaded')
 
 class GetSavedDesign(ActionSupport):
@@ -549,12 +559,8 @@ class CreateDesign(ActionSupport):
     if self.request.get('design_key'):
       design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
     else:        
-      design_obj = ClientProductDesign()                    
-    design_obj.client = self.client.key
-    design_obj.product_code = p.code
-    design_obj.product = p.key 
-    design_obj = design_obj.put().get()
-    bucket_path = '/designer_textptrn/%s/preview/%s/%s' %(self.client.id, p.code, design_obj.id)
+      design_obj = ClientProductDesign(client = self.client.key, product_code = p.code, product = p.key).put().get()                    
+    bucket_path = '/designer_textptrn/%s/preview/%s/%s' %(p.code, self.client.id, design_obj.id)
     write_urlecoded_png_img(design_print, bucket_path) 
     try:
       bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
@@ -564,7 +570,7 @@ class CreateDesign(ActionSupport):
     design_obj.design_prev_url = serving_url
     design_obj.design_prev_key = bucket_key
     design_obj.design_prev_path = bucket_path
-    bucket_path = '/designer_textptrn/%s/json/%s/%s' %(self.client.id, p.code, design_obj.id)
+    bucket_path = '/designer_textptrn/%s/json/%s/%s' %(p.code, self.client.id, design_obj.id)
     upload_text_file(layer, bucket_path)
     try:
       bucket_key = blobstore.create_gs_key('/gs' + bucket_path)

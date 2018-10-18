@@ -15,6 +15,7 @@ from webapp2_extras.appengine.auth.models import User as UserSessionModel
 from src.app_configration import config
 
 product_design_title_choice = config.get('design_img_title')
+MAIL_TEMPLATE_CHOICES = config.get('MAIL_TEMPLATE_CHOICES')
 
 class UserSession(UserSessionModel):
   username = ndb.StringProperty()
@@ -672,10 +673,14 @@ class ReadyDesignTemplate(EndpointsModel):
   created_on = ndb.DateTimeProperty(auto_now_add=True)
   status = ndb.BooleanProperty(default=True)
   product = ndb.KeyProperty(Product)
-  code = ndb.StringProperty(default='')
+  product_code = ndb.StringProperty(default='')
   name = ndb.StringProperty(default='')
-  design_prev = ndb.TextProperty(default='')
-  design_json = ndb.TextProperty(default='')
+  json_bucket_path = ndb.StringProperty(default='')
+  json_bucket_key = ndb.StringProperty(default='')
+  design_id = ndb.StringProperty(default='')
+  design_prev_url = ndb.TextProperty(default='')
+  design_prev_key = ndb.TextProperty(default='')
+  design_prev_path = ndb.TextProperty(default='')
 
   @classmethod
   def get_list(cls):  
@@ -708,6 +713,16 @@ class RoleModel(EndpointsModel):
       logging.info('updating_user_Acl %s' %(_e_list.__len__()))
       ndb.put_multi(_e_list)
               
+class MailUploads(EndpointsModel):
+  created_on = ndb.DateTimeProperty(auto_now_add=True)  
+  serving_url = ndb.StringProperty(default='')  
+  bucket_key = ndb.StringProperty(default='')  
+  bucket_path = ndb.StringProperty(default='')  
+    
+  @classmethod
+  def get_list(cls):
+    return cls.query().fetch()  
+        
 class AllowDesignerOffLogin(ndb.Model):
   allow = ndb.BooleanProperty(default=False)
   
@@ -717,6 +732,18 @@ class AllowDesignerOffLogin(ndb.Model):
     if not e:
       e = AllowDesignerOffLogin().put().get()
     return e
+
       
+class MailTemplateModel(EndpointsModel):
+  created_on = ndb.DateTimeProperty(auto_now_add=True)  
+  codeline_html = ndb.TextProperty(default='')  
+  template = ndb.TextProperty(default='')  
+  template_type = ndb.StringProperty(choices=MAIL_TEMPLATE_CHOICES)  
+    
+  @classmethod
+  def get_list(cls):
+    return cls.query().fetch()  
         
-        
+  @classmethod
+  def get_template(cls, template_type):
+    return cls.query(cls.template_type==template_type).get()          

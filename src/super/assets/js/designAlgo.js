@@ -1,13 +1,3 @@
-/*var product = yourDesigner.getProduct();
-console.log(product);
-product[0].elements
-title != "Base"*/
-
-/*yourDesigner.getProductDataURL(function(dataURL) {
-  $.post("php/save_image.php", {
-    base64_image : dataURL
-  });
-});*/ 
 
 function getRequest(formID, url, callback) {
     var formData = [];
@@ -70,10 +60,7 @@ function createUserDisgn(savingURL) {
     // get the real base64 content of the file
     var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
     // Convert it to a blob to upload
-    var blob = b64toBlob(realData, contentType);
-     
-    /*postRequest('create_product_design_form', '/CreateDesign',
-        'createUserDisgnCallBack');*/
+    var blob = b64toBlob(realData, contentType); 
      
     var formData = new FormData();
     formData.append('layer', layer);
@@ -101,15 +88,7 @@ function createUserDisgn(savingURL) {
 
 };
 
-function createUserDisgnCallBack(r) {
-  /*var h = 'Your design is ready<br>Design Id: ' + r.data.id
-          + ' <br><button type="button" class="fpd-btn" onclick="backToProductAcitionDom()">Continue</button>';
-  $('#pls_wait_design_saving').html(h);
-  $('#selected_design_id').val(r.data.id);
-  $('#design_id').val(r.data.id);
-  $('#design_id_text').html(r.data.id);
-  $('#design_paragraf').show();
-  $('#create_desgin_btn').hide();*/
+function createUserDisgnCallBack(r) { 
   $('#pls_wait_design_saving').hide();
   $('#design_key').val(r.data.design_key);
   
@@ -140,14 +119,8 @@ return blob;
 }
 
 function getReadyDesingJsonCB(r){
-  if(!r.data.contents){
-    $('#msg_div').html('<h4>Please refresh your browser!</h4>')
-    return;
-  }
-  $('#msg_div').html('<h4>Parsing Desiner Data!</h4>');
-  var designJson = JSON.parse(r.data.contents);
-  console.log(designJson);
-  loadFPDJsonRecursive(designJson);
+  console.log(r.data);
+  alert(r.message);
 }
 
 function loadFPDJsonRecursive(designJson){

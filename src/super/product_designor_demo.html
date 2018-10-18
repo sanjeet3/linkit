@@ -2,6 +2,11 @@
 <html>
 <head>
 <title>Craftyourchoice</title>
+<link rel="shortcut icon" type="image/png" href="/img/fevicon.png" />
+<link rel="stylesheet" href="/css/api.css">
+<link href="/light/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+<!--theme-style-->
+<link href="/light/css/style.css" rel="stylesheet" type="text/css" media="all" />
 <!-- Google Webfonts -->
 <link href='/css/Gorditas.css' rel='stylesheet' type='text/css'>
 <!-- Google Webfonts 110 -->
@@ -14,21 +19,37 @@
   href="/productdesigner/css/jquery.fancyProductDesigner-fonts.css" />
 </head>
 <body style="height: 100%; width: 100%">
-  <div class="container" id="product_design_caontainer" style="width: 100%;">
+  <div class="container main-content" id="product_design_caontainer" style="bottom: 0 !important; padding-left: 0;top:0 !important;">
     <div id="set_frame_mask_dom" class="text-center frame-mask-action-dom" style="display: none;">
       <input type="hidden" id="frame_id" name="frame">
       <input type="hidden" id="pic_id" name="pic">
       <span class="btn btn-sm btn-success btn-round btn-mini" style="margin-top: 3%;" id="set_frame_mask_btn"><span class="fpd-icon-done"></span> Save Frame</span>
     </div>
+    <div id="pls_wait_design_saving" class="saving-design" style="display: none;">
+      <div class="reveal-modal">
+        <h3>Please wait saving your design...</h3>
+      </div>
+    </div>
     <div id="main-container">
-      <h3 id="clothing" style="float: left;">{{p.code}}-{{p.name}} Designer</h3>
+      <h3 id="clothing" style="float: left;">Create Ready Design for {{p.code}}-{{p.name}}</h3>
+      {%if p.code=='GBSDF48Q'%}<button type="button" onclick="createUserDisgn('/DesinerDemo')" id="save_design_btn"
+        class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
+        <i class="ace-icon fa fa-save"></i> Save
+      </button>{%endif%}
       <div id="product-designer" style="clear: both;"
         class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
         {%if canvas%}
         <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
           <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
-            data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}} }' />
+            data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name":"Front side of card" }' />
+          {%if p.code=='GBSDF48Q'%}  
+          <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
+            <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
+            title="Base"
+            data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name":"Back side of card" }' />
+          </div>  
+          {%endif%}  
         </div>
         {%else%}
         <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
@@ -98,30 +119,25 @@
           </div>
         </div>#}
       </div>
-      <br />
-      <div class="fpd-clearfix text-center" style="margin-top: 15px;">
+      <div class="fpd-clearfix text-center">
         <div class="api-buttons fpd-container">
           <h5>Help and tips:</h5>
           <ol>
             <li>Keyboard Control: Use arrow keys to move and backspace key to delete selected
               element</li>
           </ol>
-          <form id="create_product_design_form">
-          
-            <input type="hidden" name="code" value="{{p.code}}">
-            <input type="hidden" name="name" value="{{p.name}}">
-            <input type="hidden" name="product" value="{{key}}">
-            <textarea style="display: none;" name="design_print" id="design_print"></textarea>
-            <textarea style="display: none;" name="layer" id="design_layer"></textarea>
-            <!-- <button type="button" class="fpd-btn" onclick="createReadyDesign()">Create
-              Ready Design</button> -->
-          </form>
           <p id="pls_wait_design_saving" style="display: none;" class="text-center">Please wait
             preparing your design...</p>
         </div>
       </div>
     </div>
   </div>
+  <form id="create_product_design_form" style="display: none;">
+    <input type="hidden" name="product" id="product_key" value="{{key}}">
+    <textarea name="layer" id="design_layer"></textarea>
+    <input type="hidden" name="design_print" id="design_print"> <input type="hidden"
+      name="design_key" id="design_key" value="{{saveDesignKey}}">
+  </form>
 </body>
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>
@@ -131,12 +147,20 @@
 <script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script>
 <script src="/productdesigner/js/fancyDesigner2.js" type="text/javascript"></script>
 <script src="/super/assets/js/algo.js"></script>
+<script src="/super/assets/js/designAlgo.js"></script>
 <script type="text/javascript">  
 var canvasPreviewUrl = '',
 preview_top = 0,
 preview_left = 0,
 stage_height = 780,
-stage_width=780;
+stage_width=780,
+main_bar_module=[];
+{%for m in designer_module%}
+main_bar_module.push('{{m}}');
+{%else%}
+main_bar_module = ['images', 'frames', 'backgrounds', 'text', 'designs'];
+{%endfor%}
+main_bar_module.push('manage-layers');
 {%if canvas%}
 canvasPreviewUrl = {%if canvas.preview_url%}'{{canvas.preview_url}}=s0'{%else%}''{%endif%};
 preview_top = '{{canvas.preview_top}}px';
@@ -153,8 +177,7 @@ stage_width = {{canvas.stage_width}};
           stageHeight: stage_height, 
           editorMode : true,
           fitImagesInCanvas: true,
-          mainBarModules : [ 'images', 'frames', 'backgrounds', 'text', 'designs', 
-              'manage-layers'],
+          mainBarModules : main_bar_module,
           actions : {
             'right' : [ ],
             'top' : ['preview-lightbox', 'undo', 'redo', 'reset-product', 'qr-code', 'magnify-glass', 'download', 'print'],
@@ -239,6 +262,8 @@ stage_width = {{canvas.stage_width}};
 
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
         setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
+        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000);
+
       });
 </script>
 </html>

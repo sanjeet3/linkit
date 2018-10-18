@@ -1827,7 +1827,7 @@ function getDesignerModuleCB(r){
 }
 
 function setDesignerModule(){
-  if(!$('#selected_product').val()){
+  if(!$('#modules_selected_product').val()){
     return;
   }
   
@@ -1841,4 +1841,183 @@ function AllowDesignerOffLogin(){
   }  
   getRequest('', '/superadmin/DesignerLoginAccess?allow='+allow, null)
 };
+
+function uploadMailImage() {
+  var fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) { 
+    postFormWithFile("upload_form",
+        '/superadmin/MailTemplates', 'uploadMailImageCB');
+  }
+};
+
+function uploadMailImageCB(r){
+  if(r.data.serving_url){
+    var h = '<div class="col-lg-12"><img alt="" src="'+
+    r.data.serving_url +'" style="width: 100%;" onclick="setUrlToEmailTemp(this.src)"></div>'
+    $('#mail_uploads').prepend(h);
+  }
+};
+
+function setUrlToEmailTemp(url){
+  $('#url_val').val(url);
+  showMSG('Image selected', 'info');
+};
+
+
+function tagChanges(v){
+  if (v=='custom'||v=='para'){
+    $('#url_dom').hide();
+    $('#fc_dom').show();
+    $('#text_dom').show();
+    $('#fs_dom').show();
+  } else if (v=='link') {
+    $('#url_dom').show();
+    $('#text_dom').hide();
+    $('#fc_dom').hide();
+    $('#fs_dom').hide();
+  } else if (v=='img_lg'||v=='img_sm'){
+    $('#url_dom').show();
+    $('#text_dom').hide();
+    $('#fc_dom').hide();
+    $('#fs_dom').hide();
+  } else if (v=='h'|| v=='subh'){
+    $('#url_dom').hide();
+    $('#fs_dom').hide();
+    $('#fc_dom').hide();
+    $('#text_dom').show();
+  } 
+};
+
+function insertToTemplate() {
+  var type = $('#choose_tag').val(), link = $('#url_val').val(), text = $(
+      '#para_val').val(), fs = $('#font_size').val(), fc = $('#font_color')
+      .val();
+
+  var h = [];
+  if((type=='img_lg'||type=='img_sm') && !link){
+    return;
+  }
+  if(type=='link' && !link){
+    return;
+  }
+  if(type=='h'){
+    h.push('<div class="drag-vertical">');
+    h.push('<span data-tag="h" class="pull-left" style="width: 98%;color: #478fca;font-size: 28px;">');
+    h.push(text);
+    h.push('</span>');
+  } else if(type=='subh'){ 
+    h.push('<div class="drag-vertical">');
+    h.push('<span data-tag="subh" class="pull-left" style="width: 98%;color: #444444;font-size: 18px;" >');
+    h.push(text);
+    h.push('</span>');
+  }else if(type=='para'){
+    h.push('<div class="drag-vertical">');
+    h.push('<span data-tag="para" class="pull-left" style="width: 98%;color:'+fc+';font-size: '+fs+'px;"  data-color="'+fc+'" >');
+    h.push(text);
+    h.push('</span>');
+  }else if(type=='custom'){
+    h.push('<div class="drag-vertical">');
+    h.push('<span data-tag="custom" class="pull-left" style="width: 98%;color:'+fc+';font-size: '+fs+'px;" data-color="'+fc+'">');
+    h.push(text);
+    h.push('</span>'); 
+  }else if(type=='link'){
+    h.push('<div class="drag-vertical">');
+    h.push('<a data-tag="link" class="pull-left" style="width: 98%;color: #428bca; text-decoration: none; background-color: transparent;" >');
+    h.push(link);
+    h.push('</a>');
+  }else if(type=='img_lg'){
+    h.push('<div class="drag-vertical">');
+    h.push('<img data-tag="img_lg" style="width:100%" src="'); 
+    h.push(link);  
+    h.push('" data-url="'); 
+    h.push(link);
+    h.push('">'); 
+  }else if(type=='img_sm'){
+    h.push('<div class="drag-vertical pull-left" style="width:30%;margin-left: 2%;">');
+    h.push('<img data-tag="img_sm" style="width:100%;" src="'); 
+    h.push(link); 
+    h.push('" data-url="'); 
+    h.push(link); 
+    h.push('">'); 
+  }
+  h.push('<i class="ace-icon fa fa-times class="pull-right"></i></div>');
+  $('#output_dom').append(h.join(''));
+      
+      
+  //$( ".drag-vertical" ).draggable({ axis: "y" });  
+  $("i.fa-times").on('click', function(e) {
+    $(this).closest('div.drag-vertical').remove();
+  });
+
+  $('#save_email_template_btn').hide();
+};
+
+function previewTemplate() {
+  var dom = $('#output_dom').find('.drag-vertical');
+  if(dom.length==0) return;
+  var template = '';
+  for(var i=0; i<dom.length; i++){
+    var elem = dom[i].children[0];
+    console.log(elem.dataset);
+    if(elem.dataset.tag=='h'){
+      template=template+H1+elem.innerText+H2+oneLine;
+    } else if (elem.dataset.tag=='link'){
+      template=template+link1+elem.innerText+link2+elem.innerText+link3+oneLine;
+    } else if (elem.dataset.tag=='img_lg'){
+      template=template+imgLG+elem.dataset.url+imgLG2+oneLine;
+    } else if (elem.dataset.tag=='custom'){
+      var fcs='color: '+elem.dataset.color+';font-size: '+elem.style.fontSize+';'
+      var h = TEXTHTML.replace('[FONTSIZECOLOR]', fcs);
+      template=template+h+elem.innerText+TEXTHTML2+oneLine;
+      
+    } else if (elem.dataset.tag=='subh'){
+      var h = TEXTHTML.replace('[FONTSIZECOLOR]', subHeadingFONTCOLOR);
+      template=template+h+elem.innerText+TEXTHTML2+oneLine;
+      
+    } else if (elem.dataset.tag=='para'){
+      var fcs='color: '+elem.dataset.color+';font-size: '+elem.style.fontSize+';'
+      var h = TEXTHTML.replace('[FONTSIZECOLOR]', fcs);
+      template=template+h+elem.innerText+TEXTHTML2+oneLine;
+    }
+  }
+  var template_upper = $('#template_upper').html();
+  template_upper = template_upper.replace('[CONTENTREPLACE]', template);
+  var newWindow = window.open();
+  newWindow.document.write(template_upper)
+  $('#template_html').val(template_upper);
+  $('#codeline_html').val($('#output_dom').html());
+  $('#save_email_template_btn').show();
+};
+
+function saveTemplate(){
+  postRequest('save_mail_template_form', '/superadmin/GetMailTemplates', 'saveTemplateCB');
+}
+
+function saveTemplateCB(r){
+  $('#template_key').val(r.data.key);
+}
+function getMailTemplate(t){
+  $('#output_dom').html('');
+  if(!t) return;
+  $('#output_dom').html('Please wait template loading...');
+  getRequest('', '/superadmin/GetMailTemplates?t='+t, 'getMailTemplateCB')
+}
+
+function getMailTemplateCB(r){
+  $('#output_dom').html('');
+  $('#template_type').val(r.data.template_type);
+  if(r.data.key){
+    $('#template_key').val(r.data.key);
+    $('#template_html').val(r.data.template);
+    $('#codeline_html').val(r.data.codeline_html);
+    $('#output_dom').html(r.data.codeline_html);
+  } else {
+    $('#template_key').val('');
+    $('#template_html').val('');
+    $('#codeline_html').val('');
+  }
+  
+}
+
+
 

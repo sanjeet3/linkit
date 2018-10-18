@@ -47,7 +47,7 @@
       <div class="col-xs-12 col-sm-5">
         <form class="form-horizontal" id="design_module_access_form">
           <div class="form-group">
-            <select onchange="getDesignerModule(this.value)" name="product_key" id="selected_product">
+            <select onchange="getDesignerModule(this.value)" name="product_key" id="modules_selected_product">
               <option value="">select-product</option> {%for p in p_list%}
               <option value="{{p.entityKey}}">{{p.name}}</option> {%endfor%}
             </select>

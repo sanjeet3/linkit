@@ -4,7 +4,7 @@ Created on 12-Sep-2018
 @author: Sanjay Saini
 '''
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
-from src.api.bucketHandler import upload_file, delete_bucket_file
+from src.api.bucketHandler import upload_file, delete_bucket_file, write_urlecoded_png_img, upload_text_file
 from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
 from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin
 from src.Database import TextPatterns, Masks, ProductCanvas, Product, ReadyDesignTemplate
@@ -72,19 +72,41 @@ class DesignerModuleSetup(ActionSupport):
 class DesinerDemo(ActionSupport):
   def post(self):
     '''Create ready design templates ''' 
-    p = ndb.Key(urlsafe=self.request.get('product'))                     
-    design_print = self.request.get('design_print')
-    layer = self.request.get('layer')    
-    name = self.request.get('name')    
-    code = self.request.get('code')    
-    e = ReadyDesignTemplate()   
-    e.code = code
-    e.design_json = layer
-    e.design_prev = design_print
-    e.name = name
-    e.product = p
-    e.put()
-    return json_response(self.response, { }, SUCCESS,'Ready design created')
+    p = ndb.Key(urlsafe=self.request.get('product')).get()                          
+    design_print = self.request.get('design_print2')
+    layer = self.request.get('layer')
+    layer=layer.encode('utf8')
+     
+    logging.info(layer.__len__())
+    
+    #layer_json = json.loads(layer)   
+    if self.request.get('design_key'):
+      design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
+    else:        
+      design_obj = ReadyDesignTemplate(product_code = p.code, product = p.key).put().get()                    
+   
+    bucket_path = '/designer_textptrn/ready_desing/preview/%s/%s' %(p.code, design_obj.id)
+    write_urlecoded_png_img(design_print, bucket_path) 
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+    design_obj.design_prev_url = serving_url
+    design_obj.design_prev_key = bucket_key
+    design_obj.design_prev_path = bucket_path
+    bucket_path = '/designer_textptrn/ready_desing/json/%s/%s' %(p.code, design_obj.id)
+    upload_text_file(layer, bucket_path)
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)
+    design_obj.json_bucket_key = bucket_key
+    design_obj.json_bucket_path = bucket_path
+    design_obj.put()  
+    data_dict = {'id': design_obj.id, 'design_key': design_obj.entityKey}                        
+    return json_response(self.response, data_dict, SUCCESS, 'Product design saved')                        
     
   def get(self):
     template_path = 'super/product_designor_demo.html'  
@@ -93,9 +115,11 @@ class DesinerDemo(ActionSupport):
     p = ndb.Key(urlsafe=self.request.get('product')).get()  
     sub_cat_dict = {}
     sub_bg_dict = {}  
+    designer_module = [] 
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
-    
+    if canvas:
+      designer_module = canvas.designer_module
     frame_list = FrameCategory.get_mapping_list(p.category_key)
     for e in FrameSubCategory.get_list():
       if e.category in sub_frame_dict:
@@ -120,6 +144,7 @@ class DesinerDemo(ActionSupport):
         sub_bg_dict[e.category]=[e]      
              
     self.response.out.write(template.render({'p': p,
+                                             'designer_module': designer_module,
                                              'key': self.request.get('product'),   
                                              'canvas': canvas,
                                              'patterns': patterns,

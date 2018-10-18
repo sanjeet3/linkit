@@ -20,7 +20,11 @@ config={
     
     'app_lang': 'en',
     'design_img_title': ['BASE', 'LEFT', 'CENTER', 'RIGHT'],
-    
+    'MAIL_TEMPLATE_CHOICES': ['Account Verification',
+                              'News Latter',
+                              'On Order',
+                              'Order Updates',
+                              'Ladger'],
     'super_admin': ['care4growth@gmail.com',
                     'badalvpatel1980@gmail.com',
                     'sainisanjeet3@gmail.com',
