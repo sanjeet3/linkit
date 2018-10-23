@@ -1063,10 +1063,8 @@ body='''
 <h2>test</h2>'''
 class Test(webapp2.RequestHandler):    
   def get(self):  
-    e = UserModel()
-    e.email='appboxtechnologies@gmail.com'
-    e.name='sanjay'
-    e.role='ADMIN'
-    e.put()
+    e = ndb.Key(urlsafe='ahBpfmxpbmstaXQtcG9ydGFschQLEgdQcm9kdWN0GICAgICdipYKDA').get()
+    e.default_design_template = 'card_designer'
+    #e.put()
     #mail_sender('appboxtechnologies@gmail.com', 'subject', body)
     self.response.out.write('200')      

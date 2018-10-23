@@ -32,10 +32,10 @@
     </div>
     <div id="main-container">
       <h3 id="clothing" style="float: left;">Create Ready Design for {{p.code}}-{{p.name}}</h3>
-      {%if p.code=='GBSDF48Q'%}<button type="button" onclick="createUserDisgn('/DesinerDemo')" id="save_design_btn"
+      {#<button type="button" onclick="createUserDisgn('/DesinerDemo')" id="save_design_btn"
         class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
         <i class="ace-icon fa fa-save"></i> Save
-      </button>{%endif%}
+      </button>#}
       <div id="product-designer" style="clear: both;"
         class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
         {%if canvas%}
@@ -260,9 +260,7 @@ stage_width = {{canvas.stage_width}};
           },
         };
 
-        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-        setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
-        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000);
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts); 
 
       });
 </script>

@@ -78,14 +78,14 @@ City, STATE, 00123</span>
           <span title="contact bar" data-parameters='{"fontSize":12, "left": 560, "top": 325, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
           >      tel. (206)555-1689
 you@emailaddres.com</span>
-          <img src="/images/cards/your-logo-here.png" title="your_logo" data-parameters='{"left": 520, "top": 180, "colors": "#2893e5","boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
+          <img src="/images/cards/kingologo.png" title="your_logo" data-parameters='{"left": 520, "top": 155, "colors": "#2893e5","boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
           <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
             <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
             data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name":"Back side of card" }' />
-            <img src="/images/cards/your-logo-here.png" title="your_logo_2" data-parameters='{"left": 320, "top": 180, "colors": "#2893e5","boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
-            <span title="Main Title bar" data-parameters='{"fontSize":12, "left": 320, "top": 320, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
-          >You custom text</span> 
+            <img src="/images/cards/kingologo.png" title="your_logo_2" data-parameters='{"left": 320, "top": 180, "colors": "#2893e5","boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
+            <span title="Main Title bar" data-parameters='{"fontSize":12, "left": 320, "top": 340, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >Your custom text</span> 
           </div>  
         </div>
         {%else%}
@@ -93,8 +93,7 @@ you@emailaddres.com</span>
           <img src="/img/Product.png" title="Base"
             data-parameters='{"product_canvas": true, "left": 525, "top": 400, "name": "Front"}' />
         </div>
-        {%endif%}
-        {%if 'design' in designer_module%}
+        {%endif%} 
         <div class="fpd-design">
           {%for cat in design_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -111,9 +110,7 @@ you@emailaddres.com</span>
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {%endif%}
-        {%if 'backgrounds' in designer_module%}
+        </div>  
         <div class="fpd-background">
           {%for cat in bg_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -130,9 +127,7 @@ you@emailaddres.com</span>
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {%endif%}
-        {%if 'frames' in designer_module%}
+        </div>  
         <div class="fpd-frame">
           {%for cat in frame_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -149,8 +144,7 @@ you@emailaddres.com</span>
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {%endif%} 
+        </div> 
       </div> 
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
@@ -208,7 +202,7 @@ main_bar_module=[];
 {%for m in designer_module%}
 main_bar_module.push('{{m}}');
 {%else%}
-main_bar_module = ['images', 'frames', 'backgrounds', 'text', 'designs'];
+main_bar_module = ['images','text'];
 {%endfor%}
 main_bar_module.push('manage-layers');
 
@@ -311,9 +305,7 @@ stage_width = {{canvas.stage_width}};
           },
         };
 
-        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-        setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
-        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000); 
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts); 
       });
  
 </script>

@@ -12805,7 +12805,8 @@ var FancyProductDesigner = function(elem, opts) {
               getRequest('', loadFPDUrl, loadFPCCB);
               
             }            
-            
+            $('.fpd-actions-container').css({position:'fixed'});
+            $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});
 
         });
 

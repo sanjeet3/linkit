@@ -425,49 +425,62 @@ class PlaceOrder(ActionSupport):
     return json_response(self.response, {'html': html_str}, SUCCESS, 'Order success')
 
 class GetProductDesignor(ActionSupport):
+    
+  def set_frames(self):  
+    self.frame_list = FrameCategory.get_mapping_list(self.p.category_key)
+    for e in FrameSubCategory.get_list():
+      if e.category in self.sub_frame_dict:
+        self.sub_frame_dict[e.category].append(e)
+      else:
+        self.sub_frame_dict[e.category]=[e] 
+        
+  def set_designs(self):        
+    self.design_list  = DesignCategory.get_mapping_list(self.p.category_key)
+    for e in DesignSubCategory.get_list():
+      if e.category in self.sub_cat_dict:
+        self.sub_cat_dict[e.category].append(e)
+      else:
+        self.sub_cat_dict[e.category]=[e]  
+  
+  def set_bg(self):
+    self.bg_list = BGCategory.get_mapping_list(self.p.category_key).fetch()
+    self.sub_bg_list = BGSubCategory.get_list()
+    for e in self.sub_bg_list:
+      if e.category in self.sub_bg_dict:  
+        self.sub_bg_dict[e.category].append(e)
+      else:
+        self.sub_bg_dict[e.category]=[e]
+           
   def get(self): 
-    sub_frame_dict = {}
-    sub_cat_dict = {}
-    sub_bg_dict = {}  
+    self.sub_frame_dict = {}
+    self.sub_cat_dict = {}
+    self.sub_bg_dict = {}
+    self.frame_list=[]
+    self.design_list=[]
+    self.bg_list=[]
+    self.sub_bg_list=[]  
     designer_module = [] #['images', 'frames', 'backgrounds', 'text', 'designs']
     redayDesignKey=self.request.get('redayDesign')
     saveDesignKey=self.request.get('saveDesign')
-    p = ndb.Key(urlsafe=self.request.get('key')).get() 
-    if p.default_design_template:
-      template_path = 'endclient/%s.html' %(p.default_design_template)
+    self.p = ndb.Key(urlsafe=self.request.get('key')).get() 
+    if self.p.default_design_template:
+      template_path = 'endclient/%s.html' %(self.p.default_design_template)
     else:     
       template_path = 'endclient/product_designor.html'
     template = self.get_jinja2_env.get_template(template_path)    
     patterns = TextPatterns.get_img_url_list()
-    canvas = ProductCanvas.get_obj(p.key)
+    canvas = ProductCanvas.get_obj(self.p.key)
     logging.info(canvas)
     if canvas:
-      designer_module = canvas.designer_module    
-    frame_list = FrameCategory.get_mapping_list(p.category_key)
-    for e in FrameSubCategory.get_list():
-      if e.category in sub_frame_dict:
-        sub_frame_dict[e.category].append(e)
-      else:
-        sub_frame_dict[e.category]=[e] 
-    
-    
-    design_list  = DesignCategory.get_mapping_list(p.category_key)
-    for e in DesignSubCategory.get_list():
-      if e.category in sub_cat_dict:
-        sub_cat_dict[e.category].append(e)
-      else:
-        sub_cat_dict[e.category]=[e]    
-                
-    bg_list = BGCategory.get_mapping_list(p.category_key).fetch()
-    sub_bg_list = BGSubCategory.get_list()
-    for e in sub_bg_list:
-      if e.category in sub_bg_dict:  
-        sub_bg_dict[e.category].append(e)
-      else:
-        sub_bg_dict[e.category]=[e]      
-    
-             
-    self.response.out.write(template.render({'p': p,
+      designer_module = canvas.designer_module  
+      if 'frames' in designer_module:
+        self.set_frames()      
+      if 'designs' in designer_module:
+        self.set_designs()    
+      if 'backgrounds' in designer_module:
+        self.set_bg()  
+       
+    self.response.out.write(template.render({'p': self.p,
                                              'designer_module': designer_module,
                                              'saveDesignKey': saveDesignKey,
                                              'redayDesignKey': redayDesignKey, 
@@ -476,12 +489,12 @@ class GetProductDesignor(ActionSupport):
                                              'user_obj': self.client, 
                                              'canvas': canvas,
                                              'patterns': patterns,
-                                             'frame_list': frame_list,
-                                             'sub_frame_dict': sub_frame_dict,
-                                             'bg_list': bg_list,
-                                             'sub_bg_dict': sub_bg_dict,
-                                             'design_list': design_list,
-                                             'sub_cat_dict': sub_cat_dict}))  
+                                             'frame_list': self.frame_list,
+                                             'sub_frame_dict': self.sub_frame_dict,
+                                             'bg_list': self.bg_list,
+                                             'sub_bg_dict': self.sub_bg_dict,
+                                             'design_list': self.design_list,
+                                             'sub_cat_dict': self.sub_cat_dict}))  
                                 
 class TestFPD(ActionSupport):
   def get(self):  

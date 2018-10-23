@@ -77,8 +77,7 @@
           <img src="/img/Product.png" title="Base"
             data-parameters='{"product_canvas": true, "left": 525, "top": 400, "name": "Front"}' />
         </div>
-        {%endif%}
-        {%if 'design' in designer_module%}
+        {%endif%} 
         <div class="fpd-design">
           {%for cat in design_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -95,9 +94,7 @@
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {%endif%}
-        {%if 'backgrounds' in designer_module%}
+        </div> 
         <div class="fpd-background">
           {%for cat in bg_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -114,9 +111,7 @@
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {%endif%}
-        {%if 'frames' in designer_module%}
+        </div> 
         <div class="fpd-frame">
           {%for cat in frame_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
@@ -133,8 +128,7 @@
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {%endif%}
+        </div> 
         {#
         <div class="fpd-frame">
           <div class="fpd-category" title="Frame Mock" data-thumbnail="">
@@ -207,7 +201,7 @@ main_bar_module=[];
 {%for m in designer_module%}
 main_bar_module.push('{{m}}');
 {%else%}
-main_bar_module = ['images', 'frames', 'backgrounds', 'text', 'designs'];
+main_bar_module = ['images','text'];
 {%endfor%}
 main_bar_module.push('manage-layers');
 
@@ -310,9 +304,7 @@ stage_width = {{canvas.stage_width}};
           },
         };
 
-        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
-        setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
-        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000);
+        yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts); 
         {%if redayDesignKey%} 
         $('#pls_wait_design_loadind').show();
         loadFPDUrl='/GetReadyDesingJson?key='+'{{redayDesignKey}}';
