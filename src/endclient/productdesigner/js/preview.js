@@ -51,3 +51,24 @@ var preveiwMug = function(designDataUrl, leftView){
   
   
 }
+
+
+function preveiwWaterBottle(background_url, src){
+  var h =['<div style="float: left;width: 350px;height: 928px;overflow: hidden; background: url('];
+  h.push(background_url);
+  h.push(');background-size: cover;"><div style="width: 98.5%;height: 98%;overflow: hidden;padding: 3px;"><img class="" style="margin-top: 95%;height: 58%;max-width: initial;" src="');
+  h.push(src); 
+  h.push('"></div></div>'); 
+  h.push('<div style="float: left;margin-left:50px;width: 350px;height: 928px;overflow: hidden;background: url(');
+  h.push(background_url);
+  h.push(');background-size: cover;"><div style="text-indent:-169px;width: 98.5%;height: 98%;overflow: hidden;padding: 3px;"><img class="" style="margin-top: 95%;height: 58%;max-width: initial;" src="');
+  h.push(src); 
+  h.push('"></div></div>'); 
+  h.push('<div style="float: left;margin-left:50px;width: 350px;height: 928px;overflow: hidden;background: url(');
+  h.push(background_url);
+  h.push(');background-size: cover;"><div style="text-indent:-76%;width: 98.5%;height: 98%;overflow: hidden;padding: 3px;"><img class="" style="margin-top: 95%;height: 58%;max-width: initial;" src="');
+  h.push(src); 
+  h.push('"></div></div>'); 
+  //h.push();  
+  return h.join('');
+}

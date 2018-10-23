@@ -183,11 +183,11 @@
         <div class="nbs-flexisel-inner">
           <h5>Saved designs:</h5>
           {%for d in save_design_list%}
-          <div class="ready-design-box">
-            <img alt="" src="{{d.design_prev_url}}">
+          <div class="ready-design-box" style="background-image: url('{{d.design_prev_url}}')">
+            <!-- <img alt="" src="{{d.design_prev_url}}"> -->
             <div class="overlay"></div>
             <div class="button" style="left: 50px" onclick="showImageModel('{{d.design_prev_url}}')">View</div>
-            <a class="button" style="left: 130px" href="/GetProductDesignor?key={{p.entityKey}}&saveDesign={{d.entityKey}}">Edit</a>
+            <!-- <a class="button" style="left: 130px" href="/GetProductDesignor?key={{p.entityKey}}&saveDesign={{d.entityKey}}">Edit</a> -->
             <div class="button" style="left: 200px">Order</div>
           </div>
           {%endfor%}
@@ -196,11 +196,9 @@
         <div class="nbs-flexisel-inner">
           <h5>Choose from ready designs:</h5>
           {%for d in design_list%} 
-          
-          <div class="ready-design-box">
-            <img alt="" src="{{d.design_prev}}">
+          <div class="ready-design-box" style="background-image: url('{{d.design_prev_url}}')">
             <div class="overlay"></div>
-            <div class="button" style="left: 50px" onclick="showImageModel('{{d.design_prev}}')">View</div>
+            <div class="button" style="left: 50px" onclick="showImageModel('{{d.design_prev_url}}')">View</div>
             <a class="button" style="left: 130px" href="/GetProductDesignor?key={{p.entityKey}}&redayDesign={{d.entityKey}}">Edit</a>
             <div class="button" style="left: 200px">Order</div>
           </div>

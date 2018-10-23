@@ -941,8 +941,9 @@ class UserAccount(ActionSupport):
     e.email = email
     e.name = user_name
     e.role = role
-    r = RoleModel.get_by_role(role)
-    e.acl = r.acl
+    if role != 'ADMIN':
+      r = RoleModel.get_by_role(role)
+      e.acl = r.acl
     e.put()
     data_dict = {'user_name': user_name,
                  'email': email,
@@ -1062,5 +1063,10 @@ body='''
 <h2>test</h2>'''
 class Test(webapp2.RequestHandler):    
   def get(self):  
-    mail_sender('appboxtechnologies@gmail.com', 'subject', body)
+    e = UserModel()
+    e.email='appboxtechnologies@gmail.com'
+    e.name='sanjay'
+    e.role='ADMIN'
+    e.put()
+    #mail_sender('appboxtechnologies@gmail.com', 'subject', body)
     self.response.out.write('200')      

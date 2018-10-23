@@ -169,6 +169,7 @@ class Product(EndpointsModel):
   promo_product_bg_key = ndb.StringProperty(default='')
   promo_text = ndb.StringProperty(default='')
   promo_sequence = ndb.IntegerProperty(default=0)
+  default_design_template = ndb.StringProperty(default='')
   
   @classmethod
   def get_product_by_code(cls, code):

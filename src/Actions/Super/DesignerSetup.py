@@ -95,7 +95,7 @@ class DesinerDemo(ActionSupport):
     design_obj.design_prev_url = serving_url
     design_obj.design_prev_key = bucket_key
     design_obj.design_prev_path = bucket_path
-    bucket_path = '/designer_textptrn/ready_desing/json/%s/%s' %(p.code, design_obj.id)
+    bucket_path = '/designer_textptrn/ready_desing/json/%s/%s.png' %(p.code, design_obj.id)
     upload_text_file(layer, bucket_path)
     try:
       bucket_key = blobstore.create_gs_key('/gs' + bucket_path)

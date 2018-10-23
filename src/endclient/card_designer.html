@@ -64,13 +64,29 @@
           <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
             data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name": "Front side of card" }' />
-          {%if p.code=='GBSDF48Q'%}  
+          <span title="Brand Title bar" data-parameters='{"fontSize":24, "left": 150, "top": 60, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >Your Brand Name Here</span>  
+          <span title="Brand msg bar" data-parameters='{"fontSize":12, "left": 120, "top": 95, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >A Message From Your Company</span>  
+          <span title="Full Name bar" data-parameters='{"fontSize":24, "left": 80, "top": 200, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >Full Name</span>  
+          <span title="Main Title bar" data-parameters='{"fontSize":12, "left": 55, "top": 225, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >Main Title</span>   
+          <span title="Address bar" data-parameters='{"fontSize":12, "left": 80, "top": 325, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >122 Main Street
+City, STATE, 00123</span>  
+          <span title="contact bar" data-parameters='{"fontSize":12, "left": 560, "top": 325, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >      tel. (206)555-1689
+you@emailaddres.com</span>
+          <img src="/images/cards/your-logo-here.png" title="your_logo" data-parameters='{"left": 520, "top": 180, "colors": "#2893e5","boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
           <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
             <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
             title="Base"
             data-parameters='{"product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name":"Back side of card" }' />
+            <img src="/images/cards/your-logo-here.png" title="your_logo_2" data-parameters='{"left": 320, "top": 180, "colors": "#2893e5","boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true}' />
+            <span title="Main Title bar" data-parameters='{"fontSize":12, "left": 320, "top": 320, "boundingBox": "Base", "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "colors": "#000000"}' 
+          >You custom text</span> 
           </div>  
-          {%endif%}
         </div>
         {%else%}
         <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
@@ -134,22 +150,7 @@
           </div>
           {%endfor%}
         </div>
-        {%endif%}
-        {#
-        <div class="fpd-frame">
-          <div class="fpd-category" title="Frame Mock" data-thumbnail="">
-            <img src="/wp-content/3_box_frame.svg" title="3 Frame"
-              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            <img src="/wp-content/4_box.svg" title="4 Frame"
-              data-parameters='{"svg": "/wp-content/4_box.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            <img src="/wp-content/7_box.svg" title="7 Frame"
-              data-parameters='{"svg": "/wp-content/1_box.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />    
-          </div>
-          <div class="fpd-category" title="Frame test" data-thumbnail="">
-            <img src="/wp-content/2_hexagon.svg" title="Tow Hexagone"
-              data-parameters='{"svg": "/wp-content/2_hexagon.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          </div>
-        </div>#}
+        {%endif%} 
       </div> 
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
@@ -312,19 +313,7 @@ stage_width = {{canvas.stage_width}};
 
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts);
         setTimeout(function(){$('.fpd-actions-container').css({position:'fixed'});
-        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000);
-        {%if redayDesignKey%} 
-        $('#pls_wait_design_loadind').show();
-        loadFPDUrl='/GetReadyDesingJson?key='+'{{redayDesignKey}}';
-        loadFPCCB='getReadyDesingJsonCB';
-        loadReadyDesign=true;
-        {%endif%}
-        {%if saveDesignKey%}
-        $('#pls_wait_design_loadind').show(); 
-        loadFPDUrl='/GetSavedDesingJson?key='+'{{saveDesignKey}}';
-        loadFPCCB='getSavedDesingJsonCB';
-        loadReadyDesign=true;
-        {%endif%}
+        $('.fpd-actions-wrapper.fpd-pos-top').css({top:'10px'});}, 2000); 
       });
  
 </script>

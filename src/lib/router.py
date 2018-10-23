@@ -12,7 +12,8 @@ from webapp2_extras.routes import RedirectRoute
 
 __route_list = [
     RedirectRoute(r'/', Home.Home, name='Home page', strict_slash=True),
-    RedirectRoute(r'/AboutUs', Home.AboutUs, name='AboutUs page', strict_slash=True),
+    RedirectRoute(r'/TermsAndConditions', Home.TermsAndConditions, name='TermsAndConditions page', strict_slash=True),
+    RedirectRoute(r'/PrivacyPolicy', Home.PrivacyPolicy, name='PrivacyPolicy page', strict_slash=True),
     RedirectRoute(r'/ContactUs', Home.ContactUs, name='ContactUs page', strict_slash=True),
     RedirectRoute(r'/ActivateAccount', Home.ActivateAccount, name='ActivateAccount page', strict_slash=True),
     RedirectRoute(r'/Register', Home.Register, name='Register page', strict_slash=True),

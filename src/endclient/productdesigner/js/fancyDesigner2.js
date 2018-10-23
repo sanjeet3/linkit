@@ -4231,7 +4231,14 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       elem.evented=false; 
       frameBox.startPanning=elem; 
       frameBox.evented=true; 
-      frameBox.opacity=0; 
+      frameBox.opacity=0;   
+      frameBox.lockRotation = true;
+      frameBox.lockScalingX = true;
+      frameBox.lockScalingY = true;
+      frameBox.lockUniScaling = true;         
+      frameBox.rotatable = false;             
+      frameBox.resizable = false;
+      frameBox.copyable = false;
       
       instance.stage.renderAll();
       $('#set_frame_mask_dom').hide();
@@ -4741,18 +4748,23 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             parameters: instance.getElementJSON(element),
             interaction: 'remove'
         });
-        if(instance.svgModel && element.id==instance.svgModel.id){
+        if(element.id==instance.svgModel){//if(instance.svgModel && element.id==instance.svgModel.id){
           instance.svgModel = null;
           instance.svgModelReady=false;
           instance.svgModelSigle=false;
           instance.svgModelIndex=-1;
         }
-        if(element.svgid!=undefined){
+        /*if(element.svgid!=undefined){
           var frameBox = instance.getElementByID(element.svgid);
           if(frameBox){
             frameBox = setFrameLockMode(frameBox, true, true, 1);
           }
+        }*/
+        if(element.startPanning){
+          var imgElm = instance.getElementByID(element.startPanning.id);
+          if(imgElm)instance.stage.remove(imgElm);
         }
+        
         instance.stage.remove(element);
 
         _elementHasUploadZone(element);
@@ -7817,17 +7829,27 @@ var FPDActions = function(fpdInstance, $actions){
               //preveiwMug(dataURL, '');
               setTimeout(function(){ preveiwMug(dataURL, ''); }, 400);*/
                 
-                var image = new Image();
+                /*var image = new Image();
                 image.src = dataURL; 
                 image.onload = function() {
-                    FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);
+                    //FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);
                   var h = ['<div class="preview-container">'];
                   h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
                   h.push('<img class="preview-imgB1" style="left: '+preview_left+', top: '+preview_top+'" src="'+this.src+'" download="product.png" /></div>');
                   h = h.join('');
                   FPDUtil.createModal(h, true);
                   
-                }
+                }*/
+              if(prodCode == 'PRD004'){
+                var h = preveiwWaterBottle(canvasPreviewUrl, dataURL);
+                FPDUtil.createModal(h, true);
+              } else {
+                var h = ['<div class="preview-container">'];
+                h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
+                h.push('<img class="preview-imgB1" style="left: '+preview_left+', top: '+preview_top+'" src="'+dataURL+'" download="product.png" /></div>');
+                h = h.join('');
+                FPDUtil.createModal(h, true);
+              }
 
             });
 

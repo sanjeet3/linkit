@@ -32,6 +32,16 @@ design_img_title = config.get('design_img_title')
 
 import webapp2
 import src.lib.external.cloudstorage as gcs
+class PrivacyPolicy(ActionSupport):
+  def get(self):
+    template = self.get_jinja2_env.get_template('endclient/privacy_policy.html') 
+    self.response.out.write(template.render({}))
+                              
+class TermsAndConditions(ActionSupport):
+  def get(self):
+    template = self.get_jinja2_env.get_template('endclient/terms_conditions.html') 
+    self.response.out.write(template.render({}))
+                              
 class Imgage(webapp2.RequestHandler):
   def get(self):
     bucket_path = self.request.get('id')
@@ -270,6 +280,7 @@ class GetProductDetails(ActionSupport):
     seller_dict = {}#Seller.get_key_obj_dict()
     seller_product_list = []#SellerProduct.get_product_by_master_key_for_client(p.key)
     design_list = ReadyDesignTemplate.get_ready_design_list(p.key) #ProductDesign.get_design_list(p.key)
+    product_cat_list = ProductCategory.get_list()
     if self.client:
       save_design_list = ClientProductDesign.get_client_design(self.client.key, p.key)
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
@@ -280,6 +291,7 @@ class GetProductDetails(ActionSupport):
                                              'seller_product': SellerProduct.get_default_seller_product(p.key),
                                              'seller_product_list': seller_product_list,
                                              'seller_dict': seller_dict,
+                                             'product_cat_list': product_cat_list,
                                              'user_obj': self.client}))
 
 QUANTITY_ERROR='''
@@ -414,7 +426,6 @@ class PlaceOrder(ActionSupport):
 
 class GetProductDesignor(ActionSupport):
   def get(self): 
-    template_path = 'endclient/product_designor.html'
     sub_frame_dict = {}
     sub_cat_dict = {}
     sub_bg_dict = {}  
@@ -422,6 +433,10 @@ class GetProductDesignor(ActionSupport):
     redayDesignKey=self.request.get('redayDesign')
     saveDesignKey=self.request.get('saveDesign')
     p = ndb.Key(urlsafe=self.request.get('key')).get() 
+    if p.default_design_template:
+      template_path = 'endclient/%s.html' %(p.default_design_template)
+    else:     
+      template_path = 'endclient/product_designor.html'
     template = self.get_jinja2_env.get_template(template_path)    
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(p.key)
@@ -570,7 +585,7 @@ class CreateDesign(ActionSupport):
     design_obj.design_prev_url = serving_url
     design_obj.design_prev_key = bucket_key
     design_obj.design_prev_path = bucket_path
-    bucket_path = '/designer_textptrn/%s/json/%s/%s' %(p.code, self.client.id, design_obj.id)
+    bucket_path = '/designer_textptrn/%s/json/%s/%s.png' %(p.code, self.client.id, design_obj.id)
     upload_text_file(layer, bucket_path)
     try:
       bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
