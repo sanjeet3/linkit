@@ -14691,13 +14691,6 @@ var FancyProductDesigner = function(elem, opts) {
                   if(w < imageW) { 
                     scaleX=w/imageW;
                   }
-
-                  if(scaleX<scaleY){
-                    scaleX=scaleY;
-                  } else if(scaleY<scaleX) {
-                    scaleY=scaleX;
-                  }
-                  
                 } else {
                   if(baseHeight>0 && imageH>baseHeight) { 
                     scaleY=baseHeight/imageH
@@ -14705,14 +14698,14 @@ var FancyProductDesigner = function(elem, opts) {
                   if(baseWidth>0 && imageW>baseWidth) { 
                     scaleX=baseWidth/imageW;
                   }
-
-                  if(scaleX>scaleY){
-                    scaleX=scaleY;
-                  } else if(scaleY>scaleX) {
-                    scaleY=scaleX;
-                  }
+                  
                 } 
                 
+                if(scaleX>scaleY){
+                  scaleX=scaleY;
+                } else if(scaleY>scaleX) {
+                  scaleY=scaleX;
+                }
             if(!FPDUtil.checkImageDimensions(instance, imageW, imageH)) {
                 instance.toggleSpinner(false);
                 return false;
