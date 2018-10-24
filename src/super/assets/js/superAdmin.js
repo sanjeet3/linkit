@@ -2019,5 +2019,9 @@ function getMailTemplateCB(r){
   
 }
 
+function saveReadyDesign() {
+  postRequest('ready_design_setup_form', '/superadmin/ReadyDesingSetup', null);
+} 
+
 
 

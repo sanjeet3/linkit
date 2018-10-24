@@ -167,12 +167,7 @@
             {%else%}
             <a class="now-get" id="create_desgin_btn"
               href="/GetProductDesignor?key={{p.entityKey}}">Create Design</a>
-              {%endif%}
-            <p id="design_paragraf" style="display: none;">
-              <b>Design Id: </b> <font id="design_id_text"></font>
-            </p>
-            {#<a class="now-get" href="javascript:alert('Please login to create your disign')">Create
-              Design</a>#}
+              {%endif%} 
           </div>
         </div>
         {%endif%}
@@ -199,7 +194,7 @@
           <div class="ready-design-box" style="background-image: url('{{d.design_prev_url}}')">
             <div class="overlay"></div>
             <div class="button" style="left: 50px" onclick="showImageModel('{{d.design_prev_url}}')">View</div>
-            <a class="button" style="left: 130px" href="/GetProductDesignor?key={{p.entityKey}}&redayDesign={{d.entityKey}}">Edit</a>
+            <a class="button" style="left: 130px" href="/GetProductDesignor?key={{p.entityKey}}{%if d.template_source%}&readyDesignKey={{d.entityKey}}{%else%}&redayDesignTemplate={{d.template_name}}{%endif%}">Edit</a>
             <div class="button" style="left: 200px">Order</div>
           </div>
           {%endfor%}

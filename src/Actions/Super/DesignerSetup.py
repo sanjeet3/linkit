@@ -850,4 +850,35 @@ class DeleteSUBCategory(ActionSupport):
             
     return json_response(self.response, {'k': k}, self.status, self.msg)
  
+class ReadyDesingSetup(ActionSupport):
+  def get(self):
+    p_list = Product.get_product_list()
+    context = {'p_list': p_list,
+               }  
+    template = self.get_jinja2_env.get_template('super/ready_design.html')    
+    self.response.out.write(template.render(context))   
+  
+  def post(self): 
+    product = ndb.Key(urlsafe=self.request.get('product_key')).get()  
+    url = self.request.get('url')  
+    template_name = self.request.get('template_name')  
+    source_code = self.request.get('source_code')  
+    source_code2 = self.request.get('source_code2')
+    l = []
+    if source_code:
+      l.append(source_code)
+    if source_code2:
+      l.append(source_code2)
+    if not url: 
+      return json_response(self.response, {}, ERROR, 'data missing')
+    e = ReadyDesignTemplate()
+    e.design_prev_url = url
+    e.name = product.name
+    e.product = product.key
+    e.product_code = product.code
+    e.template_source = l
+    e.template_name = template_name
+    e.put()
+     
+    return json_response(self.response, {}, SUCCESS, 'OK')
         

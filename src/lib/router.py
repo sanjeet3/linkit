@@ -24,8 +24,8 @@ __route_list = [
     RedirectRoute(r'/GetSavedDesingJson', Home.GetSavedDesign, name='Create Product Saved Design Json', strict_slash=True),
     RedirectRoute(r'/GetReadyDesingJson', Home.GetReadyDesign, name='Get Product Ready Design Json', strict_slash=True),
     RedirectRoute(r'/GetProductDesignor', Home.GetProductDesignor, name='Get Product Designor page', strict_slash=True),
-    RedirectRoute(r'/Product', Home.ProductView, name='View product page', strict_slash=True),
     RedirectRoute(r'/GetProductDetails', Home.GetProductDetails, name='Get product details page', strict_slash=True),
+    RedirectRoute(r'/Product', Home.ProductView, name='View product page', strict_slash=True),
     RedirectRoute(r'/SearchEvent', Home.GetEventView, name='GetEventView', strict_slash=True),
     RedirectRoute(r'/FPD', Home.TestFPD, name='Test FPD', strict_slash=True),
     RedirectRoute(r'/PhotoBookDesign', Home.PhotoBookDesign, name='Test FPD', strict_slash=True),
@@ -46,6 +46,7 @@ __route_list = [
     
     #Designer Setup
     RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),
+    RedirectRoute(r'/superadmin/ReadyDesingSetup', DesignerSetup.ReadyDesingSetup, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerModuleSetup', DesignerSetup.DesignerModuleSetup, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerLoginAccess', DesignerSetup.DesignerLoginAccess, name='SuperAdmin DesignerSetup page', strict_slash=True),

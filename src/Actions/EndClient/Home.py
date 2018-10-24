@@ -460,13 +460,20 @@ class GetProductDesignor(ActionSupport):
     self.bg_list=[]
     self.sub_bg_list=[]  
     designer_module = [] #['images', 'frames', 'backgrounds', 'text', 'designs']
-    redayDesignKey=self.request.get('redayDesign')
-    saveDesignKey=self.request.get('saveDesign')
+    source_html = ''
+    reday_design_template=self.request.get('redayDesignTemplate')
+    reday_design_key=self.request.get('readyDesignKey')
     self.p = ndb.Key(urlsafe=self.request.get('key')).get() 
-    if self.p.default_design_template:
+    template_path = 'endclient/product_designor.html'
+    if reday_design_template:
+      template_path = 'endclient/%s' %(reday_design_template)
+    elif reday_design_key:  
+      r_d_templt = ndb.Key(urlsafe=reday_design_key).get()   
+      source_html = r_d_templt.template_source 
+      template_path = 'endclient/product_designor_custom_template.html'
+    elif self.p.default_design_template:
       template_path = 'endclient/%s.html' %(self.p.default_design_template)
-    else:     
-      template_path = 'endclient/product_designor.html'
+          
     template = self.get_jinja2_env.get_template(template_path)    
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(self.p.key)
@@ -481,9 +488,8 @@ class GetProductDesignor(ActionSupport):
         self.set_bg()  
        
     self.response.out.write(template.render({'p': self.p,
+                                             'source_html': source_html,
                                              'designer_module': designer_module,
-                                             'saveDesignKey': saveDesignKey,
-                                             'redayDesignKey': redayDesignKey, 
                                              'dev': self.DEV,
                                              'key': self.request.get('key'), 
                                              'user_obj': self.client, 
@@ -598,7 +604,7 @@ class CreateDesign(ActionSupport):
     design_obj.design_prev_url = serving_url
     design_obj.design_prev_key = bucket_key
     design_obj.design_prev_path = bucket_path
-    bucket_path = '/designer_textptrn/%s/json/%s/%s.png' %(p.code, self.client.id, design_obj.id)
+    '''bucket_path = '/designer_textptrn/%s/json/%s/%s.png' %(p.code, self.client.id, design_obj.id)
     upload_text_file(layer, bucket_path)
     try:
       bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
@@ -606,7 +612,7 @@ class CreateDesign(ActionSupport):
     except Exception, msg:
       logging.error(msg)
     design_obj.json_bucket_key = bucket_key
-    design_obj.json_bucket_path = bucket_path
+    design_obj.json_bucket_path = bucket_path'''
     design_obj.put()  
     data_dict = {'id': design_obj.id, 'design_key': design_obj.entityKey}                        
     return json_response(self.response, data_dict, SUCCESS, 'Product design saved')                        

@@ -1,0 +1,57 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-desktop"></i> <a href="javascript:">Product Designer
+        Templates</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+</div>
+<div class="page-content" id="setup_main_menu">
+  <div class="col-xs-12">
+    <h3 class="header smaller lighter blue">Ready Design Templates setup</h3>
+    <div class="col-xs-12 col-sm-5">
+      <form class="form-horizontal" id="ready_design_setup_form">
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Product</label>
+          <div class="col-sm-9">
+          <select name="product_key" id="ready_design_selected_product"> {%for p in
+            p_list%} 
+            <option value="{{p.entityKey}}">
+            {{p.name}}- {{p.code}}
+            </option> {%endfor%}
+          </select>
+          </div>
+        </div> 
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Serving Url </label>
+          <div class="col-sm-9">
+            <input type="text" name="url" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right"> Template Name </label>
+          <div class="col-sm-9">
+            <input type="text" name="template_name" class="form-control input-custom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Source Code </label>
+          <div class="col-sm-9">
+            <textarea name="source_code" class="form-control input-custom"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Source Code </label>
+          <div class="col-sm-9">
+            <textarea name="source_code2" class="form-control input-custom"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right"> </label>
+          <div class="col-sm-9">
+            <button type="button" class="btn btn-info btn-minier" onclick="saveReadyDesign()">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

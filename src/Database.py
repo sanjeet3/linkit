@@ -352,12 +352,9 @@ class ClientProductDesign(EndpointsModel):
   product_code = ndb.StringProperty(default='')
   json_bucket_path = ndb.StringProperty(default='')
   json_bucket_key = ndb.StringProperty(default='')
-  design_id = ndb.StringProperty(default='')
   design_prev_url = ndb.TextProperty(default='')
   design_prev_key = ndb.TextProperty(default='')
-  design_prev_path = ndb.TextProperty(default='')
-  layer_list = ndb.TextProperty(repeated=True)
-  layer_ext_list = ndb.TextProperty(repeated=True)
+  design_prev_path = ndb.TextProperty(default='') 
 
   @classmethod
   def get_by_design_id(cls, design_id):
@@ -676,12 +673,9 @@ class ReadyDesignTemplate(EndpointsModel):
   product = ndb.KeyProperty(Product)
   product_code = ndb.StringProperty(default='')
   name = ndb.StringProperty(default='')
-  json_bucket_path = ndb.StringProperty(default='')
-  json_bucket_key = ndb.StringProperty(default='')
-  design_id = ndb.StringProperty(default='')
   design_prev_url = ndb.TextProperty(default='')
-  design_prev_key = ndb.TextProperty(default='')
-  design_prev_path = ndb.TextProperty(default='')
+  template_source = ndb.TextProperty(repeated=True)
+  template_name = ndb.StringProperty(default='')
 
   @classmethod
   def get_list(cls):  

@@ -31,11 +31,7 @@
       </div>
     </div>
     <div id="main-container">
-      <h3 id="clothing" style="float: left;">Create Ready Design for {{p.code}}-{{p.name}}</h3>
-      {#<button type="button" onclick="createUserDisgn('/DesinerDemo')" id="save_design_btn"
-        class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
-        <i class="ace-icon fa fa-save"></i> Save
-      </button>#}
+      <h3 id="clothing" style="float: left;">Create Ready Design for {{p.code}}-{{p.name}}</h3> 
       <div id="product-designer" style="clear: both;"
         class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
         {%if canvas%}
@@ -107,17 +103,7 @@
             {%endfor%}
           </div>
           {%endfor%}
-        </div>
-        {#<div class="fpd-frame">
-          <div class="fpd-category" title="Frame Mock" data-thumbnail="">
-            <img src="/wp-content/3_box_frame.svg" title="Frame"
-              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          </div>
-          <div class="fpd-category" title="Frame test" data-thumbnail="">
-            <img src="/wp-content/3_box_frame.svg" title="Frame"
-              data-parameters='{"svg": "/wp-content/3_box_frame.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-          </div>
-        </div>#}
+        </div> 
       </div>
       <div class="fpd-clearfix text-center">
         <div class="api-buttons fpd-container">
