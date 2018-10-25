@@ -87,6 +87,7 @@
 		"layouts_confirm_button": "Yes, got it!"
 	},
 	"image_editor": {
+	  "frames": "Set your picture into frame",
 		"mask": "Mask",
 		"filters": "Filters",
 		"color_manipulation": "Color Manipulation",

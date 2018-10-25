@@ -200,6 +200,14 @@ class Product(EndpointsModel):
     return cls.query().fetch()
 
   @classmethod
+  def get_product_list_by_categgory(cls, category_key):
+    return cls.query(cls.category_key==category_key)
+
+  @classmethod
+  def get_product_list_by_uom(cls, uom_key):
+    return cls.query(cls.uom_key==uom_key)
+
+  @classmethod
   def get_latest_product_list(cls, limit=5):
     return cls.query().order(-cls.created_on).fetch(limit)
 
@@ -399,6 +407,23 @@ class Themes(EndpointsModel):
   def get_theme_count(cls):  
     return cls.query().count()
 
+class HomeScreenStaticURL(EndpointsModel):
+  ''' Themes datastore '''
+  updated_on = ndb.DateTimeProperty(auto_now_add=True)
+  url_one = ndb.StringProperty(default='')
+  url_one_key = ndb.StringProperty(default='')
+  url_tow = ndb.StringProperty(default='')
+  url_tow_key = ndb.StringProperty(default='')
+  url_three = ndb.StringProperty(default='')
+  url_three_key = ndb.StringProperty(default='')
+
+  @classmethod
+  def get_obj(cls):  
+    e = cls.query().get()
+    if not e:
+      e = HomeScreenStaticURL().put().get()
+    return e      
+
 class EventMaster(EndpointsModel):
   ''' Themes datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)
@@ -443,6 +468,17 @@ class EventMaster(EndpointsModel):
   def get_client_view(cls):  
     return cls.query(cls.seq_selected==True).order(cls.seq_num).fetch()
 
+class StaticImage(EndpointsModel):
+  ''' Themes datastore ''' 
+  img_url = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_obj(cls):
+    e = cls.query().get()
+    if not e:
+      e = StaticImage().put().get()    
+    return e   
+ 
 class DesignCategory(EndpointsModel):
   ''' Themes datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)

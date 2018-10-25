@@ -4,7 +4,7 @@ Created on 04-Jul-2018
 @author: Sanjay Saini
 '''
 
-from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory
+from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory, HomeScreenStaticURL
 from src.Database import Client, ClientProductDesign, ProductDesign, AllowDesignerOffLogin
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster
 from src.Database import SellerLadger, ReadyDesignTemplate
@@ -217,6 +217,7 @@ class Home(ActionSupport):
     new_product = Product.get_latest_product_list(10)
     selected_product = Product.get_home_screen_product()
     th = Themes.get_theme()
+    static_img = HomeScreenStaticURL.get_obj()
     themes_path = th.title if th else 'theme1'
     template = self.get_jinja2_env.get_template('endclient/home.html')    
     self.response.headers['Access-Control-Allow-Origin']='https://storage.googleapis.com'
@@ -226,6 +227,7 @@ class Home(ActionSupport):
                                              'r': self.request.get('r'),
                                              'new_product': new_product,
                                              'selected_product': selected_product,
+                                             'static_img': static_img,
                                              'themes_path': themes_path}))
 
 class GetEventView(ActionSupport):
@@ -464,6 +466,7 @@ class GetProductDesignor(ActionSupport):
     reday_design_template=self.request.get('redayDesignTemplate')
     reday_design_key=self.request.get('readyDesignKey')
     self.p = ndb.Key(urlsafe=self.request.get('key')).get() 
+    #template_path = 'endclient/card_designer.html'
     template_path = 'endclient/product_designor.html'
     if reday_design_template:
       template_path = 'endclient/%s' %(reday_design_template)

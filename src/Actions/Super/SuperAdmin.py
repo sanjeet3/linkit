@@ -12,7 +12,7 @@ from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
 from src.Database import Client, MailUploads, MailTemplateModel
-from src.Database import Product
+from src.Database import Product, StaticImage
 from src.Database import ProductDesign
 from src.Database import ProductCategory
 from src.Database import ProductUOM
@@ -824,11 +824,21 @@ class UploadTest(ActionSupport):
                            'Select image file')     
         
     file_name = image_file.filename    
-    bucket_path = '/swamigi/script/%s' %(file_name)
+    bucket_path = '/designer_textptrn/static_image/%s' %(file_name)
     bucket_path = bucket_path.lower()
     upload_file(file_obj, bucket_path)
+    serving_url=''
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key) 
+      e = StaticImage.get_obj()
+      e.img_url.append(serving_url)
+      e.put() 
+    except Exception, msg:
+      logging.error(msg)  
+      
     return json_response(self.response, 
-                         {'serving_url': 'serving_url', },
+                         {'serving_url': serving_url, },
                          SUCCESS,
                          'Product background uploaded')  
     

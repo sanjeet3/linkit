@@ -6,7 +6,7 @@ Created on 12-Sep-2018
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.bucketHandler import upload_file, delete_bucket_file, write_urlecoded_png_img, upload_text_file
 from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
-from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin
+from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin, StaticImage
 from src.Database import TextPatterns, Masks, ProductCanvas, Product, ReadyDesignTemplate
 from src.lib.SABasehandler import ActionSupport
 
@@ -785,7 +785,36 @@ class DeleteBucketFile(ActionSupport):
 CLIP_ART='CLIP_ART'
 FRAMES='FRAMES'
 BACKGROUNDS='BACKGROUNDS'     
+PRODUCT_CATEGORY='PRODUCT_CATEGORY'     
+PRODUCT_UOM='PRODUCT_UOM'     
+
     
+class DeleteProductCategoryUOM(ActionSupport): 
+  def get(self):
+    self.status = ERROR  
+    self.msg='Remove all mapping from product first'  
+    k = self.request.get('k')
+    k_type = self.request.get('entity')
+    self.key = ndb.Key(urlsafe=k)
+    if k_type==PRODUCT_CATEGORY:
+      self.delete_product_category()   
+    elif k_type==PRODUCT_UOM:
+      self.delete_product_uom()
+            
+    return json_response(self.response, {'k': k}, self.status, self.msg)
+
+  def delete_product_category(self):
+    if Product.get_product_list_by_categgory(self.key).count() == 0:
+      self.key.delete()
+      self.status=SUCCESS
+      self.msg='Deleted'
+
+  def delete_product_uom(self):
+    if Product.get_product_list_by_uom(self.key).count() == 0:
+      self.key.delete()
+      self.status=SUCCESS
+      self.msg='Deleted'
+          
 class DeleteCategory(ActionSupport): 
   def post(self):
     self.status = ERROR  
@@ -801,7 +830,8 @@ class DeleteCategory(ActionSupport):
       self.backgound_deletion()
             
     return json_response(self.response, {'k': k}, self.status, self.msg)
-
+  def delete_product_category(self):
+    Product.get_product_list_by_categgory(category_key).count()  
   def clipart_deletion(self):
     e_query = DesignSubCategory.query_by_category(self.e.key)
     if e_query.count()!=0:
@@ -852,9 +882,11 @@ class DeleteSUBCategory(ActionSupport):
  
 class ReadyDesingSetup(ActionSupport):
   def get(self):
+    e = StaticImage.get_obj()
+        
     p_list = Product.get_product_list()
     context = {'p_list': p_list,
-               }  
+               'img_url': e.img_url}  
     template = self.get_jinja2_env.get_template('super/ready_design.html')    
     self.response.out.write(template.render(context))   
   
