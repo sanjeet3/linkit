@@ -142,6 +142,7 @@ class ProductCategory(EndpointsModel):
 class Product(EndpointsModel):
   ''' Product datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)
+  status = ndb.BooleanProperty(default=True)
   code = ndb.StringProperty(default='')
   name = ndb.StringProperty(default='')
   size = ndb.StringProperty(default='')

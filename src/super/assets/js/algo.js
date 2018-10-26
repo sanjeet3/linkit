@@ -198,7 +198,9 @@ function resizeDialog(){
   // calculate the values for center alignment
   var dialogTop =  (maskHeight/3) - ($('.dialog-box').height());  
   var dialogLeft = (maskWidth/2) - ($('.dialog-box').width()/2); 
-  
+  if(dialogTop<0){
+    dialogTop=10;
+  }
   // assign values to the overlay and dialog box
   $('.dialog-overlay').css({height:maskHeight, width:maskWidth})
   $('.dialog-box').css({top:dialogTop, left:dialogLeft}) 

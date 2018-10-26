@@ -31,12 +31,16 @@
           <tr>
             <th>Title</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="category_table">
           {%for e in cat_list%}
           <tr id="{{e.entityKey}}">
-            <td>{{e.title}}
+            <td>{{e.title}} <button class="btn btn-info btn-minier pull-right" type="button"
+              onclick="showRenameDesignModuleCat('{{e.entityKey}}','{{e.title}}')">Rename</button>
+            </td>
+            <td>
               <button type="button" onclick="deleteCategory('{{e.entityKey}}','FRAMES')" class="btn btn-danger btn-minier pull-right">Delete</button>
             </td>
             <td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae('{{e.entityKey}}', '{{e.title}}')">Set Images</button> {{e.img_url|length}}
@@ -58,7 +62,10 @@
         <tbody id="sub_category_table">
           {%for e in sub_list%}
           <tr id="{{e.entityKey}}">
-            <td>{{e.title}}
+            <td>{{e.title}} <button class="btn btn-info btn-minier pull-right" type="button"
+              onclick="showRenameDesignModuleCat('{{e.entityKey}}','{{e.title}}')">Rename</button>
+            </td>
+            <td>
               <button type="button" onclick="deleteSubCategory('{{e.entityKey}}')" class="btn btn-danger btn-minier pull-right">Delete</button>
             </td>
             <td>{{e.category_name}}</td>

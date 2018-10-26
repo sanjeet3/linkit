@@ -93,28 +93,33 @@ class GetEventList(ActionSupport):
 
 class GetProductPics(ActionSupport):
   def get(self):  
-    design_list = []
     key = self.request.get('key') 
     product = ndb.Key(urlsafe=key).get()
-    img_list = product.image_url
-    design = ProductDesign()
-    for design in ProductDesign.get_design_list(product.key):
-      design_list.append({'image_url': design.image_url,
-                          'title': design.title,
-                          'scaleX': design.scaleX,
-                          'scaleY': design.scaleY,
-                          'top': design.top,
-                          'left': design.left,
-                          'k': design.entityKey})   
+    img_list = product.image_url   
     
     data_dict = {'img_list': img_list,
                  'bg_uri': product.bg_uri,
                  'bg_bckt_key': product.bg_bckt_key,
-                 'key': key,
-                 'design_list': design_list}
+                 'key': key, }
       
     return  json_response(self.response, data_dict, SUCCESS,'')
 
+
+class DeleteProductIMG(ActionSupport):
+  def get(self):  
+    k = self.request.get('k') 
+    i = int(self.request.get('i'))
+    e = ndb.Key(urlsafe=k).get() 
+    try:
+      if delete_bucket_file(e.bucket_key[i]):
+        e.image_url.pop(i)
+        e.bucket_path.pop(i)
+        e.bucket_key.pop(i)
+        e.put()    
+    except Exception:
+      pass      
+    data_dict={'k':k, 'i':i}  
+    return  json_response(self.response, data_dict, SUCCESS,'Image Deleted')
 
 class UpdateDesignSize(ActionSupport):
   def post(self):
@@ -149,6 +154,20 @@ class DeleteDesign(ActionSupport):
     else:
       return json_response(self.response, {}, ERROR, 'Try again')      
 
+
+class SearchProducts(ActionSupport):
+  def get(self):
+    category = self.request.get('category')
+    if category:
+      p_list = Product.get_product_list_by_categgory(ndb.Key(urlsafe=category))
+    else:
+      p_list = Product.get_product_list()          
+    context = {'p_list': p_list}  
+    template = self.get_jinja2_env.get_template('super/Product_Search.html')    
+    self.response.out.write(template.render(context))  
+      
+    
+
 class EditProducts(ActionSupport):
   def get(self):
     key = self.request.get('k')
@@ -162,6 +181,7 @@ class EditProducts(ActionSupport):
     'description': p.description,
     'product_key': p.entityKey,
     'event_urlsafe': p.event_urlsafe,
+    'status': p.status,
     }
     
     return  json_response(self.response, data_dict, SUCCESS, '')
@@ -181,6 +201,8 @@ class EditProducts(ActionSupport):
     p.name=name
     p.price=price
     p.size=size
+    p.event_list = []
+    p.event_urlsafe = []
     if category:
       e=ndb.Key(urlsafe=category).get()
       p.category=e.name
@@ -193,8 +215,13 @@ class EditProducts(ActionSupport):
       uom=e.name
     if event_list:
       p.event_list = [ ndb.Key(urlsafe=k) for k in event_list ]
-      p.event_urlsafe = event_list          
-    p=p.put().get()   
+      p.event_urlsafe = event_list   
+    if self.request.get('status'):
+      p.status = True
+    else:  
+      p.status = False
+                   
+    p.put()   
     data_dict={'code':p.code,
     'name': name,
     'size':size,
@@ -203,6 +230,7 @@ class EditProducts(ActionSupport):
     'uom': uom,
     'description': description,
     'key': p.entityKey, 
+    'status': p.status,
     }
     return  json_response(self.response, data_dict, SUCCESS, 'Product %s updated' %(name))        
 
@@ -278,7 +306,21 @@ class SaveProductsCategory(ActionSupport):
     }
     return  json_response(self.response, data_dict, SUCCESS, 'Product category %s saved' %(category))
 
-
+class EditProductsCATUOM(ActionSupport):
+  def get(self):
+    category_list=ProductCategory.get_list()
+    uom_list=ProductUOM.get_list()
+    context = {'category_list': category_list,
+               'uom_list': uom_list}
+    template = self.get_jinja2_env.get_template('super/ProductCategoryUOM.html')    
+    self.response.out.write(template.render(context))
+        
+  def post(self):           
+    name=self.request.get('name').upper()
+    e=ndb.Key(urlsafe=self.request.get('k')).get()
+    e.name=name
+    e.put()
+    return json_response(self.response, {'k': self.request.get('k')}, SUCCESS, 'Rename Done')
 
 class SaveFrenchise(ActionSupport):
   def post(self):          
@@ -924,6 +966,20 @@ class Ledger(ActionSupport):
          'seller_ladger_list': SellerLadger.get_filtered_list(today_date, today_date)}
     template = self.get_jinja2_env.get_template('super/ledger.html')    
     self.response.out.write(template.render(d)) 
+
+class ManageUserStatus(ActionSupport):
+  def get(self): 
+    message = ''
+    k = self.request.get('k')  
+    status = self.request.get('status')  
+    e = ndb.Key(urlsafe=k).get()
+    if status:
+      e.active=True
+    else:  
+      e.active=False
+    e.put()
+           
+    return json_response(self.response, {'k':k, 'status': status}, SUCCESS, message)  
 
 class UserAccount(ActionSupport):
   def get(self):  

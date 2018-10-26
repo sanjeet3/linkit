@@ -11665,6 +11665,12 @@ textarea.input-transparent:focus {
 .table{
   font-size: 10px;
 }
+.table .False{
+  background-color: #f3909063;
+}
+.table .false{
+  background-color: #f3909063;
+}
 .table-bordered,
 td,
 th {

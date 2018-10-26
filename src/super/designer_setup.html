@@ -97,3 +97,32 @@
   </div>
   <button onclick="closeDialog('#designerImagesDailog')" type="button" class="btn btn-default">Close</button>
 </div>
+
+<div id="renameEnitity" class="dialog-box">
+  <div class="dailog-header">
+    <span>Edit title of Category/Sub-Cat</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#renameEnitity')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="rename_design_module_cat_form">
+      <input type="hidden" name="k" id="rename_design_cat_key">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code"> Name </label>
+        <div class="col-sm-9">
+          <input type="text" name="name" id="e_name" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="renameDesignModuleCat()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="renm_design_module_cat_name_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#renameEnitity')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> 

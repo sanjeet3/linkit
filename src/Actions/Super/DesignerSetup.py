@@ -35,7 +35,18 @@ class DesignerLoginAccess(ActionSupport):
     e.put()      
     
     return json_response(self.response, {}, SUCCESS, 'Settings updated')
-    
+
+class CatSubCatRename(ActionSupport):
+  def post(self):
+    k = self.request.get('k')
+    name = self.request.get('name').upper()
+    e = ndb.Key(urlsafe=k).get()
+    e.title=name
+    e.put()  
+      
+    data_dict = {'name': name, 'k': k}
+    return json_response(self.response, data_dict, SUCCESS, 'Rename Done')
+
 class DesignerModuleSetup(ActionSupport):
   def get(self):
     product_key = ndb.Key(urlsafe=self.request.get('product_key'))

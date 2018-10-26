@@ -4,7 +4,7 @@
   </ul>
   <!-- /.breadcrumb -->
   <div class="nav-search" id="nav-search">
-    <button class="btn btn-success btn-minier" id="add_btn" onclick="showFormDom()">
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="createNewProductForm()">
       <i class="ace-icon fa fa-plus"></i> Product
     </button>
     <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
@@ -16,8 +16,20 @@
 </div>
 <div class="page-content">
   <div class="row mt-10" id="list-dom">
-    <div class="col-xs-12">
-      <table class="table  table-bordered table-hover">
+    <div class="page-header">
+      <form class="form-inline" id="product-search-form">
+        <select class="" name="category" style="width: 25%;">
+          <option value="">--Category--</option> {%for s in category_list%}
+          <option value="{{s.entityKey}}">{{s.name}}</option> {%endfor%}
+        </select>
+        <button type="button" onclick="searchProduct()" class="btn btn-info btn-mini">
+          <i class="ace-icon fa fa-search bigger-110"></i>Search
+          <i id="search_product_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+        </button>
+      </form>
+    </div>
+    <div class="col-xs-12" id="product_search_result_dom">
+      <table class="table  table-bordered table-hover" id="product_dynamic_table">
         <thead>
           <tr>
             <td>Code</td>
@@ -32,7 +44,7 @@
         </thead>
         <tbody id="product_table_body">
           {%for e in prd_list%}
-          <tr id="{{e.entityKey}}">
+          <tr id="{{e.entityKey}}" class="{{e.status}}">
             <td>{{e.code}}</td>
             <td>{{e.name}}</td>
             <td>{{e.category}}</td>
@@ -83,8 +95,8 @@
         <div class="form-group">
           <label class="col-sm-3 control-label no-padding-right" for="price"> Price </label>
           <div class="col-sm-9">
-            <input type="number" step=".01" name="price" id="price"
-              class="form-control input-custom" value="0.0">
+            <input type="number" step="1" name="price" id="price" class="form-control input-custom"
+              value="0" min="0">
           </div>
         </div>
         <div class="form-group">
@@ -130,12 +142,23 @@
           </div>
         </div>
         <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="category">Status </label>
+          <div class="col-sm-9">
+            <select class="form-control" id="stauts" name="status">
+              <option value="true">Active</option>
+              <option value="">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-md-offset-1 col-md-9">
-            <button class="btn btn-info btn-minier" type="button" onclick="saveProduct()" id="save_btn">
+            <button class="btn btn-info btn-minier" type="button" onclick="saveProduct()"
+              id="save_btn">
               <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="save_product_spin"
                 class="fa fa-spinner fa-spin" style="display: none;"></i>
             </button>
-            <button class="btn btn-info btn-minier" type="button" onclick="editProduct()" id="edit_btn">
+            <button class="btn btn-info btn-minier" type="button" onclick="editProduct()"
+              id="edit_btn">
               <i class="ace-icon fa fa-check bigger-110"></i> Edit <i id="edit_product_spin"
                 class="fa fa-spinner fa-spin" style="display: none;"></i>
             </button>
@@ -162,37 +185,12 @@
           </table>
         </div>
       </form>
-      <h3 id="loading_product_to_edit" style="display: none;"><i class="fa fa-spinner fa-spin"></i> Loading Product details...</h3>
+      <h3 id="loading_product_to_edit" style="display: none;">
+        <i class="fa fa-spinner fa-spin"></i> Loading Product details...
+      </h3>
     </div>
-    <div class="col-xs-12 col-sm-6 col-lg-3 col-md-3">
-      <h3>Category Deletion</h3>
-      <table  class="table  table-bordered table-hover">
-      {%for e in category_list%}
-        <tr id="{{e.entityKey}}">
-          <td>{{e.name}} <button class="btn btn-minier pull-right" type="button" 
-          onclick="getRequest('','/superadmin/DeleteProductCategoryUOM?k={{e.entityKey}}&entity=PRODUCT_CATEGORY','deleteCategoryCB')">
-              <i class="ace-icon fa fa-trash"></i> Delete
-            </button></td>
-        </tr>
-      {%endfor%}
-      </table>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-lg-3 col-md-3">
-      <h3>UOM Deletion</h3>
-      <table  class="table  table-bordered table-hover">
-      {%for e in uom_list%}
-        <tr id="{{e.entityKey}}">
-          <td>{{e.name}} <button class="btn btn-minier pull-right" type="button" 
-          onclick="getRequest('','/superadmin/DeleteProductCategoryUOM?k={{e.entityKey}}&entity=PRODUCT_UOM','deleteCategoryCB')">
-              <i class="ace-icon fa fa-trash"></i> Delete
-            </button></td>
-        </tr>
-      {%endfor%}
-      </table>
-    </div>
+    
   </div>
-  
-   
   <div class="row mt-10" id="image-setup" style="display: none;">
     <div class="message-container">
       <div class="message-navbar clearfix">
@@ -231,45 +229,6 @@
             </div>
           </div>
         </form>
-        {#<form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
-          id="upload_product_design_form">
-          <input type="hidden" name="key" id="product_key_upload_design">
-          <p>Upload product design</p>
-          <div class="form-group">
-            <label class="col-sm-1">Title</label>
-            <div class="col-sm-9">
-              <select name="title"> {%for t in design_img_title%}
-                <option value="{{t}}">{{t}}</option> {%endfor%}
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-1">Top</label>
-            <div class="col-sm-9">
-              <input type="number" name="top" value="300">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-1">Left</label>
-            <div class="col-sm-9">
-              <input type="number" name="left" value="400">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-1"></label>
-            <div class="col-sm-9">
-              <input type="file" name="pic" id="design_file" accept=".png,.jpg,.png,.jpeg" />
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-md-offset-1 col-md-9">
-              <button class="btn btn-info btn-minier" type="button" onclick="uploadProductDesign()">
-                <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
-                  id="save_product_design_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
-              </button>
-            </div>
-          </div>
-        </form>#}
       </div>
       <div class="col-xs-12 user-profile">
         <div class="widget-box transparent">
@@ -286,56 +245,6 @@
           </div>
         </div>
       </div>
-      {#<div class="col-xs-12 user-profile">
-        <div class="widget-box transparent">
-          <div class="widget-header widget-header-small">
-            <h4 class="widget-title smaller">
-              <i class="ace-icon fa fa-check-square-o bigger-110"></i> Product Design
-            </h4>
-          </div>
-          <div class="widget-body">
-            <div class="widget-main">
-              <ul class="ace-thumbnails product-img-list" id="product_design_img_list">
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-12 user-profile" style="display: none;">
-        <div class="widget-box transparent">
-          <div class="widget-header widget-header-small">
-            <h4 class="widget-title smaller">
-              <i class="ace-icon fa fa-check-square-o bigger-110"></i> Product Background
-            </h4>
-          </div>
-          <div class="widget-body">
-            <div class="widget-main">
-              <ul class="ace-thumbnails product-img-list">
-                <li class="text-center" id="product_bg_img">No background image available</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <form class="form-horizontal message-form col-xs-12 col-sm-12 col-md-6 col-lg-6"
-          id="upload_product_bg_form" >
-          <input type="hidden" name="key" id="product_key_input">
-          <p>Upload Background Image</p>
-          <div class="form-group">
-            <div class="col-sm-9">
-              <input type="file" name="pic" id="bg_file" accept=".png,.jpg,.png,.jpeg" />
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-md-offset-1 col-md-9">
-              <button class="btn btn-info btn-minier" type="button"
-                onclick="uploadProductBackground()">
-                <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
-                  id="save_product_bg_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>#}
     </div>
   </div>
 </div>
@@ -394,50 +303,28 @@
     </form>
   </div>
 </div>
-<div id="editDesignSizeDailog" class="dialog-box">
+<div id="editCatUOMDailog" class="dialog-box">
   <div class="dailog-header">
-    <span>Edit Design Size</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
-      onclick="closeDialog('#editDesignSizeDailog')"></i>
+    <span>Edit title of Category/UOM</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#editCatUOMDailog')"></i>
   </div>
   <div class="dialog-content">
-    <form class="form-horizontal mx-w-99" role="form" id="editDesignSize_form">
-      <input type="hidden" name="key" id="design_key">
+    <form class="form-horizontal mx-w-99" role="form" id="edit_cat_uom_form">
+      <input type="hidden" name="k" id="edit_cat_uom_key">
       <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Width
-        </label>
+        <label class="col-sm-2 control-label no-padding-right" for="code"> Name </label>
         <div class="col-sm-9">
-          <input type="number" name="design_scallex" id="design_scallex" class="form-control input-custom" step="0.05" max="1">
+          <input type="text" name="name" id="e_name" class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Height
-        </label>
-        <div class="col-sm-9">
-          <input type="number" name="design_scalley" id="design_scalley" class="form-control input-custom" step="0.05" max="1">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Margin Top
-        </label>
-        <div class="col-sm-9">
-          <input type="number" name="design_top" id="design_top" class="form-control input-custom" min="0">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Margin Left
-        </label>
-        <div class="col-sm-9">
-          <input type="number" name="design_left" id="design_left" class="form-control input-custom"  min="0">
-        </div>
-      </div> 
-      <div class="form-group">
-        <div class="col-md-offset-3 col-md-9">
-          <button class="btn btn-info btn-minier" type="button" onclick="editDesignSizePost()">
-            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="editDesignSize_spin"
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="editNameCATUOM()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="edit_cat_uom_spin"
               class="fa fa-spinner fa-spin" style="display: none;"></i>
           </button>
           &nbsp; &nbsp; &nbsp;
-          <button class="btn btn-minier" type="button" onclick="closeDialog('#editDesignSizeDailog')">Close
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#editCatUOMDailog')">Close
           </button>
         </div>
       </div>
@@ -445,9 +332,12 @@
   </div>
 </div>
 
-
+<script src="/super/assets/js/jquery.dataTables.min.js"></script>
+<script src="/super/assets/js/jquery.dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
-  getRequest('', '/superadmin/GetEventList', 'setEventListForProductPage')
+  getRequest('', '/superadmin/GetEventList', 'setEventListForProductPage');
+  var productTable = $('#product_dynamic_table').DataTable();
+  //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
 </script>
 {#
 <script type="text/javascript">
@@ -460,59 +350,59 @@
           '<div class="form-group file-input-container"><div class="col-sm-7"></div></div>'); */
 </script>
 <script type="text/javascript">
- /*  $(function() {
-    var frames = [ "super/assets/test/rad_zoom_001.jpg",
-        "super/assets/test/rad_zoom_002.jpg",
-        "super/assets/test/rad_zoom_003.jpg",
-        "super/assets/test/rad_zoom_004.jpg",
-        "super/assets/test/rad_zoom_005.jpg",
-        "super/assets/test/rad_zoom_006.jpg",
-        "super/assets/test/rad_zoom_007.jpg",
-        "super/assets/test/rad_zoom_008.jpg",
-        "super/assets/test/rad_zoom_009.jpg",
-        "super/assets/test/rad_zoom_010.jpg",
-        "super/assets/test/rad_zoom_011.jpg",
-        "super/assets/test/rad_zoom_012.jpg",
-        "super/assets/test/rad_zoom_013.jpg",
-        "super/assets/test/rad_zoom_014.jpg",
-        "super/assets/test/rad_zoom_015.jpg",
-        "super/assets/test/rad_zoom_016.jpg",
-        "super/assets/test/rad_zoom_017.jpg",
-        "super/assets/test/rad_zoom_018.jpg",
-        "super/assets/test/rad_zoom_019.jpg",
-        "super/assets/test/rad_zoom_020.jpg",
-        "super/assets/test/rad_zoom_021.jpg",
-        "super/assets/test/rad_zoom_022.jpg",
-        "super/assets/test/rad_zoom_023.jpg",
-        "super/assets/test/rad_zoom_024.jpg",
-        "super/assets/test/rad_zoom_025.jpg",
-        "super/assets/test/rad_zoom_026.jpg",
-        "super/assets/test/rad_zoom_027.jpg",
-        "super/assets/test/rad_zoom_028.jpg",
-        "super/assets/test/rad_zoom_029.jpg",
-        "super/assets/test/rad_zoom_030.jpg",
-        "super/assets/test/rad_zoom_031.jpg",
-        "super/assets/test/rad_zoom_032.jpg",
-        "super/assets/test/rad_zoom_033.jpg",
-        "super/assets/test/rad_zoom_034.jpg" ];
+  /*  $(function() {
+     var frames = [ "super/assets/test/rad_zoom_001.jpg",
+         "super/assets/test/rad_zoom_002.jpg",
+         "super/assets/test/rad_zoom_003.jpg",
+         "super/assets/test/rad_zoom_004.jpg",
+         "super/assets/test/rad_zoom_005.jpg",
+         "super/assets/test/rad_zoom_006.jpg",
+         "super/assets/test/rad_zoom_007.jpg",
+         "super/assets/test/rad_zoom_008.jpg",
+         "super/assets/test/rad_zoom_009.jpg",
+         "super/assets/test/rad_zoom_010.jpg",
+         "super/assets/test/rad_zoom_011.jpg",
+         "super/assets/test/rad_zoom_012.jpg",
+         "super/assets/test/rad_zoom_013.jpg",
+         "super/assets/test/rad_zoom_014.jpg",
+         "super/assets/test/rad_zoom_015.jpg",
+         "super/assets/test/rad_zoom_016.jpg",
+         "super/assets/test/rad_zoom_017.jpg",
+         "super/assets/test/rad_zoom_018.jpg",
+         "super/assets/test/rad_zoom_019.jpg",
+         "super/assets/test/rad_zoom_020.jpg",
+         "super/assets/test/rad_zoom_021.jpg",
+         "super/assets/test/rad_zoom_022.jpg",
+         "super/assets/test/rad_zoom_023.jpg",
+         "super/assets/test/rad_zoom_024.jpg",
+         "super/assets/test/rad_zoom_025.jpg",
+         "super/assets/test/rad_zoom_026.jpg",
+         "super/assets/test/rad_zoom_027.jpg",
+         "super/assets/test/rad_zoom_028.jpg",
+         "super/assets/test/rad_zoom_029.jpg",
+         "super/assets/test/rad_zoom_030.jpg",
+         "super/assets/test/rad_zoom_031.jpg",
+         "super/assets/test/rad_zoom_032.jpg",
+         "super/assets/test/rad_zoom_033.jpg",
+         "super/assets/test/rad_zoom_034.jpg" ];
 
-    $("#360frames").spritespin({
-      width : 480,
-      height : 327,
-      frames : frames.length,
-      behavior : "drag", // "hold"
-      module : "360",
-      sense : -1,
-      source : frames,
-      animate : true,
-      loop : true,
-      frameWrap : true,
-      frameStep : 1,
-      frameTime : 60,
-      enableCanvas : true
-    });
+     $("#360frames").spritespin({
+       width : 480,
+       height : 327,
+       frames : frames.length,
+       behavior : "drag", // "hold"
+       module : "360",
+       sense : -1,
+       source : frames,
+       animate : true,
+       loop : true,
+       frameWrap : true,
+       frameStep : 1,
+       frameTime : 60,
+       enableCanvas : true
+     });
 
-  }); */
+   }); */
 </script>
 <script>
   /*  pannellum.viewer('product_img_list_li_1', {

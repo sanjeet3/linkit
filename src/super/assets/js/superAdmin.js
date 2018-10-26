@@ -403,75 +403,29 @@ function uploadProductDisignCallBack(r) {
 
 function getProductImageCallBack(r) {
   var arr = r.data.img_list;
-  var design = r.data.design_list;
   if (arr.length == 0) {
     $('#product_img_list').html(
         '<li class="text-center">No Pics Available</li>');
   } else {
     var h = [];
     for (var i = 0; i < arr.length; i++) {
-      h.push('<li><img alt="150x150" src="' + arr[i] + '"></li>');
+      h.push('<li id="'+ r.data.key+'_'+i);
+      h.push('"><span class="btn btn-danger btn-minier cursor" onclick="deleteProductImg(');
+      h.push("'");
+      h.push(r.data.key);
+      h.push("'");
+      h.push(',');
+      h.push("'");
+      h.push(i);
+      h.push("'");
+      h.push(')">Delete</span><img alt="150x150" src="');
+      h.push(arr[i]);
+      h.push('"></li>');
     }
 
     $('#product_img_list').html(h.join(''));
   }
 
-  if (design.length == 0) {
-    $('#product_design_img_list').html(
-        '<li class="text-center">No Design Available</li>');
-  } else {
-    var h = [];
-    for (var i = 0; i < design.length; i++) {
-      var d = design[i];
-      h.push('<li id="');
-      h.push(d.k);
-      h.push('"><img alt="'+d.title+'" src="');
-      h.push(d.image_url);
-      h.push('"><div class="tags"><span class="label label-warning arrowed-in">');
-      h.push(d.title);
-      h.push('</span></div><div class="tools">');
-      h.push('<a title="Edit size" href="javascript:editDesignSize(');
-      h.push("'");
-      h.push(d.k);
-      h.push("'");
-      h.push(',');
-      h.push("'");
-      h.push(d.scaleX);
-      h.push("'");
-      h.push(',');
-      h.push("'");
-      h.push(d.scaleY);
-      h.push("'");
-      h.push(',');
-      h.push("'");
-      h.push(d.top);
-      h.push("'");
-      h.push(',');
-      h.push("'");
-      h.push(d.left);
-      h.push("'");
-      h.push(')"><i class="ace-icon fa fa-pencil"></i></a><a title="Delete" href="javascript:deleteDesign(');
-      h.push("'");
-      h.push(d.k);
-      h.push("'");
-      h.push(')"><i class="ace-icon fa fa-times red"></i></a></div></li>');
-    }
-
-    $('#product_design_img_list').html(h.join(''));
-  }
-  
-  /*if(r.data.bg_uri){
-    var h = [ '<a href="javascript:deleteImg(' ] 
-    h.push("'")
-    h.push(r.data.key)
-    h.push("'")
-    h.push(')">Delete</a>') 
-    $('#product_bg_img').html('<img alt="150x150" src="' + r.data.bg_uri + '">');
-    $('#product_bg_img').append(h.join(''));
-  } else {
-    $('#product_bg_img').html('No background image available');
-    $('#upload_product_bg_form').show();
-  }*/
 
 };
 
@@ -935,7 +889,7 @@ function saveCategory(){
 function saveCategoryCB(r, fid){
   tr = ['<tr><td>'];
   tr.push(r.data.title);
-  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push('</td><td></td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
   tr.push("'");
   tr.push(r.data.key);
   tr.push("'");
@@ -972,7 +926,7 @@ function saveSubCategoryCB(r, fid){
   tr.push(r.data.title);
   tr.push('</td><td>');
   tr.push(r.data.category)
-  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push('</td><td></td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
   tr.push("'");
   tr.push(r.data.key);
   tr.push("'");
@@ -1210,7 +1164,7 @@ function saveBGCategory(){
 function saveBGCategoryCB(r, fid){
   tr = ['<tr><td>'];
   tr.push(r.data.title);
-  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push('</td><td></td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
   tr.push("'");
   tr.push(r.data.key);
   tr.push("'");
@@ -1262,7 +1216,7 @@ function saveBGSubCategoryCB(r, fid){
   tr.push(r.data.title);
   tr.push('</td><td>');
   tr.push(r.data.category)
-  tr.push('</td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
+  tr.push('</td><td></td><td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae(');
   tr.push("'");
   tr.push(r.data.key);
   tr.push("'");
@@ -1668,9 +1622,15 @@ function deleteCanvasPrevImgCB(r) {
   }
 };
 
+function createNewProductForm(){
+  showFormDom(); 
+  $('#product_form')[0].reset();
+}
+
 function getProductEdit(k){
   showFormDom();
   $('#loading_product_to_edit').show();
+  $('#product_form')[0].reset();
   $('#product_form').hide();
   getRequest('', '/superadmin/EditProducts?k='+k, 'getProductEditCB');
 };
@@ -1698,7 +1658,12 @@ function getProductEditCB(r){
       $(opt).prop('selected', false);
     }
   }   
-
+  if(d.status){
+    $('#stauts').val('true')
+  } else{
+    $('#stauts').val('');
+  }
+  
   $('#loading_product_to_edit, #save_btn').hide();
   $('#product_form, #edit_btn').show();
 };
@@ -1750,6 +1715,12 @@ function editProductCB(obj) {
   tr.push("'");
   tr.push(')">Edit</a></li></ul> </div></td> </tr>');
   $('#'+obj.data.key).html(tr.join(''));
+  if(obj.data.status){
+    $('#'+obj.data.key).removeClass('False');
+  } else {
+    $('#'+obj.data.key).addClass('False');
+  }
+  
 }
 
 function deleteDesignerImg(k,bk, bp){
@@ -2023,5 +1994,88 @@ function saveReadyDesign() {
   postRequest('ready_design_setup_form', '/superadmin/ReadyDesingSetup', null);
 } 
 
+function activeSuperAdminUser(k){
+    getRequest('', '/superadmin/ManageUserStatus?k='+k+'&status=true', 'deactiveSuperAdminUserCB');
+}
 
+function deactiveSuperAdminUser(k){
+  if(confirm('Suspend user account?')){
+    getRequest('', '/superadmin/ManageUserStatus?k='+k, 'deactiveSuperAdminUserCB')
+  }
+}
+
+function deactiveSuperAdminUserCB(r){
+  if(r.data.status){
+    h = ['<button class="btn btn-danger btn-minier pull-right" type="button" onclick="deactiveSuperAdminUser('];
+    h.push("'");
+    h.push(r.data.k);
+    h.push("'");
+    h.push(')">Suspend</button>');
+  } else{
+    h = ['<button class="btn btn-success btn-minier pull-right" type="button" onclick="activeSuperAdminUser('];
+    h.push("'");
+    h.push(r.data.k);
+    h.push("'");
+    h.push(')">Activate</button>'); 
+  }
+  $('#'+r.data.k+'_status').html(h.join(''));
+  
+}
+
+function deleteProductImg(k,i){
+  if(confirm('Delete product image?')){
+    getRequest('','/superadmin/DeleteProductIMG?k='+k+'&i='+i,'deleteProductImgCB')
+  }
+}
+function deleteProductImgCB(r){
+  $('#'+r.data.k+'_'+r.data.i).remove();
+}
+
+function searchProduct(){
+  $('#search_product_spin').show();
+  getRequest('product-search-form', '/superadmin/SearchProducts', 'searchProductCallBack');
+}
+
+function searchProductCallBack(r) {
+  $('#product_search_result_dom').html(r);
+  $('#search_product_spin').hide();
+  $('#product_dynamic_table').DataTable();
+}
+
+function showCAtUOMEdit(k,n){
+  $('#edit_cat_uom_key').val(k);
+  $('#e_name').val(n);
+  
+  openDialog('#editCatUOMDailog');
+}
+
+function editNameCATUOM(){
+  $('#edit_cat_uom_spin').show();
+  postRequest('edit_cat_uom_form', '/superadmin/EditProductsCATUOM',
+  'editNameCATUOMCB')  
+}
+function editNameCATUOMCB(r){
+  $('#edit_cat_uom_spin').hide();
+  closeDialog('#editCatUOMDailog');
+  $('#'+r.data.k).remove();
+}
+
+function showRenameDesignModuleCat(k, n) {
+  $('#rename_design_cat_key').val(k);
+  $('#e_name').val(n);
+  openDialog('#renameEnitity');
+};
+
+function renameDesignModuleCat() {
+  if(!$('#e_name')) return;
+  $('#renm_design_module_cat_name_spin').show();
+  postRequest('rename_design_module_cat_form', '/superadmin/CatSubCatRename', 'renameDesignModuleCatCB')
+  
+};
+
+function renameDesignModuleCatCB(r) {
+  $('#renm_design_module_cat_name_spin').hide();
+  closeDialog('#renameEnitity');
+  $('#'+r.data.k).find("td:eq(0)").html(r.data.name);
+};
 
