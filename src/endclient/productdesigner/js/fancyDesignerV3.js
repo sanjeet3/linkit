@@ -4609,9 +4609,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 var svgUrl = url;
-                /*if(params.svg){
+                if(params.svg){
                   svgUrl = '/Imgage?id='+ params.svg;
-                }*/
+                }
                 fabric.loadSVGFromURL(svgUrl, function(objects, options) {
                   if(objects){
                     var x=stage_width/options.width, y=stage_height/options.height;
@@ -9187,9 +9187,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
               if($(this).hasClass('fpd-mask-save')) {
                   _resizeCanvas();
-                  if($('#use_mask_broder').prop("checked") == false){
-                    clippingObject.set('strokeWidth', 0);
-                  }
+                  clippingObject.set('strokeWidth', 0);
                   fabricCanvas.clipTo = function(ctx) {
                     clippingObject.render(ctx);
                   };

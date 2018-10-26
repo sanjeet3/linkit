@@ -105,7 +105,7 @@
           </div>
           {%endfor%}
         </div> 
-        {#<div class="fpd-frame">
+        <div class="fpd-frame">
           {%for cat in frame_list%}
           <div class="fpd-category" title="{{cat.title}}" data-thumbnail="">
             {%if cat.key in sub_frame_dict%} {%set cat_list=sub_frame_dict[cat.key]%} {%for sc in
@@ -122,8 +122,8 @@
           </div>
           {%endfor%}
         </div> 
-        #}
-        <div class="fpd-frame">
+        
+        {#<div class="fpd-frame">
           <div class="fpd-category" title="Frame Mock" data-thumbnail="">
             <img src="/wp-content/3_box_frame.svg" title="3 Frame"
               data-parameters='{"svg": "/wp-content/3_box_frame.svg", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
@@ -136,7 +136,7 @@
             <img src="/wp-content/2_hexagon.svg" title="Tow Hexagone"
               data-parameters='{"svg": "/wp-content/2_hexagon.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           </div>
-        </div>
+        </div>#}
       </div> 
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
