@@ -1,0 +1,136 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Product</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="openDialog('#addCategoryDailog')">
+      <i class="ace-icon fa fa-plus"></i> Product Category
+    </button>
+    <button class="btn btn-success btn-minier" id="add_btn" onclick="openDialog('#addUOMDailog')">
+      <i class="ace-icon fa fa-plus"></i> Product UOM
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+    <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+      <h3>Category Edit & Deletion</h3>
+      <table class="table  table-bordered table-hover">
+        {%for e in category_list%}
+        <tr id="{{e.entityKey}}">
+          <td>{{e.name}}
+            <button class="btn btn-minier pull-right" type="button"
+              onclick="getRequest('','/superadmin/DeleteProductCategoryUOM?k={{e.entityKey}}&entity=PRODUCT_CATEGORY','deleteCategoryCB')">
+              <i class="ace-icon fa fa-trash"></i> Delete
+            </button>
+            <button class="btn btn-info btn-minier pull-right" type="button"
+              onclick="showCAtUOMEdit('{{e.entityKey}}','{{e.name}}')">Edit</button>
+          </td>
+        </tr>
+        {%endfor%}
+      </table>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-lg-6 col-md-6">
+      <h3>UOM Edit & Deletion</h3>
+      <table class="table  table-bordered table-hover">
+        {%for e in uom_list%}
+        <tr id="{{e.entityKey}}">
+          <td>{{e.name}}
+            <button class="btn btn-minier pull-right" type="button"
+              onclick="getRequest('','/superadmin/DeleteProductCategoryUOM?k={{e.entityKey}}&entity=PRODUCT_UOM','deleteCategoryCB')">
+              <i class="ace-icon fa fa-trash"></i> Delete
+            </button>
+            <button class="btn btn-info btn-minier pull-right" type="button"
+              onclick="showCAtUOMEdit('{{e.entityKey}}','{{e.name}}')">Edit</button>
+          </td>
+        </tr>
+        {%endfor%}
+      </table>
+    </div>
+  </div>
+</div>
+<div id="addCategoryDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add Category</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addCategoryDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_new_category_form">
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category
+        </label>
+        <div class="col-sm-9">
+          <input type="text" name="category" id="new_category" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveProductCategory()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="add_new_category_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addCategoryDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="addUOMDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add UOM</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addUOMDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_new_uom_form">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code"> UOM </label>
+        <div class="col-sm-9">
+          <input type="text" name="uom" id="new_uom" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveUOM()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="add_new_uom_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addUOMDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="editCatUOMDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Edit title of Category/UOM</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#editCatUOMDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="edit_cat_uom_form">
+      <input type="hidden" name="k" id="edit_cat_uom_key">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code"> Name </label>
+        <div class="col-sm-9">
+          <input type="text" name="name" id="e_name" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="editNameCATUOM()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="edit_cat_uom_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#editCatUOMDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

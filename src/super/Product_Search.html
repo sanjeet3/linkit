@@ -1,0 +1,42 @@
+<table class="table  table-bordered table-hover" id="product_dynamic_table">
+  <thead>
+    <tr>
+      <td>Code</td>
+      <td>Name</td>
+      <td>Category</td>
+      <td>UOM</td>
+      <td>Price</td>
+      <td>Size</td>
+      <td width="30%">Description</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody id="product_table_body">
+    {%for e in p_list%}
+    <tr id="{{e.entityKey}}" class="{{e.status}}">
+      <td>{{e.code}}</td>
+      <td>{{e.name}}</td>
+      <td>{{e.category}}</td>
+      <td>{{e.uom}}</td>
+      <td>{{e.price}}</td>
+      <td>{{e.size}}</td>
+      <td>{{e.description}}</td>
+      <td><div class="widget-toolbar no-border">
+          <button class="btn btn-xs bigger btn-yellow dropdown-toggle" data-toggle="dropdown"
+            aria-expanded="false">
+            <i class="ace-icon fa fa-cog"></i>
+          </button>
+          <ul
+            class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+            <li><a href="javascript:imgSetupProduct('{{e.entityKey}}')">Setup Images</a></li>
+            <li><a href="javascript:getProductEdit('{{e.entityKey}}')">Edit</a></li>
+          </ul>
+        </div></td>
+    </tr>
+    {%else%}
+    <tr>
+      <td colspan="10">No Product found</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>

@@ -911,55 +911,6 @@ var FPDUtil =  {
      * @return {jQuery} Returns a jQuery object containing the modal.
      * @static
      */
-    openFrameModal : function(htmlMessage, fullscreen, type, $container) {
-
-        type = type === undefined ? '' : type;
-        $container = $container === undefined ? $('body') : $container;
-
-        if($container.is('body')) {
-            $container.addClass('fpd-overflow-hidden')
-        }
-
-        var fullscreenCSS = fullscreen ? 'fpd-fullscreen' : '';
-            html = '<div class="fpd-modal-internal fpd-modal-overlay"><div class="fpd-modal-wrapper fpd-shadow-3" style="padding: 0px 4px 0px 4px !important;"><div class="fpd-modal-close" style="display:none;"><span class="fpd-icon-close"></span></div><div class="fpd-modal-content" style="margin-top: 0px !important;"></div></div></div>';
-
-        if($('.fpd-modal-internal').length === 0) {
-
-            $container.append(html)
-            .children('.fpd-modal-internal:first').click(function(evt) {
-
-                $target = $(evt.target);
-                if($target.hasClass('fpd-modal-overlay')) {
-
-                    $target.find('.fpd-modal-close').click();
-
-                }
-
-            });
-
-        }
-
-        if(type === 'prompt') {
-            htmlMessage = '<input type="text" placeholder="'+htmlMessage+'" /><span class="fpd-btn"></span>';
-        }
-        else if(type === 'confirm') {
-            htmlMessage = '<div class="fpd-confirm-msg">'+htmlMessage+'</div><span class="fpd-btn fpd-confirm"></span>';
-        }
-
-        $container.children('.fpd-modal-internal').attr('data-type', type).removeClass('fpd-fullscreen').addClass(fullscreenCSS)
-        .fadeIn(300).find('.fpd-modal-content').html(htmlMessage);
-
-        return $container.children('.fpd-modal-internal');
-
-    },
-    /**
-     * Opens the modal box with an own message.
-     *
-     * @method showModal
-     * @param {String} message The message you would like to display in the modal box.
-     * @return {jQuery} Returns a jQuery object containing the modal.
-     * @static
-     */
     showModal : function(htmlMessage, fullscreen, type, $container) {
 
         type = type === undefined ? '' : type;
@@ -4171,18 +4122,6 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       return frameBox;
     }
     
-    var dropNearSVGClipToBase = function(element){
-      _clipElement(element);
-      var frameBox = instance.getElementByID(element.svgid);
-      element.svgFrameIndex = frameBox.svgIndex;
-      element.svgFrameUrl = frameBox.svg;
-      element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.getScaledWidth()*0.5, frameBox.aCoords.tl.y+frameBox.getScaledHeight()*0.5), 'center', 'center');
-      if(frameBox){
-        instance.removeElement(frameBox); 
-      }
-      
-    }
-    
     //defines the clipping area from svg
     var _setSVGClip = function(element) {
       var frameBox = instance.getElementByID(element.svgid);
@@ -4190,6 +4129,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
           instance.deselectElement();
           frameBox = setFrameLockMode(frameBox, true, false, 1);
         }
+        
         element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.getScaledWidth()*0.5, frameBox.aCoords.tl.y+frameBox.getScaledHeight()*0.5), 'center', 'center');
         frameBox.seletedImg=element.id;
         var topLeftPoint = frameBox.getPointByOrigin('left', 'top');
@@ -4541,24 +4481,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         }));
 
                     }
-                    if(fabricImage.svgFrameUrl){
-                      //open customizeSVGMaskEditor()
-                      var advanceEditorHtml = $(instance.fpdInstance.translatedUI).children('#advance_editor_frame_stage').clone(),
-                      source = fabricImage.source,
-                      newModal = FPDUtil.openFrameModal(advanceEditorHtml, true),
-                      imageEditor = new FrameImageEditor(
-                        newModal.find('.fpd-image-editor-container'),
-                        fabricImage,
-                        instance.fpdInstance,
-                        fabricImage.svgFrameUrl,
-                        fabricImage.svgFrameIndex);
 
-                      imageEditor.loadImage(source);
-                      
-                    } 
-                    
-                    
-                    
                     if(!fabricImage._isInitial) {
                         _setUndoRedo({
                             element: fabricImage,
@@ -4626,9 +4549,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         };
                       fabricParams.id=timeStamp;
                       fabricParams.title=timeStamp;
-                      var svgGroup = new fabric.Group([objects[i]], opt);
-                      svgGroup.svgIndex = i;
-                      //svgGroup.svgUrl = svgUrl;
+                      var svgGroup = new fabric.Group([objects[i]], opt); 
                       fabricParams.scaleX = x;
                       fabricParams.scaleY = y;
                       _fabricImageLoaded(svgGroup, fabricParams, true,{})
@@ -4823,12 +4744,12 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
             parameters: instance.getElementJSON(element),
             interaction: 'remove'
         });
-        /*if(element.id==instance.svgModel){//if(instance.svgModel && element.id==instance.svgModel.id){
+        if(element.id==instance.svgModel){//if(instance.svgModel && element.id==instance.svgModel.id){
           instance.svgModel = null;
           instance.svgModelReady=false;
           instance.svgModelSigle=false;
           instance.svgModelIndex=-1;
-        }*/
+        }
         /*if(element.svgid!=undefined){
           var frameBox = instance.getElementByID(element.svgid);
           if(frameBox){
@@ -5158,8 +5079,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         
         if(element.minDPI != undefined && instance.svgModel){
           element.svgid = instance.svgModel;
-          dropNearSVGClipToBase(element);
-          //_setSVGClip(element);
+          _setSVGClip(element);
         } else if((parameters.boundingBox && parameters.boundingBoxMode === 'clipping') || parameters.hasUploadZone) {
           //clip element
             _clipElement(element);
@@ -9082,309 +9002,8 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
 
 };
 
-var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrameUrl, svgFrameIndex) {
 
-  'use strict';
 
-  var options = fpdInstance.mainOptions.imageEditorSettings;
-
-  var borderColor = '#2ecc71',
-      instance = this,
-      canvasWidth = 0,
-      canvasHeight = 0,
-      $canvasContainer = $container.children('.fpd-image-editor-main'),
-      fabricCanvas,
-      svgGroup,
-      maskPlacedFlag = false,
-      customMaskEnabled = false,
-      clippingObject = null,
-      fabricImage,
-      fabricMaskOptions = {
-          opacity: 0.3,
-          cornerColor: borderColor,
-          borderColor: borderColor,
-          borderScaleFactor: 3,
-          borderDashArray: [5,5],
-          hasRotatingPoint: true,
-          centeredScaling: true,
-          objectCaching: false,
-          __editorMode: true,
-          __imageEditor: true
-      };
-
-  var _initialize = function() {
-
-      targetElement.originSource = targetElement.originSource ? targetElement.originSource : targetElement.source;
-
-      instance.responsiveScale = 1;
-
-      $container.addClass('fpd-container')
-
-      $canvasContainer.append('<canvas>');
-
-      var canvasOptions = {
-          containerClass: 'fpd-image-editor-canvas-wrapper',
-          selection: false,
-          hoverCursor: 'pointer',
-          controlsAboveOverlay: true,
-          centeredScaling: true,
-          allowTouchScrolling: true,
-          preserveObjectStacking: true,
-          enableRetinaScaling: false
-      };
-
-      fabricCanvas = new fabric.Canvas($canvasContainer.children('canvas:last').get(0), canvasOptions);
-
-      var startCoords = {},
-          drawClipping = false;
-
-
-      //mask gets selected
-      $container.on('click', '.fpd-mask-selection > span', function() {
-
-          if(!fabricImage) {
-              return false;
-          }
-
-          var $this = $(this),
-              mask = $this.data('mask');
-
-          fabricCanvas.discardActiveObject();
-          fabricImage.evented = false;
-
-          fabricCanvas.clipTo = null;
-          clippingObject = null;
-
-          if(mask === 'custom-rect') {
-              customMaskEnabled = true;
-          }
-          else {
-
-              
-          }
-
-          fabricCanvas.renderAll();
-          $container.find('.fpd-content-mask').addClass('fpd-show-secondary');
-
-
-
-      });
-      
-      
-      //mask: cancel, save
-      $container.on('click', '.fpd-mask-cancel, .fpd-mask-save', function() {
-
-          if(!fabricImage) {
-              return false;
-          }
-
-          fabricImage.evented = true;
-          customMaskEnabled = false;
-
-          fabricCanvas.discardActiveObject();
-
-          if(clippingObject) {
-
-              if($(this).hasClass('fpd-mask-save')) {
-                  _resizeCanvas();
-                  if($('#use_mask_broder').prop("checked") == false){
-                    clippingObject.set('strokeWidth', 0);
-                  }
-                  fabricCanvas.clipTo = function(ctx) {
-                    clippingObject.render(ctx);
-                  };
-
-              } 
-
-              fabricCanvas.remove(clippingObject);
-
-          }
-          $container.find('.fpd-content-mask').removeClass('fpd-show-secondary');
-          $('.fpd-action-save').show(); 
-
-      });
-
-
-      //--- ACTIONS
-
-      $container.on('click', '.fpd-action-restore', function() {
-
-          if(!fabricImage) {
-              return false;
-          }
-
-          fabricImage.source = targetElement.originSource;
-          fabricImage.setSrc(targetElement.originSource, function() {
-
-              fabricImage.setCoords();
-              fabricCanvas.renderAll();
-
-          });
-
-          instance.reset();
-
-      });
-
-      $container.on('click', '.fpd-action-save', function() {
-
-          var dataURL = instance.getImage();
-
-          targetElement.source = dataURL;
-          targetElement.setSrc(dataURL, function() {
-
-              targetElement.setCoords();
-              targetElement.canvas.renderAll();
-
-          });
-
-          $container.parent().siblings('.fpd-modal-close').click();
-
-      });
-
-      FPDUtil.updateTooltip($container);
-
-  };
-
-  
-  var _resizeCanvas = function () {
-
-      var $canvasWrapper = $container.children('.fpd-image-editor-main');
-
-      instance.responsiveScale = $canvasWrapper.outerWidth() < canvasWidth ? $canvasWrapper.outerWidth() / canvasWidth : 1;
-      instance.responsiveScale = parseFloat(Number(instance.responsiveScale.toFixed(7)));
-      instance.responsiveScale = instance.responsiveScale > 1 ? 1 : instance.responsiveScale;
-
-      if(clippingObject) {
-          clippingObject.left = clippingObject.left * instance.responsiveScale;
-          clippingObject.top = clippingObject.top * instance.responsiveScale;
-          clippingObject.scaleX = clippingObject.scaleX * instance.responsiveScale;
-          clippingObject.scaleY = clippingObject.scaleY * instance.responsiveScale;
-          clippingObject.setCoords();
-      }
-
-      fabricCanvas
-      .setDimensions({
-          width: $canvasWrapper.width(),
-          height: canvasHeight * instance.responsiveScale
-      })
-      .setZoom(instance.responsiveScale)
-      .calcOffset()
-      .renderAll();
-
-  }; 
-
-  this.loadImage = function(imageURL) {
-
-      this.reset();
-
-      new fabric.Image.fromURL(imageURL, function(fabricImg) {
-
-          fabricImage = fabricImg;
-          canvasWidth = fabricImg.width;
-          canvasHeight = fabricImg.height;
-
-          fabricImage.setOptions({
-              cornerColor: borderColor,
-              borderColor: borderColor,
-              __editorMode: true,
-              __imageEditor: true
-          });
-
-          fabricCanvas.setDimensions({
-              width: canvasWidth,
-              height: canvasHeight,
-          });
-
-          fabricCanvas.add(fabricImg);
-
-          _resizeCanvas();
-          fabric.loadSVGFromURL(svgFrameUrl, function(objects, options) {
-            var newSVGObj = objects[svgFrameIndex];
-            options.width = newSVGObj.width
-            options.height = newSVGObj.height;
-            //if objects is null, svg is loaded from external server with cors disabled
-            svgGroup = objects ? fabric.util.groupSVGElements([newSVGObj], options) : null;
-
-            fabricCanvas.add(svgGroup);
-
-            svgGroup.setOptions($.extend({}, fabricMaskOptions, {opacity: 1, fill: "rgba(0,0,0,0)"}));
-            if(fabricCanvas.width > fabricCanvas.height) {
-                svgGroup.scaleToHeight((fabricCanvas.height - 180) / instance.responsiveScale);
-            }
-            else {
-                svgGroup.scaleToWidth((fabricCanvas.width - 180) / instance.responsiveScale);
-            } 
-            if(fabric.version === '1.6.7') { //Fabric 1.6.7
-                svgGroup.getObjects()[0].set('stroke', borderColor).set('strokeWidth', 3 / svgGroup.scaleX);
-            }
-            else {
-                svgGroup.set('stroke', borderColor).set('strokeWidth', 3 / svgGroup.scaleX);
-            }
-
-            clippingObject = svgGroup;
-            _resizeCanvas();
-            
-            svgGroup.left = 0;
-            svgGroup.top = 0;
-            svgGroup.setPositionByOrigin(new fabric.Point(canvasWidth * 0.5, canvasHeight * 0.5), 'center', 'center');
-
-            svgGroup.setCoords();
-            fabricCanvas.renderAll();
-
-        });
-
-      });
-
-  };
-
-  this.getImage = function() {
-
-      fabricCanvas.setDimensions({width: canvasWidth, height: canvasHeight}).setZoom(1);
-
-      if(clippingObject) {
-          clippingObject.left = clippingObject.left / instance.responsiveScale;
-          clippingObject.top = clippingObject.top / instance.responsiveScale;
-          clippingObject.scaleX = clippingObject.scaleX / instance.responsiveScale;
-          clippingObject.scaleY = clippingObject.scaleY / instance.responsiveScale;
-          clippingObject.setCoords();
-      }
-
-      fabricCanvas.renderAll();
-
-      var dataURL = fabricCanvas.toDataURL({});
-
-      _resizeCanvas();
-
-      return dataURL;
-
-  };
-
-  this.reset = function() {
-
-      $container.find('.fpd-switch-container').removeClass('fpd-enabled');
-
-      fabricCanvas.clipTo = null;
-      clippingObject = null;
-      fabricCanvas.discardActiveObject();
-
-      if(fabricImage) {
-          fabricImage.setOptions({
-              scaleX: 1,
-              scaleY: 1,
-              angle: 0,
-              left: 0,
-              top: 0
-          })
-          fabricImage.filters = [];
-
-          //_applyFilterRender();
-      }
-
-  };
-
-  _initialize();
-
-};
 
 
 var DesignsModule = function(fpdInstance, $module) {
@@ -12772,12 +12391,12 @@ var FancyProductDesigner = function(elem, opts) {
                        $('.fpd-element-toolbar').show();
                      }
                   
-                     /*if(element.svgid!=undefined && !element.startPanning){
+                     if(element.svgid!=undefined && !element.startPanning){
                        $('#set_frame_mask_dom').show();
                        $('#pic_id').val(element.id);
                      } else {
                        $('#set_frame_mask_dom').hide();
-                     }*/
+                     }
                     //upload zone is selected
                     if(element.uploadZone && !instance.mainOptions.editorMode) {
 
@@ -13996,7 +13615,7 @@ var FancyProductDesigner = function(elem, opts) {
 
         }, instance.mainOptions.fabricCanvasOptions);
 
-        viewInstance.fpdInstance = instance;
+
         viewInstance.stage.on({
 
             'object:scaling': function(opts) {
