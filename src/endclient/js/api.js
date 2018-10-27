@@ -447,3 +447,16 @@ function closeModal(){
 $('#modal-background').fadeOut();
 $('#product_action_caontainer').show();
 }
+
+function downloadFile(file_path){
+  var a = document.createElement('A');
+  a.href = '/DownloadFile?bucket_path='+file_path; 
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a); 
+}
+
+function playYouTube(h, e){
+  $(e).remove();
+  $('#vedio_output').html(h);
+}

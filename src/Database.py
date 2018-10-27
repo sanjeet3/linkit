@@ -212,6 +212,23 @@ class Product(EndpointsModel):
   def get_latest_product_list(cls, limit=5):
     return cls.query().order(-cls.created_on).fetch(limit)
 
+class ProductTutorial(EndpointsModel):
+  ''' Product tutorial datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  product = ndb.KeyProperty(Product)
+  video_link = ndb.TextProperty(default='')
+  pdf_bucket_path = ndb.StringProperty(default='')
+  pdf_bucket_key = ndb.StringProperty(default='')
+  
+  @classmethod
+  def get_tutorial(cls, product_key):
+    e = cls.query(cls.product==product_key).get()
+    if not e:
+      e = ProductTutorial()
+      e.product = product_key
+      e = e.put().get()    
+    return e
+  
 class ProductDesign(EndpointsModel):
   ''' Product datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)

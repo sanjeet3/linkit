@@ -2079,3 +2079,68 @@ function renameDesignModuleCatCB(r) {
   $('#'+r.data.k).find("td:eq(0)").html(r.data.name);
 };
 
+
+function getProductTutorial(k, p){
+  $('#productTutorialDailog_header').html(p);
+  $('#product_tutorial_loading').show();
+  $('#productTutorialDailog_form').hide();
+  openDialog('#productTutorialDailog');
+  getRequest('', '/superadmin/ProductTutorialObj?k='+k, 'getProductTutorialCB');
+};
+
+function getProductTutorialCB(r){
+  $('#productTutorial_key').val(r.data.k);
+  $('#video_link').val(r.data.video_link); 
+  $('#video_prev').html(r.data.video_link);
+  if(r.data.pdf_bucket_path){
+    $('#pdf_input_file_dom').hide();
+    var h = ['<div class="col-sm-12 text-center"><i class="fa fa-file-pdf-o fa-3x cursor" onclick="downloadBucketFile('];
+    h.push("'")  
+    h.push(r.data.pdf_bucket_path)  
+    h.push("'")  
+    h.push(')"> Download pdf</i><br><button type="button" class="btn btn-danger btn-minier mt-10" onclick="deleteTutorialPdf(')
+    h.push("'")
+    h.push(r.data.k)
+    h.push("'")
+    h.push(',')
+    h.push("'")
+    h.push(r.data.pdf_bucket_key)
+    h.push("'")
+    h.push(')">Delete</button></div>')
+    $('#pdf_preview_dom').show().html(h.join(''));
+    
+  } else {
+    $('#pdf_input_file_dom').show();
+    $('#pdf_preview_dom').hide().html('');
+  }
+  $('#product_tutorial_loading').hide();
+  $('#productTutorialDailog_form').show();
+};
+
+function uploadProductTutorialCB(r){
+  closeDialog('#productTutorialDailog'); 
+}
+
+function showEmbededdVedio(video_link){
+  $('#video_prev').html(video_link);
+}
+
+function downloadBucketFile(file_path){
+  var a = document.createElement('A');
+  a.href = '/DownloadFile?bucket_path='+file_path; 
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a); 
+}
+
+function deleteTutorialPdf(k, bk){
+  var uri = '/DeleteBucketFile?k='+k+'&bucket_key='+bk+'&selection=TUTORIAL_PDF';
+  getRequest('',uri, 'deleteTutorialPdfCB');
+
+}
+
+
+function deleteTutorialPdfCB(k,bk){
+  $('#pdf_input_file_dom').show();
+  $('#pdf_preview_dom').hide().html('');
+}

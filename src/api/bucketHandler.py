@@ -15,6 +15,13 @@ from google.appengine.ext import blobstore
 from google.appengine.api import images
 from google.appengine.api import search
 
+def read_file_from_bucket(bucket_path):
+  gcs_file = gcs.open(bucket_path)
+  contents = gcs_file.read()
+  gcs_file.close()
+  return contents  
+         
+
 def upload_image_to_bucket(file_obj, bucket_path): 
   """upload file to bucket.
 

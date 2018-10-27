@@ -723,6 +723,7 @@ PRODUCTPROMOBG='PRODUCTPROMOBG'
 CANVASIMG='CANVASIMG'
 CANVASPREV='CANVASPREV'
 DESINGERUPLOAD='DESINGERUPLOAD'
+TUTORIAL_PDF='TUTORIAL_PDF'
 class DeleteBucketFile(ActionSupport): 
   def get(self):
     self.status = ERROR  
@@ -741,9 +742,19 @@ class DeleteBucketFile(ActionSupport):
     elif selection==CANVASPREV:
       self.product_preview_canvas()
     elif selection==DESINGERUPLOAD:
-      self.remove_designer_upload()                  
+      self.remove_designer_upload()
+    elif selection==TUTORIAL_PDF:
+      self.remove_tutorial_pdf()                      
     return json_response(self.response, {'k': k, 'i': self.index}, self.status, self.msg)
   
+  def remove_tutorial_pdf(self):
+    if delete_bucket_file(self.bucket_key):
+      self.e.pdf_bucket_key=''    
+      self.e.pdf_bucket_path = ''
+      self.e.put()
+      self.status=SUCCESS
+      self.msg='File removed'
+      
   def remove_designer_upload(self):
     bucket_path = self.request.get('bucket_path')  
     if delete_bucket_file(self.bucket_key):
@@ -755,14 +766,14 @@ class DeleteBucketFile(ActionSupport):
         self.e.bucket_path.pop(i)
         self.e.put()
         self.status=SUCCESS
-        self.msg='Image file removed'
+        self.msg='File removed'
       except Exception, msg:
         logging.error(msg)
              
   def product_promo(self):
     if delete_bucket_file(self.bucket_key):
       self.status=SUCCESS
-      self.msg='Image file removed'
+      self.msg='File removed'
       self.e.promo_img=''           
       self.e.promo_buckt_key=''           
       self.e.put()
@@ -770,7 +781,7 @@ class DeleteBucketFile(ActionSupport):
   def product_promo_bg(self):
     if delete_bucket_file(self.bucket_key):
       self.status=SUCCESS
-      self.msg='Image file removed'
+      self.msg='File removed'
       self.e.promo_product_bg_img=''           
       self.e.promo_product_bg_key=''           
       self.e.put()
@@ -778,7 +789,7 @@ class DeleteBucketFile(ActionSupport):
   def product_cavan(self):
     if delete_bucket_file(self.bucket_key):
       self.status=SUCCESS
-      self.msg='Image file removed'
+      self.msg='File removed'
       self.e.img_url=''           
       self.e.bucket_key=''           
       self.e.bucket_path=''           
@@ -788,7 +799,7 @@ class DeleteBucketFile(ActionSupport):
   def product_preview_canvas(self):
     if delete_bucket_file(self.bucket_key):
       self.status=SUCCESS
-      self.msg='Image file removed'
+      self.msg='File removed'
       self.e.preview_url=''           
       self.e.preview_key=''           
       self.e.put()   
@@ -841,8 +852,7 @@ class DeleteCategory(ActionSupport):
       self.backgound_deletion()
             
     return json_response(self.response, {'k': k}, self.status, self.msg)
-  def delete_product_category(self):
-    Product.get_product_list_by_categgory(category_key).count()  
+
   def clipart_deletion(self):
     e_query = DesignSubCategory.query_by_category(self.e.key)
     if e_query.count()!=0:

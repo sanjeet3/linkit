@@ -11,7 +11,7 @@ from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
-from src.Database import Client, MailUploads, MailTemplateModel
+from src.Database import Client, MailUploads, MailTemplateModel, ProductTutorial
 from src.Database import Product, StaticImage
 from src.Database import ProductDesign
 from src.Database import ProductCategory
@@ -35,6 +35,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext import blobstore
 from google.appengine.api import images
 from src.Actions.taskqueue import mail_sender
+import time
 
 design_img_title = config.get('design_img_title')
 
@@ -80,6 +81,30 @@ class Products(ActionSupport):
              }
     template = self.get_jinja2_env.get_template('super/Products.html')    
     self.response.out.write(template.render(context))
+
+class ProductTutorialObj(ActionSupport):
+  def get(self):
+    product_key = ndb.Key(urlsafe=self.request.get('k'))
+    e = ProductTutorial.get_tutorial(product_key)  
+    data_dict = {'video_link': e.video_link,
+                 'pdf_bucket_path': e.pdf_bucket_path,
+                 'pdf_bucket_key': e.pdf_bucket_key,
+                 'k': e.entityKey}
+
+    return json_response(self.response, data_dict, SUCCESS, '')
+
+  def post(self): 
+    tutorial = ndb.Key(urlsafe=self.request.get('k')).get()
+    video_link = self.request.get('video_link')
+    pdf = self.request.get('pdf')
+    tutorial.video_link = video_link
+    if not tutorial.pdf_bucket_key and pdf: 
+      bucket_path = '/designer_textptrn/tutorial/%s.pdf' %(str(time.time()))
+      upload_file(pdf, bucket_path)  
+      tutorial.pdf_bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      tutorial.pdf_bucket_path = bucket_path
+    tutorial.put()
+    return json_response(self.response, {}, SUCCESS, 'Tutorial updated')
 
 class GetEventList(ActionSupport):
   def get(self):

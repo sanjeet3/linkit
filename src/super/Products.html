@@ -23,8 +23,8 @@
           <option value="{{s.entityKey}}">{{s.name}}</option> {%endfor%}
         </select>
         <button type="button" onclick="searchProduct()" class="btn btn-info btn-mini">
-          <i class="ace-icon fa fa-search bigger-110"></i>Search
-          <i id="search_product_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
+          <i class="ace-icon fa fa-search bigger-110"></i>Search <i id="search_product_spin"
+            class="fa fa-spinner fa-spin" style="display: none;"></i>
         </button>
       </form>
     </div>
@@ -61,6 +61,7 @@
                   class="dropdown-menu dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
                   <li><a href="javascript:imgSetupProduct('{{e.entityKey}}')">Setup Images</a></li>
                   <li><a href="javascript:getProductEdit('{{e.entityKey}}')">Edit</a></li>
+                  <li><a href="javascript:getProductTutorial('{{e.entityKey}}','{{e.code}}-{{e.name}}')">Tutorial</a></li>
                 </ul>
               </div></td>
           </tr>
@@ -189,7 +190,6 @@
         <i class="fa fa-spinner fa-spin"></i> Loading Product details...
       </h3>
     </div>
-    
   </div>
   <div class="row mt-10" id="image-setup" style="display: none;">
     <div class="message-container">
@@ -331,7 +331,49 @@
     </form>
   </div>
 </div>
-
+<div id="productTutorialDailog" class="dialog-box dialog-vw-50">
+  <div class="dailog-header">
+    <span>Product Tutorial Setup</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#productTutorialDailog')"></i>
+  </div>
+  <div class="dialog-content">
+     <p id="productTutorialDailog_header"></p>
+    <div class="text-center" id="product_tutorial_loading">
+     <i class="fa fa-spinner fa-spin fa-3x">Loading...</i>
+    </div>
+    <form class="form-horizontal mx-w-99" role="form" id="productTutorialDailog_form">
+      <input type="hidden" name="k" id="productTutorial_key">
+      <div class="form-group">
+        <div class="col-xs-12" id="video_prev">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="video_link"> Video Link </label>
+        <div class="col-sm-9">
+          <textarea onchange="showEmbededdVedio(this.value)"  name="video_link" id="video_link" class="form-control input-custom"></textarea>
+        </div>
+      </div>
+      <div class="form-group" id="pdf_input_file_dom">
+        <label class="col-sm-2 control-label no-padding-right" for="pdf"> Upload Pdf file </label>
+        <div class="col-sm-9">
+          <input type="file" name="pdf" id="tutorial_file" accept=".pdf" />
+        </div>
+      </div>
+      <div class="form-group" id="pdf_preview_dom">
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="postFormWithFile('productTutorialDailog_form', '/superadmin/ProductTutorialObj', 'uploadProductTutorialCB');">
+            <i class="ace-icon fa fa-check bigger-110"></i> Update 
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button"
+            onclick="closeDialog('#productTutorialDailog')">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 <script src="/super/assets/js/jquery.dataTables.min.js"></script>
 <script src="/super/assets/js/jquery.dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
