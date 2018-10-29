@@ -460,3 +460,10 @@ function playYouTube(h, e){
   $(e).remove();
   $('#vedio_output').html(h);
 }
+function youtubeModal(h){ 
+  $('#tutorialModal').show();
+}
+function youtubeModalHide(){ 
+  $('#tutorialModal').hide();
+}
+

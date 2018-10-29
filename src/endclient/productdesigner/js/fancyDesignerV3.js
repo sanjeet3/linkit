@@ -5,7 +5,7 @@ let lastClientX;
 let lastClientY;
 var baseWidth=0; var baseHeight = 0;
 var yourDesigner=null;
-var designJson = [], loadReadyDesign=false, loadFPDUrl='', loadFPCCB='';
+var designJson = [], loadReadyDesign=false, loadFPDUrl='', loadFPCCB='', windowHeight=780;
 
 if(fabric.version === '1.6.7') {
 
@@ -8477,6 +8477,11 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
         instance = this,
         canvasWidth = 0,
         canvasHeight = 0,
+        canvasWidthCache = 0,
+        canvasHeightCache = 0,
+        allotHeight=0,
+        desitnationHeight=targetElement.getScaledHeight(),
+        desitnationWidth=targetElement.getScaledWidth(),
         $canvasContainer = $container.children('.fpd-image-editor-main'),
         fabricCanvas,
         svgGroup,
@@ -8701,9 +8706,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
           if(svgGroup && maskPlacedFlag){
             var strokeWidth = $('#mask_border_size').val();
             strokeWidth = strokeWidth?strokeWidth:3;
-            strokeWidth = strokeWidth ? strokeWidth/svgGroup.scaleX : 3/svgGroup.scaleX;
-            console.log(strokeWidth);
-            console.log(useBorder);
+            strokeWidth = strokeWidth ? strokeWidth/svgGroup.scaleX : 3/svgGroup.scaleX; 
             if(useBorder){
               svgGroup.set('strokeWidth', strokeWidth);
             }else{
@@ -8738,13 +8741,29 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
                     fabricCanvas.clipTo = function(ctx) {
                       clippingObject.render(ctx);
                     };
+                    canvasWidth = clippingObject.width*clippingObject.scaleX;
+                    canvasWidth = canvasWidth+5;
+                    canvasHeight = clippingObject.height*clippingObject.scaleY;
+                    canvasHeight = canvasHeight+5;
+                    fabricImage.left = fabricImage.left-clippingObject.left;
+                    fabricImage.top = fabricImage.top-clippingObject.top;
+                    clippingObject.top=0;
+                    clippingObject.left=0;
+                    fabricCanvas.remove(clippingObject);
+                    fabricCanvas
+                            .setDimensions({
+                                width: canvasWidth,
+                                height: canvasHeight * instance.responsiveScale
+                            })
+                            .setZoom(instance.responsiveScale)
+                            .calcOffset()
+                            .renderAll();
 
                 } else {
                   maskPlacedFlag=false;
                 }
-
-                fabricCanvas.remove(clippingObject);
-
+ 
+                
             }
 
             $container.find('.fpd-content-mask').removeClass('fpd-show-secondary');
@@ -8897,7 +8916,18 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
 
             fabricImage.source = targetElement.originSource;
             fabricImage.setSrc(targetElement.originSource, function() {
-
+                fabricCanvas.setDimensions({
+                  width: canvasWidthCache,
+                  height: canvasHeightCache * instance.responsiveScale
+                })
+                canvasWidth = canvasWidthCache;
+                canvasHeight = canvasHeightCache;
+                var scaleXY = 1;
+                if(allotHeight < fabricImage.height){
+                  scaleXY = allotHeight/fabricImage.height; 
+                }
+                fabricImage.scaleX=scaleXY;
+                fabricImage.scaleY=scaleXY; 
                 fabricImage.setCoords();
                 fabricCanvas.renderAll();
 
@@ -8912,8 +8942,12 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             var dataURL = instance.getImage();
 
             targetElement.source = dataURL;
-            targetElement.setSrc(dataURL, function() {
-
+            console.log(desitnationWidth)
+            targetElement.setSrc(dataURL, function() { 
+                var scaleX=desitnationHeight/targetElement.height;
+                //scaleY=desitnationWidth/targetElement.width;
+                targetElement.scaleX=scaleX;
+                targetElement.scaleY=scaleX;
                 targetElement.setCoords();
                 targetElement.canvas.renderAll();
 
@@ -8980,7 +9014,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
 
         fabricCanvas
         .setDimensions({
-            width: $canvasWrapper.width(),
+            width: canvasWidth,
             height: canvasHeight * instance.responsiveScale
         })
         .setZoom(instance.responsiveScale)
@@ -9008,14 +9042,28 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
         this.reset();
 
         new fabric.Image.fromURL(imageURL, function(fabricImg) {
-
+            var scaleXY=1;
+            allotHeight = window.innerHeight-130;
             fabricImage = fabricImg;
-            canvasWidth = fabricImg.width;
-            canvasHeight = fabricImg.height;
-
+            if(allotHeight<fabricImg.height){
+              scaleXY = allotHeight/fabricImg.height;
+              canvasWidth = fabricImg.width*scaleXY;
+              canvasHeight = allotHeight;
+              canvasWidthCache = fabricImg.width*scaleXY;
+              canvasHeightCache = allotHeight;
+              
+            } else {
+              canvasWidth = fabricImg.width;
+              canvasHeight = fabricImg.height;
+              canvasWidthCache = fabricImg.width;
+              canvasHeightCache = fabricImg.height;
+            }
+             
             fabricImage.setOptions({
                 cornerColor: borderColor,
                 borderColor: borderColor,
+                scaleX: scaleXY,
+                scaleY: scaleXY,
                 __editorMode: true,
                 __imageEditor: true
             });
@@ -9092,6 +9140,9 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
       instance = this,
       canvasWidth = 0,
       canvasHeight = 0,
+      canvasWidthCache = 0,
+      canvasHeightCache = 0,
+      allotHeight=0,
       $canvasContainer = $container.children('.fpd-image-editor-main'),
       fabricCanvas,
       svgGroup,
@@ -9191,10 +9242,27 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
                   fabricCanvas.clipTo = function(ctx) {
                     clippingObject.render(ctx);
                   };
+                  
+                  
+                  canvasWidth = clippingObject.width*clippingObject.scaleX;
+                  canvasWidth = canvasWidth+5;
+                  canvasHeight = clippingObject.height*clippingObject.scaleY;
+                  canvasHeight = canvasHeight+5;
+                  fabricImage.left = fabricImage.left-clippingObject.left;
+                  fabricImage.top = fabricImage.top-clippingObject.top;
+                  clippingObject.top=0;
+                  clippingObject.left=0;
+                  fabricCanvas.remove(clippingObject);
+                  fabricCanvas
+                          .setDimensions({
+                              width: canvasWidth,
+                              height: canvasHeight * instance.responsiveScale
+                          })
+                          .setZoom(instance.responsiveScale)
+                          .calcOffset()
+                          .renderAll();
 
-              } 
-
-              fabricCanvas.remove(clippingObject);
+              }  
 
           }
           $container.find('.fpd-content-mask').removeClass('fpd-show-secondary');
@@ -9213,7 +9281,12 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
           fabricImage.source = targetElement.originSource;
           fabricImage.setSrc(targetElement.originSource, function() {
-
+            fabricCanvas.setDimensions({
+              width: canvasWidthCache,
+              height: canvasHeightCache * instance.responsiveScale
+            })
+            canvasWidth = canvasWidthCache;
+            canvasHeight = canvasHeightCache;
               fabricImage.setCoords();
               fabricCanvas.renderAll();
 
@@ -9262,7 +9335,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
       fabricCanvas
       .setDimensions({
-          width: $canvasWrapper.width(),
+          width: canvasWidth,
           height: canvasHeight * instance.responsiveScale
       })
       .setZoom(instance.responsiveScale)
@@ -9280,7 +9353,8 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           fabricImage = fabricImg;
           canvasWidth = fabricImg.width;
           canvasHeight = fabricImg.height;
-
+          canvasWidthCache = fabricImg.width;
+          canvasHeightCache = fabricImg.height;
           fabricImage.setOptions({
               cornerColor: borderColor,
               borderColor: borderColor,
@@ -13028,7 +13102,7 @@ var FancyProductDesigner = function(elem, opts) {
           if($this.parents('.fpd-modal-product-designer:first').size() > 0) {
               instance.deselectElement();
           }
-
+          $('.fpd-modal-internal').remove();
       }).on('mouseup touchend', function(evt) {
 
             var $target = $(evt.target);

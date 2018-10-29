@@ -150,10 +150,10 @@
             <div class="pull-left"><b>Price: </b>{{seller_product.retail_price}} KES</div>
             <div class="pull-right">
               {%if tutorial.video_link%}
-              <i class="fa fa-youtube-play fa-2x" style="cursor: pointer; color: red;" onclick="playYouTube('{{tutorial.video_link}}', this)"></i>
+              <i class="fa fa-youtube-play fa-2x" title="Tutorial video" style="cursor: pointer; color: red;" onclick="playYouTube('{{tutorial.video_link}}', this)"></i>
               {%endif%} 
               {%if tutorial.pdf_bucket_path%}
-              <i class="fa fa-file-pdf-o fa-2x" style="cursor: pointer; color: blue;" onclick="downloadFile('{{tutorial.pdf_bucket_path}}')"></i>
+              <i class="fa fa-file-pdf-o fa-2x" title="Tutorial Pdf" style="cursor: pointer; color: blue;" onclick="downloadFile('{{tutorial.pdf_bucket_path}}')"></i>
               {%endif%} 
             </div> <br> <b>Size:</b> {{p.size}}<br>
             <b>Category:</b> {{p.category}}<br> <b>UOM:</b> {{p.uom}}<br> <b>Description:</b>{{p.description}}<br />{%

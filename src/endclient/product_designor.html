@@ -45,7 +45,13 @@
       </div>
     </div>
     <div id="main-container">
-      <h3 id="clothing" style="float: left;">{{p.name}} Designer</h3>
+      <h3 id="clothing" class="pull-left">{{p.name}}</h3>
+      {%if tutorial.video_link%}
+      <i class="fa fa-youtube-play fa-2x pull-left" title="Tutorial Video" style="cursor: pointer; color: red; margin-top: 25px; padding-left: 10px;" onclick="youtubeModal()"></i>
+      {%endif%} 
+      {%if tutorial.pdf_bucket_path%}
+      <i class="fa fa-file-pdf-o fa-2x pull-left" title="Tutorial Pdf" style="cursor: pointer; color: blue; margin-top: 20px;" onclick="downloadFile('{{tutorial.pdf_bucket_path}}')"></i>
+      {%endif%} 
       <button type="button" onclick="window.history.go(-1); return false;"
         class="btn btn-sm btn-primary btn-round btn-mini mt-15 mr-5 pull-right"
         style="margin-left: 5px;">
@@ -122,7 +128,6 @@
           </div>
           {%endfor%}
         </div> 
-        
         {#<div class="fpd-frame">
           <div class="fpd-category" title="Frame Mock" data-thumbnail="">
             <img src="/wp-content/3_box_frame.svg" title="3 Frame"
@@ -162,6 +167,18 @@
     <input type="hidden" name="design_print" id="design_print"> <input type="hidden"
       name="design_key" id="design_key" value="{{saveDesignKey}}">
   </form>
+  
+<!-- Modal -->
+  <div class="new-modal" id="tutorialModal" style="display: none;">
+    <div class="new-modal-content">
+      <div class="col-lg-12">
+        <span class="pull-right btn btn-sm btn-primary btn-round btn-mini" onclick="youtubeModalHide()">close</span>
+      </div>
+      <div class="fpd-modal-content" id="tutorial_output">
+      {{tutorial.video_link|safe}}
+      </div>
+    </div>
+  </div>
 </body>
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>

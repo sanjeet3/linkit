@@ -479,6 +479,7 @@ class GetProductDesignor(ActionSupport):
     reday_design_template=self.request.get('redayDesignTemplate')
     reday_design_key=self.request.get('readyDesignKey')
     self.p = ndb.Key(urlsafe=self.request.get('key')).get() 
+    tutorial = ProductTutorial.get_tutorial(self.p.key)
     #template_path = 'endclient/card_designer.html'
     template_path = 'endclient/product_designor.html'
     if reday_design_template:
@@ -504,6 +505,7 @@ class GetProductDesignor(ActionSupport):
         self.set_bg()  
        
     self.response.out.write(template.render({'p': self.p,
+                                             'tutorial': tutorial,
                                              'source_html': source_html,
                                              'designer_module': designer_module,
                                              'dev': self.DEV,
