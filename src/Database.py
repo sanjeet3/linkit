@@ -784,7 +784,11 @@ class AllowDesignerOffLogin(ndb.Model):
 
       
 class MailTemplateModel(EndpointsModel):
-  created_on = ndb.DateTimeProperty(auto_now_add=True)  
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  header_img = ndb.StringProperty(default='')    
+  bg_img = ndb.StringProperty(default='')    
+  padding_bottom = ndb.StringProperty(default='50')    
+  padding_top = ndb.StringProperty(default='50')    
   codeline_html = ndb.TextProperty(default='')  
   template = ndb.TextProperty(default='')  
   template_type = ndb.StringProperty(choices=MAIL_TEMPLATE_CHOICES)  

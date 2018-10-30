@@ -7,12 +7,10 @@
 <div class="page-content" id="email_setup">
   <div class="row mt-10">
     <div class="col-lg-12">
-      <font class="ml-5">User name: [USERNAME]</font>
-      <font class="ml-5">Account verification link: [VERIFICATIONLINK]</font> 
-      <font class="ml-5">Order Number: [ORDERNUMBER]</font> 
-      <font class="ml-5">Order Amount: [ORDERAMT]</font> 
-      <font class="ml-5">Order Date: [ORDERDATE]</font> 
-      <font class="ml-5">Order Status: [ORDERSTATUS]</font> 
+      <font class="ml-5">User name: [USERNAME]</font> <font class="ml-5">Account verification
+        link: [VERIFICATIONLINK]</font> <font class="ml-5">Order Number: [ORDERNUMBER]</font> <font
+        class="ml-5">Order Amount: [ORDERAMT]</font> <font class="ml-5">Order Date:
+        [ORDERDATE]</font> <font class="ml-5">Order Status: [ORDERSTATUS]</font>
     </div>
     <div class="col-lg-8 col-xs-12 col-sm-12">
       <h3 class="header smaller lighter blue">Email Templates</h3>
@@ -20,19 +18,42 @@
         <label class="col-sm-4 control-label no-padding-right"> Choose Template </label>
         <div class="col-sm-8">
           <select id="choose_templates" class="form-control" onchange="getMailTemplate(this.value)">
-            <option value="">-Select-</option>
-            {%for t in MAIL_TEMPLATE_CHOICES %}
-            <option value="{{t}}">{{t}}</option>
-            {%endfor%} 
+            <option value="">-Select Template-</option> {%for t in MAIL_TEMPLATE_CHOICES %}
+            <option value="{{t}}">{{t}}</option> {%endfor%}
           </select>
         </div>
       </div>
       <h4>Insert Content:</h4>
       <form class="form-horizontal" role="form" id="email_form">
         <div class="form-group">
-          <label class="col-sm-3 control-label no-padding-right" for="price"> content </label>
+          <label class="col-sm-3 control-label no-padding-right" for="price"> Header Strip </label>
           <div class="col-sm-9">
-            <select id="choose_tag" class="form-control input-custom" onchange="tagChanges(this.value)">
+            <input type="text" class="form-control input-custom" name="header_img" id="header_img" placeholder="Paste image url">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="price"> Content Background</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control input-custom" name="bg_img" id="bg_img" placeholder="Paste image url">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="price"> Content Padding-Top </label>
+          <div class="col-sm-9">
+            <input type="number" value="30" class="form-control input-custom" name="padding_top" id="padding_top">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="price"> Content Padding-Bottom </label>
+          <div class="col-sm-9">
+            <input type="number" value="30" class="form-control input-custom" name="padding_bottom" id="padding_bottom">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="price"> Content </label>
+          <div class="col-sm-9">
+            <select id="choose_tag" class="form-control input-custom"
+              onchange="tagChanges(this.value)">
               <option value="custom">Custom Text</option>
               <option value="h">Main Heading</option>
               <option value="subh">Sub Heading</option>
@@ -63,27 +84,28 @@
           </div>
         </div>
         <div class="form-group" id="fc_dom">
-          <label class="col-sm-3 control-label no-padding-right">Font Color</label>
+          <label class="col-sm-3 control-label no-padding-right">Color</label>
           <div class="col-sm-2">
             <input id="font_color" type="color" style="padding: 0px;">
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-info btn-minier" type="button" onclick="insertToTemplate()">
+          <button class="btn btn-info btn-minier" type="button" id="insrt_email_template_btn"
+            style="display: none;" onclick="insertToTemplate()">
             <i class="ace-icon fa fa-check bigger-110"></i> Insert
           </button>
-          
-          <button class="btn btn-info btn-minier" type="button" onclick="previewTemplate()">
+          <button class="btn btn-info btn-minier" type="button" id="prev_email_template_btn"
+            style="display: none;" onclick="previewTemplate()">
             <i class="ace-icon fa  fa-laptop bigger-110"></i> Preview
           </button>
-          
-          <button class="btn btn-info btn-minier" type="button" onclick="saveTemplate()" id="save_email_template_btn" style="display: none;">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveTemplate()"
+            id="save_email_template_btn" style="display: none;">
             <i class="ace-icon fa  fa-laptop bigger-110"></i> Save
           </button>
         </div>
       </form>
       <div id="output_dom"
-        style="font-family: Arial, sans-serif; color: #444444; min-height: 200px;" bgcolor="#E4E6E9"
+        style="font-family: Arial, sans-serif; background-color: #bfbfbf; min-height: 200px;" bgcolor="#E4E6E9"
         leftmargin="0" topmargin="0" marginheight="0" marginwidth="0"></div>
     </div>
     <div class="col-lg-4 col-xs-12 col-sm-12">
@@ -104,10 +126,11 @@
         </div>
       </form>
       <br>
-      <div id="mail_uploads">
+      <div id="mail_uploads" style="overflow-x: scroll;">
         {%for e in upload_list%}
-        <div class="col-lg-12" id="{{e.entityKey}}">
-          <img alt="" src="{{e.serving_url}}" style="width: 100%;"
+        <div class="col-lg-12 mb-20" id="{{e.entityKey}}">
+          <button class="btn btn-default btn-minier" onclick="copyText('loop_{{loop.index}}')" type="button"><i class="fa fa-copy"></i> </button><span id="loop_{{loop.index}}">{{e.serving_url}}</span>
+          <img alt="" src="{{e.serving_url}}" style="width: 100px;"
             onclick="setUrlToEmailTemp(this.src)">
           <button class="btn btn-danger btn-minier" type="button"
             onclick="deleteMailUploads('{{e.entityKey}}')">Delete</button>
@@ -117,9 +140,7 @@
     </div>
   </div>
 </div>
-
-<div style="display: none;" id="template_upper">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<div style="display: none;" id="template_upper">  
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="initial-scale=1.0">
 <meta name="format-detection" content="telephone=no">
@@ -212,86 +233,94 @@ body {
     width: 100% !important;
   }
 }
-</style>
-</head>
-<body style="font-family: Arial, sans-serif; font-size: 13px; color: #444444; min-height: 200px;" bgcolor="#E4E6E9" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
+</style> 
+<body style="font-family: Arial, sans-serif; font-size: 13px; color: #444444; min-height: 200px;"
+  bgcolor="#E4E6E9" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
   <table width="100%" height="100%" bgcolor="#E4E6E9" cellspacing="0" cellpadding="0" border="0">
     <tbody>
       <tr>
-        <td width="100%" align="center" valign="top" bgcolor="#E4E6E9" style="background-color: #E4E6E9; min-height: 200px;">
+        <td width="100%" align="center" valign="top" bgcolor="#E4E6E9"
+          style="background-color: #E4E6E9; min-height: 200px;">
           <table>
             <tbody>
               <tr>
-                <td class="table-td-wrap" align="center" width="608"><div style="font-family: Arial, sans-serif; line-height: 32px; color: #444444; font-size: 13px;">
+                <td class="table-td-wrap" align="center" width="608"><div
+                    style="font-family: Arial, sans-serif; line-height: 32px; color: #444444; font-size: 13px;">
                   </div>
-                  <table class="table-row" style="table-layout: auto; padding-right: 24px; padding-left: 24px; width: 600px; background-color: #ffffff;" bgcolor="#FFFFFF" width="600" cellspacing="0" cellpadding="0" border="0">
+                  <table class="table-row"
+                    style="table-layout: auto; width: 600px; background-color: #ffffff;"
+                    bgcolor="#FFFFFF" width="600" cellspacing="0" cellpadding="0" border="0">
                     <tbody>
-                      <tr height="55px" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; height: 55px;">
-                        <td class="table-row-td" style="height: 55px; padding-right: 16px; font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; vertical-align: middle;" valign="middle" align="left"><a href="http://www.craftyourchoice.com" target="_blank" style="color: #428bca; text-decoration: none; padding: 0px; font-size: 18px; line-height: 20px; height: 50px; background-color: transparent;">
-                            <img alt="http://www.craftyourchoice.com" src="http://www.craftyourchoice.com/img/craftyourchoicelogo1.png" style="width: 150px;padding: 5px;"> </a></td> 
+                      <tr 
+                        style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; height: 55px;">
+                        <td class="table-row-td" style="vertical-align: middle;"
+                          valign="middle" align="left"><a href="http://www.craftyourchoice.com"
+                          target="_blank"
+                          style="">
+                           <img alt="" src="[HEADERIMG]" width="100%">
+                        </a></td>
                       </tr>
                     </tbody>
                   </table>
-                  <table class="table-space" height="6" style="height: 6px; font-size: 0px; line-height: 0; width: 600px; background-color: #e4e6e9;" width="600" bgcolor="#E4E6E9" cellspacing="0" cellpadding="0" border="0">
+                  [CONTENTREPLACE]  
+                  <table class="table-space" height="6"
+                    style="height: 6px; font-size: 0px; line-height: 0; width: 600px; background-color: #e4e6e9;"
+                    width="600" bgcolor="#E4E6E9" cellspacing="0" cellpadding="0" border="0">
                     <tbody>
                       <tr>
-                        <td class="table-space-td" valign="middle" height="6" style="height: 6px; width: 600px; background-color: #e4e6e9;" width="600" bgcolor="#E4E6E9" align="left">&nbsp;</td>
+                        <td class="table-space-td" valign="middle" height="6"
+                          style="height: 6px; width: 600px; background-color: #e4e6e9;" width="600"
+                          bgcolor="#E4E6E9" align="left">&nbsp;</td>
                       </tr>
                     </tbody>
                   </table>
-                  <table class="table-space" height="16" style="height: 16px; font-size: 0px; line-height: 0; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0">
+                  <table class="table-row" width="600" bgcolor="#FFFFFF"
+                    style="table-layout: fixed; background-color: #ffffff;" cellspacing="0"
+                    cellpadding="0" border="0">
                     <tbody>
                       <tr>
-                        <td class="table-space-td" valign="middle" height="16" style="height: 16px; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" align="left">&nbsp;</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  [CONTENTREPLACE]
-                  <table class="table-space" height="12" style="height: 12px; font-size: 0px; line-height: 0; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0">
-                    <tbody>
-                      <tr>
-                        <td class="table-space-td" valign="middle" height="12" style="height: 12px; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" align="left">&nbsp;</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <table class="table-space" height="16" style="height: 16px; font-size: 0px; line-height: 0; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0">
-                    <tbody>
-                      <tr>
-                        <td class="table-space-td" valign="middle" height="16" style="height: 16px; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" align="left">&nbsp;</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <table class="table-space" height="6" style="height: 6px; font-size: 0px; line-height: 0; width: 600px; background-color: #e4e6e9;" width="600" bgcolor="#E4E6E9" cellspacing="0" cellpadding="0" border="0">
-                    <tbody>
-                      <tr>
-                        <td class="table-space-td" valign="middle" height="6" style="height: 6px; width: 600px; background-color: #e4e6e9;" width="600" bgcolor="#E4E6E9" align="left">&nbsp;</td>
-                      </tr>
-                    </tbody>
-                  </table><table class="table-row" width="600" bgcolor="#FFFFFF" style="table-layout: fixed; background-color: #ffffff;" cellspacing="0" cellpadding="0" border="0">
-                    <tbody>
-                      <tr>
-                        <td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">
-                          <table class="table-col" align="left" width="273" style="padding-right: 18px; table-layout: fixed;" cellspacing="0" cellpadding="0" border="0">
+                        <td class="table-row-td"
+                          style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;"
+                          valign="top" align="left">
+                          <table class="table-col" align="left" width="273"
+                            style="padding-right: 18px; table-layout: fixed;" cellspacing="0"
+                            cellpadding="0" border="0">
                             <tbody>
                               <tr>
-                                <td class="table-col-td" width="255" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">
-                                  <div style="font-family: Arial, sans-serif; line-height: 36px; color: #444444; font-size: 13px;">
-                                    <a href="#" style=" padding: 2px;text-decoration: none;"><img alt="Google plus" src="http://lh3.googleusercontent.com/CZ76w-ml_Dn9F09KcxXnkHdaZ9wv4Egc-jBm_RMN_im2ao1olik8eMY2iHVR7GQb5YHW0o4xxDK4Wgu28QaNF-soo2vo"> </a>
-                                    <a href="#" style=" padding: 2px;text-decoration: none;"><img alt="Linkedin" src="http://lh3.googleusercontent.com/1zlKfkCYcsuE-G-NJ4niPVv_NqPFI0TxTdRLe8IG1KcTxb1SWhukLB6PdKCPDlrv6jrEsgNtzT6cYEdYaoYakssUvcU"> </a>
-                                    <a href="#" style=" padding: 2px;text-decoration: none;"><img alt="Facebook" src="http://lh3.googleusercontent.com/kz335b7FwL9JCeW8y30Ca0_hIYVgXzwtOi5Jrj1YSdS2LlA3LRQPxjK973Ln2Zro586gowpdALlz2QJWviE-my3p4PJn"> </a>
+                                <td class="table-col-td" width="255"
+                                  style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;"
+                                  valign="top" align="left">
+                                  <div
+                                    style="font-family: Arial, sans-serif; line-height: 36px; color: #444444; font-size: 13px;">
+                                    <a href="#" style="padding: 2px; text-decoration: none;"><img
+                                      alt="Google plus"
+                                      src="http://lh3.googleusercontent.com/CZ76w-ml_Dn9F09KcxXnkHdaZ9wv4Egc-jBm_RMN_im2ao1olik8eMY2iHVR7GQb5YHW0o4xxDK4Wgu28QaNF-soo2vo">
+                                    </a> <a href="#" style="padding: 2px; text-decoration: none;"><img
+                                      alt="Linkedin"
+                                      src="http://lh3.googleusercontent.com/1zlKfkCYcsuE-G-NJ4niPVv_NqPFI0TxTdRLe8IG1KcTxb1SWhukLB6PdKCPDlrv6jrEsgNtzT6cYEdYaoYakssUvcU">
+                                    </a> <a href="#" style="padding: 2px; text-decoration: none;"><img
+                                      alt="Facebook"
+                                      src="http://lh3.googleusercontent.com/kz335b7FwL9JCeW8y30Ca0_hIYVgXzwtOi5Jrj1YSdS2LlA3LRQPxjK973Ln2Zro586gowpdALlz2QJWviE-my3p4PJn">
+                                    </a>
                                   </div>
                                 </td>
                               </tr>
                             </tbody>
                           </table>
-                          <table class="table-col" align="left" width="255" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">
+                          <table class="table-col" align="left" width="255" cellspacing="0"
+                            cellpadding="0" border="0" style="table-layout: fixed;">
                             <tbody>
                               <tr>
-                                <td class="table-col-td" width="255" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">
-                                  <table class="header-row" width="255" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">
+                                <td class="table-col-td" width="255"
+                                  style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;"
+                                  valign="top" align="left">
+                                  <table class="header-row" width="255" cellspacing="0"
+                                    cellpadding="0" border="0" style="table-layout: fixed;">
                                     <tbody>
                                       <tr>
-                                        <td class="header-row-td" width="255" style="font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; color: #478fca; margin: 0px; font-size: 18px; padding-bottom: 8px; padding-top: 10px;" valign="top" align="left">Our Contact Info</td>
+                                        <td class="header-row-td" width="255"
+                                          style="font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; color: #478fca; margin: 0px; font-size: 18px; padding-bottom: 8px; padding-top: 10px;"
+                                          valign="top" align="left">Our Contact Info</td>
                                       </tr>
                                     </tbody>
                                   </table> Phone: +25 475 013 1414 <br> Email: maxprolimited@gmail.com,
@@ -304,39 +333,66 @@ body {
                       </tr>
                     </tbody>
                   </table>
-                  <table class="table-row" width="600" bgcolor="#FFFFFF" style="table-layout: fixed; background-color: #ffffff;" cellspacing="0" cellpadding="0" border="0">
+                  <table class="table-row" width="600" bgcolor="#FFFFFF"
+                    style="table-layout: fixed; background-color: #ffffff;" cellspacing="0"
+                    cellpadding="0" border="0">
                     <tbody>
                       <tr>
-                        <td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">
-                          <table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">
+                        <td class="table-row-td"
+                          style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;"
+                          valign="top" align="left">
+                          <table class="table-col" align="left" width="528" cellspacing="0"
+                            cellpadding="0" border="0" style="table-layout: fixed;">
                             <tbody>
                               <tr>
-                                <td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">
-                                  <table class="table-space" height="16" style="height: 16px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;" width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0">
+                                <td class="table-col-td" width="528"
+                                  style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;"
+                                  valign="top" align="left">
+                                  <table class="table-space" height="16"
+                                    style="height: 16px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;"
+                                    width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0"
+                                    border="0">
                                     <tbody>
                                       <tr>
-                                        <td class="table-space-td" valign="middle" height="16" style="height: 16px; width: 528px; background-color: #ffffff;" width="528" bgcolor="#FFFFFF" align="left">&nbsp;</td>
+                                        <td class="table-space-td" valign="middle" height="16"
+                                          style="height: 16px; width: 528px; background-color: #ffffff;"
+                                          width="528" bgcolor="#FFFFFF" align="left">&nbsp;</td>
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <div style="font-family: Arial, sans-serif; line-height: 19px; color: #777777; font-size: 14px; text-align: center;">©
+                                  <div
+                                    style="font-family: Arial, sans-serif; line-height: 19px; color: #777777; font-size: 14px; text-align: center;">©
                                     2018 by Maxpro Limited</div>
-                                  <table class="table-space" height="12" style="height: 12px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;" width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0">
+                                  <table class="table-space" height="12"
+                                    style="height: 12px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;"
+                                    width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0"
+                                    border="0">
                                     <tbody>
                                       <tr>
-                                        <td class="table-space-td" valign="middle" height="12" style="height: 12px; width: 528px; background-color: #ffffff;" width="528" bgcolor="#FFFFFF" align="left">&nbsp;</td>
+                                        <td class="table-space-td" valign="middle" height="12"
+                                          style="height: 12px; width: 528px; background-color: #ffffff;"
+                                          width="528" bgcolor="#FFFFFF" align="left">&nbsp;</td>
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <div style="font-family: Arial, sans-serif; line-height: 19px; color: #bbbbbb; font-size: 13px; text-align: center;">
-                                    <a href="http://www.craftyourchoice.com/TermsAndConditions" style="color: #428bca; text-decoration: none; background-color: transparent;">Terms</a>
-                                    &nbsp;|&nbsp; <a href="http://www.craftyourchoice.com/PrivacyPolicy" style="color: #428bca; text-decoration: none; background-color: transparent;">Privacy</a>
+                                  <div
+                                    style="font-family: Arial, sans-serif; line-height: 19px; color: #bbbbbb; font-size: 13px; text-align: center;">
+                                    <a href="http://www.craftyourchoice.com/TermsAndConditions"
+                                      style="color: #428bca; text-decoration: none; background-color: transparent;">Terms</a>
+                                    &nbsp;|&nbsp; <a
+                                      href="http://www.craftyourchoice.com/PrivacyPolicy"
+                                      style="color: #428bca; text-decoration: none; background-color: transparent;">Privacy</a>
                                     &nbsp;
                                   </div>
-                                  <table class="table-space" height="16" style="height: 16px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;" width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0">
+                                  <table class="table-space" height="16"
+                                    style="height: 16px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;"
+                                    width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0"
+                                    border="0">
                                     <tbody>
                                       <tr>
-                                        <td class="table-space-td" valign="middle" height="16" style="height: 16px; width: 528px; background-color: #ffffff;" width="528" bgcolor="#FFFFFF" align="left">&nbsp;</td>
+                                        <td class="table-space-td" valign="middle" height="16"
+                                          style="height: 16px; width: 528px; background-color: #ffffff;"
+                                          width="528" bgcolor="#FFFFFF" align="left">&nbsp;</td>
                                       </tr>
                                     </tbody>
                                   </table>
@@ -348,10 +404,14 @@ body {
                       </tr>
                     </tbody>
                   </table>
-                  <table class="table-space" height="8" style="height: 8px; font-size: 0px; line-height: 0; width: 600px; background-color: #e4e6e9;" width="600" bgcolor="#E4E6E9" cellspacing="0" cellpadding="0" border="0">
+                  <table class="table-space" height="8"
+                    style="height: 8px; font-size: 0px; line-height: 0; width: 600px; background-color: #e4e6e9;"
+                    width="600" bgcolor="#E4E6E9" cellspacing="0" cellpadding="0" border="0">
                     <tbody>
                       <tr>
-                        <td class="table-space-td" valign="middle" height="8" style="height: 8px; width: 600px; background-color: #e4e6e9;" width="600" bgcolor="#E4E6E9" align="left">&nbsp;</td>
+                        <td class="table-space-td" valign="middle" height="8"
+                          style="height: 8px; width: 600px; background-color: #e4e6e9;" width="600"
+                          bgcolor="#E4E6E9" align="left">&nbsp;</td>
                       </tr>
                     </tbody>
                   </table></td>
@@ -362,17 +422,19 @@ body {
       </tr>
     </tbody>
   </table>
-
-</body></html>
+</body> 
 </div>
-<form id="save_mail_template_form" style="display:none;">
-  <input type="hidden" name="key" id="template_key">
-  <input type="hidden" name="template_type" id="template_type">
+<form id="save_mail_template_form" style="display: none;">
+  <input type="hidden" name="key" id="template_key"> <input type="hidden"
+    name="template_type" id="template_type">
+  <input type="hidden" id="input_padding_bottom" name="padding_bottom">  
+  <input type="hidden" id="input_padding_top" name="padding_top">  
+  <input type="hidden" id="input_bg_img" name="bg_img">  
+  <input type="hidden" id="input_header_img" name="header_img">  
   <textarea name="codeline" id="codeline_html"></textarea>
   <textarea name="template" id="template_html"></textarea>
 </form>
 <script type="text/javascript">
- 
   $("#output_dom").sortable({
 
     axis : "y",
@@ -381,29 +443,34 @@ body {
     placeholder : "sortable-placeholder",
     cursor : "move"
 
-  }); 
-var subHeadingFONTCOLOR = 'color: #444444;font-size: 18px;';  
-var oneLine = '<table class="table-space" height="12" style="height: 12px; font-size: 0px; line-height: 0; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-space-td" valign="middle" height="12" style="height: 12px; width: 600px; background-color: #ffffff;" width="600" bgcolor="#FFFFFF" align="left">&nbsp;</td></tr></tbody></table>';  
-var H1 = ['<table class="table-row" width="600" bgcolor="#FFFFFF" style="table-layout: fixed; background-color: #ffffff;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">'];
-H1.push('<table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">');
-H1.push('<table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="header-row-td" width="528" style="font-size: 28px; margin: 0px; font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; color: #478fca; padding-bottom: 10px; padding-top: 15px;" valign="top" align="left">');
-H1 = H1.join('');
-var H2 = '</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>';  
-var link1 = ['<table class="table-row" width="600" bgcolor="#FFFFFF" style="table-layout: fixed; background-color: #ffffff;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">'];
-link1.push('<table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">');
-link1.push('<table width="100%" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td width="100%" bgcolor="#d9edf7" style="font-family: Arial, sans-serif; line-height: 19px; color: #31708f; font-size: 14px; font-weight: normal; padding: 15px; border: 1px solid #bce8f1; background-color: #d9edf7;" valign="top" align="left">Click to open link or copy and open in new tab.<br><a href="');
-link1 = link1.join('');
-var link2 = '" style="color: #428bca; text-decoration: none; background-color: transparent;">';
-var link3 = '</a></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>';
-var imgLG = ['<table class="table-row" width="600" bgcolor="#FFFFFF" style="table-layout: fixed; background-color: #ffffff;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 24px; padding-right: 24px;" valign="top" align="left"><table class="table-col" align="left" width="552" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody>'];
-imgLG.push('<tr><td class="table-col-td" width="552" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left"><div style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; text-align: center;"><img src="');
-imgLG.push();
-imgLG = imgLG.join('');
-imgLG2 = '" style="width: 100%;border: 0px none #444444; vertical-align: middle; display: block; padding-bottom: 9px;" hspace="0" vspace="0" border="0"></div></td></tr></tbody></table></td></tr></tbody></table>';
-var TEXTHTML = ['<table class="table-row" width="600" bgcolor="#FFFFFF" style="table-layout: fixed; background-color: #ffffff;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left"><table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">'];
-TEXTHTML.push('<tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left"><table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">');
-TEXTHTML.push('<tbody><tr><td class="header-row-td" width="528" style="font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; margin: 0px; padding-bottom: 8px; padding-top: 10px;[FONTSIZECOLOR]" valign="top" align="left">')
-TEXTHTML = TEXTHTML.join('')
-var TEXTHTML2 = '</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>';
-
+  });
+  var subHeadingFONTCOLOR = 'color: #444444;font-size: 18px;';
+  var oneLine = '<table class="table-space" height="6" style="height: 6px; font-size: 0px; line-height: 0; width: 600px;" width="600" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-space-td" valign="middle" height="6" style="height: 6px; width: 600px; " width="600"  align="left">&nbsp;</td></tr></tbody></table>';
+  var H1 = [ '<table class="table-row" width="600"   style="table-layout: fixed; " cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">' ];
+  H1
+      .push('<table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">');
+  H1
+      .push('<table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="header-row-td" width="528" style="font-size: 28px; margin: 0px; font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; padding-bottom: 10px; padding-top: 15px; [COLOR]" valign="top" align="left">');
+  H1 = H1.join('');
+  var H2 = '</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>';
+  var link1 = [ '<table class="table-row" width="600"   style="table-layout: fixed; " cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">' ];
+  link1.push('<table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">');
+  link1.push('<table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;overflow-wrap: break-word;"><tbody><tr><td class="header-row-td" width="528" style="margin: 0px; font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; padding-bottom: 10px; padding-top: 15px; text-align:center;" valign="top" align="left">');
+  link1.push('<a href="[LINK]" style="font-size:[FONTSIZE];text-decoration: none;border-radius: 3px; padding:8px;color:white; background-color:[COLOR]">[TEXT]</a>');
+  link1.push('<br><p>Or copy link<br>[LINK]</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>');
+  link1 = link1.join('');
+  
+  var imgLG = [ '<table class="table-row" width="600"  style="table-layout: fixed; " cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 24px; padding-right: 24px;" valign="top" align="left"><table class="table-col" align="left" width="552" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody>' ];
+  imgLG
+      .push('<tr><td class="table-col-td" width="552" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left"><div style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; text-align: center;"><img src="');
+  imgLG.push();
+  imgLG = imgLG.join('');
+  imgLG2 = '" style="width: 100%;border: 0px none #444444; vertical-align: middle; display: block; padding-bottom: 9px;" hspace="0" vspace="0" border="0"></div></td></tr></tbody></table></td></tr></tbody></table>';
+  var TEXTHTML = [ '<table class="table-row" width="600"  style="table-layout: fixed; " cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left"><table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">' ];
+  TEXTHTML
+      .push('<tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left"><table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">');
+  TEXTHTML
+      .push('<tbody><tr><td class="header-row-td" width="528" style="font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; margin: 0px; padding-bottom: 8px; padding-top: 10px;[FONTSIZECOLOR]" valign="top" align="left">')
+  TEXTHTML = TEXTHTML.join('')
+  var TEXTHTML2 = '</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>';
 </script>

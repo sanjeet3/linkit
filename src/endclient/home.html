@@ -290,8 +290,8 @@
         {%endif%}
       </div>
       <div class="col-lg-12 slide-container" >
-      <img alt="" src="{{static_img.url_one or '/img/Promo.png'}}" width="100%">
-    </div>
+        <img alt="" src="{{static_img.url_one or '/img/Promo.png'}}" width="100%">
+      </div>
       <div class="col-lg-12 col-xs-12 events-slide">
         <form id="event_search_form">
           <div class="col-lg-3 col-sm-3 col-xs-6">
@@ -391,6 +391,11 @@
         {%endfor%}
       </div>
     </div>  
+    {%if static_img.url_tow%}
+    <div class="col-lg-12 slide-container" >
+      <img alt="" src="{{static_img.url_tow}}" width="100%">
+    </div>
+    {%endif%}
     <div class="row">
     <div class="row">  
       <div class="col-lg-12 col-xs-12 product-promo-slide" style="padding-left: 0; padding-right: 0;"> 

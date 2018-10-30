@@ -39,7 +39,7 @@ class DesignerLoginAccess(ActionSupport):
 class CatSubCatRename(ActionSupport):
   def post(self):
     k = self.request.get('k')
-    name = self.request.get('name').upper()
+    name = self.request.get('name')
     e = ndb.Key(urlsafe=k).get()
     e.title=name
     e.put()  
@@ -250,7 +250,7 @@ class UploadMasks(ActionSupport):
     
 class BGCategorySave(ActionSupport):
   def post(self):
-    title = self.request.get('title').upper()  
+    title = self.request.get('title') 
     e = BGCategory()
     e.title = title
     e = e.put().get()  
@@ -260,7 +260,7 @@ class BGCategorySave(ActionSupport):
       
 class BGSubCategorySave(ActionSupport):
   def post(self):
-    title = self.request.get('title').upper()  
+    title = self.request.get('title')  
     category = self.request.get('category')
     cat = ndb.Key(urlsafe=category).get()
     e = BGSubCategory()
@@ -318,7 +318,7 @@ class FramesView(ActionSupport):
 
 class FrameCategorySave(ActionSupport):
   def post(self):
-    title = self.request.get('title').upper()  
+    title = self.request.get('title')
     e = FrameCategory()
     e.title = title
     e = e.put().get()  
@@ -328,7 +328,7 @@ class FrameCategorySave(ActionSupport):
       
 class FrameSubCategorySave(ActionSupport):
   def post(self):
-    title = self.request.get('title').upper()  
+    title = self.request.get('title') 
     category = self.request.get('category')
     cat = ndb.Key(urlsafe=category).get()
     e = FrameSubCategory()

@@ -11,7 +11,8 @@ from src.app_configration import config
 from src.api.datetimeapi import get_dt_by_country
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
-from src.Database import Client, MailUploads, MailTemplateModel, ProductTutorial
+from src.Database import Client, MailUploads, MailTemplateModel, ProductTutorial,\
+    HomeScreenStaticURL
 from src.Database import Product, StaticImage
 from src.Database import ProductDesign
 from src.Database import ProductCategory
@@ -309,7 +310,7 @@ class SaveProducts(ActionSupport):
 
 class SaveProductsUOM(ActionSupport):
   def post(self):           
-    uom=self.request.get('uom').upper() 
+    uom=self.request.get('uom')
     uom_obj = ProductUOM.get_product_uom(uom)
     if not uom_obj:
       uom_obj = ProductUOM(name=uom).put().get()
@@ -321,7 +322,7 @@ class SaveProductsUOM(ActionSupport):
 
 class SaveProductsCategory(ActionSupport):
   def post(self):           
-    category=self.request.get('category').upper() 
+    category=self.request.get('category')
     c_obj = ProductCategory.get_product_cat(category)
     if not c_obj:
       c_obj = ProductCategory(name=category).put().get()
@@ -341,7 +342,7 @@ class EditProductsCATUOM(ActionSupport):
     self.response.out.write(template.render(context))
         
   def post(self):           
-    name=self.request.get('name').upper()
+    name=self.request.get('name')
     e=ndb.Key(urlsafe=self.request.get('k')).get()
     e.name=name
     e.put()
@@ -682,13 +683,73 @@ class RenameOrderStatus(ActionSupport):
                           'order_status': order_status},
                          SUCCESS,
                          'Stage renamed')    
-     
+
+class ManageStripImg(ActionSupport):
+  def get(self): 
+    bucket_key = ''  
+    index = self.request.get('index')
+    static_img = HomeScreenStaticURL.get_obj() 
+    if index=='1':
+      bucket_key = static_img.url_one_key
+      static_img.url_one = ''
+      static_img.url_one_key = ''
+    if index=='2':
+      bucket_key = static_img.url_tow_key
+      static_img.url_tow = ''
+      static_img.url_tow_key = ''
+          
+    if bucket_key and delete_bucket_file(bucket_key):
+      static_img.put()  
+      return json_response(self.response,
+                         {'index': index},
+                         SUCCESS,
+                         'Deleted')
+    else:
+      return json_response(self.response, {}, ERROR, '')
+       
+  def post(self): 
+    index = self.request.get('index')  
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')     
+        
+    file_name = image_file.filename    
+    bucket_path = '/designer_textptrn/static_image/%s' %(file_name)
+    bucket_path = bucket_path.lower()
+    upload_file(file_obj, bucket_path)
+    serving_url=''
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)
+      static_img = HomeScreenStaticURL.get_obj()  
+      if index=='1':
+        static_img.url_one = serving_url   
+        static_img.url_one_key=bucket_key
+        static_img.put()
+      elif index=='2':
+        static_img.url_tow = serving_url  
+        static_img.url_tow_key=bucket_key
+        static_img.put()
+    except Exception, msg:
+      logging.error(msg)  
+      return json_response(self.response, {}, ERROR, 'Try again')
+    
+    return json_response(self.response,
+                         {'index': index,
+                          'url': serving_url},
+                         SUCCESS,
+                         'Updated') 
 class ThemesView(ActionSupport):
   def get(self): 
+    static_img = HomeScreenStaticURL.get_obj()
     themes_list = Themes.get_theme_list() 
     product_list = Product.get_selling_product_list()
     context={'themes_list': themes_list,
              'product_list': product_list,
+             'static_img': static_img,
              }
     template = self.get_jinja2_env.get_template('super/Themes.html')    
     self.response.out.write(template.render(context))  
@@ -919,7 +980,7 @@ class CustomDesign(ActionSupport):
     
 class DesignCategorySave(ActionSupport):
   def post(self):
-    title = self.request.get('title').upper()  
+    title = self.request.get('title')  
     e = DesignCategory()
     e.title = title
     e = e.put().get()  
@@ -929,7 +990,7 @@ class DesignCategorySave(ActionSupport):
       
 class DesignSubCategorySave(ActionSupport):
   def post(self):
-    title = self.request.get('title').upper()  
+    title = self.request.get('title')
     category = self.request.get('category')
     cat = ndb.Key(urlsafe=category).get()
     e = DesignSubCategory()
@@ -1084,11 +1145,15 @@ class GetMailTemplates(ActionSupport):
   def get(self):
     template_type=self.request.get('t')  
     message = 'Create new template'
-    data_dict ={'key': '', 'template_type': template_type}
+    data_dict ={'key': '', 'template_type': template_type, 'header_img': '', 'bg_img':'','padding_bottom':'30','padding_top':'30'}
     e=MailTemplateModel.get_template(template_type)
     if e:
       data_dict['key'] = e.entityKey    
       data_dict['template'] = e.template    
+      data_dict['header_img'] = e.header_img    
+      data_dict['bg_img'] = e.bg_img    
+      data_dict['padding_top'] = e.padding_top    
+      data_dict['padding_bottom'] = e.padding_bottom    
       data_dict['codeline_html'] = e.codeline_html  
       message = 'Template loads'  
     return json_response(self.response, data_dict, SUCCESS, message)
@@ -1104,6 +1169,10 @@ class GetMailTemplates(ActionSupport):
      
     e.codeline_html = codeline
     e.template = template  
+    e.padding_top = self.request.get('padding_top')
+    e.padding_bottom = self.request.get('padding_bottom')
+    e.header_img = self.request.get('header_img')
+    e.bg_img = self.request.get('bg_img')
     e = e.put().get()
     data_dict = {'key': e.entityKey}
     return json_response(self.response, data_dict, SUCCESS, 'Mail template saved')      

@@ -92,6 +92,7 @@ __route_list = [
     RedirectRoute(r'/superadmin/GetMailTemplates', SuperAdmin.GetMailTemplates, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Themes', SuperAdmin.ThemesView, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/SetupThemesLive', SuperAdmin.SetupThemesLive, name='SuperAdmin themes page', strict_slash=True),
+    RedirectRoute(r'/superadmin/ManageStripImg', SuperAdmin.ManageStripImg, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Events', SuperAdmin.EventView, name='SuperAdmin EventView page', strict_slash=True),
     RedirectRoute(r'/superadmin/EventSequenceSet', SuperAdmin.EventSequenceSet, name='SuperAdmin Event client view setup', strict_slash=True),
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
