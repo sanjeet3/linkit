@@ -4176,6 +4176,8 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
       var frameBox = instance.getElementByID(element.svgid);
       element.svgFrameIndex = frameBox.svgIndex;
       element.svgFrameUrl = frameBox.svg;
+      element.frameWidth=frameBox.getScaledWidth();
+      element.frameHeight=frameBox.getScaledHeight();
       element.setPositionByOrigin(new fabric.Point(frameBox.aCoords.tl.x+frameBox.getScaledWidth()*0.5, frameBox.aCoords.tl.y+frameBox.getScaledHeight()*0.5), 'center', 'center');
       if(frameBox){
         instance.removeElement(frameBox); 
@@ -4527,7 +4529,11 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                       params.originParams.filter = false;   
                       params.originParams.resizable = false; 
                       params.originParams.rotatable = false;  
-                    } 
+                    } else if(params.svg){
+                      params.originParams.copyable = false;
+                      params.copyable = false;
+                      
+                    }
                     fabricImage.setOptions(params);
                     instance.setElementParameters(params, fabricImage, false);
                     instance.stage.add(fabricImage);
@@ -4551,7 +4557,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         fabricImage,
                         instance.fpdInstance,
                         fabricImage.svgFrameUrl,
-                        fabricImage.svgFrameIndex);
+                        fabricImage.svgFrameIndex,
+                        fabricImage.frameWidth,
+                        fabricImage.frameHeight,
+                        );
 
                       imageEditor.loadImage(source);
                       
@@ -9072,7 +9081,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
                 width: canvasWidth,
                 height: canvasHeight,
             });
-
+            fabricImg.evented = false;
             fabricCanvas.add(fabricImg);
 
             _resizeCanvas();
@@ -9130,7 +9139,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
 
 };
 
-var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrameUrl, svgFrameIndex) {
+var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrameUrl, svgFrameIndex, frameWidth, frameHeight) {
 
   'use strict';
 
@@ -9201,8 +9210,6 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
               mask = $this.data('mask');
 
           fabricCanvas.discardActiveObject();
-          fabricImage.evented = false;
-
           fabricCanvas.clipTo = null;
           clippingObject = null;
 
@@ -9228,12 +9235,8 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           if(!fabricImage) {
               return false;
           }
-
-          fabricImage.evented = true;
           customMaskEnabled = false;
-
           fabricCanvas.discardActiveObject();
-
           if(clippingObject) {
 
               if($(this).hasClass('fpd-mask-save')) {
@@ -9302,7 +9305,10 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
           targetElement.source = dataURL;
           targetElement.setSrc(dataURL, function() {
-
+              var scaleX=frameHeight/targetElement.height;
+              //scaleY=desitnationWidth/targetElement.width;
+              targetElement.scaleX=scaleX;
+              targetElement.scaleY=scaleX;
               targetElement.setCoords();
               targetElement.canvas.renderAll();
 
@@ -9366,7 +9372,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
               width: canvasWidth,
               height: canvasHeight,
           });
-
+          fabricImg.evented = false; 
           fabricCanvas.add(fabricImg);
 
           _resizeCanvas();
@@ -15134,7 +15140,7 @@ var FancyProductDesigner = function(elem, opts) {
                 scaleX = currentCustomImageParameters.scaleX || 1,
                 scaleY = currentCustomImageParameters.scaleY || 1;
                 if(instance.currentViewInstance.svgModel){
-                  var frameBox = instance.getElementByID(instance.currentViewInstance.svgModel);  
+                  /*var frameBox = instance.getElementByID(instance.currentViewInstance.svgModel);  
                   var h=frameBox.getScaledHeight(), w=frameBox.getScaledWidth();
                   //h=h?h:frameBox.height;
                   //w=w?w:frameBox.width;
@@ -15143,7 +15149,7 @@ var FancyProductDesigner = function(elem, opts) {
                   }
                   if(w < imageW) { 
                     scaleX=w/imageW;
-                  }
+                  }*/
                 } else {
                   if(baseHeight>0 && imageH>baseHeight) { 
                     scaleY=baseHeight/imageH
