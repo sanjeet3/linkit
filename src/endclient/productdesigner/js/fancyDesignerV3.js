@@ -8506,6 +8506,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             borderDashArray: [5,5],
             hasRotatingPoint: true,
             centeredScaling: true,
+            lockUniScaling: true,
             objectCaching: false,
             __editorMode: true,
             __imageEditor: true
@@ -9167,6 +9168,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           borderDashArray: [5,5],
           hasRotatingPoint: true,
           centeredScaling: true,
+          lockUniScaling: true,
           objectCaching: false,
           __editorMode: true,
           __imageEditor: true
@@ -9258,7 +9260,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
                   fabricCanvas.remove(clippingObject);
                   fabricCanvas
                           .setDimensions({
-                              width: canvasWidth,
+                              width: canvasWidth, 
                               height: canvasHeight * instance.responsiveScale
                           })
                           .setZoom(instance.responsiveScale)
@@ -9305,10 +9307,10 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
           targetElement.source = dataURL;
           targetElement.setSrc(dataURL, function() {
-              var scaleX=frameHeight/targetElement.height;
-              //scaleY=desitnationWidth/targetElement.width;
+              var scaleX=frameHeight/targetElement.height,
+              scaleY=frameWidth/targetElement.width;
               targetElement.scaleX=scaleX;
-              targetElement.scaleY=scaleX;
+              targetElement.scaleY=scaleY;
               targetElement.setCoords();
               targetElement.canvas.renderAll();
 
@@ -9416,8 +9418,9 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
   };
 
   this.getImage = function() {
-
+    
       fabricCanvas.setDimensions({width: canvasWidth, height: canvasHeight}).setZoom(1);
+
 
       if(clippingObject) {
           clippingObject.left = clippingObject.left / instance.responsiveScale;
@@ -9426,7 +9429,6 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           clippingObject.scaleY = clippingObject.scaleY / instance.responsiveScale;
           clippingObject.setCoords();
       }
-
       fabricCanvas.renderAll();
 
       var dataURL = fabricCanvas.toDataURL({});

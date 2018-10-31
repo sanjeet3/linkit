@@ -1223,8 +1223,14 @@ body='''
 <h2>test</h2>'''
 class Test(webapp2.RequestHandler):    
   def get(self):  
-    e = ndb.Key(urlsafe='ahBpfmxpbmstaXQtcG9ydGFschQLEgdQcm9kdWN0GICAgICdipYKDA').get()
-    e.default_design_template = 'card_designer'
+    #e = ndb.Key(urlsafe='ahBpfmxpbmstaXQtcG9ydGFschQLEgdQcm9kdWN0GICAgICdipYKDA').get()
+    #e.default_design_template = 'card_designer'
     #e.put()
     #mail_sender('appboxtechnologies@gmail.com', 'subject', body)
-    self.response.out.write('200')      
+    #self.response.out.write('200')     
+    self.response.content_type = 'application/json'
+    result = {'status' : 'SUCCESS',
+            'data': {'key1': 'value1', 'k2': 375},
+            'message': 'message strong'}
+    
+    self.response.out.write(json.dumps(result)) 
