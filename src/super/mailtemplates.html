@@ -7,7 +7,7 @@
 <div class="page-content" id="email_setup">
   <div class="row mt-10">
     <div class="col-lg-12">
-      <font class="ml-5">User name: [USERNAME]</font> <font class="ml-5">Account verification
+      <font class="ml-5">User name: [USERNAME], Email: [USEREMAIL]</font> <font class="ml-5">Account verification
         link: [VERIFICATIONLINK]</font> <font class="ml-5">Order Number: [ORDERNUMBER]</font> <font
         class="ml-5">Order Amount: [ORDERAMT]</font> <font class="ml-5">Order Date:
         [ORDERDATE]</font> <font class="ml-5">Order Status: [ORDERSTATUS]</font>
@@ -25,6 +25,12 @@
       </div>
       <h4>Insert Content:</h4>
       <form class="form-horizontal" role="form" id="email_form">
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="subject"> Subject </label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control input-custom" name="subject" id="subject" placeholder="Email subject">
+          </div>
+        </div>
         <div class="form-group">
           <label class="col-sm-3 control-label no-padding-right" for="price"> Header Strip </label>
           <div class="col-sm-9">
@@ -76,11 +82,16 @@
             <textarea rows="5" class="form-control input-custom" id="para_val"></textarea>
           </div>
         </div>
-        <div class="form-group" id="fs_dom">
+        <div id="fs_dom">
+          <div class="form-group">
           <label class="col-sm-3 control-label no-padding-right">Font Size</label>
           <div class="col-sm-9">
             <input class="form-control input-custom" type="number" min="4" max="28" value="12"
               id="font_size">
+          </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right"><input type="checkbox" name="bold" id="font_weight"> Bold</label>
           </div>
         </div>
         <div class="form-group" id="fc_dom">
@@ -361,8 +372,8 @@ body {
                                     </tbody>
                                   </table>
                                   <div
-                                    style="font-family: Arial, sans-serif; line-height: 19px; color: #777777; font-size: 14px; text-align: center;">©
-                                    2018 by Maxpro Limited</div>
+                                    style="font-family: Arial, sans-serif; line-height: 19px; color: #777777; font-size: 14px; text-align: center;">&copy;
+                                    {{year}} by Maxpro Limited</div>
                                   <table class="table-space" height="12"
                                     style="height: 12px; font-size: 0px; line-height: 0; width: 528px; background-color: #ffffff;"
                                     width="528" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0"
@@ -431,6 +442,7 @@ body {
   <input type="hidden" id="input_padding_top" name="padding_top">  
   <input type="hidden" id="input_bg_img" name="bg_img">  
   <input type="hidden" id="input_header_img" name="header_img">  
+  <input type="hidden" id="input_subject" name="subject">  
   <textarea name="codeline" id="codeline_html"></textarea>
   <textarea name="template" id="template_html"></textarea>
 </form>
@@ -450,7 +462,7 @@ body {
   H1
       .push('<table class="table-col" align="left" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="table-col-td" width="528" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal;" valign="top" align="left">');
   H1
-      .push('<table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="header-row-td" width="528" style="font-size: 28px; margin: 0px; font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; padding-bottom: 10px; padding-top: 15px; [COLOR]" valign="top" align="left">');
+      .push('<table class="header-row" width="528" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;"><tbody><tr><td class="header-row-td" width="528" style="font-size: 28px; margin: 0px; font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; padding-bottom: 10px; padding-top: 15px; text-align:center; [COLOR]" valign="top" align="left">');
   H1 = H1.join('');
   var H2 = '</td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>';
   var link1 = [ '<table class="table-row" width="600"   style="table-layout: fixed; " cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="table-row-td" style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; font-weight: normal; padding-left: 36px; padding-right: 36px;" valign="top" align="left">' ];

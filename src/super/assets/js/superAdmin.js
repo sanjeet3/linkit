@@ -1857,7 +1857,7 @@ function tagChanges(v){
 function insertToTemplate() {
   var type = $('#choose_tag').val(), link = $('#url_val').val(), text = $(
       '#para_val').val(), fs = $('#font_size').val(), fc = $('#font_color')
-      .val();
+      .val(), bold=$('#font_weight')[0].checked;
 
   var h = [];
   if((type=='img_lg'||type=='img_sm') && !link){
@@ -1878,12 +1878,12 @@ function insertToTemplate() {
     h.push('</span>');
   }else if(type=='para'){
     h.push('<div class="drag-vertical">');
-    h.push('<span data-tag="para" class="pull-left" style="width: 98%;color:'+fc+';font-size: '+fs+'px;"  data-color="'+fc+'" >');
+    h.push('<span data-tag="para" class="pull-left" style="width: 98%;color:'+fc+';font-size: '+fs+'px;"  data-color="'+fc+'" data-bold="'+bold+'">');
     h.push(text);
     h.push('</span>');
   }else if(type=='custom'){
     h.push('<div class="drag-vertical">');
-    h.push('<span data-tag="custom" class="pull-left" style="width: 98%;color:'+fc+';font-size: '+fs+'px;" data-color="'+fc+'">');
+    h.push('<span data-tag="custom" class="pull-left" style="width: 98%;color:'+fc+';font-size: '+fs+'px;" data-color="'+fc+'" data-bold="'+bold+'">');
     h.push(text);
     h.push('</span>'); 
   }else if(type=='link'){
@@ -1952,25 +1952,31 @@ function previewTemplate() {
     } else if (elem.dataset.tag=='img_lg'){
       template=template+imgLG+elem.dataset.url+imgLG2+oneLine;
     } else if (elem.dataset.tag=='custom'){
-      var fcs='color: '+elem.dataset.color+';font-size: '+elem.style.fontSize+';'
+      var fcs='color: '+elem.dataset.color+';font-size: '+elem.style.fontSize+';text-align:center;';
+      if(elem.dataset.bold){
+        fcs = fcs+'font-weight:bold;'
+      }
       var h = TEXTHTML.replace('[FONTSIZECOLOR]', fcs);
       template=template+h+elem.innerText+TEXTHTML2+oneLine;
     } else if (elem.dataset.tag=='subh'){
-      var fsc='color: '+elem.dataset.color+';font-size: 18px;'
+      var fsc='color: '+elem.dataset.color+';font-size: 18px;text-align:center;'
       var h = TEXTHTML.replace('[FONTSIZECOLOR]', fsc);
       template=template+h+elem.innerText+TEXTHTML2+oneLine;
       
     } else if (elem.dataset.tag=='para'){
-      var fcs='color: '+elem.dataset.color+';font-size: '+elem.style.fontSize+';'
+      var fcs='color: '+elem.dataset.color+';font-size: '+elem.style.fontSize+';';
+      if(elem.dataset.bold){
+        fcs = fcs+'font-weight:bold;'
+      }
       var h = TEXTHTML.replace('[FONTSIZECOLOR]', fcs);
       template=template+h+elem.innerText+TEXTHTML2+oneLine;
     }
   }
-  var a1 = ['<div style="background-image: url(']
+  var a1 = ['<div style="background: url(']
   a1.push("'")
   a1.push(bg)
   a1.push("'")
-  a1.push('); background-repeat: repeat;width: 600px;padding-top:'+pt+'px;padding-bottom:'+pb+'px;">');
+  a1.push(') 0 0 no-repeat / cover; width: 600px;padding-top:'+pt+'px;padding-bottom:'+pb+'px;">');
   var template_upper = $('#template_upper').html();
   template_upper = template_upper.replace('[HEADERIMG]', hdr);
   template_upper = template_upper.replace('[CONTENTREPLACE]', a1.join('')+template+'</div>');
@@ -1982,6 +1988,7 @@ function previewTemplate() {
   $('#input_padding_top').val($('#padding_top').val());
   $('#input_bg_img').val($('#bg_img').val());
   $('#input_header_img').val($('#header_img').val());
+  $('#input_subject').val($('#subject').val());
   
   $('#save_email_template_btn').show();
 };
@@ -1995,8 +2002,7 @@ function saveTemplateCB(r){
 }
 function getMailTemplate(t){
   $('#output_dom').html('');
-  $('#insrt_email_template_btn').hide();
-  $('#prev_email_template_btn').hide();
+  $('#insrt_email_template_btn, #prev_email_template_btn, #save_email_template_btn').hide();
   if(!t) return;
   $('#output_dom').html('Please wait template loading...');
   getRequest('', '/superadmin/GetMailTemplates?t='+t, 'getMailTemplateCB')
@@ -2011,6 +2017,8 @@ function getMailTemplateCB(r){
   $('#header_img').val(r.data.header_img);
   $('#padding_top').val(r.data.padding_top);
   $('#padding_bottom').val(r.data.padding_bottom);
+  $('#subject').val(r.data.subject);
+  $('#input_subject').val(r.data.subject);
   if(r.data.key){
     $('#template_key').val(r.data.key);
     $('#template_html').val(r.data.template);
@@ -2021,6 +2029,9 @@ function getMailTemplateCB(r){
     $('#template_html').val('');
     $('#codeline_html').val('');
   }
+  $("i.fa-times").on('click', function(e) {
+    $(this).closest('div.drag-vertical').remove();
+  });
   
 }
 
@@ -2212,4 +2223,40 @@ function copyText(id){
   document.execCommand("Copy");
   textArea.remove();
   showMSG('Image url copied', 'info');
+}
+
+
+function gotoCreateEvent(){
+  showFormDom()
+  $('#events_form').show();
+  $('#edit_events_form').hide();
+}
+
+function editEvent(k){
+  showFormDom();
+  $('#events_form').hide();
+  $('#edit_events_form').show();
+  getRequest('', '/superadmin/GetEvent?k='+k, 'editEventCB');
+}
+
+function editEventCB(r){
+  $('#loading_evnt').hide();
+  $('#event_key').val(r.data.k);
+  if(r.data.status){
+    $('#stauts').val('true')
+  } else{
+    $('#stauts').val('');
+  }
+  $('#edit_event_end_date').val(r.data.end_date);
+  $('#edit_event_start_date').val(r.data.start_date);
+  $('#edit_event_date').val(r.data.date);
+  $('#edit_title').val(r.data.title);
+   
+}
+function updateEvent(){
+  postRequest('edit_events_form', '/superadmin/EditEvent', 'updateEventCB');
+}
+function updateEventCB(r){
+  showListDom();
+  $('#tr_'+r.data.k).toggleClass('False True');
 }

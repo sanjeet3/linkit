@@ -35,6 +35,7 @@ __route_list = [
     RedirectRoute(r'/GetMyOrderDetails', Home.GetMyOrderDetails, name='Get My Order Details', strict_slash=True),
     RedirectRoute(r'/Imgage', Home.Imgage, name='Read svg image only ', strict_slash=True),
     RedirectRoute(r'/DownloadFile', Home.DownloadFile, name='DownloadFile', strict_slash=True),
+    RedirectRoute(r'/Testing', Home.Testing, name='Testing', strict_slash=True),
     
     RedirectRoute(r'/DeleteBucketFile', DesignerSetup.DeleteBucketFile, name='DeleteBucketFile', strict_slash=True),
      
@@ -94,6 +95,8 @@ __route_list = [
     RedirectRoute(r'/superadmin/SetupThemesLive', SuperAdmin.SetupThemesLive, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/ManageStripImg', SuperAdmin.ManageStripImg, name='SuperAdmin themes page', strict_slash=True),
     RedirectRoute(r'/superadmin/Events', SuperAdmin.EventView, name='SuperAdmin EventView page', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetEvent', SuperAdmin.GetEvent, name='SuperAdmin EventView page', strict_slash=True),
+    RedirectRoute(r'/superadmin/EditEvent', SuperAdmin.EditEvent, name='SuperAdmin EventView page', strict_slash=True),
     RedirectRoute(r'/superadmin/EventSequenceSet', SuperAdmin.EventSequenceSet, name='SuperAdmin Event client view setup', strict_slash=True),
     RedirectRoute(r'/superadmin/Products', SuperAdmin.Products, name='SuperAdmin Products page', strict_slash=True),
     RedirectRoute(r'/superadmin/SearchProducts', SuperAdmin.SearchProducts, name='SuperAdmin Products page', strict_slash=True),

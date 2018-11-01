@@ -31,6 +31,13 @@ def get_date_from_str(value):
     pass
   return None
 
+def date_to_str(value):
+  try:
+    return value.strftime(DATE_STRING_FORMAT0)
+  except Exception:
+    pass
+  return ''
+
 def get_time_from_str(value):
   try:
     return datetime.datetime.strptime(value, TIME_STRING_FORMAT0).time()

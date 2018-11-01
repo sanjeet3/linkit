@@ -455,6 +455,10 @@ class EventMaster(EndpointsModel):
   bucket_key = ndb.StringProperty(default='')
   seq_num = ndb.IntegerProperty(default=0)
   seq_selected = ndb.BooleanProperty(default=False)
+  status = ndb.BooleanProperty(default=True)
+  date = ndb.DateProperty()
+  start_date = ndb.DateProperty()
+  end_date = ndb.DateProperty()
   
   @classmethod
   def get_list(cls):  
@@ -484,7 +488,7 @@ class EventMaster(EndpointsModel):
   
   @classmethod
   def get_client_view(cls):  
-    return cls.query(cls.seq_selected==True).order(cls.seq_num).fetch()
+    return cls.query(cls.seq_selected==True, cls.status==True).order(cls.seq_num).fetch()
 
 class StaticImage(EndpointsModel):
   ''' Themes datastore ''' 
@@ -792,6 +796,7 @@ class MailTemplateModel(EndpointsModel):
   codeline_html = ndb.TextProperty(default='')  
   template = ndb.TextProperty(default='')  
   template_type = ndb.StringProperty(choices=MAIL_TEMPLATE_CHOICES)  
+  subject = ndb.StringProperty(default='')  
     
   @classmethod
   def get_list(cls):

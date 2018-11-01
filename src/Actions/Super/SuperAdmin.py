@@ -8,7 +8,7 @@ from src.api.baseapi import get_64bit_binary_string_from_int
 from src.api.baseapi import get_integer_from_binary_string
 from src.api.bucketHandler import upload_file, delete_bucket_file
 from src.app_configration import config
-from src.api.datetimeapi import get_dt_by_country
+from src.api.datetimeapi import get_dt_by_country, date_to_str
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
 from src.Database import Client, MailUploads, MailTemplateModel, ProductTutorial,\
@@ -578,7 +578,7 @@ class UploadProductDesign(ActionSupport):
                           'Product design exist')  
         
     file_name = image_file.filename    
-    bucket_path = '/productpromo/design/%s' %(file_name)
+    bucket_path = '/design_variation/design/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url = ''
     upload_file(file_obj, bucket_path)
@@ -800,7 +800,7 @@ class ThemesPicsUploading(ActionSupport):
     file_name = image_file.filename
     msg = '%s, %s, %s' %(collum, param, file_name) 
     logging.info(msg)   
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/design_variation/theme/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url, bucket_key = '', ''
     if not serving_url:
@@ -854,6 +854,33 @@ class DeleteProductBG(ActionSupport):
                          SUCCESS,
                          'Product background removed')
     
+    
+class GetEvent(ActionSupport):
+  def get(self): 
+    e = ndb.Key(urlsafe=self.request.get('k')).get()  
+    data_dict={'k': self.request.get('k'),
+        'title': e.title,
+        'status': e.status,
+        'date': date_to_str(e.date),
+        'start_date': date_to_str(e.start_date),
+        'end_date': date_to_str(e.end_date),} 
+    return json_response(self.response, data_dict, SUCCESS, '')  
+
+class EditEvent(ActionSupport):
+  def post(self): 
+    e = ndb.Key(urlsafe=self.request.get('k')).get()
+    e.title = self.request.get('title')
+    e.date = get_date_from_str(self.request.get('event_date'))
+    e.start_date = get_date_from_str(self.request.get('event_start_date'))
+    e.end_date = get_date_from_str(self.request.get('event_end_date'))
+    if self.request.get('status'):
+      e.status = True
+    else:    
+      e.status = False  
+    e.put()
+    return json_response(self.response, {'k':self.request.get('k'),
+                                         'status': e.status}, SUCCESS, 'Updated')
+
 class EventView(ActionSupport):
   def get(self):
     e_list = EventMaster.get_list()  
@@ -877,7 +904,7 @@ class EventView(ActionSupport):
                            ERROR,
                            'Select image file')
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/design_variation/event/%s' %(file_name)
     serving_url = ''
     upload_file(file_obj, bucket_path)
     try:
@@ -905,6 +932,9 @@ class EventView(ActionSupport):
     e.img_url = serving_url
     e.religion = religion
     e.title = title
+    e.date = get_date_from_str(self.request.get('event_date'))
+    e.start_date = get_date_from_str(self.request.get('event_start_date'))
+    e.end_date = get_date_from_str(self.request.get('event_end_date'))
     e.put()
     
     data_dict = {'title': e.title,
@@ -1018,7 +1048,7 @@ class UploadDesignImage(ActionSupport):
     e = ndb.Key(urlsafe=key).get()
             
     file_name = image_file.filename    
-    bucket_path = '/productpromo/%s' %(file_name)
+    bucket_path = '/design_variation/%s' %(file_name)
     bucket_path = bucket_path.lower()
     serving_url = ''
     upload_file(file_obj, bucket_path)
@@ -1145,10 +1175,17 @@ class GetMailTemplates(ActionSupport):
   def get(self):
     template_type=self.request.get('t')  
     message = 'Create new template'
-    data_dict ={'key': '', 'template_type': template_type, 'header_img': '', 'bg_img':'','padding_bottom':'30','padding_top':'30'}
+    data_dict ={'key': '',
+                'subject': '',
+                'template_type': template_type, 
+                'header_img': '', 
+                'bg_img':'',
+                'padding_bottom':'30',
+                'padding_top':'30'}
     e=MailTemplateModel.get_template(template_type)
     if e:
       data_dict['key'] = e.entityKey    
+      data_dict['subject'] = e.subject    
       data_dict['template'] = e.template    
       data_dict['header_img'] = e.header_img    
       data_dict['bg_img'] = e.bg_img    
@@ -1163,11 +1200,14 @@ class GetMailTemplates(ActionSupport):
     key=self.request.get('key')  
     codeline=self.request.get('codeline')  
     template=self.request.get('template')   
+    subject=self.request.get('subject')   
+    
     e = MailTemplateModel(template_type=template_type)
     if key:
       e = ndb.Key(urlsafe=key).get()
      
     e.codeline_html = codeline
+    e.subject = subject
     e.template = template  
     e.padding_top = self.request.get('padding_top')
     e.padding_bottom = self.request.get('padding_bottom')

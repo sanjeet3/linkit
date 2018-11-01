@@ -698,3 +698,10 @@ class ContactUs(ActionSupport):
         r= '<font style="font-family: %s;font-size: %spx">%s</font>' %(fontFamily, fontSize, source)
         layer_list.append(r)
         layer_ext_list.append('text')     '''
+ 
+from jinja2 import Environment, BaseLoader
+class Testing(webapp2.RequestHandler):
+  def get(self):
+    rtemplate = Environment(loader=BaseLoader).from_string('<h4>{{year}}')  
+    y = datetime.datetime.now().strftime('%Y')
+    return self.response.out.write(rtemplate.render({'year': y}))            

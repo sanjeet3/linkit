@@ -31,6 +31,12 @@ indexes:
   - name: seq_num
     direction: desc
 
+- kind: EventMaster
+  properties:
+  - name: seq_selected
+  - name: status
+  - name: seq_num
+
 - kind: FrameCategory
   properties:
   - name: product_category
