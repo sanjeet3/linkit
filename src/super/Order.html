@@ -37,14 +37,15 @@
           <thead>
             <tr>
               <th>Order Number</th>
-              <td>Stage</td>
-              <th>Amount</th>
+              <td>Stage</td> 
+              <td>Payment</td> 
+              <th>Amount (KES)</th>
               <th>Date</th>
               <th>Product</th>
               <th>QTY</th>
               <th>Client</th>
               <th>Seller</th>
-              <th></th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="table_body">
@@ -52,6 +53,7 @@
             <tr id="{{e.entityKey}}">
               <td>{{e.order_number}}</td>
               <td>{{e.status}}</td>
+              <td>{{e.payment_ref}}<br>{{e.payment_dt}}</td>
               <td>{{e.amount}}</td>
               <td>{{e.date}}</td>
               <td>{{e.code}}-{{e.name}}</td>

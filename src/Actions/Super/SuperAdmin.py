@@ -32,6 +32,7 @@ from src.lib.SABasehandler import ActionSupport
  
 import json, logging, datetime
 import cgi    
+from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
 from google.appengine.ext import blobstore
 from google.appengine.api import images
@@ -478,21 +479,40 @@ class OrderSearch(ActionSupport):
 
 class EditOrderStage(ActionSupport):
   def post(self):
-    order = SellerOrder()  
     order = ndb.Key(urlsafe=self.request.get('key')).get()
     stage = self.request.get('stage')
     action_date = self.request.get('date')
     action_time = self.request.get('time')  
-    
+    local_dt = get_dt_by_country(datetime.datetime.now(), 'KE')
+    d = action_date if action_date else local_dt.strftime('%d%b, %Y') 
+    t = action_time if action_time else local_dt.strftime('%H:%M')
+    history_list = json.loads(order.history)
+    history_list.append({
+        'stage': stage,
+        'date': d,
+        'time': t,
+        'updated_by': self.user_obj.email,
+        'updated_on': local_dt.strftime('%d%b, %Y %H:%M'),
+        'remarks': 'Status updated'
+                     })
+    order.history = json.dumps(history_list)
     order.status = stage
     order.put()
     
-    history = SellerOrderHistory()
-    history.date = action_date
-    history.time = action_time
-    history.stage = stage
-    history.order = order.key
-    history.put()
+    
+    try:
+      if 'approve' in stage.lower():  
+        taskqueue.add(url='/taskqueue/OrderApproveMailer',
+                      queue_name='OrderApproveMailer',
+                      params={'receiver_mail': order.email,
+                              'name': order.client_name,
+                              'key': order.entityKey,
+                              'order_number': order,
+                              'order_amt': order,
+                            
+                            })
+    except Exception, msg:
+      logging.error(msg)
     
     data_dict = {'key': self.request.get('key'),
                  'stage': stage,}
@@ -501,10 +521,9 @@ class EditOrderStage(ActionSupport):
 class GerOrderProductPrint(ActionSupport):
   def get(self): 
     order = ndb.Key(urlsafe=self.request.get('key')).get()
-    if order.design:
-      design = order.design.get()  
+    if order.client_print: 
       template = self.get_jinja2_env.get_template('super/order_production_print.html') 
-      html_str = template.render({'order': order, 'design': design}) 
+      html_str = template.render({'order': order }) 
     else:    
       html_str = 'No design available'  
     data_dict = {'html': html_str}  

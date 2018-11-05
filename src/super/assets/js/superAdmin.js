@@ -497,7 +497,9 @@ function saveOrderStageCallBack(r) {
   $('#tbla_footer').show();
   var h = [ '<tr><td><input type="number" min="1" name="index" value="' ];
   h.push(r.data.i);
-  h.push('"></td><td>');
+  h.push(' title="');
+  h.push(r.data.code);
+  h.push('" class="order_stage_input" "></td><td>');
   h.push(r.data.code);
   h.push('</td></tr>');
 
@@ -507,7 +509,7 @@ function saveOrderStageCallBack(r) {
 function updateOrderStage() {
   var tbl = {}, stageCount = 0;
 
-  $('#order_stage_tbody').html();
+  /* $('#order_stage_tbody').html();
   $('#order_stage_tbody tr').map(function() {
     var x = $(this).find('td').map(function() {
       // return $(this).html();
@@ -518,14 +520,22 @@ function updateOrderStage() {
 
     tbl[x[0]] = x[1];
     stageCount += 1;
-  })
+  })*/
 
+  var inputs = $(".order_stage_input"); 
+
+  for(var i = 0; i < inputs.length; i++){
+    var a = $(inputs[i]);  
+    tbl[a[0].value] = a[0].title;
+  }
+  console.log(tbl);
+  
   if ('' in tbl) {
     showMSG('index missing', 'warning');
     return;
   }
 
-  if (stageCount != Object.keys(tbl).length) {
+  if (inputs.length != Object.keys(tbl).length) {
     showMSG('index duplicate', 'warning');
     return;
   }
@@ -606,7 +616,7 @@ orderApi.gotoEditStatus = function(key) {
 };
 orderApi.editOrderStatus = function() {
 
-  if (!$('#status_date').val()) {
+  /*if (!$('#status_date').val()) {
     showMSG('Date missing', 'warning');
     return;
   }
@@ -614,7 +624,7 @@ orderApi.editOrderStatus = function() {
   if (!$('#status_time').val()) {
     showMSG('Time missing', 'warning');
     return;
-  }
+  }*/
 
   postRequest('update_order_stage_form', '/superadmin/EditOrderStage',
       'orderApi.editOrderStatusCallBack');
@@ -1107,7 +1117,8 @@ function renameOrderStatusCB(r){
     tr.push("'");
     tr.push(');"><i class="ace-icon fa fa-pencil-square-o"></i></button></td>');
     $('#'+r.data.index).html(tr.join(''));  
-    closeDialog('#editOrderStatusDailog')
+    closeDialog('#editOrderStatusDailog');
+    $('#tbla_footer').html('');
   }
   
 }

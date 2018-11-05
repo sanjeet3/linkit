@@ -88,9 +88,23 @@ class ActivateAccount(ActionSupport):
       logging.error(msg)
       self.abort(401) 
       return
+    logging.info(e)  
+    if e.status:
+      logging.info('status_is_true')  
+      return self.redirect('/')     
+    logging.info('start_taskqueue_welcom_mail')
+    try:
+      taskqueue.add(url='/taskqueue/WelcomeMailer',
+                    queue_name='WelcomeMailer',
+                    params={'receiver_mail': e.email,
+                            'name': e.name,
+                            'key': e.entityKey})
+    except Exception, msg:
+      logging.error(msg)
     
     e.status=True
     e.put()
+    logging.info('activated')
     return self.redirect('/')  
   
           
@@ -106,7 +120,7 @@ class Register(ActionSupport):
       return json_response(self.response, data_dict, ERROR, 'Invalid email')
   
     if Client.verify_email(email):
-      return json_response(self.response, data_dict, ERROR, 'Email account exist')    
+      return json_response(self.response, {'error': 'Email registered use another email'}, ERROR, 'Email account exist')    
     
     e = Client()
     e.email=email
@@ -602,12 +616,7 @@ class CreateDesign(ActionSupport):
     p = Product()  
     p = ndb.Key(urlsafe=self.request.get('product')).get()                          
     design_print = self.request.get('design_print2')
-    layer = self.request.get('layer')
-    layer=layer.encode('utf8')
-     
-    logging.info(layer.__len__())
-    
-    #layer_json = json.loads(layer)   
+       
     if self.request.get('design_key'):
       design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
     else:        
@@ -622,7 +631,14 @@ class CreateDesign(ActionSupport):
     design_obj.design_prev_url = serving_url
     design_obj.design_prev_key = bucket_key
     design_obj.design_prev_path = bucket_path
-    '''bucket_path = '/designer_textptrn/%s/json/%s/%s.png' %(p.code, self.client.id, design_obj.id)
+    '''
+    layer = self.request.get('layer')
+    layer=layer.encode('utf8')
+     
+    logging.info(layer.__len__())
+    
+    #layer_json = json.loads(layer)
+    bucket_path = '/designer_textptrn/%s/json/%s/%s.png' %(p.code, self.client.id, design_obj.id)
     upload_text_file(layer, bucket_path)
     try:
       bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
@@ -632,14 +648,130 @@ class CreateDesign(ActionSupport):
     design_obj.json_bucket_key = bucket_key
     design_obj.json_bucket_path = bucket_path'''
     design_obj.put()  
-    data_dict = {'id': design_obj.id, 'design_key': design_obj.entityKey}                        
+    data_dict = {'id': design_obj.id,
+                 'design_key': design_obj.entityKey,
+                 'placeOrder': self.request.get('order'),
+                 }                        
     return json_response(self.response, data_dict, SUCCESS, 'Product design saved')                        
 
+class UpdateOrderRef(ActionSupport):
+  def post(self): 
+    payment_ref = self.request.get('payment_ref')  
+    order_obj = ndb.Key(urlsafe=self.request.get('order_id')).get()
+    if SellerOrder.get_by_ref(payment_ref):
+      data = {'new_order': order_obj, 'error': 'Payment reference number invalid'}
+      template = self.get_jinja2_env.get_template('endclient/order_pay.html') 
+      return self.response.out.write(template.render(data))    
+  
+    local_dt = get_dt_by_country(datetime.datetime.now(), 'KE')
+    order_obj.order_number = str(order_obj.id)
+    order_obj.payment_ref = payment_ref
+    order_obj.payment_dt = local_dt.strftime('%d%b, %Y %H:%M')
+    order_obj.payed=True
+    status_list = OrderStage.get_order_stage().name
+    history_list = json.loads(order_obj.history)
+    history_list.append({
+        'stage': status_list[1],
+        'date': local_dt.strftime('%d%b, %Y'),
+        'time': local_dt.strftime('%H:%M'),
+        'updated_by': self.client.email,
+        'updated_on': order_obj.payment_dt,
+        'remarks': 'Payment Reference added'
+                     })
+    order_obj.history = json.dumps(history_list)
+    order_obj.status=status_list[1]
+    order_obj.put()
+    
+    self.redirect('/Orders')
+
+class AddOrderPaymentRef(ActionSupport):
+  def get(self):
+    new_order = ndb.Key(urlsafe=self.request.get('k')).get()  
+    data = {'new_order': new_order, 'error': '', 'user_obj': self.client, }
+    template = self.get_jinja2_env.get_template('endclient/order_pay.html') 
+    return self.response.out.write(template.render(data))
+
+class CreateNewOrder(ActionSupport):
+  def get(self): 
+    design_obj = ndb.Key(urlsafe=self.request.get('key')).get() 
+    data = {'design_obj': design_obj,
+            'seller_product': SellerProduct.get_default_seller_product(design_obj.product),
+            'p': design_obj.product.get(),
+            'error': '',
+            'user_obj': self.client,}
+    template = self.get_jinja2_env.get_template('endclient/create-order-page.html') 
+    self.response.out.write(template.render(data))
+    
+  def post(self):
+    new_order = SellerOrder()
+    error_msg = ''  
+    qty = self.request.get('qty')          
+    seller_product_urlsafe = self.request.get('product')
+    design_obj = ndb.Key(urlsafe=self.request.get('design_id')).get()
+    try:
+      qty = int(qty)    
+    except Exception:
+      error_msg = 'Missing quantity'
+    if qty < 1:
+      error_msg = 'Minimum quantity 1'    
+    try:
+      seller_product = ndb.Key(urlsafe=seller_product_urlsafe).get()
+    except Exception:    
+      error_msg = 'No seller available'
+       
+    if error_msg:  
+      data = {'design_obj': design_obj,
+            'seller_product': SellerProduct.get_default_seller_product(design_obj.product),
+            'p': design_obj.product.get(),
+            'error': error_msg}
+      template = self.get_jinja2_env.get_template('endclient/create-order-page.html') 
+      return self.response.out.write(template.render(data))
+
+    master_product = design_obj.product.get()
+    seller = seller_product.seller.get()
+    status_list = OrderStage.get_order_stage().name
+    local_dt = get_dt_by_country(datetime.datetime.now(), 'KE')
+    history_list = [{
+        'stage': status_list[0],
+        'date': local_dt.strftime('%d%b, %Y'),
+        'time': local_dt.strftime('%H:%M'),
+        'updated_by': self.client.email,
+        'updated_on': local_dt.strftime('%d%b, %Y %H:%M'),
+        'remarks': 'New order created'
+                     }]
+    new_order.date = local_dt.date()
+    new_order.amount = qty * seller_product.retail_price
+    new_order.seller = seller_product.seller  
+    new_order.client = self.client.key 
+    new_order.design = design_obj.key
+    new_order.seller_urlsafe = seller_product.seller_urlsafe
+    new_order.seller_name = seller.name
+    new_order.seller_email = seller.email
+    new_order.master_product = master_product.key
+    new_order.master_product_urlsafe= master_product.entityKey 
+    new_order.code = master_product.code
+    new_order.name = master_product.name
+    new_order.size = master_product.size
+    new_order.uom = master_product.uom
+    new_order.category = master_product.category
+    new_order.retail_price = seller_product.retail_price
+    new_order.master_price = master_product.price 
+    new_order.client_print = design_obj.design_prev_url
+    new_order.image_url = master_product.image_url[0] if master_product.image_url else ''
+    new_order.qty =  qty
+    new_order.client_name = self.client.name 
+    new_order.phone = self.client.telephone
+    new_order.email = self.client.email
+    new_order.status = status_list[0]  
+    new_order.history = json.dumps(history_list)            
+    new_order = new_order.put().get()
+    self.redirect('/AddOrderPaymentRef?k=%s' %(new_order.entityKey))
+    
 
 class GetMyOrders(ActionSupport):
   def get(self):
     order_list=SellerOrder.get_client_filetered(self.client.key)
-    data = {'order_list': order_list}
+    data = {'order_list': order_list, 'user_obj': self.client,}
     template = self.get_jinja2_env.get_template('endclient/order-list.html') 
     self.response.out.write(template.render(data))
 
@@ -657,10 +789,14 @@ class GetMyOrderDetails(ActionSupport):
   def get(self):
     order=ndb.Key(urlsafe=self.request.get('k')).get()
     history = json.loads(order.history)
-    
+    history_status_set = set()
+    for h in history:
+      history_status_set.add(h['stage'])    
     data = {'order': order,
             'seller':order.seller.get(),
-            'history': history}
+            'history': history,
+            'history_status_set': history_status_set,
+            'status_list': OrderStage.get_order_stage().name}
     template = self.get_jinja2_env.get_template('endclient/order_details.html') 
     self.response.out.write(template.render(data))
     

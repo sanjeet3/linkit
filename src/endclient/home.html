@@ -214,7 +214,7 @@
             style="display: none;">
             <p>
               Verification mail will sent to your registered email <span id="email_text"></span>,
-              Check your inbox and verify account to complete registration.
+              Check your inbox and verify account to complete registration. If you do not see the email in your inbox, please check your spam or junk folder as it may have found it’s way there in error. If you find it please be sure to identify the email as "not junk" non-spam email.  You'll also want to add my email address to your safe sender list. Thanks. 
             </p>
           </div>
           <form action="/Login" method="post" style="display: {%if not r%}none{%endif%};" id="login_form">
@@ -281,6 +281,7 @@
                   Get alert for new offers</label>
               </div>
             </div>
+            <span class="red" id="registraition_error"></span>
             <div class="form-group">
               <button type="button" class="btn btn-success pull-left" onclick="register()">Sign-Up</button>
               <button type="button" class="btn btn-info pull-right" onclick="showLoginDom()">Sign-in</button>

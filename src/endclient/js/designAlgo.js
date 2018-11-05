@@ -91,6 +91,10 @@ function createUserDisgn(savingURL) {
             var r = JSON.parse(this.response);
             $('#design_key').val(r.data.design_key); 
             $('#pls_wait_design_saving').hide();
+            if(r.data.placeOrder){
+              placeOrder=true;
+              window.location='/CreateNewOrder?key='+r.data.design_key;
+            }
        }
     }; 
 

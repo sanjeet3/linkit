@@ -384,7 +384,7 @@ function registerCallBack(r) {
     $('#registeration_msg_dom').show();
     $('#registration_form').hide();
   } else {
-
+    $("#registraition_error").html(r.data.error)
   }
 };
 
@@ -427,9 +427,9 @@ function getOrderDetails(k){
 function getOrderDetailsCallBack(r){
   $('#order_detail_dom').html(r);
 };
-function showHistory(i){
+function showHistory(status){
   $('#history_details>p').hide();
-  $('#history_'+i).show();
+  $('.'+status).show();
 };
 
 
@@ -466,4 +466,4 @@ function youtubeModal(h){
 function youtubeModalHide(){ 
   $('#tutorialModal').hide();
 }
-
+ 

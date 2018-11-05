@@ -1,6 +1,7 @@
 
 <div class="navbar">
   <img alt="Craft your choice" src="/img/craftyourchoicelogo1.png" class="home-logo" onclick="window.location='/'">
+  <div class="pull-right">
   <div class="dropdown">
     <button class="dropbtn">
       Products <i class="fa fa-caret-down"></i>
@@ -11,12 +12,9 @@
   </div>
   {% if user_obj %} <a href="/Orders">Orders</a> <a href="/AboutUs">About Us</a> <a
     href="/ContactUs">Contact Us</a>
-  <div class="pull-right">
     <a href="/Logout" id="logout">Logout</a>
-  </div>
-  {%else%} <a href="/AboutUs">About Us</a> <a href="/ContactUs">Contact Us</a>
-  <div class="pull-right">
+   {%else%} <a href="/AboutUs">About Us</a> <a href="/ContactUs">Contact Us</a>
     <a href="javascript:showLoginDom();">Sign-In</a> <a href="javascript:showRegisterDom();">Sign-Up</a>
-  </div>
   {%endif%}
+  </div>
 </div>

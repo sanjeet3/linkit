@@ -742,3 +742,10 @@ a.button:hover{
   display: block;
   background: rgba(0, 0, 0, .3);
 }
+
+.red {
+  color: red;
+}
+.inline{
+  display: inline-block;
+}

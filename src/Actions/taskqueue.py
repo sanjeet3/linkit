@@ -61,9 +61,66 @@ class VerifyAccountMailer(webapp2.RequestHandler):
     mail_sender(receiver_email, subject, html_str)
     
     logging.info('verify_email_account_complete')
+
+class WelcomeMailer(webapp2.RequestHandler):
+  def post(self):
+    logging.info('welocme_email_account_start') 
+    logging.info(self.request) 
+    e = MailTemplateModel.get_template('Welcome Mail')
+    if not e:
+      logging.warning('Welcome Mail template NA')
+      return
+    
+    receiver_email = self.request.get('receiver_mail')
+    y = datetime.datetime.now().strftime('%Y')
+    d = {'receiver_mail': receiver_email,
+         'name': self.request.get('name'),
+         'key': self.request.get('key'),
+         'year': y}
+    crafty = 'https://www.craftyourchoice.com'
+    template_str = e.template
+    template_str = template_str.replace('[CRAFTY]', crafty)
+    template_str = template_str.replace('[USERNAME]', self.request.get('name'))
+    template_str = template_str.replace('[USEREMAIL]', receiver_email)
+    template = Environment(loader=BaseLoader).from_string(template_str) 
+    html_str = template.render(d)
+    subject = e.subject if e.subject else 'Welcome to craft your choice'
+    mail_sender(receiver_email, subject, html_str)
+    
+    logging.info('welcome_email_account_complete')
+
+class OrderApproveMailer(webapp2.RequestHandler):
+  def post(self):
+    logging.info('order_approve_email_account_start') 
+    logging.info(self.request) 
+    e = MailTemplateModel.get_template('On Order Approve')
+    if not e:
+      logging.warning('Welcome Mail template NA')
+      return
+    
+    receiver_email = self.request.get('receiver_mail')
+    y = datetime.datetime.now().strftime('%Y')
+    d = {'receiver_mail': receiver_email,
+         'name': self.request.get('name'),
+         'key': self.request.get('key'),
+         'year': y}
+    template_str = e.template
+    template_str = template_str.replace('[ORDERNUMBER]', self.request.get('order_number'))
+    template_str = template_str.replace('[ORDERAMT]', self.request.get('order_amt'))
+    template_str = template_str.replace('[USERNAME]', self.request.get('name'))
+    template_str = template_str.replace('[USEREMAIL]', receiver_email)
+    template = Environment(loader=BaseLoader).from_string(template_str) 
+    html_str = template.render(d)
+    subject = e.subject if e.subject else 'Your order craft your choice'
+    subject = subject.replace('[ORDERNUMBER]', self.request.get('order_number'))
+    mail_sender(receiver_email, subject, html_str)
+    
+    logging.info('welcome_email_account_complete')
     
 app = webapp2.WSGIApplication([
     ('/taskqueue/VerifyAccountMailer', VerifyAccountMailer), 
+    ('/taskqueue/WelcomeMailer', WelcomeMailer), 
+    ('/taskqueue/OrderApproveMailer', OrderApproveMailer), 
     
     ], debug=True)
          

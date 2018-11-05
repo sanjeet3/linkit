@@ -19,7 +19,7 @@
         <tbody id="order_stage_tbody">
           {%for d in stage_list%}
           <tr id="{{loop.index-1}}">
-            <td><input type="number" min="1" name="index" value="{{loop.index}}"></td>
+            <td><input type="number" min="1" name="index" value="{{loop.index}}" title="{{d}}" class="order_stage_input"></td>
             <td>{{d}}
               <button class="btn btn-xs bigger btn-yellow pull-right" type="button"
                 onclick="gotoRenameOrderSatus({{loop.index-1}}, '{{d}}');">

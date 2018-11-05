@@ -319,6 +319,7 @@ class SellerOrder(EndpointsModel):
   created_on = ndb.DateTimeProperty(auto_now_add=True)
   order_number = ndb.StringProperty(default='')
   payment_ref = ndb.StringProperty(default='')
+  payment_dt = ndb.StringProperty(default='')
   payed = ndb.BooleanProperty(default=False) 
   amount = ndb.FloatProperty(default=0.0) 
   date = ndb.DateProperty(auto_now_add=True)
@@ -339,7 +340,7 @@ class SellerOrder(EndpointsModel):
   retail_price = ndb.FloatProperty(default=0.0) 
   master_price = ndb.FloatProperty(default=0.0) 
   image_url = ndb.StringProperty(default='')
-  client_print = ndb.StringProperty(default='[]')
+  client_print = ndb.StringProperty(default='')
   qty = ndb.IntegerProperty(default=0)
   client_name = ndb.StringProperty(default='')
   phone = ndb.StringProperty(default='')
@@ -349,10 +350,12 @@ class SellerOrder(EndpointsModel):
   history = ndb.TextProperty(default='[]')
   
   @classmethod
-  def get_order_filetered(cls, from_date, to_date, seller_list=[]):  
+  def get_order_filetered(cls, from_date, to_date, seller_list=[], status_list=[]):  
     q = cls.query(cls.date>=from_date, cls.date<=to_date).order(-cls.date)
     if seller_list:
       q = q.filter(cls.seller.IN(seller_list))    
+    if status_list:  
+      q = q.filter(cls.seller.IN(status_list))    
     return q
 
   @classmethod
@@ -361,7 +364,11 @@ class SellerOrder(EndpointsModel):
     if from_date and to_date:
       q = q.filter(cls.date>=from_date, cls.date<=to_date)    
     return q.fetch()    
-    
+  
+  @classmethod
+  def get_by_ref(cls, ref):
+    return cls.query(cls.payment_ref==ref).get()
+      
 class SellerOrderHistory(EndpointsModel):
   '''Franchisor order Data Store model ''' 
   created_on = ndb.DateTimeProperty(auto_now_add=True)

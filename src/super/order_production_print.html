@@ -1,24 +1,14 @@
 <input type="hidden" id="print_title" value="{{order.order_number}}">
 <div style="display: block;" id="order-print-content">
   <div style="clear: both;">
-    <table style="width: 50%; float: left;">
+    <table style="width: 100%;">
       <tr>
         <th>Order Number</th>
-        <td>{{order.order_number}}</td>
+        <td>{{order.id}}</td>
       </tr>
       <tr>
-        <th>Design Id</th>
-        <td>{{design.design_id}}</td>
-      </tr>
-    </table>
-    <table style="width: 50%; float: right;">
-      <tr>
-        <th>Item Quantity</th>
+        <th>Quantity</th>
         <td>{{order.qty}}</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
       </tr>
     </table>
   </div>
@@ -26,17 +16,8 @@
     <hr>
     <h5>Design View</h5>
     <div class="download-item">
-      <img alt="" src="{{design.design_prev}}"> <a href="javascript:" onclick="downloadPic(this)" class="tobehide"
-        style="clear: both; display: block;">Download</a>
+      <img alt="" src="{{order.client_print}}"> <a href="javascript:"
+        onclick="downloadPic(this)" class="tobehide" style="clear: both; display: block;">Download</a>
     </div>
-    <hr>
-    <h5>Design Items</h5>
-    {%for item in design.layer_list%} {%if design.layer_ext_list[loop.index-1]=='text'%}
-    <div style="margin-bottom: 5px; clear: both; display: block;">{{item|safe}}</div>
-    {%else%}
-    <div class="download-item" style="margin-bottom: 5px; clear: both; display: block;">
-      {{item|safe}}<a href="javascript:" onclick="downloadPic(this)" class="tobehide" style="clear: both; display: block;">Download</a>
-    </div>
-    {%endif%} {%endfor%}
   </div>
 </div>

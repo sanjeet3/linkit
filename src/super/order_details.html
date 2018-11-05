@@ -6,8 +6,9 @@
           <i class="ace-icon fa fa-leaf green"></i> Customer Invoice
         </h3>
         <div class="widget-toolbar no-border invoice-info">
-          <span class="invoice-info-label">Invoice:</span> <span class="red">#{{order.order_number}}</span>
-          <br> <span class="invoice-info-label">Date:</span> <span class="blue">{{order.date}}</span>
+          <span class="invoice-info-label">Invoice:</span> <span class="red">#{{order.order_number
+            or 'Payment pending'}}</span> <br> <span class="invoice-info-label">Date:</span> <span
+            class="blue">{{order.date}}</span>
         </div>
         <div class="widget-toolbar hidden-480">
           <a href="#"> <i class="ace-icon fa fa-print"></i>
@@ -25,12 +26,14 @@
               </div>
               <div>
                 <ul class="list-unstyled spaced">
-                  <li><i class="ace-icon fa fa-caret-right blue"></i>{{order.client_name}}</li>
-                  <li><i class="ace-icon fa fa-caret-right blue"></i>{{order.email}}</li>
+                  <li><i class="ace-icon fa fa-caret-right blue"></i>{{order.client_name}} ({{order.email}})</li>
                   <li><i class="ace-icon fa fa-caret-right blue"></i>Phone: {{order.phone}}</li>
-                  </li>
-                  <li class="divider"></li>
-                  <li><i class="ace-icon fa fa-caret-right blue"></i> Paymant Info</li>
+                  <li><i class="ace-icon fa fa-caret-right blue"></i>Address: </li>
+                  <li><i class="ace-icon fa fa-caret-right blue"></i> Payment Info:
+                    <ul style="margin-left: 40px;">
+                      <li> Reference No: {{order.payment_ref}}</li>
+                      <li> Date-Time: {{order.payment_dt}}</li>
+                    </ul></li>
                 </ul>
               </div>
             </div>

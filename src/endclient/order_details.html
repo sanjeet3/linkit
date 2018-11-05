@@ -2,75 +2,85 @@
   <div class="mb-5 text-center" style="border-bottom: 2px black dotted;">
     <h4>Order Details</h4>
   </div>
-  <div class="col-sm-6">
-    <div class="prod-detail">
-      <h4>{{order.code}}, {{order.name}}</h4>
-      <p>
-        <strong>Invoice Number : </strong> {{order.order_number}}
-      </p>
-      <p>
-        <strong>Invoice Value : </strong> {{order.amount}}
-      </p>
-      <p>
-        <strong>Quantity: </strong> {{order.qty}}
-      </p>
-      <p>
-        <strong>Size: </strong>{{order.size}}
-      </p>
-      <p>
-        <strong>Price: </strong>{{order.retail_price}}
-      </p>
-      <p>
-        <strong>Category: </strong> {{order.category}}
-      </p>
-      <p>
-        <strong>UOM: </strong> {{order.uom}}
-      </p>
-      <p>
-        <strong>Description: </strong>{{order.description}}
-      </p>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="prod-img">
-      <img class="img-responsive" src="{{order.image_url}}" id="product-view-img">
-    </div>
-  </div>
-  <div class="col-sm-12 mt-10">
-    <div class="media search-media">
-      <div class="media-left">
-        <a href="javascript:"> <img class="media-object" alt="{{seller.name}}"
-          src="{{seller.img_url or '/super/assets/images/avatars/avatar2.png'}}"
-          style="width: 72px; height: 72px;">
-        </a>
+  <div class="row inline">
+    <div class="col-sm-6">
+      <div class="">
+        <h4>{{order.code}}, {{order.name}}</h4>
+        <p>
+          <strong>Invoice Number : </strong> {{order.id}}
+        </p>
+        <p>
+          <strong>Invoice Value : </strong> {{order.amount}} KES
+        </p>
+        <p>
+          <strong>Quantity: </strong> {{order.qty}}
+        </p>
+        <p>
+          <strong>Size: </strong>{{order.size}}
+        </p>
+        <p>
+          <strong>Price: </strong>{{order.retail_price}}
+        </p>
+        <p>
+          <strong>Category: </strong> {{order.category}}
+        </p>
+        <p>
+          <strong>UOM: </strong> {{order.uom}}
+        </p>
       </div>
-      <div class="media-body">
-        <div>
-          <h4 class="media-heading">
-            <a href="javascript:" class="blue">{{seller.name}}, {{seller.person}} </a>
-          </h4>
+    </div>
+    <div class="col-sm-6">
+      <div class="prod-img">
+        <img class="img-responsive" src="{{order.image_url}}" id="product-view-img" width="100%">
+      </div>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-sm-12 mt-10">
+      <div class="media search-media">
+        <div class="media-left">
+          <a href="javascript:"> <img class="media-object" alt="{{seller.name}}"
+            src="{{seller.img_url or '/super/assets/images/avatars/avatar2.png'}}"
+            style="width: 72px; height: 72px;">
+          </a>
         </div>
-        <p>{{seller.address}}</p>
+        <div class="media-body">
+          <div>
+            <h4 class="media-heading">
+              <a href="javascript:" class="blue">{{seller.name}}, {{seller.person}} </a>
+            </h4>
+          </div>
+          <p>{{seller.address}}</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<div class="col-sm-12 mb-20">
-  <ol class="progtrckr" data-progtrckr-steps="5">
-    <li class="progtrckr-done" onclick="showHistory(1)">Order Processing</li>
-    <li class="progtrckr-todo" onclick="showHistory(2)">Pre-Production</li>
-    <li class="progtrckr-todo" onclick="showHistory(3)">In Production</li>
-    <li class="progtrckr-todo" onclick="showHistory(4)">Shipped</li>
-    <li class="progtrckr-todo" onclick="showHistory(5)">Delivered</li>
+<div class="col-sm-12" style="padding-bottom: 35px;">
+  <ol class="progtrckr" data-progtrckr-steps="{{status_list|length}}">
+    {%for s in status_list%}
+    <li class="{%if s in history_status_set%}progtrckr-done{%else%}progtrckr-todo{%endif%}">{{s}}</li>
+    {%endfor%}
   </ol>
-  <div id="history_details">
-    {%for h in history%} {%if loop.index==1%}
-    <p id="history_{{loop.index}}" class="mt-20">{{h['date']}}, {{h['time']}}</p>
-    {%else%}
-    <p id="history_{{loop.index}}" class="mt-20" style="display: none;">{{h['date']}},
-      {{h['time']}}</p>
-    {%endif%} {%endfor%}
-  </div>
+  <div id="history_details"></div>
+</div>
+<div class="col-sm-12 inline">
+  <table class="table  table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Date Time</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {%for h in history%}
+      <tr>
+        <td>{{h['stage']}}</td>
+        <td>{{h['date']}}, {{h['time']}}</td> 
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
 </div>
 <div class="col-sm-12 mt-10 mb-10 text-center">
   <button type="button" class="btn btn-success btn-mini "
