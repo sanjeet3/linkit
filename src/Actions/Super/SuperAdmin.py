@@ -21,7 +21,7 @@ from src.Database import Seller
 from src.Database import SellerLadger
 from src.Database import SellerProduct
 from src.Database import SellerOrder
-from src.Database import SellerOrderHistory
+from src.Database import ClientLogs
 from src.Database import OrderStage
 from src.Database import Themes
 from src.Database import EventMaster
@@ -57,6 +57,8 @@ class Home(ActionSupport):
     context['inactive_client'] = inactive_client
     context['today_order_count'] = today_order_count
     context['month_order_count'] = month_order_count
+    context['log_list'] = ClientLogs.get_list()
+    context['dt'] = today_date
     
     logging.info(self.permission)
     template = self.get_jinja2_env.get_template('super/base.html')    
@@ -1275,7 +1277,17 @@ class MailTemplates(ActionSupport):
                          SUCCESS, 'uploads')  
 
 
-        
+class ClientLogsSearch(ActionSupport):
+  def get(self):    
+    dt= get_date_from_str(self.request.get('dt'))
+    data = {'log_list': ClientLogs.get_list(dt)}
+    template = self.get_jinja2_env.get_template('super/client_log_search.html')
+    html = template.render(data)
+    
+    return json_response(self.response,
+                         {'html': html},
+                         SUCCESS,
+                         'Search result')        
 
 import webapp2         
 body='''

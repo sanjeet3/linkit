@@ -1,0 +1,10 @@
+{%for e in log_list%}
+<tr>
+  <td>{{e.email}}</td>
+  <td>{{'%0.2f'| format((e.hit_time - e.in_time)/60)}} Minutes</td>
+</tr>
+{%else%}
+<tr class="text-center">
+  <td colspan="20">No record available</td>
+</tr>
+{%endfor%}

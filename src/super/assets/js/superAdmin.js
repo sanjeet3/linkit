@@ -2271,3 +2271,18 @@ function updateEventCB(r){
   showListDom();
   $('#tr_'+r.data.k).toggleClass('False True');
 }
+
+function searchClientLog(){
+  var dt = $('#seleted_date').val(); 
+  if (!dt) {
+    showMSG('Please select date', 'warning');
+    return;
+  }
+  $('#client_logs').html(searchTableMsg);
+  getRequest('', '/superadmin/ClientLogsSearch?dt='+dt,
+      'searchClientLogCB');
+}
+
+function searchClientLogCB(r){
+  $('#client_logs').html(r.data.html);
+}

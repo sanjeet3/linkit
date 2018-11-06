@@ -4,12 +4,11 @@ Created on 04-Jul-2018
 @author: Sanjay Saini
 '''
 
-from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory, HomeScreenStaticURL,\
-    ProductTutorial
+from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory, HomeScreenStaticURL
 from src.Database import Client, ClientProductDesign, ProductDesign, AllowDesignerOffLogin
-from src.Database import OrderStage, ProductCategory, Themes, EventMaster
-from src.Database import SellerLadger, ReadyDesignTemplate
-from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, FrameCategory,FrameSubCategory, BGSubCategory, Masks, TextPatterns 
+from src.Database import OrderStage, ProductCategory, Themes, EventMaster, TextPatterns
+from src.Database import SellerLadger, ReadyDesignTemplate, ProductTutorial, BGSubCategory
+from src.Database import ProductCanvas ,DesignCategory, DesignSubCategory, FrameCategory,FrameSubCategory  
 from src.lib.ECBasehandler import ActionSupport
  
 import logging, time 
@@ -176,7 +175,7 @@ class Login(ActionSupport):
           self.msg = 'Please try again' 
           sesion_success = False
     
-    if sesion_success:
+    if sesion_success: 
       return self.redirect('/')      
     else:
       template = self.get_jinja2_env.get_template('endclient/loginerror.html')    
@@ -630,6 +629,8 @@ class CreateDesign(ActionSupport):
     return self.response.out.write(template.render(html_dta))
     
   def post(self):  
+    if not self.client:
+      return json_response(self.response, {}, ERROR, 'Session Expired')    
     p = ndb.Key(urlsafe=self.request.get('product')).get()                          
     design_obj = ClientProductDesign(client = self.client.key, product_code = p.code, product = p.key).put().get()  
     params={'design_key': design_obj.entityKey,
@@ -663,7 +664,7 @@ class UpdateOrderRef(ActionSupport):
         'stage': status_list[1],
         'date': local_dt.strftime('%d%b, %Y'),
         'time': local_dt.strftime('%H:%M'),
-        'updated_by': self.client.email,
+        'updated_by': self.client.email if self.client else '',
         'updated_on': order_obj.payment_dt,
         'remarks': 'Payment Reference added'
                      })
@@ -771,6 +772,11 @@ class CreateNewOrder(ActionSupport):
 
 class GetMyOrders(ActionSupport):
   def get(self):
+    if not self.client:
+      template = self.get_jinja2_env.get_template('endclient/loginerror.html')  
+      d= {'msg': 'Session expired! Kindly login again'}  
+      return self.response.out.write(template.render(d))   
+       
     order_list=SellerOrder.get_client_filetered(self.client.key)
     data = {'order_list': order_list, 'user_obj': self.client,}
     template = self.get_jinja2_env.get_template('endclient/order-list.html') 
@@ -778,6 +784,11 @@ class GetMyOrders(ActionSupport):
 
 class MyOrders(ActionSupport):
   def get(self):
+    if not self.client:
+      template = self.get_jinja2_env.get_template('endclient/loginerror.html')  
+      d= {'msg': 'Session expired! Kindly login again'}  
+      return self.response.out.write(template.render(d))   
+
     order_list=SellerOrder.get_client_filetered(self.client.key)
     product_cat_list = ProductCategory.get_list()
     data = {'order_list': order_list,

@@ -74,6 +74,10 @@ function createDBEntryOnly(){
 }
 
 function uploadDesignToBucket(r){
+  if(r.status=='ERROR'){
+    alert('Session expired, Kindly login');
+    return;
+  }
   //r.data.id;
   $('#design_key').val(r.data.design_key);
   placeOrder=true; 

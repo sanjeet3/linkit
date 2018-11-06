@@ -13,6 +13,7 @@ from google.appengine.ext import ndb
 from webapp2_extras import security
 from webapp2_extras.appengine.auth.models import User as UserSessionModel
 from src.app_configration import config
+from datetime import datetime
 
 product_design_title_choice = config.get('design_img_title')
 MAIL_TEMPLATE_CHOICES = config.get('MAIL_TEMPLATE_CHOICES')
@@ -85,7 +86,26 @@ class Client(EndpointsModel):
   @classmethod
   def validate_active_client(cls, email, password):
     return cls.query(cls.status==True, cls.email==email, cls.password==password).get()   
+
+class ClientLogs(ndb.Model):  
+  client = ndb.KeyProperty(Client)
+  created_on = ndb.DateProperty(auto_now_add=True)
+  email = ndb.StringProperty(default='')
+  in_time = ndb.IntegerProperty(default=0)
+  hit_time = ndb.IntegerProperty(default=0)
   
+  @classmethod
+  def log_entry(cls, client_obj):
+    e = cls.query(cls.client==client_obj.key, cls.created_on==datetime.now().date()).get()  
+    if not e:
+      ClientLogs(client=client_obj.key, email=client_obj.email, created_on=datetime.now().date(), in_time=int(time.time())).put()  
+    else:
+      e.hit_time = int(time.time())    
+      e.put()  
+
+  @classmethod
+  def get_list(cls, dt=datetime.now().date()):
+    return cls.query(cls.created_on==dt).fetch()
   
 class Seller(EndpointsModel):
   '''Franchisor Data Store model '''

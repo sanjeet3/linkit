@@ -47,6 +47,7 @@ __route_list = [
      
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
+    RedirectRoute(r'/superadmin/ClientLogsSearch', SuperAdmin.ClientLogsSearch, name='ClientLogsSearch', strict_slash=True),
     RedirectRoute(r'/superadmin/test', SuperAdmin.Test, name='SuperAdmin Test', strict_slash=True),
     RedirectRoute(r'/superadmin/UserAccount', SuperAdmin.UserAccount, name='SuperAdmin UserAccount', strict_slash=True),
     RedirectRoute(r'/superadmin/ManageUserStatus', SuperAdmin.ManageUserStatus, name='SuperAdmin UserAccount', strict_slash=True),

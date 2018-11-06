@@ -4,7 +4,7 @@ Created on 04-Jul-2018
 @author: Sanjay Saini
 '''
 
-from src.Database import Client
+from src.Database import Client, ClientLogs
 
 import os
 import logging
@@ -29,7 +29,10 @@ class ActionSupport(webapp2.RequestHandler):
     user_session = self.auth.get_user_by_session()  
     if user_session:
       self.client = Client.get_active_client_by_email(user_session['username'])
-          
+      try:
+        ClientLogs.log_entry(self.client)
+      except:
+        pass      
   def dispatch(self):
     # Get a session store for this request.
     self.session_store = sessions.get_store(request=self.request)    

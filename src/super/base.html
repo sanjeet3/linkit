@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta charset="utf-8">
 <title>CraftYourChoice</title>
-<link rel="shortcut icon" type="image/png" href="/img/fevicon.png"/>
+<link rel="shortcut icon" type="image/png" href="/img/fevicon.png" />
 <meta name="description" content="overview &amp; stats">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <!-- bootstrap & fontawesome -->
@@ -138,7 +138,7 @@ to {
 }
 </style>
 </head>
-<body class="no-skin"> 
+<body class="no-skin">
   {% include 'super/navbar.html' %}
   <div class="main-container ace-save-state" id="main-container">
     <script type="text/javascript">
@@ -157,37 +157,6 @@ to {
           <!-- /.nav-search -->
         </div>
         <div class="page-content">
-          <!-- .ace-settings-container -->
-          <div class="ace-settings-container" id="ace-settings-container">
-            <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
-              <i class="ace-icon fa fa-cog bigger-130"></i>
-            </div>
-            <div class="ace-settings-box clearfix" id="ace-settings-box">
-              <div class="pull-left width-100">
-                <div class="ace-settings-item">
-                  <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover"
-                    autocomplete="off"> <label class="lbl" for="ace-settings-hover">
-                    Submenu on Hover</label>
-                </div>
-                <div class="ace-settings-item">
-                  <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl"
-                    autocomplete="off"> <label class="lbl" for="ace-settings-rtl">
-                    Right To Left (rtl)</label>
-                </div>
-              </div>
-              <!-- /.pull-left -->
-            </div>
-            <!-- /.ace-settings-box -->
-          </div>
-          <!-- /.ace-settings-container -->
-          <div class="page-header">
-            <h1>
-              Dashboard <small> <i class="ace-icon fa fa-angle-double-right"></i> overview
-                &amp; stats
-              </small>
-            </h1>
-          </div>
-          <!-- /.page-header -->
           <div class="row">
             <div class="col-sm-12">
               <div class="widget-box transparent">
@@ -234,6 +203,47 @@ to {
               <!-- /.widget-box -->
             </div>
             <!-- /.col -->
+            <div class="col-sm-12">
+              <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                  <h4 class="widget-title lighter pull-left">
+                    <i class="ace-icon fa fa-users orange"></i> Clients Logs
+                  </h4>
+                  <div class="input-daterange input-group pl-15 pt-10" >
+                    <input type="text" class="date-input" name="seleted_date" id="seleted_date"
+                      value="{{dt.strftime('%d-%m-%Y')}}">
+                    <button type="button" onclick="searchClientLog()" class="btn btn-info btn-mini"
+                      style="margin-top: -6px;">
+                      <i class="ace-icon fa fa-search bigger-110"></i>Search
+                    </button>
+                  </div>
+                  <div class="widget-toolbar">
+                    <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="widget-body">
+                  <div class="widget-main no-padding">
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th>Client</th>
+                          <th>Uses Time</th>
+                        </tr>
+                      </thead>
+                      <tbody id="client_logs">
+                        {%for e in log_list%}
+                        <tr>
+                          <td>{{e.email}}</td>
+                          <td>{{'%0.2f'| format((e.hit_time - e.in_time)/60)}} Minutes</td>
+                        </tr>
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- /.row -->
           <div class="hr hr32 hr-dotted"></div>
@@ -355,6 +365,10 @@ to {
         //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
         //so disable dragging when clicking on label
         var agent = navigator.userAgent.toLowerCase();
+        $('.input-daterange').datepicker({
+          autoclose : true,
+          format : 'dd-mm-yyyy',
+        });
 
       })
     </script>

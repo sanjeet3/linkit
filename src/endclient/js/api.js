@@ -324,15 +324,21 @@ function orderMakePaymentCallBack(r) {
 
 }
 
+function scrollTop(){
+  window.scrollTo(0, 0);
+}
+
 function showLoginDom() {
   $('#login_form').show();
   $('#registration_form, #registeration_msg_dom, #registration_dom').hide();
   $(".signin-grid").animate({backgroundColor: "red"});
+  scrollTop();
 }
 
 function showRegisterDom() {
   $('#registration_form, #registration_dom').show();
   $('#login_form, #registeration_msg_dom').hide();
+  scrollTop();
 }
 
 function register() {
