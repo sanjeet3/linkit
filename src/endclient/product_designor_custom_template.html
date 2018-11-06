@@ -46,15 +46,21 @@
     </div>
     <div id="main-container">
       <h3 id="clothing" style="float: left;">{{p.name}} Designer</h3>
+      {%if tutorial.video_link%}
+      <i class="fa fa-youtube-play fa-2x pull-left" title="Tutorial Video" style="cursor: pointer; color: red; margin-top: 25px; padding-left: 10px;" onclick="youtubeModal()"></i>
+      {%endif%} 
+      {%if tutorial.pdf_bucket_path%}
+      <i class="fa fa-file-pdf-o fa-2x pull-left" title="Tutorial Pdf" style="cursor: pointer; color: blue; margin-top: 20px;" onclick="downloadFile('{{tutorial.pdf_bucket_path}}')"></i>
+      {%endif%}
       <button type="button" onclick="window.history.go(-1); return false;"
         class="btn btn-sm btn-primary btn-round btn-mini mt-15 mr-5 pull-right"
         style="margin-left: 5px;">
         <i class="ace-icon fa fa-arrow-left"></i> Back
       </button>
       {%if user_obj%}
-      <button type="button" onclick="createUserDisgn('/CreateDesign')" id="save_design_btn"
+      <button type="button" onclick="createUserDisgn('/CreateDesign?order=true')" id="save_design_place_order_btn"
         class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
-        <i class="ace-icon fa fa-save"></i> Save
+        <i class="ace-icon fa fa-cart-plus"></i> Save + Order
       </button>
       {%endif%}
       <div id="product-designer" style="clear: both;"
@@ -150,12 +156,23 @@
       </div>
     </div>
   </div>
-  <form id="create_product_design_form" style="display: none;">
+  <form id="create_product_design_form" style="display: none;" method="post" action="/CreateNewOrderView">
     <input type="hidden" name="product" id="product_key" value="{{key}}">
     <textarea name="layer" id="design_layer"></textarea>
     <input type="hidden" name="design_print" id="design_print"> <input type="hidden"
       name="design_key" id="design_key" value="{{saveDesignKey}}">
   </form>
+<!-- Modal -->
+  <div class="new-modal" id="tutorialModal" style="display: none;">
+    <div class="new-modal-content">
+      <div class="col-lg-12">
+        <span class="pull-right btn btn-sm btn-primary btn-round btn-mini" onclick="youtubeModalHide()">close</span>
+      </div>
+      <div class="fpd-modal-content" id="tutorial_output">
+      {{tutorial.video_link|safe}}
+      </div>
+    </div>
+  </div>  
 </body>
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>
@@ -163,10 +180,11 @@
 <script src="/productdesigner/js/jquery-mousewheel.js" type="text/javascript"></script>
 <script src="/productdesigner/js/preview.js" type="text/javascript"></script>
 <script src="/productdesigner/js/fabric.min.js" type="text/javascript"></script>
-<script src="/productdesigner/js/fancyDesigner2.js" type="text/javascript"></script>
+<script src="/productdesigner/js/fancyDesignerV3.js" type="text/javascript"></script>
 <script src="/productdesigner/js/preview.js" type="text/javascript"></script>
 <script src="/js/api.js" type="text/javascript"></script>
-<script type="text/javascript">  
+<script type="text/javascript"> 
+var placeOrder=false;
 window.addEventListener("beforeunload", function (e) {
     
 }); 
@@ -174,7 +192,7 @@ window.addEventListener("beforeunload", function (e) {
 window.onbeforeunload = function () {
   // This will happen before leaving the page
   var confirmationMessage =  'If you leave before saving, your changes will be lost.';
-  if(document.activeElement && document.activeElement.id != "save_design_btn")
+  if(!placeOrder)
   return confirmationMessage;
 }
 

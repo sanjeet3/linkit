@@ -116,11 +116,18 @@ class OrderApproveMailer(webapp2.RequestHandler):
     mail_sender(receiver_email, subject, html_str)
     
     logging.info('welcome_email_account_complete')
+
+
+class BucketUploadDesign(webapp2.RequestHandler):
+  def post(self):
+    logging.info('order_design_upload_to_bucket_start') 
+
     
 app = webapp2.WSGIApplication([
     ('/taskqueue/VerifyAccountMailer', VerifyAccountMailer), 
     ('/taskqueue/WelcomeMailer', WelcomeMailer), 
     ('/taskqueue/OrderApproveMailer', OrderApproveMailer), 
+    ('/taskqueue/BucketUploadDesign', BucketUploadDesign), 
     
     ], debug=True)
          

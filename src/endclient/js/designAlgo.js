@@ -62,48 +62,51 @@ function createUserDisgn(savingURL) {
   layer=JSON.stringify(product);
   //$('#design_layer').val(JSON.stringify(product));
   yourDesigner.getProductDataURL(function(dataURL) {
-    
-    //$('#design_print').val(dataURL);
-    var block = dataURL.split(";");
-    // Get the content type of the image
-    var contentType = block[0].split(":")[1];// In this case "image/gif"
-    // get the real base64 content of the file
-    var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
-    // Convert it to a blob to upload
-    var blob = b64toBlob(realData, contentType);
-     
-    /*postRequest('create_product_design_form', '/CreateDesign',
-        'createUserDisgnCallBack');*/
-     
-    var formData = new FormData();
-    formData.append('layer', layer);
-    formData.append('design_print2', blob);
-    formData.append('product', $('#product_key').val());
-    formData.append('design_key', $('#design_key').val());
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', savingURL, true);
-
-    xhr.onreadystatechange = function(r) {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(r)
-            console.log(this)
-            var r = JSON.parse(this.response);
-            $('#design_key').val(r.data.design_key); 
-            $('#pls_wait_design_saving').hide();
-            if(r.data.placeOrder){
-              placeOrder=true;
-              window.location='/CreateNewOrder?key='+r.data.design_key;
-            }
-       }
-    }; 
-
-    xhr.send(formData);
-    
+    $('#design_print').val(dataURL);
+    postRequest('create_product_design_form', '/CreateDesign', 'uploadDesignToBucket');
     
   });
 
 };
+
+function createDBEntryOnly(){
+  postRequest('create_product_design_form', '/CreateDesign', 'uploadDesignToBucket');
+}
+
+function uploadDesignToBucket(r){
+  //r.data.id;
+  $('#design_key').val(r.data.design_key);
+  placeOrder=true; 
+  var block = $('#design_print').val().split(";");
+  // Get the content type of the image
+  var contentType = block[0].split(":")[1];// In this case "image/gif"
+  // get the real base64 content of the file
+  var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
+  // Convert it to a blob to upload
+  var blob = b64toBlob(realData, contentType);
+  var formData = new FormData();
+  formData.append('layer', layer);
+  formData.append('design_print2', blob);
+  formData.append('product', $('#product_key').val());
+  formData.append('design_key', $('#design_key').val());
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/BucketUploadDesign', true);
+
+  xhr.onreadystatechange = function(r) {
+      if (this.readyState == 4 && this.status == 200) {
+          console.log(r)
+          console.log(this)
+          var r = JSON.parse(this.response); 
+          $('#pls_wait_design_saving').hide();
+     }
+  }; 
+
+  xhr.send(formData);
+  $( "#create_product_design_form" ).submit();
+  
+}
+
 
 function createUserDisgnCallBack(r) {
   /*var h = 'Your design is ready<br>Design Id: ' + r.data.id

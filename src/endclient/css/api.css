@@ -72,8 +72,9 @@
   border-radius: 5px;
 } */
 .home-logo {
-  height: 51.5px;
+  height: 92px;
   margin-top: -1px;
+  margin-left: -1px;
   padding-right: 5px;
   float: left;
   cursor: pointer;

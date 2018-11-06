@@ -496,9 +496,9 @@ class GetProductDesignor(ActionSupport):
     tutorial = ProductTutorial.get_tutorial(self.p.key)
     #template_path = 'endclient/card_designer.html'
     template_path = 'endclient/product_designor.html'
-    if reday_design_template:
-      template_path = 'endclient/%s' %(reday_design_template)
-    elif reday_design_key:  
+    '''if reday_design_template:
+      template_path = 'endclient/%s' %(reday_design_template)'''
+    if reday_design_key:  
       r_d_templt = ndb.Key(urlsafe=reday_design_key).get()   
       source_html = r_d_templt.template_source 
       template_path = 'endclient/product_designor_custom_template.html'
@@ -600,6 +600,23 @@ class GetSavedDesign(ActionSupport):
     
     return json_response(self.response, data_dict, SUCCESS, 'Saved design loaded')
 
+class BucketUploadDesign(ActionSupport):
+  def post(self): 
+    design_print = self.request.get('design_print2')
+    design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
+    bucket_path = '/designer_textptrn/saved_design/%s/%s.png' %(design_obj.product_code, design_obj.id)
+    write_urlecoded_png_img(design_print, bucket_path) 
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key)  
+    except Exception, msg:
+      logging.error(msg)  
+    design_obj.design_prev_url = serving_url
+    design_obj.design_prev_key = bucket_key
+    design_obj.design_prev_path = bucket_path
+    design_obj.put()
+    return json_response(self.response, {}, SUCCESS, 'Product design uploads')
+
 class CreateDesign(ActionSupport):
   def get(self): 
     template_path = 'endclient/customDesign.html' #'endclient/fancy_product_designer.html'
@@ -613,41 +630,13 @@ class CreateDesign(ActionSupport):
     return self.response.out.write(template.render(html_dta))
     
   def post(self):  
-    p = Product()  
     p = ndb.Key(urlsafe=self.request.get('product')).get()                          
-    design_print = self.request.get('design_print2')
-       
-    if self.request.get('design_key'):
-      design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
-    else:        
-      design_obj = ClientProductDesign(client = self.client.key, product_code = p.code, product = p.key).put().get()                    
-    bucket_path = '/designer_textptrn/%s/preview/%s/%s' %(p.code, self.client.id, design_obj.id)
-    write_urlecoded_png_img(design_print, bucket_path) 
-    try:
-      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
-      serving_url = images.get_serving_url(bucket_key)  
-    except Exception, msg:
-      logging.error(msg)  
-    design_obj.design_prev_url = serving_url
-    design_obj.design_prev_key = bucket_key
-    design_obj.design_prev_path = bucket_path
-    '''
-    layer = self.request.get('layer')
-    layer=layer.encode('utf8')
+    design_obj = ClientProductDesign(client = self.client.key, product_code = p.code, product = p.key).put().get()  
+    params={'design_key': design_obj.entityKey,
+            'client_id': self.client.id,
+            'code': p.code,
+            'design_print': self.request.get('design_print2')}
      
-    logging.info(layer.__len__())
-    
-    #layer_json = json.loads(layer)
-    bucket_path = '/designer_textptrn/%s/json/%s/%s.png' %(p.code, self.client.id, design_obj.id)
-    upload_text_file(layer, bucket_path)
-    try:
-      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
-      serving_url = images.get_serving_url(bucket_key)  
-    except Exception, msg:
-      logging.error(msg)
-    design_obj.json_bucket_key = bucket_key
-    design_obj.json_bucket_path = bucket_path'''
-    design_obj.put()  
     data_dict = {'id': design_obj.id,
                  'design_key': design_obj.entityKey,
                  'placeOrder': self.request.get('order'),
@@ -691,6 +680,18 @@ class AddOrderPaymentRef(ActionSupport):
     template = self.get_jinja2_env.get_template('endclient/order_pay.html') 
     return self.response.out.write(template.render(data))
 
+class CreateNewOrderView(ActionSupport):
+  def post(self):
+    design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get() 
+    data = {'design_obj': design_obj,
+            'seller_product': SellerProduct.get_default_seller_product(design_obj.product),
+            'p': design_obj.product.get(),
+            'error': '',
+            'design_print': self.request.get('design_print'),
+            'user_obj': self.client,}
+    template = self.get_jinja2_env.get_template('endclient/create-order-page.html') 
+    self.response.out.write(template.render(data))
+    
 class CreateNewOrder(ActionSupport):
   def get(self): 
     design_obj = ndb.Key(urlsafe=self.request.get('key')).get() 
@@ -804,13 +805,15 @@ class AboutUs(ActionSupport):
   def get(self):
     product_cat_list = ProductCategory.get_list()
     template = self.get_jinja2_env.get_template('endclient/aboutus.html') 
-    self.response.out.write(template.render({'product_cat_list': product_cat_list}))
+    self.response.out.write(template.render({'product_cat_list': product_cat_list,
+                                             'user_obj': self.client}))
 
 class ContactUs(ActionSupport):
   def get(self):
     product_cat_list = ProductCategory.get_list()
     template = self.get_jinja2_env.get_template('endclient/contactus.html') 
-    self.response.out.write(template.render({'product_cat_list': product_cat_list}))
+    self.response.out.write(template.render({'product_cat_list': product_cat_list,
+                                             'user_obj': self.client}))
       
      
      
