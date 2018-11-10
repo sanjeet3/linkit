@@ -8503,7 +8503,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             cornerColor: borderColor,
             borderColor: borderColor,
             borderScaleFactor: 3,
-            borderDashArray: [5,5],
+            borderDashArray: [2,2],
             hasRotatingPoint: true,
             centeredScaling: true,
             lockUniScaling: true,
@@ -8702,6 +8702,10 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
         // mask border size change callback  
         $container.on('change', '#mask_border_size', function(e) {
           var strokeWidth = e.target.value;
+          if(strokeWidth>30){
+            $('#mask_border_size').val(30);
+            return;
+          }
           if(svgGroup){
             strokeWidth = strokeWidth ? strokeWidth/svgGroup.scaleX : 3/svgGroup.scaleX;
             svgGroup.set('strokeWidth', strokeWidth);
@@ -8745,20 +8749,25 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
                 if($(this).hasClass('fpd-mask-save')) {
                     _resizeCanvas();
                     maskPlacedFlag=true;
+                    var margin=5, padding=0;
                     if($('#use_mask_broder').prop("checked") == false){
                       clippingObject.set('strokeWidth', 0);
+                    } else {
+                      margin = parseInt($('#mask_border_size').val());
+                      padding = margin/2;
                     }
                     fabricCanvas.clipTo = function(ctx) {
                       clippingObject.render(ctx);
-                    };
+                    }; 
+                    
                     canvasWidth = clippingObject.width*clippingObject.scaleX;
-                    canvasWidth = canvasWidth+5;
+                    canvasWidth = canvasWidth+(margin*2)+4;
                     canvasHeight = clippingObject.height*clippingObject.scaleY;
-                    canvasHeight = canvasHeight+5;
-                    fabricImage.left = fabricImage.left-clippingObject.left;
-                    fabricImage.top = fabricImage.top-clippingObject.top;
-                    clippingObject.top=0;
-                    clippingObject.left=0;
+                    canvasHeight = canvasHeight+(margin*2)+2;
+                    fabricImage.left = padding+fabricImage.left-clippingObject.left;
+                    fabricImage.top = padding+fabricImage.top-clippingObject.top;
+                    clippingObject.top=padding;
+                    clippingObject.left=padding;
                     fabricCanvas.remove(clippingObject);
                     fabricCanvas
                             .setDimensions({
