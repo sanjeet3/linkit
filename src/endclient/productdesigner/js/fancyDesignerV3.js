@@ -4617,11 +4617,10 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                 if(instance.options.imageLoadTimestamp && !instance.options._loadFromScript) {
                     url += '?'+timeStamp;
                 }
-                var svgUrl = url;
                 if(params.svg){
-                  svgUrl = '/Imgage?id='+ params.svg;
+                  params.svg = '/Imgage?id='+ params.svg;
                 }
-                fabric.loadSVGFromURL(svgUrl, function(objects, options) {
+                fabric.loadSVGFromURL(params.svg, function(objects, options) {
                   if(objects){
                     var x=stage_width/options.width, y=stage_height/options.height;
                     if(x>y) y=x;
