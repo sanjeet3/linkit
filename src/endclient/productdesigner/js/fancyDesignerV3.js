@@ -4556,7 +4556,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         newModal.find('.fpd-image-editor-container'),
                         fabricImage,
                         instance.fpdInstance,
-                        fabricImage.svgFrameUrl,
+                        '/Imgage?id='+fabricImage.svgFrameUrl,
                         fabricImage.svgFrameIndex,
                         fabricImage.frameWidth,
                         fabricImage.frameHeight,
