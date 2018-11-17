@@ -4548,7 +4548,6 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
                     }
                     if(fabricImage.svgFrameUrl){
-                      //open customizeSVGMaskEditor()
                       var advanceEditorHtml = $(instance.fpdInstance.translatedUI).children('#advance_editor_frame_stage').clone(),
                       source = fabricImage.source,
                       newModal = FPDUtil.openFrameModal(advanceEditorHtml, true),
@@ -4556,7 +4555,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         newModal.find('.fpd-image-editor-container'),
                         fabricImage,
                         instance.fpdInstance,
-                        '/Imgage?id='+fabricImage.svgFrameUrl,
+                        '/Imgage?id='+fabricImage.svgFrameUrl, 
                         fabricImage.svgFrameIndex,
                         fabricImage.frameWidth,
                         fabricImage.frameHeight,
@@ -8505,7 +8504,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             borderDashArray: [2,2],
             hasRotatingPoint: true,
             centeredScaling: true,
-            lockUniScaling: true,
+            lockUniScaling: false,
             objectCaching: false,
             __editorMode: true,
             __imageEditor: true
@@ -9365,15 +9364,27 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
       this.reset();
 
       new fabric.Image.fromURL(imageURL, function(fabricImg) {
-
+          var scaleXY=1;
           fabricImage = fabricImg;
-          canvasWidth = fabricImg.width;
-          canvasHeight = fabricImg.height;
-          canvasWidthCache = fabricImg.width;
-          canvasHeightCache = fabricImg.height;
+          allotHeight = window.innerHeight-130;
+          if(allotHeight<fabricImg.height){
+            scaleXY = allotHeight/fabricImg.height;
+            canvasWidth = fabricImg.width*scaleXY;
+            canvasHeight = allotHeight;
+            canvasWidthCache = fabricImg.width*scaleXY;
+            canvasHeightCache = allotHeight;
+          } else {
+            canvasWidth = fabricImg.width;
+            canvasHeight = fabricImg.height;
+            canvasWidthCache = fabricImg.width;
+            canvasHeightCache = fabricImg.height;
+          } 
+          
           fabricImage.setOptions({
               cornerColor: borderColor,
               borderColor: borderColor,
+              scaleX: scaleXY,
+              scaleY: scaleXY,
               __editorMode: true,
               __imageEditor: true
           });
@@ -9386,6 +9397,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           fabricCanvas.add(fabricImg);
 
           _resizeCanvas();
+          $('#frame-loader').fadeIn(300);
           fabric.loadSVGFromURL(svgFrameUrl, function(objects, options) {
             var newSVGObj = objects[svgFrameIndex];
             options.width = newSVGObj.width
@@ -9418,7 +9430,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
             svgGroup.setCoords();
             fabricCanvas.renderAll();
-
+            $('#frame-loader').stop().fadeOut(300); 
         });
 
       });
