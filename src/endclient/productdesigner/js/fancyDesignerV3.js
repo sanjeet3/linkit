@@ -9431,6 +9431,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
             svgGroup.setCoords();
             fabricCanvas.renderAll();
             $('#frame-loader').stop().fadeOut(300); 
+            $('#apply_frame_btn').show();
         });
 
       });
