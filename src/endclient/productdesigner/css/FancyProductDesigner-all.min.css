@@ -7243,3 +7243,13 @@ input[type=range]:focus+.fpd-range-slider .fpd-range-slider__handle {
     box-sizing: border-box;
 	
 }
+
+#frame-loader{
+  z-index: 10;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  position: absolute;
+  background-color: #dadadab3;
+}
+

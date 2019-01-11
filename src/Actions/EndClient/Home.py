@@ -503,7 +503,7 @@ class GetProductDesignor(ActionSupport):
       template_path = 'endclient/product_designor_custom_template.html'
     elif self.p.default_design_template:
       template_path = 'endclient/%s.html' %(self.p.default_design_template)
-          
+    logging.info(template_path)      
     template = self.get_jinja2_env.get_template(template_path)    
     patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(self.p.key)
