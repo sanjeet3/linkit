@@ -1299,6 +1299,11 @@ class Test(webapp2.RequestHandler):
     #e.put()
     #mail_sender('appboxtechnologies@gmail.com', 'subject', body)
     #self.response.out.write('200')     
+    e = UserModel() 
+    e.email='appboxtechnologies@gmail.com'
+    e.name='Appbox Tech'
+    e.role='ADMIN'
+    e.put()
     self.response.content_type = 'application/json'
     result = {'status' : 'SUCCESS',
             'data': {'key1': 'value1', 'k2': 375},
