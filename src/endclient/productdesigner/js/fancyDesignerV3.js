@@ -4555,7 +4555,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         newModal.find('.fpd-image-editor-container'),
                         fabricImage,
                         instance.fpdInstance,
-                        '/Imgage?id='+fabricImage.svgFrameUrl, 
+                        '/Imgage?id='+fabricImage.svgFrameUrl, //fabricImage.svgFrameUrl, 
                         fabricImage.svgFrameIndex,
                         fabricImage.frameWidth,
                         fabricImage.frameHeight,
@@ -8640,7 +8640,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             else {
 
                 fabric.loadSVGFromURL(mask, function(objects, options) {
-
+                  $container.find('.fpd-content-mask').removeClass('fpd-show-secondary');
                     //if objects is null, svg is loaded from external server with cors disabled
                     svgGroup = objects ? fabric.util.groupSVGElements(objects, options) : null;
 
@@ -8671,7 +8671,7 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
 
                     svgGroup.setCoords();
                     fabricCanvas.renderAll();
-
+                    $container.find('.fpd-content-mask').addClass('fpd-show-secondary');
                 });
 
             }
@@ -8777,7 +8777,9 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
                             .renderAll();
 
                 } else {
-                  maskPlacedFlag=false;
+                  maskPlacedFlag=false; 
+                  fabricCanvas.remove(clippingObject);
+                  
                 }
  
                 
@@ -8839,8 +8841,12 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             });
 
             fabricImage.filters.push(FPDUtil.getFilter($(this).data('type')));
-            _applyFilterRender();
-
+            try{
+              _applyFilterRender();
+            } catch {
+              FPDUtil.showModal("Filter doen't works for this image");
+            }
+            
         });
 
 
@@ -8906,9 +8912,11 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
             }
 
             valueObj[$this.attr('name')] = value;
-
-            _applyFilterValue(filterType, valueObj);
-
+            try{
+              _applyFilterValue(filterType, valueObj);
+            } catch {
+              FPDUtil.showModal("Color manipulation doen't works for this image");
+            }
             //hide tooltip after 2 secs
             if(tooltipTimer) {
                 clearTimeout(tooltipTimer);
@@ -9175,7 +9183,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           borderDashArray: [5,5],
           hasRotatingPoint: true,
           centeredScaling: true,
-          lockUniScaling: true,
+          lockUniScaling: false,
           objectCaching: false,
           __editorMode: true,
           __imageEditor: true
@@ -9254,8 +9262,6 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
                   fabricCanvas.clipTo = function(ctx) {
                     clippingObject.render(ctx);
                   };
-                  
-                  
                   canvasWidth = clippingObject.width*clippingObject.scaleX;
                   canvasWidth = canvasWidth+5;
                   canvasHeight = clippingObject.height*clippingObject.scaleY;
@@ -9267,15 +9273,14 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
                   fabricCanvas.remove(clippingObject);
                   fabricCanvas
                           .setDimensions({
-                              width: canvasWidth, 
+                              width: canvasWidth* instance.responsiveScale, 
                               height: canvasHeight * instance.responsiveScale
                           })
                           .setZoom(instance.responsiveScale)
                           .calcOffset()
                           .renderAll();
 
-              }  
-
+              } 
           }
           $container.find('.fpd-content-mask').removeClass('fpd-show-secondary');
           $('.fpd-action-save').show(); 
@@ -11515,12 +11520,15 @@ var ImagesModule = function(fpdInstance, $module) {
 
                     if(realRes < fpdInstance.mainOptions.customImageParameters.minDPI) {
                         FPDUtil.showModal(fpdInstance.getTranslation('misc', 'minimum_dpi_info').replace('%dpi', fpdInstance.mainOptions.customImageParameters.minDPI), false, '', fpdInstance.$modalContainer);
+                        FPDUtil.showModal("This image has low resulation thats why rejected");
                         return false;
                     }
 
                 }
                 else {
+                    FPDUtil.showModal("Image has low resulation");
                     FPDUtil.log(file.name + ': Resolution is not accessible.', 'info');
+                    
                 }
 
             }
