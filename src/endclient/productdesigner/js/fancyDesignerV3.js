@@ -4519,7 +4519,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                       if(params.product_canvas!=undefined){
                       //params.opacity = 0.2;               
                       params.removable = false;
-                      params.originParams.opacity = 0.2 ;  
+                      //params.originParams.opacity = 0.2 ;  
                       params.originParams.removable = false; 
                       }
                       params.originParams.selectable = false; 
@@ -4555,7 +4555,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         newModal.find('.fpd-image-editor-container'),
                         fabricImage,
                         instance.fpdInstance,
-                        '/Imgage?id='+fabricImage.svgFrameUrl, //fabricImage.svgFrameUrl, 
+                        fabricImage.svgFrameUrl, //'/Imgage?id='+fabricImage.svgFrameUrl,
                         fabricImage.svgFrameIndex,
                         fabricImage.frameWidth,
                         fabricImage.frameHeight,
@@ -4617,7 +4617,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 if(params.svg){
-                  params.svg = '/Imgage?id='+ params.svg;
+                  //params.svg = '/Imgage?id='+ params.svg;
                 }
                 fabric.loadSVGFromURL(params.svg, function(objects, options) {
                   if(objects){
@@ -9321,8 +9321,13 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
           targetElement.setSrc(dataURL, function() {
               var scaleX=frameHeight/targetElement.height,
               scaleY=frameWidth/targetElement.width;
-              targetElement.scaleX=scaleX;
+              if(scaleX>scaleY){
+                targetElement.scaleX=scaleX;
+                targetElement.scaleY=scaleX;
+              } else {
+              targetElement.scaleX=scaleY;
               targetElement.scaleY=scaleY;
+              }
               targetElement.setCoords();
               targetElement.canvas.renderAll();
 
@@ -9355,7 +9360,7 @@ var FrameImageEditor = function($container, targetElement, fpdInstance, svgFrame
 
       fabricCanvas
       .setDimensions({
-          width: canvasWidth,
+          width: canvasWidth * instance.responsiveScale,
           height: canvasHeight * instance.responsiveScale
       })
       .setZoom(instance.responsiveScale)
