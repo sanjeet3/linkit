@@ -473,3 +473,9 @@ function youtubeModalHide(){
   $('#tutorialModal').hide();
 }
  
+function deleteDesign(k){
+  $('#'+k).remove();
+  url = '/BucketDeleteDesign?key='+k;
+  getRequest('', url, null);
+}
+

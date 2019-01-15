@@ -76,6 +76,8 @@ function createDBEntryOnly(){
 function uploadDesignToBucket(r){
   if(r.status=='ERROR'){
     alert('Session expired, Kindly login');
+    $('#pls_wait_design_saving').hide();
+    window.location='/'
     return;
   }
   //r.data.id;

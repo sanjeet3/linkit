@@ -26,6 +26,7 @@ __route_list = [
     RedirectRoute(r'/CreateNewOrder', Home.CreateNewOrder, name='Place Order', strict_slash=True),
     RedirectRoute(r'/CreateNewOrderView', Home.CreateNewOrderView, name='After Design save show Place Order page', strict_slash=True),
     RedirectRoute(r'/BucketUploadDesign', Home.BucketUploadDesign, name='Bucket Upload Design', strict_slash=True),
+    RedirectRoute(r'/BucketDeleteDesign', Home.BucketDeleteDesign, name='Bucket delete Design', strict_slash=True),
     RedirectRoute(r'/CreateDesign', Home.CreateDesign, name='Create Product Design', strict_slash=True),
     RedirectRoute(r'/GetSavedDesingJson', Home.GetSavedDesign, name='Create Product Saved Design Json', strict_slash=True),
     RedirectRoute(r'/GetReadyDesingJson', Home.GetReadyDesign, name='Get Product Ready Design Json', strict_slash=True),

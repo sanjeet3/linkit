@@ -16,7 +16,7 @@ from uuid import uuid1
 import json
 from src.api.baseapi import json_response, SUCCESS, ERROR
 from src.api.bucketHandler import get_by_bucket_key, write_urlecoded_png_img, upload_text_file,\
-    read_file_from_bucket
+    read_file_from_bucket, delete_bucket_file
 from src.api.datetimeapi import get_dt_by_country
 import datetime
 
@@ -615,6 +615,14 @@ class BucketUploadDesign(ActionSupport):
     design_obj.design_prev_path = bucket_path
     design_obj.put()
     return json_response(self.response, {}, SUCCESS, 'Product design uploads')
+
+class BucketDeleteDesign(ActionSupport):
+  def get(self): 
+    design_obj = ndb.Key(urlsafe=self.request.get('key')).get()     
+    delete_bucket_file(design_obj.design_prev_key) 
+    design_obj.key.delete()
+    return json_response(self.response)
+
 
 class CreateDesign(ActionSupport):
   def get(self): 
