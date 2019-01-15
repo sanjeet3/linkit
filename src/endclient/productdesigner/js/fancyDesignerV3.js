@@ -4555,7 +4555,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                         newModal.find('.fpd-image-editor-container'),
                         fabricImage,
                         instance.fpdInstance,
-                        fabricImage.svgFrameUrl, //'/Imgage?id='+fabricImage.svgFrameUrl,
+                        '/Imgage?id='+fabricImage.svgFrameUrl, //fabricImage.svgFrameUrl,
                         fabricImage.svgFrameIndex,
                         fabricImage.frameWidth,
                         fabricImage.frameHeight,
@@ -4617,7 +4617,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     url += '?'+timeStamp;
                 }
                 if(params.svg){
-                  //params.svg = '/Imgage?id='+ params.svg;
+                  params.svg = '/Imgage?id='+ params.svg;
                 }
                 fabric.loadSVGFromURL(params.svg, function(objects, options) {
                   if(objects){
