@@ -7923,16 +7923,16 @@ var FPDActions = function(fpdInstance, $actions){
                   FPDUtil.createModal(h, true);
                   
                 }*/
-              if(prodCode == 'PRD004'){
+              /*if(prodCode == 'PRD004'){
                 var h = preveiwWaterBottle(canvasPreviewUrl, dataURL);
                 FPDUtil.createModal(h, true);
-              } else {
-                var h = ['<div class="preview-container">'];
-                h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
-                h.push('<img class="preview-imgB1" style="left: '+preview_left+', top: '+preview_top+'" src="'+dataURL+'" download="product.png" /></div>');
-                h = h.join('');
-                FPDUtil.createModal(h, true);
-              }
+              }*/ 
+              var h = ['<div class="preview-container">'];
+              h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
+              h.push('<img class="preview-imgB1" style="left: '+preview_left+'; top: '+preview_top+'" src="'+dataURL+'" download="product.png" /></div>');
+              h = h.join('');
+              FPDUtil.createModal(h, true);
+              
 
             });
 
