@@ -9083,7 +9083,9 @@ var FPDImageEditor = function($container, targetElement, fpdInstance, maskEnable
               canvasWidthCache = fabricImg.width;
               canvasHeightCache = fabricImg.height;
             }
-             
+            if(fabricImg.height > 2000 || fabricImg.width > 2000){
+             $('#advance_editor_filter_link, #advance_editor_color_link').hide();  
+            } 
             fabricImage.setOptions({
                 cornerColor: borderColor,
                 borderColor: borderColor,
