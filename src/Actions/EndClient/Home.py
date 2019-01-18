@@ -16,7 +16,9 @@ from uuid import uuid1
 import json
 from src.api.baseapi import json_response, SUCCESS, ERROR
 from src.api.bucketHandler import get_by_bucket_key, write_urlecoded_png_img, upload_text_file,\
-    read_file_from_bucket, delete_bucket_file
+  write_urlecoded_svg_img
+from src.api.bucketHandler import read_file_from_bucket, delete_bucket_file
+from src.api.bucketHandler import write_urlecoded_svg_img    
 from src.api.datetimeapi import get_dt_by_country
 import datetime
 
@@ -615,11 +617,33 @@ class BucketUploadDesign(ActionSupport):
     design_obj.design_prev_path = bucket_path
     design_obj.put()
     return json_response(self.response, {}, SUCCESS, 'Product design uploads')
+  
+class SVGBucketUploadDesign(ActionSupport):
+  def post(self): 
+    design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
+    svg_counter = int(self.request.get('counter'))
+    logging.info(svg_counter)
+    for i in range(svg_counter):
+      logging.info(i)
+      file_obj = self.request.get("svg%s" %(i), None)
+      logging.info(len(file_obj)) 
+      bucket_path = '/designer_textptrn/saved_design/%s/%s/%s.svg' %(design_obj.product_code, design_obj.id, i)
+      write_urlecoded_svg_img(file_obj, bucket_path) 
+      try:
+        bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+        serving_url = images.get_serving_url(bucket_key)  
+      except Exception, msg:
+        logging.error(msg)  
+      design_obj.svg_url.append(serving_url)
+      design_obj.svg_key.append(bucket_key) 
+    design_obj.put()
+    return json_response(self.response, {}, SUCCESS, 'Product design uploads')
 
 class BucketDeleteDesign(ActionSupport):
   def get(self): 
-    design_obj = ndb.Key(urlsafe=self.request.get('key')).get()     
-    delete_bucket_file(design_obj.design_prev_key) 
+    design_obj = ndb.Key(urlsafe=self.request.get('key')).get()
+    for k in design_obj.svg_url:     
+      delete_bucket_file(k) 
     design_obj.key.delete()
     return json_response(self.response)
 
@@ -641,10 +665,10 @@ class CreateDesign(ActionSupport):
       return json_response(self.response, {}, ERROR, 'Session Expired')    
     p = ndb.Key(urlsafe=self.request.get('product')).get()                          
     design_obj = ClientProductDesign(client = self.client.key, product_code = p.code, product = p.key).put().get()  
-    params={'design_key': design_obj.entityKey,
+    '''params={'design_key': design_obj.entityKey,
             'client_id': self.client.id,
             'code': p.code,
-            'design_print': self.request.get('design_print2')}
+            'design_print': self.request.get('design_print2')}'''
      
     data_dict = {'id': design_obj.id,
                  'design_key': design_obj.entityKey,
@@ -694,9 +718,11 @@ class CreateNewOrderView(ActionSupport):
     design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get() 
     data = {'design_obj': design_obj,
             'seller_product': SellerProduct.get_default_seller_product(design_obj.product),
+            'product_cat_list': ProductCategory.get_list(),
             'p': design_obj.product.get(),
             'error': '',
             'design_print': self.request.get('design_print'),
+            'svgresut': self.request.get_all('svgresut'),
             'user_obj': self.client,}
     template = self.get_jinja2_env.get_template('endclient/create-order-page.html') 
     self.response.out.write(template.render(data))

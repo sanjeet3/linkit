@@ -8,7 +8,7 @@ title != "Base"*/
     base64_image : dataURL
   });
 });*/ 
-
+var svgList = []
 function getRequest(formID, url, callback) {
     var formData = [];
     try{
@@ -69,9 +69,86 @@ function createUserDisgn(savingURL) {
 
 };
 
+function download(svgContent){
+  var dl = document.createElement("a");
+  document.body.appendChild(dl); // This line makes it work in Firefox.
+  dl.setAttribute("href", svgContent);
+  dl.setAttribute("download", "test.svg");
+  dl.click();
+}
+
 function createDBEntryOnly(){
   postRequest('create_product_design_form', '/CreateDesign', 'uploadDesignToBucket');
 }
+
+function SaveAndOrderSVG(){
+
+  var product = yourDesigner.getProduct();
+  productDesignLayer = product[0].elements;
+  console.log(productDesignLayer)
+  if (productDesignLayer.length < 2) {
+    alert('No changes detected');
+    return;
+  }
+  if (!confirm('Do you wish to save this design?')){
+    return;
+  }
+  try{
+    svgList = yourDesigner.getViewsSVG()
+    
+  } catch {
+    alert('Kindly add color to your text!')
+    return
+  }
+  //download(svgList[0])
+  $('#pls_wait_design_saving').show();
+  postRequest('create_product_design_form', '/CreateDesign', 'svgUploadDesignToBucket');
+}
+
+function getSvgToBlob(svgData){
+  //svgData = (new XMLSerializer()).serializeToString(svgData)
+  var blob = new Blob([svgData], {
+    type: 'image/svg+xml; charset=utf8'
+  });
+  return blob;
+}
+
+function svgUploadDesignToBucket(r){
+  if(r.status=='ERROR'){
+    alert('Session expired, Kindly login');
+    $('#pls_wait_design_saving').hide();
+    window.location='/'
+    return;
+  } 
+  $('#design_key').val(r.data.design_key); 
+  placeOrder=true; 
+  var formData = new FormData(); 
+  formData.append('counter', svgList.length);
+  formData.append('product', $('#product_key').val());
+  formData.append('design_key', r.data.design_key);
+  for(let i in svgList){
+    formData.append('svg'+i, getSvgToBlob(svgList[i]));
+    $('#create_product_design_form').append($('<textarea name="svgresut">').val(svgList[0]))
+  }
+  
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/SVGBucketUploadDesign', true);
+
+  xhr.onreadystatechange = function(r) {
+      if (this.readyState == 4 && this.status == 200) {
+          console.log(r)
+          console.log(this)
+          var r = JSON.parse(this.response); 
+          $('#pls_wait_design_saving').hide();
+     }
+  }; 
+
+  xhr.send(formData);
+  $( "#create_product_design_form" ).submit();
+  
+}
+
 
 function uploadDesignToBucket(r){
   if(r.status=='ERROR'){

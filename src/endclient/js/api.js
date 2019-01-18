@@ -439,8 +439,13 @@ function showHistory(status){
 };
 
 
-function showImageModel(imageurl){
-   $('#modal-content').html('<img style="max-width:100%;" src="' + imageurl+'">');
+function showImageModel(btn){
+   var arr = btn.parentElement.dataset.list.replace("u'", '"');
+   arr = arr.replace("'", '"');
+   arr = $.parseJSON(arr);
+   for(let i in arr){
+     $('#modal-content').html('<img style="max-width:100%; margin-botom:10px;" src="' + arr[i] +'">');
+   }
    $('#modal-background').fadeIn();
    $('#product_action_caontainer').hide();
    $('#modal-background').click(function(){

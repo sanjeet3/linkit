@@ -28,11 +28,7 @@
   <div class="container main-content">
     <div class="mt-10 mb-10">
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-          <h4>Your Design</h4>
-          <img alt="" src="{{design_print}}" width="100%" class="shadow">
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="col-lg-12 col-xs-12">
           <h4>{{p.name}}</h4>
           <img alt="" src="{{p.image_url[0] or 'img/prod_default.png'}}" style="max-width: 40%; height: 200px;"
             class="pull-left mr-20 mb-10 shadow"> <b>Price: </b>{{seller_product.retail_price}} KES <br />
@@ -51,6 +47,12 @@
             <button type="submit"  class="btn btn-sm btn-primary btn-white btn-round"><i class="fa fa-shopping-cart"></i>  Order Now</button>  
           </form>
         </div>
+       <h4>Your Design</h4>
+       {%for svg in svgresut%}
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 shadow" style="display: flex;"> 
+          {{svg|safe}}
+        </div>
+       {%endfor%} 
       </div>
       <div class="row"></div>
     </div>

@@ -56,8 +56,13 @@
         class="btn btn-sm btn-primary btn-round btn-mini mt-15 mr-5 ml-5 pull-right" >
         <i class="ace-icon fa fa-arrow-left"></i> Back
       </button>
-      {%if user_obj%} 
-      <button type="button" onclick="createUserDisgn('/CreateDesign?order=true')" id="save_design_place_order_btn"
+      {%if user_obj%}
+       
+      <!-- <button type="button"
+        class="btn btn-sm btn-success btn-round btn-mini mt-15 ml-5 pull-right">
+        <i class="ace-icon fa fa-eye"></i> See
+      </button>  -->
+      <button type="button" onclick="SaveAndOrderSVG()" id="save_design_place_order_btn"
         class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
         <i class="ace-icon fa fa-cart-plus"></i> Save + Order
       </button>
@@ -149,6 +154,7 @@
             <li>Keyboard Control: Use arrow keys to move and backspace key to delete selected
               element</li>
           </ol>
+          <div id="test_dom"></div>
         </div>
       </div>
       <div class="fpd-loader-wrapper" id="frame-loader" style="display: none;">
@@ -163,8 +169,8 @@
   <form id="create_product_design_form" style="display: none;" method="post" action="/CreateNewOrderView">
     <input type="hidden" name="product" id="product_key" value="{{key}}">
     <textarea name="layer" id="design_layer"></textarea>
-    <input type="hidden" name="design_print" id="design_print"> <input type="hidden"
-      name="design_key" id="design_key" value="{{saveDesignKey}}">
+    <input type="hidden" name="design_print" id="design_print">
+    <input type="hidden" name="design_key" id="design_key" value="{{saveDesignKey}}">
   </form>
   
 <!-- Modal -->

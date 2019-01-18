@@ -403,11 +403,11 @@ class ClientProductDesign(EndpointsModel):
   client = ndb.KeyProperty(Client)
   product = ndb.KeyProperty(Product)
   product_code = ndb.StringProperty(default='')
-  json_bucket_path = ndb.StringProperty(default='')
-  json_bucket_key = ndb.StringProperty(default='')
   design_prev_url = ndb.TextProperty(default='')
   design_prev_key = ndb.TextProperty(default='')
   design_prev_path = ndb.TextProperty(default='') 
+  svg_url = ndb.StringProperty(repeated=True)
+  svg_key = ndb.StringProperty(repeated=True)
 
   @classmethod
   def get_by_design_id(cls, design_id):
