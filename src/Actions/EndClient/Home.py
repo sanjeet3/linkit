@@ -629,6 +629,7 @@ class SVGBucketUploadDesign(ActionSupport):
       logging.info(len(file_obj)) 
       bucket_path = '/designer_textptrn/saved_design/%s/%s/%s.svg' %(design_obj.product_code, design_obj.id, i)
       write_urlecoded_svg_img(file_obj, bucket_path) 
+      bucket_key, serving_url = '',''
       try:
         bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
         serving_url = images.get_serving_url(bucket_key)  
