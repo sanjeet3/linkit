@@ -634,7 +634,8 @@ class SVGBucketUploadDesign(ActionSupport):
         bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
         serving_url = images.get_serving_url(bucket_key)  
       except Exception, msg:
-        logging.error(msg)  
+        logging.info('generating_direct_svg_url')  
+        serving_url='https://storage.googleapis.com/designer_textptrn/saved_design/%s/%s/%s.svg' %(design_obj.product_code, design_obj.id, i) 
       design_obj.svg_url.append(serving_url)
       design_obj.svg_key.append(bucket_key) 
     design_obj.put()
