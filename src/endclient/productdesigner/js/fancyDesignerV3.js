@@ -4668,6 +4668,11 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
 
                     //if src is empty, image is loaded from external server with cors disabled
                     fabricImg = fabricImg.getSrc() === '' ? null : fabricImg;
+                    try{
+                      if(fabricParams.clipart || fabricParams.background_layer || fabricParams.product_canvas){
+                        fabricImg.setSrc(fabricImg.toDataURL());
+                      }
+                    } catch{}
                     _fabricImageLoaded(fabricImg, fabricParams, false);
 
                 }, {crossOrigin: 'Anonymous'});
