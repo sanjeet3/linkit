@@ -145,7 +145,10 @@ function svgUploadDesignToBucket(r){
   }; 
 
   xhr.send(formData);
-  $( "#create_product_design_form" ).submit();
+  $('#pls_wait_design_saving').show();
+  setTimeout(function(){
+    $( "#create_product_design_form" ).submit();
+  }, 500);
   
 }
 
