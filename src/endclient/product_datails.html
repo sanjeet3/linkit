@@ -186,7 +186,7 @@
         <div class="nbs-flexisel-inner">
           <h5>Saved designs:</h5>
           {%for d in save_design_list%}
-          <div class="ready-design-box" style="background-image: url('{%if d.svg_url %}{{d.svg_url[0]}}{%endif%}')" id="{{d.entityKey}}" data-list="{{d.svg_url}}"> 
+          <div class="ready-design-box" style="background-image: url('{%if d.svg_url %}{{d.svg_url[0]}}{%endif%}')" id="{{d.entityKey}}" data-list="{{d.svg_url|safe}}"> 
             <div class="overlay"></div>
             <div class="button" style="left: 30px" onclick="showImageModel(this)">View</div>
             <div class="button" style="left: 130px" onclick="deleteDesign('{{d.entityKey}}')">Delete</div>
@@ -213,8 +213,10 @@
   <!--footer-->
 </body>
 <div id='modal-background'>
-    <button type="button" class="btn btn-danger mt-5">Close</button>
-    <div id='modal-content'></div> 
+  <div style="display: contents;">
+    <button type="button" class="btn btn-danger mt-5" style="position: absolute;right: 10px;">Close</button>
+    <div id='modal-content'></div>
+  </div>   
 </div>
 <!-- Include js files -->
 <script src="/js/jquery.min.js" type="text/javascript"></script>

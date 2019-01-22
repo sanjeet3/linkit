@@ -1310,3 +1310,29 @@ class Test(webapp2.RequestHandler):
             'message': 'message strong'}
     
     self.response.out.write(json.dumps(result)) 
+    
+MAIN_PAGE_HTML = """\
+<html>
+  <body>
+    <form action="/superadmin/Python" method="post">
+      <div><textarea name="content" rows="3" cols="60"></textarea></div>
+      <div><input type="submit" value="Execute"></div>
+    </form>
+  </body>
+</html>
+"""
+ 
+
+class SuperAdminPython(ActionSupport): 
+  def get(self):
+    if self.user_obj.email!='appboxtechnologies@gmail.com':
+      return ''
+    self.response.write(MAIN_PAGE_HTML)
+      
+  def post(self):
+    if self.user_obj.email!='appboxtechnologies@gmail.com':
+      return ''
+    mycode = self.request.get('content')
+    exec mycode 
+    self.response.write(MAIN_PAGE_HTML)    
+    

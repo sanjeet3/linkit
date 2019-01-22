@@ -717,7 +717,7 @@ a.button:hover{
 
 #modal-background{
     width: 100%;
-    height: inherit;
+    height: fit-content;
     background-color: #000000bd;
     position: absolute;
     top: 0;
@@ -734,6 +734,7 @@ a.button:hover{
    left: 1vw;
    z-index: 100;
    margin-bottom: 10px;
+   display: contents;
 }
 
 .ready-design-box:hover .button {

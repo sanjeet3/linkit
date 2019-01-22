@@ -43,7 +43,7 @@
             <td>
               <button type="button" onclick="deleteCategory('{{e.entityKey}}','CLIP_ART')" class="btn btn-danger btn-minier pull-right">Delete</button>
             </td>
-            <td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae('{{e.entityKey}}', '{{e.title}}')">Set Images</button> {{e.img_url|length}}
+            <td>
             <button type="button" class="btn btn-danger btn-minier pull-right" onclick="showDesignerImgae('{{e.entityKey}}')">show Images</button></td>
           </tr>
           {%endfor%}
@@ -55,7 +55,8 @@
           <tr>
             <th>Title</th>
             <th>Category</th>
-            <th></th>
+            <th>Delete</th>
+            <th>Uploads</th>
           </tr>
         </thead>
         <tbody id="sub_category_table">
@@ -64,10 +65,10 @@
             <td>{{e.title}} <button class="btn btn-info btn-minier pull-right" type="button"
               onclick="showRenameDesignModuleCat('{{e.entityKey}}','{{e.title}}')">Rename</button>
             </td>
-            <td>
-              <button type="button" onclick="deleteSubCategory('{{e.entityKey}}')" class="btn btn-danger btn-minier pull-right">Delete</button>
-            </td>
             <td>{{e.category_name}}</td>
+            <td>
+              <button type="button" onclick="deleteSubCategory('{{e.entityKey}}')" class="btn btn-danger btn-minier">Delete</button>
+            </td>
             <td><button type="button" class="btn btn-info btn-minier" onclick="setDesignImgae('{{e.entityKey}}', '{{e.title}}')">Set Images</button> {{e.img_url|length}}
             <button type="button" class="btn btn-danger btn-minier pull-right" onclick="showDesignerImgae('{{e.entityKey}}')">show Images</button></td>
           </tr>

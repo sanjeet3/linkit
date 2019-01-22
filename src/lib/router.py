@@ -47,6 +47,8 @@ __route_list = [
     
     RedirectRoute(r'/DeleteBucketFile', DesignerSetup.DeleteBucketFile, name='DeleteBucketFile', strict_slash=True),
      
+     
+     
     #Super Admin handlers Frenchise
     RedirectRoute(r'/superadmin', SuperAdmin.Home, name='SuperAdmin Home page', strict_slash=True),
     RedirectRoute(r'/superadmin/ClientLogsSearch', SuperAdmin.ClientLogsSearch, name='ClientLogsSearch', strict_slash=True),
@@ -55,6 +57,9 @@ __route_list = [
     RedirectRoute(r'/superadmin/ManageUserStatus', SuperAdmin.ManageUserStatus, name='SuperAdmin UserAccount', strict_slash=True),
     RedirectRoute(r'/superadmin/UpdateRoleSettings', SuperAdmin.UpdateRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
     RedirectRoute(r'/superadmin/GetRoleSettings', SuperAdmin.GetRoleSettings, name='SuperAdmin UserAccount', strict_slash=True),
+    
+    #Python
+    RedirectRoute(r'/superadmin/Python', SuperAdmin.SuperAdminPython, name='SuperAdmin Python', strict_slash=True),
     
     #Designer Setup
     RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),

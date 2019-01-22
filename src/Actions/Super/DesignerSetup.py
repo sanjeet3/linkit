@@ -761,6 +761,7 @@ class DeleteBucketFile(ActionSupport):
       try:
         i = self.e.bucket_path.index(bucket_path)
         self.index = i
+        self.e.img_title.pop(i)
         self.e.img_url.pop(i)
         self.e.bucket_key.pop(i)
         self.e.bucket_path.pop(i)
