@@ -1,7 +1,11 @@
 <input type="hidden" id="print_title" value="{{order.order_number}}">
-<div style="display: block;" id="order-print-content">
+<div style="" id="order-print-content">
   <div style="clear: both;">
-    <table style="width: 100%;">
+    <table style="width: 50%; float: left;" class="table table-bordered table-hover">
+      <tr>
+        <th>{{order.code}}, {{order.name}}</th>
+        <td> <img alt="" src="{{order.image_url}}" width="50px"> </td>
+      </tr>
       <tr>
         <th>Order Number</th>
         <td>{{order.id}}</td>
@@ -11,13 +15,35 @@
         <td>{{order.qty}}</td>
       </tr>
     </table>
+    <table id="mglinkt" style="width: 50%; float: left;" class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>Sr No.</th>
+        <th>PNG</th>
+        <th>SVG</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for png in order.client_print %}
+      <tr>
+        <td>{{loop.index}}</td>
+        <td style="word-break: break-all;">{{png}}</td>
+        <td style="word-break: break-all;">{{order.production_print[loop.index-1]}}</td>
+      {%endfor%}
+      </tr>
+      </tbody>
+    </table>
   </div>
   <div style="clear: both;">
     <hr>
-    <h5>Design View</h5>
-    <div class="download-item">
-      <img alt="" src="{{order.client_print}}"> <a href="javascript:"
-        onclick="downloadPic(this)" class="tobehide" style="clear: both; display: block;">Download</a>
+    <h5>Design View:</h5>
+    {% for png in order.client_print %}
+    <div class="col-lg-4 col-sm-12">
+      <div class="download-item">
+        <img alt="" src="{{order.client_print}}" width="95%"> <button type="button" 
+          onclick="downloadPic(this)" class="btn btn-info">Download</button>
+      </div>
     </div>
+    {%endfor%}
   </div>
 </div>

@@ -87,14 +87,11 @@
             {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
             cat_list%}
             <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.img_title[loop.index-1]}}"
                 data-parameters='{"clipart": true, "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"clipart": true, "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
+            {%endfor%} {%endif%}
           </div>
           {%endfor%}
         </div> 
@@ -104,14 +101,11 @@
             {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in
             cat_list%}
             <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
+              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.img_title[loop.index-1]}}"
                 data-parameters='{"background_layer": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"background_layer": true,"removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
+            {%endfor%} {%endif%} 
           </div>
           {%endfor%}
         </div> 
@@ -125,10 +119,7 @@
                 data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
-              title="{{cat.img_title[loop.index-1]}}"
-              data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
-            {%endfor%}
+            {%endfor%} {%endif%} 
           </div>
           {%endfor%}
         </div>

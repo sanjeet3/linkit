@@ -6,7 +6,7 @@ Created on 04-Jul-2018
 
 config={
     # webapp2 sessions
-    'webapp2_extras.sessions': {'secret_key': '07c45ee19b5109a60d5fbe9c88e55a031f4875l', 'session_max_age': 1800},
+    'webapp2_extras.sessions': {'secret_key': '07c45ee19b5109a60d5fbe9c88e55a031f4875l', 'session_max_age': 7200},
     'webapp2_extras.auth': {'user_model': 'src.Database.UserSession',
                             'user_attributes': ['username']},
     # application name

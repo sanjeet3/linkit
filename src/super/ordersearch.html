@@ -1,7 +1,9 @@
 {%for e in order_list%}
-<tr>
+<tr id="{{e.entityKey}}">
   <td>{{e.order_number}}</td>
   <td>{{e.status}}</td>
+  <td>{{e.payment_ref}}<br>{{e.payment_dt}}
+  </td>
   <td>{{e.amount}}</td>
   <td>{{e.date}}</td>
   <td>{{e.code}}-{{e.name}}</td>

@@ -186,7 +186,7 @@
         <div class="nbs-flexisel-inner">
           <h5>Saved designs:</h5>
           {%for d in save_design_list%}
-          <div class="ready-design-box" style="background-image: url('{%if d.svg_url %}{{d.svg_url[0]}}{%endif%}')" id="{{d.entityKey}}" data-list="{{d.svg_url|safe}}"> 
+          <div class="ready-design-box" style="background-image: url('{%if d.png_url %}{{d.png_url[0]}}{%endif%}')" id="{{d.entityKey}}" data-list="{{d.png_url|safe}}"> 
             <div class="overlay"></div>
             <div class="button" style="left: 30px" onclick="showImageModel(this)">View</div>
             <div class="button" style="left: 130px" onclick="deleteDesign('{{d.entityKey}}')">Delete</div>

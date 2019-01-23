@@ -73,6 +73,20 @@ indexes:
   - name: client
   - name: date
     direction: desc
+  - name: amount
+  - name: code
+  - name: image_url
+  - name: name
+  - name: qty
+  - name: retail_price
+  - name: size
+  - name: status
+
+- kind: SellerOrder
+  properties:
+  - name: client
+  - name: date
+    direction: desc
 
 - kind: SellerOrder
   properties:

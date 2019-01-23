@@ -4493,7 +4493,9 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                 if(fabricImage) {
 
                     originParams = originParams === undefined ? {} : originParams;
-
+                    //Add title of image into id => id_title
+                    params.id += '_'+params.title;
+                    
                     $.extend(params, {
                         originParams: $.extend({}, params, originParams)
                     });

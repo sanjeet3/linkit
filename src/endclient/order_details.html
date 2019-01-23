@@ -1,8 +1,12 @@
 <div class="ord-dtl-stg-1">
   <div class="mb-5 text-center" style="border-bottom: 2px black dotted;">
     <h4>Order Details</h4>
+    <button type="button" onclick="showOrderList()" class="btn btn-primary btn-mini"
+       style="    position: absolute; top: 3px; right: 15px;">
+      <i class="ace-icon fa fa-times"></i> Close
+    </button>
   </div>
-  <div class="row inline">
+  <div class="row">
     <div class="col-sm-6">
       <div class="">
         <h4>{{order.code}}, {{order.name}}</h4>

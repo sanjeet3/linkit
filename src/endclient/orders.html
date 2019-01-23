@@ -40,6 +40,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
+              <th>View</th>
               <th>Item</th>
               <th>Date</th>
               <th>Amount (KES)</th>
@@ -52,7 +53,9 @@
             <tr>
               <td><a href="javascript:getOrderDetails('{{e.entityKey}}')"><img
                   alt="{{e.name}}" src="{{e.image_url}}" width="75px" height="75px">
-                  {{e.code}}, {{e.name}}</a></td>
+                  Show details
+                  </a></td>
+              <td>{{e.code}}, {{e.name}}</td>    
               <td>{{e.date}}</td>
               <td>{{e.amount}}</td>
               <td>{{e.qty}}</td>

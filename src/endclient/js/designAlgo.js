@@ -1,14 +1,6 @@
-/*var product = yourDesigner.getProduct();
-console.log(product);
-product[0].elements
-title != "Base"*/
+var svgList = [], pngList =[], productDesignLayer = [],layer='';;
 
-/*yourDesigner.getProductDataURL(function(dataURL) {
-  $.post("php/save_image.php", {
-    base64_image : dataURL
-  });
-});*/ 
-var svgList = []
+
 function getRequest(formID, url, callback) {
     var formData = [];
     try{
@@ -44,7 +36,6 @@ function postRequest(formID, url, callback) {
 }; 
 
 
-var productDesignLayer = [],layer='';
 function createUserDisgn(savingURL) {
 
   var product = yourDesigner.getProduct();
@@ -81,9 +72,21 @@ function createDBEntryOnly(){
   postRequest('create_product_design_form', '/CreateDesign', 'uploadDesignToBucket');
 }
 
-function SaveAndOrderSVG(){
+function getBlobFromImgDataUrl(block){
+  block = block.split(";");
+  // Get the content type of the image
+  var contentType = block[0].split(":")[1];// In this case "image/gif"
+  // get the real base64 content of the file
+  var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
+  // Convert it to a blob to upload
+  return b64toBlob(realData, contentType);
+}
 
-  var product = yourDesigner.getProduct();
+
+function SaveAndOrderSVG(){
+  pngList = [];
+  var canvasCount=0,
+  product = yourDesigner.getProduct();
   productDesignLayer = product[0].elements;
   console.log(productDesignLayer)
   if (productDesignLayer.length < 2) {
@@ -93,15 +96,25 @@ function SaveAndOrderSVG(){
   if (!confirm('Do you wish to save this design?')){
     return;
   }
+  $('#pls_wait_design_saving h3 ').html('Extratcting your design!');
+  $('#pls_wait_design_saving').show();
   try{
     svgList = yourDesigner.getViewsSVG()
-    
   } catch {
-    alert('Kindly add color to your text!')
+    $('#pls_wait_design_saving').hide();
+    alert('Kindly add color to your text!');
     return
   }
-  //download(svgList[0])
-  $('#pls_wait_design_saving').show();
+  console.log('Extratcting your design!');
+  while (canvasCount < yourDesigner.viewInstances.length){
+    console.log('Extratcting canvas: '+canvasCount);
+    yourDesigner.viewInstances[canvasCount].toDataURL(function(dataURL) {
+      pngList.push(dataURL);
+    });
+    canvasCount += 1;
+  }
+  console.log('Extratction completed !');
+  console.log(pngList);
   postRequest('create_product_design_form', '/CreateDesign', 'svgUploadDesignToBucket');
 }
 
@@ -120,7 +133,10 @@ function svgUploadDesignToBucket(r){
     window.location='/'
     return;
   } 
+  
   $('#design_key').val(r.data.design_key); 
+  $('#pls_wait_design_saving h3').html('Uploading Your Designs!');
+  
   placeOrder=true; 
   var formData = new FormData(); 
   formData.append('counter', svgList.length);
@@ -128,27 +144,33 @@ function svgUploadDesignToBucket(r){
   formData.append('design_key', r.data.design_key);
   for(let i in svgList){
     formData.append('svg'+i, getSvgToBlob(svgList[i]));
-    $('#create_product_design_form').append($('<textarea name="svgresut">').val(svgList[0]))
+  }
+  var pngFormData = new FormData(); 
+  pngFormData.append('counter', pngList.length); 
+  pngFormData.append('design_key', r.data.design_key);
+  for(let i in pngList){
+    pngFormData.append('png'+i, getBlobFromImgDataUrl(pngList[i]));
+    $('#create_product_design_form').append($('<textarea name="pngDataUrl">').val(pngList[i]))
   }
   
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/SVGBucketUploadDesign', true);
-
-  xhr.onreadystatechange = function(r) {
-      if (this.readyState == 4 && this.status == 200) {
-          console.log(r)
-          console.log(this)
-          var r = JSON.parse(this.response); 
-          $('#pls_wait_design_saving').hide();
-     }
-  }; 
-
-  xhr.send(formData);
-  $('#pls_wait_design_saving').hide();
+  var svgXhr = new XMLHttpRequest();
+  svgXhr.open('POST', '/SVGBucketUploadDesign', true);
+  svgXhr.onreadystatechange = function(r) {}; 
+  var pngXhr = new XMLHttpRequest();
+  pngXhr.open('POST', '/BucketUploadDesign', true);
+  pngXhr.onreadystatechange = function(r) {}; 
+  
+  
+  //Sending uploads request
+  pngXhr.send(pngFormData);
+  setTimeout(function(){
+    svgXhr.send(formData);
+  }, 2000);
+  
   setTimeout(function(){
     $( "#create_product_design_form" ).submit();
-  }, 500);
+    $('#pls_wait_design_saving h3').html('Designs are ready going for order');
+  }, 2500);
   
 }
 

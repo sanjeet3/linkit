@@ -603,26 +603,33 @@ class GetSavedDesign(ActionSupport):
 
 class BucketUploadDesign(ActionSupport):
   def post(self): 
-    design_print = self.request.get('design_print2')
     design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
-    bucket_path = '/designer_textptrn/saved_design/%s/%s.png' %(design_obj.product_code, design_obj.id)
-    write_urlecoded_png_img(design_print, bucket_path) 
-    try:
-      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
-      serving_url = images.get_serving_url(bucket_key)  
-    except Exception, msg:
-      logging.error(msg)  
-    design_obj.design_prev_url = serving_url
-    design_obj.design_prev_key = bucket_key
-    design_obj.design_prev_path = bucket_path
+    png_counter = int(self.request.get('counter'))
+    logging.info('png_file_recieved: %s ' %(png_counter))
+    for i in range(png_counter):
+      logging.info(i)
+      file_obj = self.request.get("png%s" %(i), None)
+      logging.info(len(file_obj)) 
+      bucket_path = '/designer_textptrn/saved_design/%s/%s/%s.png' %(design_obj.product_code, design_obj.id, i)
+      write_urlecoded_png_img(file_obj, bucket_path) 
+      bucket_key, serving_url = '',''
+      try:
+        bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+        serving_url = images.get_serving_url(bucket_key)  
+      except Exception, msg:
+        logging.info('generating_direct_png_url')  
+        serving_url='https://storage.googleapis.com/designer_textptrn/saved_design/%s/%s/%s.png' %(design_obj.product_code, design_obj.id, i) 
+      design_obj.png_url.append(serving_url)
+      design_obj.png_key.append(bucket_key) 
     design_obj.put()
-    return json_response(self.response, {}, SUCCESS, 'Product design uploads')
+    
+    return json_response(self.response, {}, SUCCESS, 'Product design png uploads')
   
 class SVGBucketUploadDesign(ActionSupport):
   def post(self): 
     design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get()                    
     svg_counter = int(self.request.get('counter'))
-    logging.info(svg_counter)
+    logging.info('svg_file_recieved: %s ' %(svg_counter))
     for i in range(svg_counter):
       logging.info(i)
       file_obj = self.request.get("svg%s" %(i), None)
@@ -724,7 +731,7 @@ class CreateNewOrderView(ActionSupport):
             'p': design_obj.product.get(),
             'error': '',
             'design_print': self.request.get('design_print'),
-            'svgresut': self.request.get_all('svgresut'),
+            'pngDataUrl': self.request.get_all('pngDataUrl'),
             'user_obj': self.client,}
     template = self.get_jinja2_env.get_template('endclient/create-order-page.html') 
     self.response.out.write(template.render(data))
@@ -794,7 +801,8 @@ class CreateNewOrder(ActionSupport):
     new_order.category = master_product.category
     new_order.retail_price = seller_product.retail_price
     new_order.master_price = master_product.price 
-    new_order.client_print = design_obj.design_prev_url
+    new_order.client_print = design_obj.png_url
+    new_order.production_print = design_obj.svg_url
     new_order.image_url = master_product.image_url[0] if master_product.image_url else ''
     new_order.qty =  qty
     new_order.client_name = self.client.name 

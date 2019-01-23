@@ -360,7 +360,8 @@ class SellerOrder(EndpointsModel):
   retail_price = ndb.FloatProperty(default=0.0) 
   master_price = ndb.FloatProperty(default=0.0) 
   image_url = ndb.StringProperty(default='')
-  client_print = ndb.StringProperty(default='')
+  client_print = ndb.StringProperty(repeated=True)
+  production_print = ndb.StringProperty(repeated=True)
   qty = ndb.IntegerProperty(default=0)
   client_name = ndb.StringProperty(default='')
   phone = ndb.StringProperty(default='')
@@ -383,7 +384,17 @@ class SellerOrder(EndpointsModel):
     q = cls.query(cls.client==client).order(-cls.date)
     if from_date and to_date:
       q = q.filter(cls.date>=from_date, cls.date<=to_date)    
-    return q.fetch()    
+    return q.fetch(projection=[
+      cls.amount,
+      cls.code,
+      cls.date,
+      cls.image_url,
+      cls.name,
+      cls.qty,
+      cls.retail_price,
+      cls.status,
+      cls.size,
+      ])    
   
   @classmethod
   def get_by_ref(cls, ref):
@@ -403,11 +414,10 @@ class ClientProductDesign(EndpointsModel):
   client = ndb.KeyProperty(Client)
   product = ndb.KeyProperty(Product)
   product_code = ndb.StringProperty(default='')
-  design_prev_url = ndb.TextProperty(default='')
-  design_prev_key = ndb.TextProperty(default='')
-  design_prev_path = ndb.TextProperty(default='') 
   svg_url = ndb.StringProperty(repeated=True)
   svg_key = ndb.StringProperty(repeated=True)
+  png_key = ndb.StringProperty(repeated=True)
+  png_url = ndb.StringProperty(repeated=True)
 
   @classmethod
   def get_by_design_id(cls, design_id):
