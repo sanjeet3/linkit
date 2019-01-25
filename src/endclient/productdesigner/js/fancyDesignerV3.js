@@ -4081,7 +4081,7 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
                     instance.stage.renderAll();
                   })
                 
-              });
+              }, {crossOrigin: 'Anonymous'});
             }
             else {
                 var color = element.fill ? element.fill : element.colors[0];
