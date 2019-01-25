@@ -2488,7 +2488,7 @@ var FancyProductDesignerOptions = function() {
             cornerSize: 24,
             fill: false,
             lockUniScaling: true,
-            pattern: true,
+            pattern: false,
             top: 0,
             left: 0,
             angle: 0,
@@ -4071,14 +4071,17 @@ var FancyProductDesignerView = function($productStage, view, callback, fabricCan
         else if(FPDUtil.getType(element.type) === 'text') {
 
             if(url) {
-                fabric.util.loadImage(url, function(img) {
-
+                fabric.Image.fromURL(url, function(img) {
+                  //img.setSrc();
+                  fabric.util.loadImage(img.toDataURL(), function(img) {
                     element.set('fill', new fabric.Pattern({
                         source: img,
                         repeat: 'repeat'
                     }));
                     instance.stage.renderAll();
-                });
+                  })
+                
+              });
             }
             else {
                 var color = element.fill ? element.fill : element.colors[0];
