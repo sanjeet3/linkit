@@ -36,14 +36,14 @@
   </div>
   <div style="clear: both;">
     <hr>
-    <h5>Design View:</h5>
+    <div class="col-lg-12 col-sm-12">
+    <h3>Design View:</h3>
     {% for png in order.client_print %}
-    <div class="col-lg-4 col-sm-12">
-      <div class="download-item">
-        <img alt="" src="{{order.client_print}}" width="95%"> <button type="button" 
+    <div class="download-item" style="margin-left: 10px; margin-bottom: 20px;">
+      <img alt="" src="{{png}}"> <button type="button" 
           onclick="downloadPic(this)" class="btn btn-info">Download</button>
-      </div>
     </div>
     {%endfor%}
+     </div>
   </div>
 </div>

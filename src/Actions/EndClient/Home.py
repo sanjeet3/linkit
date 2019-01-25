@@ -608,9 +608,10 @@ class BucketUploadDesign(ActionSupport):
     logging.info('png_file_recieved: %s ' %(png_counter))
     for i in range(png_counter):
       logging.info(i)
+      _path = '/designer_textptrn/saved_design/%s/%s/%s' %(design_obj.product_code, design_obj.id, i)
       file_obj = self.request.get("png%s" %(i), None)
       logging.info(len(file_obj)) 
-      bucket_path = '/designer_textptrn/saved_design/%s/%s/%s.png' %(design_obj.product_code, design_obj.id, i)
+      bucket_path = _path+'.png'
       write_urlecoded_png_img(file_obj, bucket_path) 
       bucket_key, serving_url = '',''
       try:
@@ -618,9 +619,19 @@ class BucketUploadDesign(ActionSupport):
         serving_url = images.get_serving_url(bucket_key)  
       except Exception, msg:
         logging.info('generating_direct_png_url')  
-        serving_url='https://storage.googleapis.com/designer_textptrn/saved_design/%s/%s/%s.png' %(design_obj.product_code, design_obj.id, i) 
+        serving_url='https://storage.googleapis.com/designer_textptrn/saved_design/%s/%s/%s.png' %(design_obj.product_code, design_obj.id, i)
       design_obj.png_url.append(serving_url)
-      design_obj.png_key.append(bucket_key) 
+      design_obj.png_key.append(bucket_key)
+      
+      bucket_path = _path+'.svg'
+      try:
+        bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+        serving_url = images.get_serving_url(bucket_key)  
+      except Exception, msg:
+        logging.info('generating_direct_svg_url')  
+        serving_url='https://storage.googleapis.com/designer_textptrn/saved_design/%s/%s/%s.svg' %(design_obj.product_code, design_obj.id, i) 
+      design_obj.svg_url.append(serving_url)
+      design_obj.svg_key.append(bucket_key)       
     design_obj.put()
     
     return json_response(self.response, {}, SUCCESS, 'Product design png uploads')
@@ -636,7 +647,8 @@ class SVGBucketUploadDesign(ActionSupport):
       logging.info(len(file_obj)) 
       bucket_path = '/designer_textptrn/saved_design/%s/%s/%s.svg' %(design_obj.product_code, design_obj.id, i)
       write_urlecoded_svg_img(file_obj, bucket_path) 
-      bucket_key, serving_url = '',''
+      
+      '''bucket_key, serving_url = '',''
       try:
         bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
         serving_url = images.get_serving_url(bucket_key)  
@@ -644,8 +656,9 @@ class SVGBucketUploadDesign(ActionSupport):
         logging.info('generating_direct_svg_url')  
         serving_url='https://storage.googleapis.com/designer_textptrn/saved_design/%s/%s/%s.svg' %(design_obj.product_code, design_obj.id, i) 
       design_obj.svg_url.append(serving_url)
-      design_obj.svg_key.append(bucket_key) 
-    design_obj.put()
+      design_obj.svg_key.append(bucket_key)''' 
+      
+    #design_obj.put()
     return json_response(self.response, {}, SUCCESS, 'Product design uploads')
 
 class BucketDeleteDesign(ActionSupport):
