@@ -101,8 +101,9 @@ function SaveAndOrderSVG(){
   try{
     svgList = yourDesigner.getViewsSVG()
   } catch {
+    $('#pls_wait_design_saving h3 ').html('Kindly clear your browser cache. <br/>If after refresing cache, your facing this issue kindly contact us!');
+    alert('Kindly clear your browser cache or contact us!');
     $('#pls_wait_design_saving').hide();
-    alert('Kindly add color to your text!');
     return
   }
   console.log('Extratcting your design!');
