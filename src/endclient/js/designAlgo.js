@@ -163,13 +163,16 @@ function svgUploadDesignToBucket(r){
   
   
   //Sending uploads request
-  pngXhr.send(pngFormData); 
+  
   svgXhr.send(formData); 
+  setTimeout(function(){
+    pngXhr.send(pngFormData); 
+  }, 200);
   
   setTimeout(function(){
     $( "#create_product_design_form" ).submit();
     $('#pls_wait_design_saving h3').html('Designs are ready going for order');
-  }, 1000);
+  }, 1200);
   
 }
 

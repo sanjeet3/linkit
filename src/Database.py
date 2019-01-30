@@ -731,6 +731,7 @@ class ProductCanvas(EndpointsModel):
   preview_key = ndb.StringProperty()
   preview_top = ndb.StringProperty(default='0')
   preview_left = ndb.StringProperty(default='0') 
+  preview_width = ndb.StringProperty(default='500') 
   designer_module = ndb.StringProperty(repeated=True)
   
   @classmethod

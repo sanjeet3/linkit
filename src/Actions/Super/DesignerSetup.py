@@ -411,6 +411,7 @@ class GetProductCanvasPrev(ActionSupport):
            'preview_left': e.preview_left,
            'preview_top': e.preview_top,
            'preview_key': e.preview_key,
+           'preview_width': e.preview_width,
            'preview_url': e.preview_url}    
     return json_response(self.response, d, SUCCESS, 'Success')  
 
@@ -472,8 +473,10 @@ class ChangePreviewMargin(ActionSupport):
     canvas = ndb.Key(urlsafe=self.request.get('key')).get() 
     top = self.request.get('top')
     left = self.request.get('left')
+    width = self.request.get('width')
     canvas.preview_top = top
     canvas.preview_left = left
+    canvas.preview_width = width
     canvas.put()       
     return json_response(self.response, {}, SUCCESS, 'Success')
   
@@ -488,6 +491,7 @@ class UploadProductPreview(ActionSupport):
     product_key = ndb.Key(urlsafe=self.request.get('p'))
     preview_top = self.request.get('preview_top')
     preview_left = self.request.get('preview_left')
+    preview_width = self.request.get('preview_width')
     file_name = image_file.filename    
     bucket_path = '/designer_preview/%s' %(file_name)
     bucket_path = bucket_path.lower()
@@ -511,6 +515,7 @@ class UploadProductPreview(ActionSupport):
     e.preview_url = serving_url
     e.preview_left = preview_left
     e.preview_top = preview_top
+    e.preview_width = preview_width
     e.put()
     return json_response(self.response, {'preview_url': serving_url}, SUCCESS, 'Success')
 

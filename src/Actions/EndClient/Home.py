@@ -490,24 +490,20 @@ class GetProductDesignor(ActionSupport):
     self.bg_list=[]
     self.sub_bg_list=[]  
     designer_module = [] #['images', 'frames', 'backgrounds', 'text', 'designs']
-    source_html = ''
-    reday_design_template=self.request.get('redayDesignTemplate')
+    source_html = '' 
     reday_design_key=self.request.get('readyDesignKey')
     self.p = ndb.Key(urlsafe=self.request.get('key')).get() 
     tutorial = ProductTutorial.get_tutorial(self.p.key)
     #template_path = 'endclient/card_designer.html'
-    template_path = 'endclient/product_designor.html'
-    '''if reday_design_template:
-      template_path = 'endclient/%s' %(reday_design_template)'''
+    template_path = 'endclient/product_designor.html' 
     if reday_design_key:  
       r_d_templt = ndb.Key(urlsafe=reday_design_key).get()   
       source_html = r_d_templt.template_source 
       template_path = 'endclient/product_designor_custom_template.html'
-    elif self.p.default_design_template:
-      template_path = 'endclient/%s.html' %(self.p.default_design_template)
+    '''elif self.p.default_design_template:
+      template_path = 'endclient/%s.html' %(self.p.default_design_template)'''
     logging.info(template_path)      
     template = self.get_jinja2_env.get_template(template_path)    
-    patterns = TextPatterns.get_img_url_list()
     canvas = ProductCanvas.get_obj(self.p.key)
     logging.info(canvas)
     if canvas:
@@ -526,8 +522,7 @@ class GetProductDesignor(ActionSupport):
                                              'dev': self.DEV,
                                              'key': self.request.get('key'), 
                                              'user_obj': self.client, 
-                                             'canvas': canvas,
-                                             'patterns': patterns,
+                                             'canvas': canvas, 
                                              'frame_list': self.frame_list,
                                              'sub_frame_dict': self.sub_frame_dict,
                                              'bg_list': self.bg_list,

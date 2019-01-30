@@ -200,6 +200,7 @@ var canvasPreviewUrl = '',
 prodCode='{{p.code}}',
 preview_top = 0,
 preview_left = 0,
+preview_width = 500,
 stage_height = 780,
 stage_width=780,
 main_bar_module=[];
@@ -214,6 +215,7 @@ main_bar_module.push('manage-layers');
 canvasPreviewUrl = {%if canvas.preview_url%}'{{canvas.preview_url}}=s0'{%else%}''{%endif%};
 preview_top = '{{canvas.preview_top}}px';
 preview_left = '{{canvas.preview_left}}px';
+preview_width = '{{canvas.preview_width}}px';
 stage_height = {{canvas.stage_height}};
 stage_width = {{canvas.stage_width}};
 {%endif%}
@@ -302,11 +304,7 @@ stage_width = {{canvas.stage_width}};
               '/wp-content/masks/atomic.svg',
               '/wp-content/masks/flame.svg',
               ],
-          },
-          elementParameters : {
-            patterns : [{%for img in patterns%}'{{img}}',{%endfor%}],
-               
-          },
+          }, 
         };
 
         yourDesigner = new FancyProductDesigner($yourDesigner, pluginOpts); 

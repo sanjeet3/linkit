@@ -1363,7 +1363,7 @@ function getProductCanvasPrevCB(r){
   }
   if(r.data.preview_url){
     $('#product_preview_form').hide();
-    editPreviewMargin
+    
     var h =['<div id="canvas_prev_dom"><h5>Preview</h5><p class="cursor" onclick="editPreviewMargin('];
     h.push("'");
     h.push(r.data.k);
@@ -1372,6 +1372,8 @@ function getProductCanvasPrevCB(r){
     h.push(r.data.preview_top);
     h.push(',');
     h.push(r.data.preview_left);
+    h.push(',');
+    h.push(r.data.preview_width);
     h.push(')">Change Preview Margin Top-Left</p><br><img height="100px" src="');
     h.push(r.data.preview_url);
     h.push('"><button type="button" class="btn btn-danger btn-minier"onclick="deleteCanvasPrevImg(');
@@ -1505,11 +1507,12 @@ function updateCanvasMarginCB(r){
   closeDialog('#changeCanvasMargin');
 }
 
-function editPreviewMargin(k , t, l){
+function editPreviewMargin(k , t, l, w){
   openDialog('#changePreviewMargin');
   $('#preview_key').val(k);
   $('#edit_preview_top').val(t);
   $('#edit_preview_left').val(l);
+  $('#edit_preview_width').val(w);
 }
 
 function updatePreviewMargin(){

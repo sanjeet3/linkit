@@ -7916,30 +7916,14 @@ var FPDActions = function(fpdInstance, $actions){
         else if(action === 'preview-lightbox') {
 
             fpdInstance.getProductDataURL(function(dataURL) {
-              /*var h = ['<div class="preview-container">'];
-              h.push('<canvas id="prev-canvas"></canvas></div>');
-              FPDUtil.createModal(h.join(''), true);
-              //preveiwMug(dataURL, '');
-              setTimeout(function(){ preveiwMug(dataURL, ''); }, 400);*/
-                
-                /*var image = new Image();
-                image.src = dataURL; 
-                image.onload = function() {
-                    //FPDUtil.showModal('<img src="'+this.src+'" download="product.png" />', true);
-                  var h = ['<div class="preview-container">'];
-                  h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
-                  h.push('<img class="preview-imgB1" style="left: '+preview_left+', top: '+preview_top+'" src="'+this.src+'" download="product.png" /></div>');
-                  h = h.join('');
-                  FPDUtil.createModal(h, true);
-                  
-                }*/
+              
               /*if(prodCode == 'PRD004'){
                 var h = preveiwWaterBottle(canvasPreviewUrl, dataURL);
                 FPDUtil.createModal(h, true);
               }*/ 
               var h = ['<div class="preview-container">'];
               h.push('<img class="preview-imgA1" src="'+canvasPreviewUrl+'">');
-              h.push('<img class="preview-imgB1" style="left: '+preview_left+'; top: '+preview_top+'" src="'+dataURL+'" download="product.png" /></div>');
+              h.push('<img class="preview-imgB1" style="left: '+preview_left+'; top: '+preview_top+'; width: '+preview_width+';" src="'+dataURL+'" download="product.png" /></div>');
               h = h.join('');
               FPDUtil.createModal(h, true);
               
