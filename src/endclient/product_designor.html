@@ -163,7 +163,11 @@
     <input type="hidden" name="design_print" id="design_print">
     <input type="hidden" name="design_key" id="design_key" value="{{saveDesignKey}}">
   </form>
-  
+  <div style="display: none;">
+  {%if canvas%}
+  <img alt="" src="{{canvas.preview_url}}=s0">
+  {%endif%}
+  </div>
 <!-- Modal -->
   <div class="new-modal" id="tutorialModal" style="display: none;">
     <div class="new-modal-content">
