@@ -314,7 +314,7 @@
     </form>
   </div>
 </div>
-<div id="addCustomLblDailog" class="dialog-box">
+<div id="addCustomLblDailog" class="dialog-box dialog-vw-50">
   <div class="dailog-header">
     <span>Add Custom Lable</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
       onclick="closeDialog('#addCustomLblDailog')"></i>
@@ -339,24 +339,25 @@
       <div class="form-group">
         <label class="col-sm-2 control-label no-padding-right" for="code">New Option</label>
         <div class="col-sm-9">
-          <div class="input-group">
-            <input type="text" id="new_opt" class="form-control input-custom">
-            <button type="button" onclick="addOptList()">+</button> 
-          </div>
+          <input type="text" id="new_opt" class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-12">
-        <div class="input-group">
-          <textarea class="form-control" id="opt_list"></textarea>
-          <button type="button" onclick="appendLabel()">+ Label</button>
+        <label class="col-sm-2 control-label no-padding-right" for="code">Cost</label>
+        <div class="col-sm-6">
+          <input type="text" id="new_opt_cost" class="form-control input-custom" value="0">
         </div>
+        <div class="col-sm-3">
+          <button type="button" onclick="addOptList()" class="btn btn-info btn-minier pull-right"> Add Option</button>
         </div>
+      </div> 
+      <div style="border: 1px solid #aba6a6; padding: 10px; text-align: center; margin: 5px;">
+        <button type="button" onclick="appendLabel()" class="btn btn-danger btn-minier">+
+            Label</button>
       </div>
-       
       <div class="form-group">
         <div class="col-md-offset-2 col-md-9">
-          <button class="btn btn-info btn-minier" type="button" onclick="addCustomLableProduct()">
+          <button class="btn btn-success btn-minier" type="button" onclick="addCustomLableProduct()">
             <i class="ace-icon fa fa-check bigger-110"></i> Update
           </button>
           &nbsp; &nbsp; &nbsp;
@@ -364,6 +365,8 @@
           </button>
         </div>
       </div>
+      
+      <div style="border: 1px solid #aba6a6; padding: 10px; text-align: center; margin: 5px;display: inline-block;" id="custom_field_result"></div>
     </form>
   </div>
 </div>

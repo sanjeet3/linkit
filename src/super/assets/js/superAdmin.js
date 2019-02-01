@@ -2291,42 +2291,79 @@ function searchClientLogCB(r){
   $('#client_logs').html(r.data.html);
 }
 
-var customLblData=[];
+var customLblData=[], newOptList=[];
 function customLabelDailog(){
+  $('#custom_field_result').html('');
   openDialog('#addCustomLblDailog');
   $('#add_custom_lble_form')[0].reset();
   customLblData=[];
+  newOptList=[];
+  let data=$('#custom_lable').val();
+  if(data){
+    customLblData = $.parseJSON(data);
+    for(let i in customLblData){
+      showCustomLabelHtml(customLblData[i]);
+    }
+  }
 }
 
 function resetLBLOpt(){
-  $('#opt_list').val('');
+  newOptList=[]
 }
 function addOptList(){
-  var v = $('#new_opt').val();
-  if(!v) return;
+  var v = $('#new_opt').val(),
+  c =  $('#new_opt_cost').val();
+  if(!v||!c) return;
   var a = $('#opt_list').val();
-  if(!a){
-    a=v;
-  } else{
-    a=a+','+v;
-  }
-  $('#opt_list').val(a);
+  newOptList.push({'v':v, 'c': c});
   $('#new_opt').val('');
+  $('#new_opt_cost').val(0);
 }
 function appendLabel(){
-  var l = $('#new_label').val(),
-  a = $('#opt_list').val();
-  if(!l||!a) return;
+  var l = $('#new_label').val();
+  if(!l||newOptList.length==0) return;
   
-  var t = $('#lable_type').val();
-  customLblData.push({'title': l,'type': t, 'val': a.split(',')});
-  $('#opt_list').val('');
+  var t = $('#lable_type').val(),
+  d = {'title': l,'type': t, 'data': newOptList};
+  customLblData.push(d);
+  newOptList=[];
+  $('#new_label').val('');
+  showCustomLabelHtml(d);
 } 
 function addCustomLableProduct(){
   if(customLblData.length==0){
     return;
   }
   $('#custom_lable').val(JSON.stringify(customLblData));
-
   closeDialog('#addCustomLblDailog');
 }
+function showCustomLabelHtml(d){
+  let h=['<div class="col-lg-12 mb-5"><b class="col-sm-3 control-label no-padding-right">']
+  h.push(d.title);
+  h.push(':</b><div class="col-sm-9">');
+  if(d.type=='D'){
+    h.push('<select class="form-control">');
+    for(let i in d.data){
+      opt = d.data[i]
+      h.push('<option>');
+      h.push(opt.v)
+      h.push(' (')
+      h.push(opt.c)
+      h.push(' KES)</option>')
+    }
+    h.push('</select>');
+  } else {
+    for(let i in d.data){
+      opt = d.data[i]
+      h.push('<label class="pr-5"><input type="checkbox"> ');
+      h.push(opt.v)
+      h.push(' (')
+      h.push(opt.c)
+      h.push(' KES)</label>')
+    }
+  }
+  h.push('</div></div>');
+  $('#custom_field_result').append(h.join(''))
+  
+}
+

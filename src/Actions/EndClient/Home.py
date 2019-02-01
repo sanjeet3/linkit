@@ -733,10 +733,16 @@ class AddOrderPaymentRef(ActionSupport):
 class CreateNewOrderView(ActionSupport):
   def post(self):
     design_obj = ndb.Key(urlsafe=self.request.get('design_key')).get() 
+    master_product = design_obj.product.get()
+    custom_fields=[]
+    if master_product.custom_lable:
+      custom_fields = json.loads(master_product.custom_lable)
+      logging.info(custom_fields)
     data = {'design_obj': design_obj,
             'seller_product': SellerProduct.get_default_seller_product(design_obj.product),
             'product_cat_list': ProductCategory.get_list(),
-            'p': design_obj.product.get(),
+            'p': master_product,
+            'custom_fields': custom_fields,
             'error': '',
             'design_print': self.request.get('design_print'),
             'pngDataUrl': self.request.get_all('pngDataUrl'),

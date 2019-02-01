@@ -28,10 +28,9 @@
   <div class="container main-content">
     <div class="mt-10 mb-10">
       <div class="row">
-        <div class="col-lg-12 col-xs-12">
-          <h4>{{p.name}}</h4>
-          <img alt="" src="{{p.image_url[0] or 'img/prod_default.png'}}" style="max-width: 40%; height: 200px;"
-            class="pull-left mr-20 mb-10 shadow"> <b>Price: </b>{{seller_product.retail_price}} KES <br />
+        <div class="col-lg-8 col-xs-12">
+          <h4>{{p.name}}</h4> 
+          <b>Price: </b>{{seller_product.retail_price}} KES <br />
           <b>Size:</b> {{p.size}}<br> <b>Category:</b> {{p.category}}<br> <b>UOM:</b>
           {{p.uom}}<br> <b>Description:</b>{{p.description}}<br /> <b>Quantity:</b>&nbsp;<input
             type="number" min="1" value="1" name="qty" id="user-priece-qty"
@@ -43,9 +42,35 @@
               type="hidden" name="design_id" id="selected_design_id"
               value="{{design_obj.entityKey}}"> <input type="hidden" name="product"
               id="selected_seller_product" value="{{seller_product.entityKey}}">
-              
-            <button type="submit"  class="btn btn-sm btn-primary btn-white btn-round"><i class="fa fa-shopping-cart"></i>  Order Now</button>  
+            {%if custom_fields%}  
+            <b>Choose Accessories for your product:</b><br/>
+            {%for d in custom_fields%}
+            <div class="pd-10" style="width: 100%; display: flex; ">
+            <b class="pull-left pr-15">{{d['title']}}: </b>
+            {%if d['type']=='D'%}
+            <select name="{{d['title']}}" class="pull-left">
+              {%for opt in d['data']%}
+              <option value="{{ loop.index-1 }}" data-val="{{opt['v']}}" data-cost="{{opt['c']}}">{{opt['v']}} ({{opt['c']}} KES)</option>
+              {%endfor%}
+            </select>
+            {%else%}
+             <div class="pull-left">
+              {%for opt in d['data']%}
+              <label class="cursor pr-15"><input type="checkbox" name="{{d['title']}}" value="{{ loop.index-1 }}" data-val="{{opt['v']}}" data-cost="{{opt['c']}}"> {{opt['v']}} ({{opt['c']}} KES)</label>
+              {%endfor%}
+             </div>
+            {%endif%} 
+            </div>
+            {%endfor%} 
+            {%endif%} 
+            <div class="pd-10">
+              <button type="submit"  class="btn btn-sm btn-primary btn-white btn-round"><i class="fa fa-shopping-cart"></i>  Order Now</button>  
+            </div>
           </form>
+        </div>
+        <div class="col-lg-4 col-xs-12">
+          <img alt="{{p.name}}" src="{{p.image_url[0] or 'img/prod_default.png'}}" style="max-width: 100%;float: right;"
+            class="mr-20 mb-10 shadow">
         </div>
        <div class="col-lg-12">
          <h3>Your Design</h3>
