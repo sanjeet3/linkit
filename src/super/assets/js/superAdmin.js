@@ -1661,6 +1661,7 @@ function getProductEditCB(r){
   $('#description').val(d.description);
   $('#category').val(d.category);
   $('#uom').val(d.uom);
+  $('#custom_lable').val(d.custom_lable);
   
   //selecting multiselect
   opts = $('#event > option');
@@ -2288,4 +2289,44 @@ function searchClientLog(){
 
 function searchClientLogCB(r){
   $('#client_logs').html(r.data.html);
+}
+
+var customLblData=[];
+function customLabelDailog(){
+  openDialog('#addCustomLblDailog');
+  $('#add_custom_lble_form')[0].reset();
+  customLblData=[];
+}
+
+function resetLBLOpt(){
+  $('#opt_list').val('');
+}
+function addOptList(){
+  var v = $('#new_opt').val();
+  if(!v) return;
+  var a = $('#opt_list').val();
+  if(!a){
+    a=v;
+  } else{
+    a=a+','+v;
+  }
+  $('#opt_list').val(a);
+  $('#new_opt').val('');
+}
+function appendLabel(){
+  var l = $('#new_label').val(),
+  a = $('#opt_list').val();
+  if(!l||!a) return;
+  
+  var t = $('#lable_type').val();
+  customLblData.push({'title': l,'type': t, 'val': a.split(',')});
+  $('#opt_list').val('');
+} 
+function addCustomLableProduct(){
+  if(customLblData.length==0){
+    return;
+  }
+  $('#custom_lable').val(JSON.stringify(customLblData));
+
+  closeDialog('#addCustomLblDailog');
 }

@@ -211,6 +211,7 @@ class EditProducts(ActionSupport):
     'product_key': p.entityKey,
     'event_urlsafe': p.event_urlsafe,
     'status': p.status,
+    'custom_lable': p.custom_lable,
     }
     
     return  json_response(self.response, data_dict, SUCCESS, '')
@@ -223,9 +224,11 @@ class EditProducts(ActionSupport):
     uom=self.request.get('uom')
     event_list = self.request.get_all('event')
     description=self.request.get('description') 
+    custom_lable=self.request.get('custom_lable') 
     
     key = self.request.get('k')  
     p = ndb.Key(urlsafe=key).get()
+    p.custom_lable=custom_lable
     p.description=description
     p.name=name
     p.price=price

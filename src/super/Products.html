@@ -152,6 +152,17 @@
           </div>
         </div>
         <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="category">Custom Label </label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <input type="text"  class="form-control" id="custom_lable" name="custom_lable">
+              <span class="input-group-addon font-12" onclick="customLabelDailog()">
+                <i class="fa fa-plus bigger-110"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-md-offset-1 col-md-9">
             <button class="btn btn-info btn-minier" type="button" onclick="saveProduct()"
               id="save_btn">
@@ -297,6 +308,59 @@
           </button>
           &nbsp; &nbsp; &nbsp;
           <button class="btn btn-minier" type="button" onclick="closeDialog('#addUOMDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="addCustomLblDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add Custom Lable</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addCustomLblDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_custom_lble_form">
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code">Label</label>
+        <div class="col-sm-9">
+          <input type="text" id="new_label" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code"> Selection Type </label>
+        <div class="col-sm-9">
+          <select id="lable_type" class="form-control input-custom" onchange="resetLBLOpt()">
+            <option value="D">Dropdown</option>
+            <option value="C">Choice</option>
+          </select> 
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="code">New Option</label>
+        <div class="col-sm-9">
+          <div class="input-group">
+            <input type="text" id="new_opt" class="form-control input-custom">
+            <button type="button" onclick="addOptList()">+</button> 
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-12">
+        <div class="input-group">
+          <textarea class="form-control" id="opt_list"></textarea>
+          <button type="button" onclick="appendLabel()">+ Label</button>
+        </div>
+        </div>
+      </div>
+       
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="addCustomLableProduct()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Update
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addCustomLblDailog')">Close
           </button>
         </div>
       </div>
