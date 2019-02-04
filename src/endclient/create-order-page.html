@@ -49,6 +49,7 @@
             <b class="pull-left pr-15">{{d['title']}}: </b>
             {%if d['type']=='D'%}
             <select name="{{d['title']}}" class="pull-left">
+              <option value="" data-val="" data-cost="">Select</option>
               {%for opt in d['data']%}
               <option value="{{ loop.index-1 }}" data-val="{{opt['v']}}" data-cost="{{opt['c']}}">{{opt['v']}} ({{opt['c']}} KES)</option>
               {%endfor%}
