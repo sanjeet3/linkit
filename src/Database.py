@@ -173,6 +173,7 @@ class Product(EndpointsModel):
   category = ndb.StringProperty(default='')
   category_key = ndb.KeyProperty(ProductCategory)
   price = ndb.FloatProperty(default=0.0) 
+  min_qty = ndb.IntegerProperty(default=1) 
   description = ndb.TextProperty(default='') 
   image_url = ndb.StringProperty(repeated=True)
   bucket_path = ndb.StringProperty(repeated=True) 
@@ -844,3 +845,15 @@ class MailTemplateModel(EndpointsModel):
   @classmethod
   def get_template(cls, template_type):
     return cls.query(cls.template_type==template_type).get()          
+
+class ProductDiscount(EndpointsModel):
+  ''' Product datastore '''
+  created_on = ndb.DateTimeProperty(auto_now_add=True)
+  product = ndb.KeyProperty(Product)
+  p_key = ndb.StringProperty()
+  qty = ndb.IntegerProperty(default=1)
+  discount = ndb.FloatProperty(default=0)
+  
+  @classmethod
+  def get_product_discount_list(cls, product_key):
+    return cls.query(cls.product==product_key).fetch()

@@ -130,6 +130,9 @@ __route_list = [
     RedirectRoute(r'/superadmin/EditProducts', SuperAdmin.EditProducts, name='SuperAdmin Edit Products action', strict_slash=True),
     RedirectRoute(r'/superadmin/EditProductsCATUOM', SuperAdmin.EditProductsCATUOM, name='SuperAdmin Edit Products action', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadTest', SuperAdmin.UploadTest, name='SuperAdmin UploadTest', strict_slash=True),
+    RedirectRoute(r'/superadmin/Discounts', SuperAdmin.ProductDiscountsHandler, name='SuperAdmin Discounts page', strict_slash=True),
+    RedirectRoute(r'/superadmin/GetProductDiscountList', SuperAdmin.GetProductDiscountList, name='SuperAdmin product Discounts json', strict_slash=True),
+ 
     #Super Admin order
     RedirectRoute(r'/superadmin/Order', SuperAdmin.Order, name='SuperAdmin Order view', strict_slash=True),
     RedirectRoute(r'/superadmin/GerOrderDetails', SuperAdmin.GerOrderDetails, name='SuperAdmin Order view', strict_slash=True),

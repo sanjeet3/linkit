@@ -37,6 +37,7 @@
             <td>Category</td>
             <td>UOM</td>
             <td>Price</td>
+            <td>Min-qty</td>
             <td>Size</td>
             <td width="30%">Description</td>
             <td></td>
@@ -50,6 +51,7 @@
             <td>{{e.category}}</td>
             <td>{{e.uom}}</td>
             <td>{{e.price}}</td>
+            <td>{{e.min_qty}}</td>
             <td>{{e.size}}</td>
             <td>{{e.description}}</td>
             <td><div class="widget-toolbar no-border">
@@ -98,6 +100,13 @@
           <div class="col-sm-9">
             <input type="number" step="1" name="price" id="price" class="form-control input-custom"
               value="0" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right" for="price"> Min-qty </label>
+          <div class="col-sm-9">
+            <input type="number" step="1" name="min_qty" id="min_qty" class="form-control input-custom"
+              value="1" min="1">
           </div>
         </div>
         <div class="form-group">
@@ -189,6 +198,7 @@
                 <td>Category</td>
                 <td>UOM</td>
                 <td>Price</td>
+                <td>Min_qty</td>
                 <td>Size</td>
                 <td>Description</td>
               </tr>
