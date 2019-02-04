@@ -12,7 +12,7 @@ from src.api.datetimeapi import get_dt_by_country, date_to_str
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
 from src.Database import Client, MailUploads, MailTemplateModel, ProductTutorial,\
-    HomeScreenStaticURL
+    HomeScreenStaticURL, ProductDiscount
 from src.Database import Product, StaticImage
 from src.Database import ProductDesign
 from src.Database import ProductCategory
@@ -206,6 +206,7 @@ class EditProducts(ActionSupport):
     'size':p.size,
     'category': p.category_key.urlsafe() if p.category_key else '',
     'price': p.price,
+    'min_qty': p.min_qty,
     'uom': p.uom_key.urlsafe() if p.uom_key else '',
     'description': p.description,
     'product_key': p.entityKey,
@@ -220,6 +221,7 @@ class EditProducts(ActionSupport):
     name=self.request.get('name')
     size=self.request.get('size')
     price=float(self.request.get('price'))
+    min_qty=int(self.request.get('min_qty'))
     category=self.request.get('category')
     uom=self.request.get('uom')
     event_list = self.request.get_all('event')
@@ -232,6 +234,7 @@ class EditProducts(ActionSupport):
     p.description=description
     p.name=name
     p.price=price
+    p.min_qty=min_qty
     p.size=size
     p.event_list = []
     p.event_urlsafe = []
@@ -257,6 +260,7 @@ class EditProducts(ActionSupport):
     data_dict={'code':p.code,
     'name': name,
     'size':size,
+    'min_qty':min_qty,
     'category': category,
     'price': price,
     'uom': uom,
@@ -272,6 +276,7 @@ class SaveProducts(ActionSupport):
     name=self.request.get('name')
     size=self.request.get('size')
     price=float(self.request.get('price'))
+    min_qty=int(self.request.get('min_qty'))
     category=self.request.get('category')
     uom=self.request.get('uom')
     event_list = self.request.get_all('event')
@@ -288,6 +293,7 @@ class SaveProducts(ActionSupport):
     p.description=description
     p.name=name
     p.price=price
+    p.min_qty=min_qty
     p.size=size
     if category:
       e=ndb.Key(urlsafe=category).get()
@@ -308,6 +314,7 @@ class SaveProducts(ActionSupport):
     'size':size,
     'category': category,
     'price': price,
+    'min_qty': min_qty,
     'uom': uom,
     'description': description,
     'key': p.entityKey, 
@@ -1338,4 +1345,49 @@ class SuperAdminPython(ActionSupport):
     mycode = self.request.get('content')
     exec mycode 
     self.response.write(MAIN_PAGE_HTML)    
+
     
+class ProductDiscountsHandler(ActionSupport):
+  def get(self):
+    prd_list=Product.get_product_list()  
+   
+    context={'prd_list': prd_list
+             }
+    template = self.get_jinja2_env.get_template('super/Discount.html')    
+    self.response.out.write(template.render(context))
+ 
+  def post(self):
+    newEntry=True
+    k = self.request.get('k')  
+    pk = self.request.get('pk')
+    qty = int(self.request.get('qty'))
+    discount = float(self.request.get('discount'))
+    pkey = ndb.Key(urlsafe=pk)
+    text='New discount created'
+    e = ProductDiscount(product=pkey, p_key=pk)
+    
+    if k:
+      newEntry=False
+      e = ndb.Key(urlsafe=k).get()
+      text='Discount updated'
+    e.qty = qty 
+    e.discount=discount
+    k = e.put() 
+    d ={'k': k.urlsafe(),
+        'qty': qty,
+        'discount': discount,
+        'newEntry': newEntry} 
+    return json_response(self.response, d, SUCCESS, text)
+
+
+class GetProductDiscountList(ActionSupport):
+  def get(self):    
+    d_list=[]  
+    for e in ProductDiscount.get_product_discount_list(ndb.Key(urlsafe = self.request.get('k'))):
+      d_list.append({
+            'k': e.entityKey,
+            'qty': e.qty,
+            'discount': e.discount
+          })
+    return json_response(self.response, d_list, SUCCESS, 'Product discount loaded')
+      

@@ -20,6 +20,10 @@ function saveProduct() {
     showMSG('Please enter price of product', 'warning');
     return;
   }
+  if (!$('#min_qty').val() || $('#min_qty').val() == '0.0') {
+	    showMSG('Please enter min_qty of product', 'warning');
+	    return;
+  }
   if (!$('#category').val()) {
     showMSG('Please enter category of product', 'warning');
     return;
@@ -43,9 +47,11 @@ function saveProductCallBack(obj, fID) {
   tr.push('</td><td>');
   tr.push(obj.data.price);
   tr.push('</td><td>');
+  tr.push(obj.data.min_qty);
+  tr.push('</td><td>');
   tr.push(obj.data.size);
   tr.push('</td><td>');
-  tr.push(obj.data.description);
+  tr.push(obj.data.description); 
   var dummytr = tr.join('');
   $('#dummy_product_table_body').append(dummytr + '</td></tr>');
   tr
@@ -497,9 +503,9 @@ function saveOrderStageCallBack(r) {
   $('#tbla_footer').show();
   var h = [ '<tr><td><input type="number" min="1" name="index" value="' ];
   h.push(r.data.i);
-  h.push(' title="');
+  h.push('" title="');
   h.push(r.data.code);
-  h.push('" class="order_stage_input" "></td><td>');
+  h.push('" class="order_stage_input"></td><td>');
   h.push(r.data.code);
   h.push('</td></tr>');
 
@@ -509,18 +515,14 @@ function saveOrderStageCallBack(r) {
 function updateOrderStage() {
   var tbl = {}, stageCount = 0;
 
-  /* $('#order_stage_tbody').html();
-  $('#order_stage_tbody tr').map(function() {
-    var x = $(this).find('td').map(function() {
-      // return $(this).html();
-      if (this.children.length)
-        return this.children[0].value
-      return this.innerText
-    }).get()
-
-    tbl[x[0]] = x[1];
-    stageCount += 1;
-  })*/
+  /*
+	 * $('#order_stage_tbody').html(); $('#order_stage_tbody tr').map(function() {
+	 * var x = $(this).find('td').map(function() { // return $(this).html(); if
+	 * (this.children.length) return this.children[0].value return
+	 * this.innerText }).get()
+	 * 
+	 * tbl[x[0]] = x[1]; stageCount += 1; })
+	 */
 
   var inputs = $(".order_stage_input"); 
 
@@ -616,15 +618,13 @@ orderApi.gotoEditStatus = function(key) {
 };
 orderApi.editOrderStatus = function() {
 
-  /*if (!$('#status_date').val()) {
-    showMSG('Date missing', 'warning');
-    return;
-  }
-
-  if (!$('#status_time').val()) {
-    showMSG('Time missing', 'warning');
-    return;
-  }*/
+  /*
+	 * if (!$('#status_date').val()) { showMSG('Date missing', 'warning');
+	 * return; }
+	 * 
+	 * if (!$('#status_time').val()) { showMSG('Time missing', 'warning');
+	 * return; }
+	 */
 
   postRequest('update_order_stage_form', '/superadmin/EditOrderStage',
       'orderApi.editOrderStatusCallBack');
@@ -1658,12 +1658,13 @@ function getProductEditCB(r){
   $('#name').val(d.name);
   $('#size').val(d.size);
   $('#price').val(d.price);
+  $('#min_qty').val(d.min_qty);
   $('#description').val(d.description);
   $('#category').val(d.category);
   $('#uom').val(d.uom);
   $('#custom_lable').val(d.custom_lable);
   
-  //selecting multiselect
+  // selecting multiselect
   opts = $('#event > option');
   for (index = 0; index < opts.length; index++) {
     opt = opts[index];
@@ -1713,6 +1714,8 @@ function editProductCB(obj) {
   tr.push(obj.data.uom);
   tr.push('</td><td>');
   tr.push(obj.data.price);
+  tr.push('</td><td>');
+  tr.push(obj.data.min_qty);
   tr.push('</td><td>');
   tr.push(obj.data.size);
   tr.push('</td><td>');
@@ -1925,7 +1928,7 @@ function insertToTemplate() {
   $('#output_dom').append(h.join(''));
       
       
-  //$( ".drag-vertical" ).draggable({ axis: "y" });  
+  // $( ".drag-vertical" ).draggable({ axis: "y" });
   $("i.fa-times").on('click', function(e) {
     $(this).closest('div.drag-vertical').remove();
   });
@@ -2367,3 +2370,91 @@ function showCustomLabelHtml(d){
   
 }
 
+function laodDiscount(tr){
+  $('#selected_product').val(tr.id);	
+  $('#form-dom, #bck-btn').show();	
+  $('#list-dom').hide();	
+  $('#product_discount_tbody').html('<td><td colspan="30"> Loading Product discount...');
+  getRequest('','/superadmin/GetProductDiscountList?k='+tr.id, 'laodDiscountCB')
+}
+
+function laodDiscountCB(r){
+  let h=[];	
+  for(let i in r.data){
+      d = r.data[i]	  
+	  h.push('<tr><td> <input type="number" min="1" id="qty_')
+	  h.push(d.k)
+	  h.push('" value="')
+	  h.push(d.qty)
+	  h.push('" ></td><td><input type="number" min="0" id="dis_');
+	  h.push(d.k)
+	  h.push('" value="');
+	  h.push(d.discount)
+	  h.push('" ></td><td><button type="button" onclick="updateDiscount(')
+	  h.push("'");
+	  h.push(d.k);
+	  h.push("'");
+	  h.push(')">Update</button>');
+	  h.push('</td></tr>')
+  }
+  $('#product_discount_tbody').html(h.join(''));
+}
+
+function createDiscount(){
+  if (!$('#new_qty').val()) {
+    showMSG('Please enter Quantity', 'warning');
+    return;
+  }	
+  if (!$('#new_discount').val()) {
+    showMSG('Please enter Discount', 'warning');
+	return;
+  }	
+postRequest('discount_form','/superadmin/Discounts','createDiscountCB')	
+}
+
+function createDiscountCB(r){ 
+  if(!r.data.newEntry) return;
+  let h=[]
+  h.push('<tr><td> <input type="number" min="1" id="qty_')
+  h.push(r.data.k)
+  h.push('" value="')
+  h.push(r.data.qty)
+  h.push('" ></td><td><input type="number" min="0" id="dis_');
+  h.push(r.data.k)
+  h.push('" value="');
+  h.push(r.data.discount)
+  h.push('" ></td><td><button type="button" onclick="updateDiscount(')
+  h.push("'");
+  h.push(r.data.k);
+  h.push("'");
+  h.push(')">Update</button>');
+  h.push('</td></tr>')
+  $('#product_discount_tbody').prepend(h.join(''));
+	
+}
+
+function updateDiscount(k){
+  var pk = $('#selected_product').val();
+  var qty = $('#qty_'+k).val();
+  var dis = $('#dis_'+k).val();
+  if (!qty){
+	  showMSG('Please enter Qunatity', 'warning');
+	  return;
+  }
+  if (!dis){
+	  showMSG('Please enter Discount', 'warning');
+	  return;
+  }
+
+  var formData = new FormData(); 
+  formData.append('k', k);
+  formData.append('pk', pk);
+  formData.append('discount', dis);
+  formData.append('qty', qty);
+  var newXhr = new XMLHttpRequest();
+  newXhr.open('POST', '/superadmin/Discounts', true);
+  newXhr.onreadystatechange = function(r) {}; 
+  newXhr.send(formData); 
+  
+  
+}

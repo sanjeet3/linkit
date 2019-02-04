@@ -1,0 +1,99 @@
+<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+  <ul class="breadcrumb">
+    <li><i class="ace-icon fa fa-usd"></i> <a href="javascript:">Discount</a></li>
+  </ul>
+  <!-- /.breadcrumb -->
+  <div class="nav-search" id="nav-search">
+
+    <button class="btn btn-default btn-minier" id="bck-btn"
+      style="display: none;" onclick="showListDom()">
+      <i class="ace-icon fa fa-arrow-left"></i> Back
+    </button>
+  </div>
+  <!-- /.nav-search -->
+</div>
+<div class="page-content">
+  <div class="row mt-10" id="list-dom">
+
+    <div class="col-xs-12" id="product_search_result_dom">
+      <table class="table  table-bordered table-hover"
+        id="product_dynamic_table">
+        <thead>
+          <tr>
+            <td>Code</td>
+            <td>Name</td>
+            <td>Category</td>
+            <td>Price</td>
+          </tr>
+        </thead>
+        <tbody id="product_table_body">
+          {%for e in prd_list%}
+          <tr id="{{e.entityKey}}" class="{{e.status}}"
+            onclick="laodDiscount(this)">
+            <td>{{e.code}}</td>
+            <td>{{e.name}}</td>
+            <td>{{e.category}}</td>
+            <td>{{e.price}}</td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row mt-10" id="form-dom" style="display: none;">
+    <div class="col-lg-12">
+
+      <form class="form-horizontal" role="form" id="discount_form"
+        style="width: 60%">
+        <input type="hidden" name="pk" id="selected_product">
+        <div class="form-group">
+          <label class="col-sm-2 control-label no-padding-right"
+            for="code">Qty</label>
+          <div class="col-sm-9">
+            <input type="number" id="new_qty" name="qty"
+              class="form-control input-custom" min="1" value="1">
+          </div>
+         
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label no-padding-right"
+            for="code">Discount %</label>
+          <div class="col-sm-9">
+            <input type="number" min="0" max="99" id="new_discount"
+              name="discount" class="form-control input-custom" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-9">
+            <button class="btn btn-info btn-minier" type="button"
+              onclick="createDiscount()">
+              <i class="ace-icon fa fa-check bigger-110"></i> Save <i
+                id="add_discount_spin" class="fa fa-spinner fa-spin"
+                style="display: none;"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-12">
+      <table class="table  table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th>Discount %</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody id="product_discount_tbody">
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+<script src="/super/assets/js/jquery.dataTables.min.js"></script>
+<script src="/super/assets/js/jquery.dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+	var productTable = $('#product_dynamic_table').DataTable();
+</script>
