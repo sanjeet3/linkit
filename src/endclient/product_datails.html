@@ -34,331 +34,695 @@
   href="/productdesigner/css/jquery.fancyProductDesigner-fonts.css" />
 </head>
 <body style="height: 100%; width: 100%">
-  <!--navbar-->
-  {% include 'endclient/navbar.html' %}
-  <!---->
-  {%if not user_obj%}
-  <div class="container main-content" id="login_form"
-    style="z-index: 10; background-color: aliceblue; display: none;">
-    <div class="mt-20">
-      <div class="col-lg-4 col-xs-12 mb-20">
-        <form action="/Login" method="post">
+  <div id="main_page">
+    <!--navbar-->
+    {% include 'endclient/navbar.html' %}
+    <!---->
+    {%if not user_obj%}
+    <div class="container main-content" id="login_form"
+      style="z-index: 10; background-color: aliceblue; display: none;">
+      <div class="mt-20">
+        <div class="col-lg-4 col-xs-12 mb-20">
+          <form action="/Login" method="post">
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <div>
+                <input type="email" class="form-control" id="email"
+                  name="email" required="required">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwd">Password</label>
+              <div>
+                <input type="password" name="password"
+                  class="form-control" id="pwd" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-success pull-left">Login</button>
+              <a href="javascript:showRegisterDom();" class="pull-right">Create
+                Account</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container main-content" id="registration_dom"
+      style="z-index: 10; background-color: aliceblue; display: none;">
+      <div class="col-lg-4 col-xs-12 mt-20">
+        <form id="registration_form">
           <div class="form-group">
-            <label for="email">Email address</label>
+            <label for="email">Name*</label>
             <div>
-              <input type="email" class="form-control" id="email"
+              <input type="text" class="form-control" id="name"
+                name="name" required="required">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address*</label>
+            <div>
+              <input type="email" class="form-control" id="user_email"
                 name="email" required="required">
             </div>
           </div>
           <div class="form-group">
-            <label for="pwd">Password</label>
+            <label for="pwd">Password*</label>
             <div>
               <input type="password" name="password"
-                class="form-control" id="pwd" required>
+                class="form-control" id="password" required>
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-success pull-left">Login</button>
-            <a href="javascript:showRegisterDom();" class="pull-right">Create
-              Account</a>
+            <label for="pwd">Confirm Password*</label>
+            <div>
+              <input type="password" name="confirm-password"
+                class="form-control" id="confirm-password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Contact Number</label>
+            <div>
+              <input type="text" class="form-control" id="contact"
+                name="contact" required="required">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="checkbox">
+              <label><input type="checkbox"
+                name="term_condition" id="term_condition"
+                style="left: 2vw;"> Accept Term & conditions</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="checkbox">
+              <label><input type="checkbox"
+                name="recieved_offers" id="recieved_offers"
+                style="left: 2vw;"> Get alert for new offers</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-success pull-left"
+              onclick="register()">Sign-Up</button>
+            <button type="button" class="btn btn-info pull-right"
+              onclick="showLoginDom()">Sign-in</button>
           </div>
         </form>
+        <div class="col-lg-12 col-xs-12text-center"
+          id="registeration_msg_dom" style="display: none;">
+          <p>
+            Verification mail will sent to your registered email <span
+              id="email_text"></span>, Check your inbox and verify
+            account to complete registration.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container main-content" id="registration_dom"
-    style="z-index: 10; background-color: aliceblue; display: none;">
-    <div class="col-lg-4 col-xs-12 mt-20">
-      <form id="registration_form">
-        <div class="form-group">
-          <label for="email">Name*</label>
-          <div>
-            <input type="text" class="form-control" id="name"
-              name="name" required="required">
+    {%endif%}
+    <div class="container" id="product_action_caontainer"
+      style="width: 99vw; padding: 10px;">
+      <!-- EXTENTED CODE -->
+      <input type="hidden" value="" name="design_id" id="design_id">
+      <div class=" single_top">
+        <div class="single_grid">
+          <div class="grid images_3_of_2">
+            <ul id="etalage" style="width: 100%; height: 100%;">
+              {%for img in p.image_url%}
+              <li><img class="etalage_thumb_image" src="{{img}}"
+                class="img-responsive" /> <img
+                class="etalage_source_image" src="{{img}}"
+                class="img-responsive" title="" /></li> {%else%}
+              <li><img class="etalage_thumb_image"
+                src="img/prod_default.png" class="img-responsive" /> <img
+                class="etalage_source_image" src="img/prod_default.png"
+                class="img-responsive" title="" /></li>
+              <li><img class="etalage_thumb_image"
+                src="img/prod_default.png" class="img-responsive" /> <img
+                class="etalage_source_image" src="img/prod_default.png"
+                class="img-responsive" title="" /></li> {%endfor%}
+            </ul>
+            <div class="clearfix"></div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="email">Email address*</label>
-          <div>
-            <input type="email" class="form-control" id="user_email"
-              name="email" required="required">
+          <div class="desc1 span_3_of_2" id="prd_info">
+            <button type="button"
+              onclick="window.history.go(-1); return false;"
+              class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right">
+              <i class="ace-icon fa fa-arrow-left"></i> Back
+            </button>
+            <h4>{{p.name}}</h4>
+            <div class="cart-b">
+              <div class="clearfix"></div>
+              <div id="vedio_output"></div>
+              <div class="pull-left">
+                <b>Price: </b>{{seller_product.retail_price}} KES
+              </div>
+              <div class="pull-right">
+                {%if tutorial.video_link%} <i
+                  class="fa fa-youtube-play fa-2x"
+                  title="Tutorial video"
+                  style="cursor: pointer; color: red;"
+                  onclick="playYouTube('{{tutorial.video_link}}', this)"></i>
+                {%endif%} {%if tutorial.pdf_bucket_path%} <i
+                  class="fa fa-file-pdf-o fa-2x" title="Tutorial Pdf"
+                  style="cursor: pointer; color: blue;"
+                  onclick="downloadFile('{{tutorial.pdf_bucket_path}}')"></i>
+                {%endif%}
+              </div>
+              <br> <b>Size:</b> {{p.size}}<br> <b>Category:</b>
+              {{p.category}}<br> <b>UOM:</b> {{p.uom}}<br> <b>Description:</b>{{p.description}}<br />{%
+              if seller_product %}
+              <div id="selected_seller_price_info"></div>
+              <div class="share">
+                <form id="product_order_form">
+                  <input type="hidden" name="qty"
+                    id="selected_product_qty" value="1"> <input
+                    type="hidden" name="design_id"
+                    id="selected_design_id"> <input
+                    type="hidden" name="product"
+                    id="selected_seller_product"
+                    value="{{seller_product.entityKey}}">
+                </form>
+              </div>
+              <br />Maxpro will provide free delivery to you.<br /> <br />
+              {%if not AllowDesignerOffLogin and not user_obj%} <a
+                class="now-get" id="create_desgin_btn"
+                href="javascript:alert('Please login to create your design')">Create
+                Design</a> {%else%} <a class="now-get"
+                id="create_desgin_btn"
+                href="/GetProductDesignor?key={{p.entityKey}}">Create
+                Design</a> <a class="now-get" id="hire_desginor_btn"
+                href="#" onclick="showHireDesigner()">Hire Designer</a>
+              {%endif%}
+
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Password*</label>
-          <div>
-            <input type="password" name="password" class="form-control"
-              id="password" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="pwd">Confirm Password*</label>
-          <div>
-            <input type="password" name="confirm-password"
-              class="form-control" id="confirm-password" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="email">Contact Number</label>
-          <div>
-            <input type="text" class="form-control" id="contact"
-              name="contact" required="required">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="checkbox">
-            <label><input type="checkbox" name="term_condition"
-              id="term_condition" style="left: 2vw;"> Accept
-              Term & conditions</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="checkbox">
-            <label><input type="checkbox" name="recieved_offers"
-              id="recieved_offers" style="left: 2vw;"> Get alert
-              for new offers</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <button type="button" class="btn btn-success pull-left"
-            onclick="register()">Sign-Up</button>
-          <button type="button" class="btn btn-info pull-right"
-            onclick="showLoginDom()">Sign-in</button>
-        </div>
-      </form>
-      <div class="col-lg-12 col-xs-12text-center"
-        id="registeration_msg_dom" style="display: none;">
-        <p>
-          Verification mail will sent to your registered email <span
-            id="email_text"></span>, Check your inbox and verify account
-          to complete registration.
-        </p>
-      </div>
-    </div>
-  </div>
-  {%endif%}
-  <div class="container" id="product_action_caontainer"
-    style="width: 99vw; padding: 10px;">
-    <!-- EXTENTED CODE -->
-    <input type="hidden" value="" name="design_id" id="design_id">
-    <div class=" single_top">
-      <div class="single_grid">
-        <div class="grid images_3_of_2">
-          <ul id="etalage" style="width: 100%; height: 100%;">
-            {%for img in p.image_url%}
-            <li><img class="etalage_thumb_image" src="{{img}}"
-              class="img-responsive" /> <img
-              class="etalage_source_image" src="{{img}}"
-              class="img-responsive" title="" /></li> {%else%}
-            <li><img class="etalage_thumb_image"
-              src="img/prod_default.png" class="img-responsive" /> <img
-              class="etalage_source_image" src="img/prod_default.png"
-              class="img-responsive" title="" /></li>
-            <li><img class="etalage_thumb_image"
-              src="img/prod_default.png" class="img-responsive" /> <img
-              class="etalage_source_image" src="img/prod_default.png"
-              class="img-responsive" title="" /></li> {%endfor%}
-          </ul>
+          {%endif%}
           <div class="clearfix"></div>
         </div>
-        <div class="desc1 span_3_of_2" id="prd_info">
-          <button type="button"
-            onclick="window.history.go(-1); return false;"
-            class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right">
-            <i class="ace-icon fa fa-arrow-left"></i> Back
-          </button>
-          <h4>{{p.name}}</h4>
-          <div class="cart-b">
-            <div class="clearfix"></div>
-            <div id="vedio_output"></div>
-            <div class="pull-left">
-              <b>Price: </b>{{seller_product.retail_price}} KES
+        <div class="nbs-flexisel-container">
+          {%if save_design_list%}
+          <div class="nbs-flexisel-inner">
+            <h5>Saved designs:</h5>
+            {%for d in save_design_list%}
+            <div class="ready-design-box"
+              style="background-image: url('{%if d.png_url %}{{d.png_url[0]}}{%endif%}')"
+              id="{{d.entityKey}}" data-list="{{d.png_url|safe}}">
+              <div class="overlay"></div>
+              <div class="button" style="left: 30px"
+                onclick="showImageModel(this)">View</div>
+              <div class="button" style="left: 130px"
+                onclick="deleteDesign('{{d.entityKey}}')">Delete</div>
+              <div class="button" style="left: 250px">Order</div>
             </div>
-            <div class="pull-right">
-              {%if tutorial.video_link%} <i
-                class="fa fa-youtube-play fa-2x" title="Tutorial video"
-                style="cursor: pointer; color: red;"
-                onclick="playYouTube('{{tutorial.video_link}}', this)"></i>
-              {%endif%} {%if tutorial.pdf_bucket_path%} <i
-                class="fa fa-file-pdf-o fa-2x" title="Tutorial Pdf"
-                style="cursor: pointer; color: blue;"
-                onclick="downloadFile('{{tutorial.pdf_bucket_path}}')"></i>
-              {%endif%}
+            {%endfor%}
+          </div>
+          {%endif%} {%if design_list%}
+          <div class="nbs-flexisel-inner">
+            <h5>Choose from ready designs:</h5>
+            {%for d in design_list%}
+            <div class="ready-design-box"
+              style="background-image: url('{{d.design_prev_url}}')">
+              <div class="overlay"></div>
+              <div class="button" style="left: 30px"
+                onclick="showImageModel('{{d.design_prev_url}}')">View</div>
+              <a class="button" style="left: 130px"
+                href="/GetProductDesignor?key={{p.entityKey}}{%if d.template_source%}&readyDesignKey={{d.entityKey}}{%else%}&redayDesignTemplate={{d.template_name}}{%endif%}">Edit</a>
+              <div class="button" style="left: 250px">Order</div>
             </div>
-            <br> <b>Size:</b> {{p.size}}<br> <b>Category:</b>
-            {{p.category}}<br> <b>UOM:</b> {{p.uom}}<br> <b>Description:</b>{{p.description}}<br />{%
-            if seller_product %}
-            <div id="selected_seller_price_info"></div>
-            <div class="share">
-              <form id="product_order_form">
-                <input type="hidden" name="qty"
-                  id="selected_product_qty" value="1"> <input
-                  type="hidden" name="design_id" id="selected_design_id">
-                <input type="hidden" name="product"
-                  id="selected_seller_product"
-                  value="{{seller_product.entityKey}}">
-              </form>
-            </div>
-            <br />Maxpro will provide free delivery to you.<br /> <br />
-            {%if not AllowDesignerOffLogin and not user_obj%} <a
-              class="now-get" id="create_desgin_btn"
-              href="javascript:alert('Please login to create your design')">Create
-              Design</a> {%else%} <a class="now-get" id="create_desgin_btn"
-              href="/GetProductDesignor?key={{p.entityKey}}">Create
-              Design</a> <a class="now-get" id="hire_desginor_btn" href="#"
-              onclick="showHireDesigner()">Hire Designer</a> {%endif%}
-
+            {%endfor%}
           </div>
+          {%endif%}
         </div>
-        {%endif%}
-        <div class="clearfix"></div>
-      </div>
-      <div class="nbs-flexisel-container">
-        {%if save_design_list%}
-        <div class="nbs-flexisel-inner">
-          <h5>Saved designs:</h5>
-          {%for d in save_design_list%}
-          <div class="ready-design-box"
-            style="background-image: url('{%if d.png_url %}{{d.png_url[0]}}{%endif%}')"
-            id="{{d.entityKey}}" data-list="{{d.png_url|safe}}">
-            <div class="overlay"></div>
-            <div class="button" style="left: 30px"
-              onclick="showImageModel(this)">View</div>
-            <div class="button" style="left: 130px"
-              onclick="deleteDesign('{{d.entityKey}}')">Delete</div>
-            <div class="button" style="left: 250px">Order</div>
-          </div>
-          {%endfor%}
-        </div>
-        {%endif%} {%if design_list%}
-        <div class="nbs-flexisel-inner">
-          <h5>Choose from ready designs:</h5>
-          {%for d in design_list%}
-          <div class="ready-design-box"
-            style="background-image: url('{{d.design_prev_url}}')">
-            <div class="overlay"></div>
-            <div class="button" style="left: 30px"
-              onclick="showImageModel('{{d.design_prev_url}}')">View</div>
-            <a class="button" style="left: 130px"
-              href="/GetProductDesignor?key={{p.entityKey}}{%if d.template_source%}&readyDesignKey={{d.entityKey}}{%else%}&redayDesignTemplate={{d.template_name}}{%endif%}">Edit</a>
-            <div class="button" style="left: 250px">Order</div>
-          </div>
-          {%endfor%}
-        </div>
-        {%endif%}
       </div>
     </div>
   </div>
+  <div class="loader-over-lay" id="loader_dom"
+    style="top: 0; padding: 0 !important; overflow: auto; overflow-x: hidden;">
+    <div style="border-top: 10px solid blue; padding: 10 0 10 0;">
 
-  <div class="loader-over-lay" id="loader_dom">
-    <div class='col-lg-12'>
       <div class='col-lg-12'>
-        <div
-          style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
-          <h2 style="margin: 0; font-weight: bold;">Hire a Designer</h2>
-        </div>
-      </div>
-      <div style="padding-top: 50px; clear: both;">
-        <div class="col-lg-4">
+        <div class='col-lg-12'>
           <div
-            style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
-            <h4 style="margin: 0; font-weight: bold; float: left;">STAGE
-              1 : Give us your Brief</h4>
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h2 style="margin: 0; font-weight: bold;">Hire a
+              Designer</h2>
+          </div>
+
+
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h5 style="margin: 0; font-weight: bold;">LOGO DESIGN</h5>
+          </div>
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h5 style="margin: 0; font-weight: bold;">PRODUCT
+              DESIGN</h5>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block; margin-bottom: 5px; margin-top: 10px;">
+            <h5 style="margin: 0; font-weight: bold;">LOGO DESIGN</h5>
+          </div>
+        </div>
+
+        <div class="col-lg-12" style="background-color: #25e9f3;">
+          <div style="padding-top: 50px; clear: both;">
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold; float: left;">STAGE
+                  1 : Give us your Brief</h4>
+                <div
+                  style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; color: #fff;">
+                  <i class="fa fa-angle-down fa-2x"></i>
+                </div>
+                <h4 style="clear: both; padding-top: 10px;">Provide
+                  our Designers with all relevant information and
+                  resources for your design. These should include :
+                  Clear Photos and Sharp Logos</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold; float: left">STAGE
+                  2 : Receive Options to Review</h4>
+                <div
+                  style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; color: #fff;">
+                  <i class="fa fa-angle-down fa-2x"></i>
+                </div>
+                <h4 style="clear: both; padding-top: 10px;">You
+                  will receive 3 designs within 48hours for you to
+                  review and pick your choice.</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold; float: left">STAGE
+                  3 : Get Final Network</h4>
+                <div
+                  style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; color: #fff;">
+                  <i class="fa fa-angle-down fa-2x"></i>
+                </div>
+                <h4 style="clear: both; padding-top: 10px;">Your
+                  final design will be sent to you in all available
+                  formats: AI,CDR,PDF & PNG.</h4>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="padding-top: 50px; clear: both;">
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold;">3
+                  REVISIONS</h4>
+                <h4>After submission of final artwork, you will
+                  have a maximum of 3 revisions to make on your desired
+                  final artwork.</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold;">SUBMISSION</h4>
+                <h4>You will receive your final design in 4
+                  avialable formates.AI,CDR,PDF & PNG</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold;">TURN
+                  AROUND</h4>
+                <h4>Your final design will be ready within 72Hours
+                  after confirming your order.</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class='col-lg-12'>
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block; margin-top: 10px;">
+            <h2 style="margin: 0; font-weight: bold; float: left;">ORDER
+              YOUR DESIGN</h2>
             <div
-              style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; color: #fff;">
+              style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; margin-top: 4px; color: #fff;">
               <i class="fa fa-angle-down fa-2x"></i>
             </div>
-            <h4 style="clear: both; padding-top: 10px;">Provide our
-              Designers with all relevant information and resources for
-              your design. These should include : Clear Photos and Sharp
-              Logos</h4>
+          </div>
+
+        </div>
+
+        <div class="col-lg-12">
+          <div style="margin-top: 15px;">
+            <div class="foo blue"></div>
+            <h4 style="float: left; margin: 0px; padding-left: 10px;">What
+              style & theme best describes your Design?</h4>
           </div>
         </div>
 
-        <div class="col-lg-4">
-          <div
-            style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
-            <h4 style="margin: 0; font-weight: bold; float: left">STAGE
-              2 : Receive Options to Review</h4>
-            <div
-              style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; color: #fff;">
-              <i class="fa fa-angle-down fa-2x"></i>
+        <div class="col-lg-12"
+          style="margin-top: 15px; margin-left: 23px;">
+          <div class="col-lg-12">
+            <div style="float: left; width: 12%;">
+              <label class="bol">Professional <input
+                type="checkbox"> <span class="checkmark"></span>
+              </label>
             </div>
-            <h4 style="clear: both; padding-top: 10px;">You will
-              receive 3 designs within 72hours for you to review and
-              pick your choice.</h4>
-          </div>
-        </div>
 
-        <div class="col-lg-4">
-          <div
-            style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
-            <h4 style="margin: 0; font-weight: bold; float: left">STAGE
-              3 : Get Final Network</h4>
-            <div
-              style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; color: #fff;">
-              <i class="fa fa-angle-down fa-2x"></i>
+            <div style="float: left; width: 12%;">
+              <label class="bol">Playful <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
             </div>
-            <h4 style="clear: both; padding-top: 10px;">Your final
-              design will be sent to you in all available formats:
-              AI,CDR,PDF & PNG.</h4>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Conservative <input
+                type="checkbox"> <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Luxury <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Afro <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-lg-12">
+            <div style="float: left; width: 12%;">
+              <label class="bol">Minimalist <input
+                type="checkbox"> <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Complex <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Simple <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Vintage <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div style="float: left; width: 12%;">
+              <label class="bol">Nature <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12" style="margin-top: 20px;">
+          <div style="margin-top: 15px;">
+            <input type="textbox"
+              style="border: 2px solid #5b8af5; margin-top: 30px; margin-left: -232px; padding-right: 68px;">
+            <div class="foo blue"></div>
+            <h4 style="float: left; margin: 0px; padding-left: 10px;">Tell
+              Us your preferred color(s)</h4>
           </div>
         </div>
 
+        <div class="col-lg-12"
+          style="margin-top: -20px; padding-left: 336px;">
+          <div style="float: left; width: 14%;">
+            <label class="bol">Solid Colors <input
+              type="checkbox"> <span class="checkmark"></span>
+            </label>
+          </div>
+
+          <div style="float: left; width: 12%;">
+            <label class="bol">Halftones <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+
+        </div>
       </div>
 
-      <div style="padding-top: 50px; clear: both;">
-        <div class="col-lg-4">
-          <div
-            style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
-            <h4 style="margin: 0; font-weight: bold;">3 REVISIONS</h4>
-            <h4>After submission of final artwork, you will have a
-              maximum of 3 revisions to make on your desired final
-              artwork.</h4>
-          </div>
-        </div>
 
-        <div class="col-lg-4">
-          <div
-            style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
-            <h4 style="margin: 0; font-weight: bold;">SUBMISSION</h4>
-            <h4>You will receive your final design in 4 avialable
-              formates.AI,CDR,PDF & PNG</h4>
-          </div>
-        </div>
 
-        <div class="col-lg-4">
-          <div
-            style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
-            <h4 style="margin: 0; font-weight: bold;">TURN AROUND</h4>
-            <h4>Your final design will be ready within 72Hours
-              after confirming your order.</h4>
-          </div>
-        </div>
 
-      </div>
-      <div class='col-lg-12'>
-        <div
-          style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
-          <h2 style="margin: 0; font-weight: bold; float: left;">ORDER
-            YOUR DESIGN</h2>
-          <div
-            style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; margin-top: 4px; color: #fff;">
-            <i class="fa fa-angle-down fa-2x"></i>
-          </div>
-        </div>
 
+
+
+
+
+      <div class="col-lg-12" style="padding-left: 30px;">
+        <div style="margin-top: 30px;">
+          <div class="foo blue"></div>
+          <h4 style="float: left; margin: 0px; padding-left: 13px;">Design
+            Inspiration {Attach an image that inspires your type of
+            design}</h4>
+        </div>
       </div>
 
       <div class="col-lg-12">
-        <div style="margin-top: 15px;">
+        <div style="margin-top: 15px; padding-left: 15px;">
           <div class="foo blue"></div>
-          <h4 style="float: left; margin: 0px; padding-left: 10px;">What style & theme
-          best describes your Design?</h4>
+          <h4 style="float: left; margin: 0px; padding-left: 10px;">Add
+            comments & instructions</h4>
+          <input type="textbox"
+            style="border: 2px solid #5b8af5; margin-top: 30px; margin-left: -232px; padding-right: 68px;">
         </div>
       </div>
+
+      <div class='col-lg-12'>
+        <div
+          style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block; float: right; margin-right: 45px; margin-bottom: 5px; padding-left: 15px;">
+          <h3 style="margin: 0; font-weight: bold;">Proceed To Hire
+            Designer</h3>
+        </div>
+      </div>
+      
+      
+      
+
+      <br> <br> <br>
+
+
+
+
+
+      <div class='col-lg-12'>
+        <div class='col-lg-12'>
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h2 style="margin: 0; font-weight: bold;">Hire a
+              Designer</h2>
+          </div>
+
+
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h5 style="margin: 0; font-weight: bold;">LOGO  DESIGN</h5>
+          </div>
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h5 style="margin: 0; font-weight: bold;">PRODUCT 
+              DESIGN</h5>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block; margin-bottom: 5px; margin-top: 10px;">
+            <h5 style="margin: 0; font-weight: bold;">PRODUCT 
+              DESIGN</h5>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div
+            style="padding: 10px; color: #fff; background-color: #a5c4fdeb; display: inline-block; margin-bottom: 5px; margin-top: 0px;">
+            
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">Mugs</h4>
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">Water Bottles</h4>
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">T-shirt</h4>
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">Business Cards</h4>
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">Coasters</h4>
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">School Bags</h4>
+            <h4 style="margin: 0; font-weight: bold; color: #330bad;">Calendars</h4>
+          </div>
+        </div>
+
+        <div class="col-lg-12"
+          style="margin-top: -220px; margin-left: 220px;">
+          <div style="padding-top: 50px; clear: both;">
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold; float: left;">STAGE
+                  1 : Give us your Brief</h4>
+                
+                <h4 style="clear: both; padding-top: 10px;">Provide
+                  our Designers with all relevant information and
+                  resources for your design. These should include :
+                  Clear Photos and Sharp Logos</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold; float: left">STAGE
+                  2 : Receive Options to Review</h4>
+                
+                <h4 style="clear: both; padding-top: 10px;">You
+                  will receive 3 designs within 48hours for you to
+                  review and pick your choice.</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">></div>
+
+          </div>
+
+          <div style="padding-top: 50px; clear: both;">
+
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold;">SUBMISSION</h4>
+                <h4>You will receive your final design in PNG format</h4>
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div
+                style="border-left: 10px solid #48a6dceb; padding-left: 15px; color: black; min-height: 100px;">
+                <h4 style="margin: 0; font-weight: bold;">TURN
+                  AROUND</h4>
+                <h4>Your final design will be ready within 48Hours
+                  after confirming your order.</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class='col-lg-12'>
+          <div
+            style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block;">
+            <h2 style="margin: 0; font-weight: bold; float: left;">ORDER
+              YOUR DESIGN</h2>
+            <div
+              style="background-color: black; float: left; width: 30px; text-align: center; margin-left: 10px; margin-top: 4px; color: #fff;">
+              <i class="fa fa-angle-down fa-2x"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-lg-12">
+          <div style="margin-top: 15px;">
+            <div class="foo blue"></div>
+            <h4 style="float: left; margin: 0px; padding-left: 10px;">What background best describes your design</h4>
+          </div>
+        </div>
+
+       
+        
+        
+        <div class="col-lg-12" style="margin-top: 20px;">
+          <div style="margin-top: 15px;">
+            <input type="textbox"
+              style="border: 2px solid #5b8af5; margin-top: 30px; margin-left: -232px; padding-right: 68px;">
+            <div class="foo blue"></div>
+            <h4 style="float: left; margin: 0px; padding-left: 10px;">Tell
+              Us your preferred color(s)</h4>
+          </div>
+        </div>
+
+        <div class="col-lg-12"
+          style="margin-top: -20px; padding-left: 336px;">
+          <div style="float: left; width: 14%;">
+            <label class="bol">Solid Colors <input
+              type="checkbox"> <span class="checkmark"></span>
+            </label>
+          </div>
+
+          <div style="float: left; width: 12%;">
+            <label class="bol">Halftones <input type="checkbox">
+              <span class="checkmark"></span>
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-12" style="padding-left: 30px;">
+        <div style="margin-top: 30px;">
+          <div class="foo blue"></div>
+          <h4 style="float: left; margin: 0px; padding-left: 13px;">Design
+            Inspiration {Attach an image that inspires your type of
+            design}</h4>
+        </div>
+      </div>
+
+      <div class="col-lg-12">
+        <div style="margin-top: 15px; padding-left: 15px;">
+          <div class="foo blue"></div>
+          <h4 style="float: left; margin: 0px; padding-left: 10px;">Add
+            comments & instructions</h4>
+          <input type="textbox"
+            style="border: 2px solid #5b8af5; margin-top: 30px; margin-left: -232px; padding-right: 68px;">
+        </div>
+      </div>
+
+      <div class='col-lg-12'>
+        <div
+          style="padding: 10px; color: #fff; background-color: #48a6dceb; display: inline-block; float: right; margin-right: 45px; margin-bottom: 5px; padding-left: 15px;">
+          <h3 style="margin: 0; font-weight: bold;">Proceed To Hire
+            Designer</h3>
+        </div>
+      </div>
+
+
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div>
+
+
 
 </body>
 <div id='modal-background'>
@@ -404,6 +768,7 @@
 
 	function showHireDesigner() {
 		$('#loader_dom').addClass('loading');
+		$('#main_page').hide();
 
 	}
 </script>
