@@ -759,6 +759,10 @@ a.button:hover {
   display: inline-block;
 }
 
+.inpiration-desgn {
+  padding-left: 30px;
+}
+
 .pl-15 {
   padding-left: 15px;
 }
@@ -786,8 +790,8 @@ a.button:hover {
 
 .foo {
   float: left;
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .blue {
@@ -800,4 +804,280 @@ a.button:hover {
 
 .wine {
   background: #ae163e;
+}
+
+.stage-1 {
+  background-color: #25e9f3;
+}
+
+
+
+.stage {
+  padding-top: 50px;
+  clear: both;
+}
+
+.opt-review {
+  margin: 0;
+  font-weight: bold;
+  float: left
+}
+
+.tell-color {
+  margin-top: 20px;
+}
+
+.insp-dsg {
+  margin-top: 30px;
+}
+
+.mg-theme {
+  margin-top: 15px;
+}
+
+.tell-colr {
+  float: left; 
+  padding-left: 10px;
+}
+
+.hdcontainer {
+  padding: 10px;
+  color: #fff;
+  background-color: #48a6dceb;
+  display: inline-block;
+}
+
+.huge {
+  margin-top: -220px; 
+  margin-left: 220px;
+}
+
+.de-recieve {
+  clear: both;
+  padding-top: 10px;
+}
+
+.unicode {
+  background-color: black;
+  float: left;
+  width: 30px;
+  text-align: center;
+  margin-left: 10px;
+  color: #fff;
+}
+
+.core {
+  margin: 0;
+  font-weight: bold;
+  float: left;
+}
+
+.re-view {
+  border-left: 10px solid #48a6dceb;
+  padding-left: 15px;
+  color: black;
+  min-height: 100px;
+}
+
+.to-view {
+  background-color: black;
+  float: left;
+  width: 30px;
+  text-align: center;
+  margin-left: 10px;
+  color: #fff;
+}
+
+.headclass {
+  margin: 0;
+  font-weight: bold;
+}
+
+.lgdesign {
+  padding: 10px;
+  color: #fff;
+  background-color: #48a6dceb;
+  display: inline-block;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.theme {
+  float: left;
+  margin: 0px;
+  padding-left: 10px;
+}
+
+.profesnl {
+  margin-top: 15px;
+  margin-left: 23px;
+}
+
+.sol-color {
+  float: left;
+  width: 14%;
+}
+
+.solid-color {
+  margin-top: -20px;
+  padding-left: 336px;
+}
+
+.pre-color-hd {
+  float: left;
+  margin: 0px;
+  padding-left: 10px;
+}
+
+.product-design {
+  margin: 0; 
+  font-weight: bold; 
+  color: #330bad;
+}
+
+.mugtop {
+  padding: 10px; 
+  color: #fff; 
+  background-color: #a5c4fdeb; 
+  display: inline-block; 
+  margin-bottom: 5px;
+}
+
+.add-comments {
+  border: 2px solid #5b8af5;
+  margin-top: 30px;
+  margin-left: -232px;
+  padding-right: 68px;
+}
+
+.add-desgn {
+  margin: 0;
+  font-weight: bold;
+}
+
+.hd-designer {
+  padding: 10px;
+  color: #fff;
+  background-color: #48a6dceb;
+  display: inline-block;
+  float: right;
+  margin-right: 45px;
+  margin-bottom: 5px;
+  padding-left: 15px;
+}
+
+.pre-color {
+  border: 2px solid #5b8af5;
+  margin-top: 30px;
+  margin-left: -232px;
+  padding-right: 68px;
+}
+
+.inspiration {
+  float: left;
+  margin: 0px;
+  padding-left: 13px;
+}
+
+.profesnl-1 {
+  float: left;
+  width: 12%;
+}
+
+.comments {
+  margin-top: 15px;
+  padding-left: 15px;
+}
+
+.order-desg {
+  background-color: black;
+  float: left;
+  width: 30px;
+  text-align: center;
+  margin-left: 10px;
+  margin-top: 4px;
+  color: #fff;
+}
+
+.order-deg {
+  padding: 10px;
+  color: #fff;
+  background-color: #48a6dceb;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.hd-stage {
+  border-left: 10px solid #48a6dceb;
+  padding-left: 15px;
+  color: black;
+  min-height: 100px;
+}
+
+/* The bol */
+.bol {
+  display: block;
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 17px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.bol input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 2px solid #0c99da;
+}
+
+/* On mouse-over, add a grey background color */
+.bol:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.bol input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.bol input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.bol .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
