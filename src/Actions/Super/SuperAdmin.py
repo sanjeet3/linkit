@@ -820,6 +820,8 @@ class SetupThemesLive(ActionSupport):
                          SUCCESS,
                          '')
     
+    
+    
 class ThemesPicsUploading(ActionSupport):    
   def post(self):     
     collum = self.request.get('collum')

@@ -519,23 +519,9 @@
                 DESIGN</h5>
             </div>
           </div>
-
           <div class="col-lg-12">
-            <div class="mugtop">
-
-              <h4 class="product-design">Mugs</h4>
-              <h4 class="product-design">Water Bottles</h4>
-              <h4 class="product-design">T-shirt</h4>
-              <h4 class="product-design">Business Cards</h4>
-              <h4 class="product-design">Coasters</h4>
-              <h4 class="product-design">School Bags</h4>
-              <h4 class="product-design">Calendars</h4>
-            </div>
-          </div>
-
-          <div class="col-lg-12 huge">
             <div class="stage">
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="re-view">
                   <h4 class="core">STAGE 1 : Give us your Brief</h4>
 
@@ -546,7 +532,7 @@
                 </div>
               </div>
 
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="re-view">
                   <h4 class="core">STAGE 2 : Receive Options to
                     Review</h4>
@@ -556,15 +542,12 @@
                     choice.</h4>
                 </div>
               </div>
-
-              <div class="col-lg-4">></div>
-
             </div>
 
             <div style="padding-top: 50px; clear: both;">
 
 
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="re-view">
                   <h4 class="headclass">SUBMISSION</h4>
                   <h4>You will receive your final design in PNG
@@ -572,7 +555,7 @@
                 </div>
               </div>
 
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="re-view">
                   <h4 class="headclass">TURN AROUND</h4>
                   <h4>Your final design will be ready within
@@ -597,12 +580,25 @@
         <div id="product_deisnor_phase_2" style="display: none;">
           <div class="col-lg-12">
             <div class="mg-theme">
-              <div class="foo blue"></div>
-              <h4 class="theme">What background best describes your
-                design</h4>
+              <div class="foo blue">
+              </div>
+              <h4 class="theme"> Choose your product : -  </h4>
+              <select name="product" style="border: 2px solid #5b8af5;;">
+                {%for k in hire_data%}
+                <option value="{{k}}">{{hire_data[k]}}</option>              
+                {%endfor%}
+              </select> 
             </div>
           </div>
-
+          
+          <div class="col-lg-12">
+            <div class="comments">
+              <div class="foo blue"></div>
+              <h4 class="theme">What background best describes your
+                design?</h4>
+              <textarea type="text" class="add_comments_1"></textarea>
+            </div>
+          </div>    
           <div class="col-lg-12 tell-color">
             <div class="mg-theme">
               <textarea class="add-comments"></textarea>
