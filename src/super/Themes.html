@@ -1,6 +1,7 @@
 <div class="breadcrumbs ace-save-state" id="breadcrumbs">
   <ul class="breadcrumb">
-    <li><i class="ace-icon fa fa-picture-o"></i> <a href="javascript:">Themes</a></li>
+    <li><i class="ace-icon fa fa-picture-o"></i> <a
+      href="javascript:">Themes</a></li>
   </ul>
   <!-- /.breadcrumb -->
   <div class="nav-search" id="nav-search">
@@ -12,8 +13,8 @@
       onclick="postRequest('','/superadmin/Themes', 'saveThemesCallBack')">
       <i class="ace-icon fa fa-plus"></i> Themes
     </button>
-    <button class="btn btn-default btn-minier" id="bck-btn" style="display: none;"
-      onclick="showListDom()">
+    <button class="btn btn-default btn-minier" id="bck-btn"
+      style="display: none;" onclick="showListDom()">
       <i class="ace-icon fa fa-arrow-left"></i> Back
     </button>
   </div>
@@ -25,11 +26,17 @@
       <h4 class="header smaller lighter blue">Stripes Advertisement</h4>
       <div class="tabbable tabs-left">
         <ul class="nav nav-tabs" id="myTab3">
-          <li class="active"><a data-toggle="tab" href="#first_stripe" aria-expanded="false">
-              <i class="pink fa fa-picture-o bigger-110"></i> First Stripe
+          <li class="active"><a data-toggle="tab"
+            href="#first_stripe" aria-expanded="false"> <i
+              class="pink fa fa-picture-o bigger-110"></i> First Stripe
           </a></li>
-          <li class=""><a data-toggle="tab" href="#second_stripe" aria-expanded="true"> <i
+          <li class=""><a data-toggle="tab" href="#second_stripe"
+            aria-expanded="true"> <i
               class="blue fa fa-picture-o bigger-110"></i> Second Stripe
+          </a></li>
+          <li class=""><a data-toggle="tab" href="#hire_designer_product_list"
+            aria-expanded="true"> <i
+              class="blue fa fa-picture-o bigger-110"></i> Hire Designer
           </a></li>
         </ul>
         <div class="tab-content">
@@ -38,16 +45,20 @@
               {%if static_img.url_one%}
               <div id="stripe_prev_1">
                 <img alt="" src="{{static_img.url_one}}" height="100px">
-                <br><button class="btn btn-danger btn-minier" type="button" onclick="deleteStript(1)" >Delete</button>
+                <br>
+                <button class="btn btn-danger btn-minier" type="button"
+                  onclick="deleteStript(1)">Delete</button>
               </div>
-              <form class="form-horizontal" id="stripe_upload_form_1" style="display: none;">
+              <form class="form-horizontal" id="stripe_upload_form_1"
+                style="display: none;">
                 <input type="hidden" name="index" value="1">
                 <div class="form-group">
-                  <input type="file" name="pic" id="strip_file_1" accept=".png,.jpg,.png,.jpeg" />
+                  <input type="file" name="pic" id="strip_file_1"
+                    accept=".png,.jpg,.png,.jpeg" />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-info btn-minier" type="button" onclick="uploadStrips(1)">
-                    Upload</button>
+                  <button class="btn btn-info btn-minier" type="button"
+                    onclick="uploadStrips(1)">Upload</button>
                 </div>
               </form>
               {%else%}
@@ -55,11 +66,12 @@
               <form class="form-horizontal" id="stripe_upload_form_1">
                 <input type="hidden" name="index" value="1">
                 <div class="form-group">
-                  <input type="file" name="pic" id="strip_file_1" accept=".png,.jpg,.png,.jpeg" />
+                  <input type="file" name="pic" id="strip_file_1"
+                    accept=".png,.jpg,.png,.jpeg" />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-info btn-minier" type="button" onclick="uploadStrips(1)">
-                    Upload</button>
+                  <button class="btn btn-info btn-minier" type="button"
+                    onclick="uploadStrips(1)">Upload</button>
                 </div>
               </form>
               {%endif%}
@@ -69,17 +81,20 @@
             <div class="col-lg-12">
               {%if static_img.url_tow%}
               <div id="stripe_prev_2">
-                <img alt="" src="{{static_img.url_tow}}">
-                <br><button class="btn btn-danger btn-minier" type="button" onclick="deleteStript(2)" >Delete</button>
+                <img alt="" src="{{static_img.url_tow}}"> <br>
+                <button class="btn btn-danger btn-minier" type="button"
+                  onclick="deleteStript(2)">Delete</button>
               </div>
-              <form class="form-horizontal" id="stripe_upload_form_2" style="display: none;">
+              <form class="form-horizontal" id="stripe_upload_form_2"
+                style="display: none;">
                 <input type="hidden" name="index" value="2">
                 <div class="form-group">
-                  <input type="file" name="pic" id="strip_file_2" accept=".png,.jpg,.png,.jpeg" />
+                  <input type="file" name="pic" id="strip_file_2"
+                    accept=".png,.jpg,.png,.jpeg" />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-info btn-minier" type="button" onclick="uploadStrips(2)">
-                    Upload</button>
+                  <button class="btn btn-info btn-minier" type="button"
+                    onclick="uploadStrips(2)">Upload</button>
                 </div>
               </form>
               {%else%}
@@ -87,16 +102,40 @@
               <form class="form-horizontal" id="stripe_upload_form_2">
                 <input type="hidden" name="index" value="2">
                 <div class="form-group">
-                  <input type="file" name="pic" id="strip_file_2" accept=".png,.jpg,.png,.jpeg" />
+                  <input type="file" name="pic" id="strip_file_2"
+                    accept=".png,.jpg,.png,.jpeg" />
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-info btn-minier" type="button" onclick="uploadStrips(2)">
-                    Upload</button>
+                  <button class="btn btn-info btn-minier" type="button"
+                    onclick="uploadStrips(2)">Upload</button>
                 </div>
               </form>
               {%endif%}
             </div>
           </div>
+
+          <div id="hire_designer_product_list" class="tab-pane">
+            <div class="col-lg-12"> 
+              <div id="stripe_prev_2"></div>
+              <form class="form-horizontal" id="hire_designer_product_form">
+                <input type="hidden" name="hire_designor_product" id="hire_designor_product">
+              </form> 
+                <div class="form-group">
+                  {%for e in product_list%}
+                  <label class="mr-10 mr-15"> <input type="checkbox" name="{{e.entityKey}}" title="{{e.name}}"
+                    {%if e.entityKey in hire_data%}
+                    checked="checked"
+                    {%endif%}
+                  > {{e.name}} </label>
+                  {%endfor%}
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-info btn-minier" type="button"
+                    onclick="updateHireDesigner()">Update</button>
+                </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -115,7 +154,8 @@
           <tr>
             <td>{{e.title}}</td>
             <td>{{e.status}}</td>
-            <td><button class="btn btn-xs bigger btn-success" type="button"
+            <td><button class="btn btn-xs bigger btn-success"
+                type="button"
                 onclick="showTheme('{{e.title}}', '{{e.entityKey}}')">Show</button></td>
           </tr>
           {%endfor%}
@@ -123,20 +163,22 @@
       </table>
     </div>
     <div class="col-md-6 col-xs-12">
-      <h4 class="header smaller lighter blue">Promotes Products Setup</h4>
+      <h4 class="header smaller lighter blue">Promotes Products
+        Setup</h4>
       <table class="table  table-bordered table-hover" id="product_live">
         <tbody>
           {%for p in product_list%}
           <tr>
-            <td><label class="cursor"><input type="checkbox" name="{{p.entityKey}}"
-                {%if p.endclient_selection%}checked="checked"{%endif%}>
+            <td><label class="cursor"><input
+                type="checkbox" name="{{p.entityKey}}" {%if
+                p.endclient_selection%}checked="checked"{%endif%}>
                 {{p.code}}-{{p.name}} </label></td>
           </tr>
           {%endfor%}
         </tbody>
       </table>
-      <button type="button" class="btn btn-info btn-minier" onclick="liveProducts()">Live
-        Products</button>
+      <button type="button" class="btn btn-info btn-minier"
+        onclick="liveProducts()">Live Products</button>
       <button type="button" class="btn btn-info btn-minier"
         onclick="GetActionDom('/superadmin/GetProductLiveSetting', 'Live Product Info')">Set
         Info</button>
@@ -149,8 +191,8 @@
     <div class="col-xs-12">
       <form id="theme_live_form">
         <input type="hidden" name="key" id="selected_theme">
-        <button type="button" class="btn btn-xs bigger btn-success" onclick="makeThemeLive()">Live
-          Theme</button>
+        <button type="button" class="btn btn-xs bigger btn-success"
+          onclick="makeThemeLive()">Live Theme</button>
       </form>
       <div id="theme_prev"></div>
     </div>

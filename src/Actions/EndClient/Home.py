@@ -4,7 +4,8 @@ Created on 04-Jul-2018
 @author: Sanjay Saini
 '''
 
-from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory, HomeScreenStaticURL
+from src.Database import Product, Seller, SellerProduct, SellerOrder, BGCategory, HomeScreenStaticURL,\
+    MasterData
 from src.Database import Client, ClientProductDesign, ProductDesign, AllowDesignerOffLogin
 from src.Database import OrderStage, ProductCategory, Themes, EventMaster, TextPatterns
 from src.Database import SellerLadger, ReadyDesignTemplate, ProductTutorial, BGSubCategory
@@ -303,6 +304,10 @@ class ProductView(ActionSupport):
     
 class GetProductDetails(ActionSupport):
   def get(self):
+    hire_data = {}
+    data_json = MasterData.get_obj().hire_data
+    if data_json:
+      hire_data = json.loads(data_json)  
     save_design_list = []  
     p = ndb.Key(urlsafe=self.request.get('key')).get()
     seller_dict = {}#Seller.get_key_obj_dict()
@@ -322,7 +327,8 @@ class GetProductDetails(ActionSupport):
                                              'seller_product_list': seller_product_list,
                                              'seller_dict': seller_dict,
                                              'product_cat_list': product_cat_list,
-                                             'user_obj': self.client}))
+                                             'user_obj': self.client,
+                                             'hire_data': hire_data,}))
 
 QUANTITY_ERROR='''
 '<div style="text-align: center;padding-bottom: 150px; padding-top: 150px;width: 100%;">

@@ -12,7 +12,7 @@ from src.api.datetimeapi import get_dt_by_country, date_to_str
 from src.api.datetimeapi import get_date_from_str
 from src.api.datetimeapi import get_first_day_of_month
 from src.Database import Client, MailUploads, MailTemplateModel, ProductTutorial,\
-    HomeScreenStaticURL, ProductDiscount
+    HomeScreenStaticURL, ProductDiscount, MasterData
 from src.Database import Product, StaticImage
 from src.Database import ProductDesign
 from src.Database import ProductCategory
@@ -38,7 +38,6 @@ from google.appengine.ext import blobstore
 from google.appengine.api import images
 from src.Actions.taskqueue import mail_sender
 import time
-
 design_img_title = config.get('design_img_title')
 
 class Home(ActionSupport):
@@ -774,16 +773,22 @@ class ManageStripImg(ActionSupport):
                          SUCCESS,
                          'Updated') 
 class ThemesView(ActionSupport):
-  def get(self): 
+  def get(self):
+    hire_data = {}
+    data_json = MasterData.get_obj().hire_data
+    if data_json:
+      hire_data = json.loads(data_json)     
     static_img = HomeScreenStaticURL.get_obj()
     themes_list = Themes.get_theme_list() 
     product_list = Product.get_selling_product_list()
     context={'themes_list': themes_list,
              'product_list': product_list,
              'static_img': static_img,
+             'hire_data': hire_data,
              }
     template = self.get_jinja2_env.get_template('super/Themes.html')    
-    self.response.out.write(template.render(context))  
+    self.response.out.write(template.render(context)) 
+    
     
   def post(self): 
     i = Themes.get_theme_count()    
@@ -1391,3 +1396,13 @@ class GetProductDiscountList(ActionSupport):
           })
     return json_response(self.response, d_list, SUCCESS, 'Product discount loaded')
       
+class UpdateHireDesignerProduct(ActionSupport):
+  def post(self):
+    data_json = json.loads(self.request.get('hire_designor_product'))
+    logging.info(data_json)   
+    e = MasterData.get_obj()
+    e.hire_data = self.request.get('hire_designor_product')
+    e.put()
+    data={}
+    return json_response(self.response, data, SUCCESS, 'Hire Designer product update')      
+  

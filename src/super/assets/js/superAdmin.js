@@ -516,13 +516,13 @@ function updateOrderStage() {
   var tbl = {}, stageCount = 0;
 
   /*
-	 * $('#order_stage_tbody').html(); $('#order_stage_tbody tr').map(function() {
-	 * var x = $(this).find('td').map(function() { // return $(this).html(); if
-	 * (this.children.length) return this.children[0].value return
-	 * this.innerText }).get()
-	 * 
-	 * tbl[x[0]] = x[1]; stageCount += 1; })
-	 */
+   * $('#order_stage_tbody').html(); $('#order_stage_tbody tr').map(function() {
+   * var x = $(this).find('td').map(function() { // return $(this).html(); if
+   * (this.children.length) return this.children[0].value return this.innerText
+   * }).get()
+   * 
+   * tbl[x[0]] = x[1]; stageCount += 1; })
+   */
 
   var inputs = $(".order_stage_input"); 
 
@@ -619,12 +619,10 @@ orderApi.gotoEditStatus = function(key) {
 orderApi.editOrderStatus = function() {
 
   /*
-	 * if (!$('#status_date').val()) { showMSG('Date missing', 'warning');
-	 * return; }
-	 * 
-	 * if (!$('#status_time').val()) { showMSG('Time missing', 'warning');
-	 * return; }
-	 */
+   * if (!$('#status_date').val()) { showMSG('Date missing', 'warning'); return; }
+   * 
+   * if (!$('#status_time').val()) { showMSG('Time missing', 'warning'); return; }
+   */
 
   postRequest('update_order_stage_form', '/superadmin/EditOrderStage',
       'orderApi.editOrderStatusCallBack');
@@ -2457,4 +2455,23 @@ function updateDiscount(k){
   newXhr.send(formData); 
   
   
+}
+
+function updateHireDesigner(){
+  var selected = 0, dta = {};
+  $('#hire_designer_product_list input:checked').each(function() {
+      dta[this.name] = this.title;
+      selected+=1
+  });	
+  
+  console.log(selected)
+  
+if (selected == 0) {
+  showMSG('Please select at least 1 product', 'warning');
+  return;
+}
+
+  $('#hire_designor_product').val(JSON.stringify(dta));
+  
+  postRequest('hire_designer_product_form', '/superadmin/UpdateHireDesignerProduct', null)
 }

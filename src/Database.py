@@ -857,3 +857,15 @@ class ProductDiscount(EndpointsModel):
   @classmethod
   def get_product_discount_list(cls, product_key):
     return cls.query(cls.product==product_key).fetch()
+
+class MasterData(EndpointsModel):
+  ''' Product datastore '''
+  hire_data = ndb.TextProperty(default='')
+
+  @classmethod
+  def get_obj(cls):
+    e = cls.query().get()
+    if not e:
+      e = MasterData().put().get()
+      
+    return e      
