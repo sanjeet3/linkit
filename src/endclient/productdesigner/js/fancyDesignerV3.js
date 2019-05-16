@@ -13471,7 +13471,7 @@ var FancyProductDesigner = function(elem, opts) {
 
                     var designImages = [];
 
-                    $category.children('img').each(function(designIndex, img) {
+                    $category.children('img2').each(function(designIndex, img) {
 
                         var $img = $(img),
                             designObj = {
@@ -13505,7 +13505,7 @@ var FancyProductDesigner = function(elem, opts) {
 
                 var $designImages = $designs;
                 if($designImages.hasClass('fpd-category')) {
-                    $designImages = $designImages.children('img');
+                    $designImages = $designImages.children('img2');
                 }
 
                 $designImages.each(function(designIndex, img) {
@@ -13557,7 +13557,7 @@ var FancyProductDesigner = function(elem, opts) {
 
                         var bgImages = [];
 
-                        $bgcategory.children('img').each(function(designIndex, img) {
+                        $bgcategory.children('img2').each(function(designIndex, img) {
 
                             var $img = $(img),
                                 bgObj = {
@@ -13591,7 +13591,7 @@ var FancyProductDesigner = function(elem, opts) {
 
                     var $backgroundImages = $backgrounds;
                     if($backgroundImages.hasClass('fpd-category')) {
-                        $backgroundImages = $backgroundImages.children('img');
+                        $backgroundImages = $backgroundImages.children('img2');
                     }
 
                     $backgroundImages.each(function(designIndex, img) {
@@ -13645,7 +13645,7 @@ var FancyProductDesigner = function(elem, opts) {
 
                    var frameImages = [];
 
-                   $frmcategory.children('img').each(function(designIndex, img) {
+                   $frmcategory.children('img2').each(function(designIndex, img) {
 
                        var $img = $(img),
                            frmImgObj = {
@@ -13679,7 +13679,7 @@ var FancyProductDesigner = function(elem, opts) {
 
                var $frameImages = $frames;
                if($frameImages.hasClass('fpd-category')) {
-                   $frameImages = $frameImages.children('img');
+                   $frameImages = $frameImages.children('img2');
                }
 
                $frameImages.each(function(designIndex, img) {
