@@ -65,20 +65,22 @@
       {%endif%}
       <div id="product-designer" style="clear: both;"
         class="fpd-container fpd-shadow-2 fpd-sidebar fpd-tabs fpd-tabs-side fpd-top-actions-centered fpd-bottom-actions-centered fpd-views-inside-left">
-        {%if canvas%}
+        {%if canvas and canvas.img_url%}
         <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
-          <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
+          <img src="{{canvas.img_url}}=s0"
             title="Base"
-            data-parameters='{"opacity":0, "product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name": "First Side" }' />
+            data-parameters='{"opacity":1, "product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name": "Design 1" }' />
+            <!--Front canvas content start -->
             {{source_html[0]|safe}}
-            {% if source_html|length>1 %}
+            <!--Front canvas content end -->
+            {% for designHtml in source_html[1:] %} 
             <div class="fpd-product" title="Base" data-thumbnail="{{canvas.img_url}}">
-               <img src="{%if canvas.img_url%}{{canvas.img_url}}=s0{%else%}/img/Product.png{%endif%}"
+               <img src="{{canvas.img_url}}=s0"
                     title="Base"
-                    data-parameters='{"opacity":0, "product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name": "Second Side" }' />
-              {{source_html[1]|safe}}
+                    data-parameters='{"opacity":1, "product_canvas": true, "left": {{canvas.left}}, "top": {{canvas.top}}, "name": "Design {{loop.index+1}}" }' />
+              {{designHtml|safe}}
             </div>
-            {%endif%}
+            {%endfor%} 
         </div>
         {%else%}
         <div class="fpd-product" title="Base" data-thumbnail="/img/MUG.png">
@@ -92,14 +94,11 @@
             {%if cat.key in sub_cat_dict%} {%set cat_list=sub_cat_dict[cat.key]%} {%for sc in
             cat_list%}
             <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-                data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%for img in sc.img_url%} <img2 src="{{img}}=s0" title="{{sc.img_title[loop.index-1]}}"
+                data-parameters='{"clipart": true, "zChangeable": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' ></img2>
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"clipart": true, "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
+            {%endfor%} {%endif%}
           </div>
           {%endfor%}
         </div> 
@@ -109,14 +108,11 @@
             {%if cat.key in sub_bg_dict%} {%set cat_list=sub_bg_dict[cat.key]%} {%for sc in
             cat_list%}
             <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-              {%for img in sc.img_url%} <img src="{{img}}=s0" title="{{sc.title}}{{loop.index}}"
-                data-parameters='{"background_layer": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%for img in sc.img_url%} <img2 src="{{img}}=s0" title="{{sc.img_title[loop.index-1]}}"
+                data-parameters='{"background_layer": true, "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'></img2>
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}=s0"
-              title="{{cat.title}}{{loop.index}}"
-              data-parameters='{"background_layer": true,"removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
-            {%endfor%}
+            {%endfor%} {%endif%} 
           </div>
           {%endfor%}
         </div> 
@@ -126,17 +122,14 @@
             {%if cat.key in sub_frame_dict%} {%set cat_list=sub_frame_dict[cat.key]%} {%for sc in
             cat_list%}
             <div class="fpd-category" title="{{sc.title}}" data-thumbnail="">
-              {%for img in sc.img_url%} <img src="{{img}}" title="{{sc.img_title[loop.index-1]}}"
-                data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
+              {%for img in sc.img_url%} <img2 src="{{img}}" title="{{sc.img_title[loop.index-1]}}"
+                data-parameters='{"svg": "{{sc.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' ></img2>
               {%endfor%}
             </div>
-            {%endfor%} {%endif%} {%for img in cat.img_url%} <img src="{{img}}"
-              title="{{cat.img_title[loop.index-1]}}"
-              data-parameters='{"svg": "{{cat.bucket_path[loop.index-1]}}", "zChangeable": true, "colors": "#000000", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}'>
-            {%endfor%}
+            {%endfor%} {%endif%} 
           </div>
           {%endfor%}
-        </div>  
+        </div> 
       </div> 
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">

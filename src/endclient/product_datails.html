@@ -234,13 +234,13 @@
         <div class="nbs-flexisel-inner">
           <h5>Choose from ready designs:</h5>
           {%for d in design_list%}
-          <div class="ready-design-box"
+          <div class="ready-design-box" 
             style="background-image: url('{{d.design_prev_url}}')">
             <div class="overlay"></div>
             <div class="button" style="left: 30px"
-              onclick="showImageModel('{{d.design_prev_url}}')">View</div>
+              onclick="showReadyDesignModel('{{d.design_prev_url}}')">View</div>
             <a class="button" style="left: 130px"
-              href="/GetProductDesignor?key={{p.entityKey}}{%if d.template_source%}&readyDesignKey={{d.entityKey}}{%else%}&redayDesignTemplate={{d.template_name}}{%endif%}">Edit</a>
+              href="/GetProductDesignor?key={{p.entityKey}}&readyDesignKey={{d.entityKey}}&redayDesignTemplate={{d.template_name}}">Edit</a>
             <div class="button" style="left: 250px">Order</div>
           </div>
           {%endfor%}

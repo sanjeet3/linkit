@@ -6,7 +6,7 @@ Created on 12-Sep-2018
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.bucketHandler import upload_file, delete_bucket_file, write_urlecoded_png_img, upload_text_file
 from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
-from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin, StaticImage
+from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin, ReadyDesignStaticImage
 from src.Database import TextPatterns, Masks, ProductCanvas, Product, ReadyDesignTemplate
 from src.lib.SABasehandler import ActionSupport
 
@@ -909,27 +909,32 @@ class DeleteSUBCategory(ActionSupport):
  
 class ReadyDesingSetup(ActionSupport):
   def get(self):
-    e = StaticImage.get_obj()
-        
+    e = ReadyDesignStaticImage.get_obj()
+    ready_design_list = ReadyDesignTemplate.get_list()    
     p_list = Product.get_product_list()
     context = {'p_list': p_list,
-               'img_url': e.img_url}  
+               'ready_design_list': ready_design_list,
+               'img_url': e.img_url[-5:]}  
     template = self.get_jinja2_env.get_template('super/ready_design.html')    
     self.response.out.write(template.render(context))   
   
   def post(self): 
     product = ndb.Key(urlsafe=self.request.get('product_key')).get()  
-    url = self.request.get('url')  
-    template_name = self.request.get('template_name')  
-    source_code = self.request.get('source_code')  
-    source_code2 = self.request.get('source_code2')
-    l = []
-    if source_code:
-      l.append(source_code)
-    if source_code2:
-      l.append(source_code2)
+    url = self.request.get('url')
     if not url: 
-      return json_response(self.response, {}, ERROR, 'data missing')
+      return json_response(self.response, {}, ERROR, 'Prev Url missing')
+      
+    template_name = self.request.get('template_name')  
+    source_code = self.request.get_all('source_code') 
+    logging.info(source_code.__len__()) 
+    l = []
+    for sc in source_code: 
+      if sc:
+        l.append(sc) 
+    
+    if not l: 
+      return json_response(self.response, {}, ERROR, 'Ready design missing')
+        
     e = ReadyDesignTemplate()
     e.design_prev_url = url
     e.name = product.name
@@ -940,4 +945,50 @@ class ReadyDesingSetup(ActionSupport):
     e.put()
      
     return json_response(self.response, {}, SUCCESS, 'OK')
+  
+class DeleteReadyDesign(ActionSupport):    
+  def post(self):   
+    e = ndb.Key(urlsafe=self.request.get('k')).get()
+    img = ReadyDesignStaticImage.get_obj()
+    
+    try:
+      i=img.img_url.index(e.design_prev_url)
+      bucket_key = img.img_key[i]
+      if delete_bucket_file(bucket_key):
+        img.img_key.remove(bucket_key)
+        img.img_url.remove(e.design_prev_url)
+        img.put()
+    except:
+      pass 
+    e.key.delete() 
+    return json_response(self.response, {}, SUCCESS, 'Deleted ReadyDesign')
+  
+class UploadReadyDesignImage(ActionSupport):    
+  def post(self):   
+    image_file = self.request.POST.get("pic", None)
+    file_obj = self.request.get("pic", None)     
+    if not isinstance(image_file, cgi.FieldStorage):        
+      return json_response(self.response, { },
+                           ERROR,
+                           'Select image file')     
+        
+    file_name = image_file.filename    
+    bucket_path = '/designer_textptrn/ready_design/%s' %(file_name)
+    bucket_path = bucket_path.lower()
+    upload_file(file_obj, bucket_path)
+    serving_url=''
+    try:
+      bucket_key = blobstore.create_gs_key('/gs' + bucket_path)
+      serving_url = images.get_serving_url(bucket_key) 
+      e = ReadyDesignStaticImage.get_obj()
+      e.img_url.append(serving_url)
+      e.img_key.append(bucket_key)
+      e.put() 
+    except Exception, msg:
+      logging.error(msg)  
+      
+    return json_response(self.response, 
+                         {'serving_url': serving_url, },
+                         SUCCESS,
+                         'Product background uploaded')    
         

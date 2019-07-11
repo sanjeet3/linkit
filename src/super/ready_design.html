@@ -8,7 +8,7 @@
 <div class="page-content" id="setup_main_menu">
   <div class="col-xs-12">
     <h3 class="header smaller lighter blue">Ready Design Templates setup</h3>
-    <div class="col-xs-12 col-sm-5">
+    <div class="col-xs-12 col-lg-5">
       <form class="form-horizontal" id="ready_design_setup_form">
         <div class="form-group">
           <label class="col-sm-3 control-label no-padding-right">Product</label>
@@ -34,24 +34,48 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label no-padding-right">Source Code </label>
+          <label class="col-sm-3 control-label no-padding-right">Canvas Source Code </label>
           <div class="col-sm-9">
             <textarea name="source_code" class="form-control input-custom"></textarea>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label no-padding-right">Source Code </label>
+          <label class="col-sm-3 control-label no-padding-right">Canvas Source Code </label>
           <div class="col-sm-9">
-            <textarea name="source_code2" class="form-control input-custom"></textarea>
+            <textarea name="source_code" class="form-control input-custom"></textarea>
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label no-padding-right"> </label>
-          <div class="col-sm-9">
-            <button type="button" class="btn btn-info btn-minier" onclick="saveReadyDesign()">Save</button>
+        <div id="add_more_source">
+        </div>
+        <div class="form-group"> 
+          <div class="col-sm-12">
+            <button type="button" class="btn btn-success btn-minier pull-left" onclick="addReadyDesignCanvasSouceCode()">Add More Canvas Source Code</button>
+            <button type="button" class="btn btn-info btn-minier pull-right" onclick="saveReadyDesign()">Save</button>
           </div>
         </div>
       </form>
+    </div>
+    <div class="col-xs-12 col-lg-7">
+      <table class="table  table-bordered table-hover" id="ready_design_dynamic_table">
+        <thead>
+          <tr>
+            <td>Product</td>
+            <td>Template Name</td>
+            <td>Image</td>
+            <td>Remove</td>
+          </tr>
+        </thead>
+        <tbody>
+          {%for e in ready_design_list%}
+          <tr>
+            <td>{{e.name}} {{e.product_code}}</td>
+            <td>{{e.template_name}}</td>
+            <td><button class="btn btn-info btn-minier mt-5" onclick="window.open('{{e.design_prev_url}}')">See Design</button></td>
+            <td><button class="btn btn-danger btn-minier mt-5" type="button" onclick="deleteReadyDesign('{{e.entityKey}}')">Delete</button></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
     </div>
   </div>
    <div class="row mt-10" id="list-dom">
@@ -65,7 +89,7 @@
       </div>
       <div class="form-group">
         <div class="col-md-offset-1 col-md-9">
-          <button class="btn btn-info btn-minier" type="button" onclick="uploadPic()">
+          <button class="btn btn-info btn-minier" type="button" onclick="UploadReadyDesignImage()">
             <i class="ace-icon fa fa-cloud-upload bigger-110"></i> Upload <i
               id="save_product_pic_spin" class="fa fa-spinner fa-spin" style="display: none;"></i>
           </button>
@@ -76,10 +100,18 @@
     
     </div>
     <div class="col-lg-12" >
-    {%for img in img_url%}
-    {{img}}
-    <img alt="" src="{{img}}" width="100px"><br>
+    {%for img in img_url|reverse%}
+    <div style="margin: 10px; padding:10px;border: 1px solid #dadada;">
+      <input type="text" value="{{img}}" style="width: 100%;"> <br>
+      <img alt="" src="{{img}}" width="100px">
+      <button type="button" class="btn btn-info btn-minier" onclick="window.open('{{img}}')">Open</button>
+    </div>   
     {%endfor%}
     </div>
   </div>
 </div>
+<script src="/super/assets/js/jquery.dataTables.min.js"></script>
+<script src="/super/assets/js/jquery.dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+  $('#ready_design_dynamic_table').DataTable();
+</script>

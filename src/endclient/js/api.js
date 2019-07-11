@@ -453,6 +453,16 @@ function showImageModel(btn){
    });
 
 };
+function showReadyDesignModel(url){ 
+  
+  $('#modal-content').html('<img style="max-width:100%; margin-botom:10px;" src="' + url +'">');
+  $('#modal-background').fadeIn();
+  $('#product_action_caontainer').hide();
+  $('#modal-background').click(function(){
+    closeModal();
+  });
+
+};
 
 function closeModal(){
 $('#modal-background').fadeOut();

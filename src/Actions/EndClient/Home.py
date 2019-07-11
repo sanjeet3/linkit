@@ -490,7 +490,7 @@ class GetProductDesignor(ActionSupport):
     self.bg_list=[]
     self.sub_bg_list=[]  
     designer_module = [] #['images', 'frames', 'backgrounds', 'text', 'designs']
-    source_html = '' 
+    source_html = []
     reday_design_key=self.request.get('readyDesignKey')
     self.p = ndb.Key(urlsafe=self.request.get('key')).get() 
     tutorial = ProductTutorial.get_tutorial(self.p.key)

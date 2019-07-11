@@ -764,6 +764,18 @@ class UserModel(EndpointsModel):
   def get_active_by_email(cls, email):  
     return cls.query(cls.email==email.lower(), cls.active==True).get()
 
+class ReadyDesignStaticImage(EndpointsModel):
+  ''' Themes datastore ''' 
+  img_url = ndb.StringProperty(repeated=True)
+  img_key = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def get_obj(cls):
+    e = cls.query().get()
+    if not e:
+      e = ReadyDesignStaticImage().put().get()    
+    return e 
+  
 class ReadyDesignTemplate(EndpointsModel):
   ''' Text Patterns datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)

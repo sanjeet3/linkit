@@ -858,6 +858,14 @@ function uploadPic() {
   }
 };
 
+function UploadReadyDesignImage() { 
+  fileObj = $('#imgage_file')[0];
+  if (fileObj.files && fileObj.files[0]) {
+    $('#save_product_pic_spin').show();
+    postFormWithFile("upload_test", '/superadmin/UploadReadyDesignImage', 'TC');
+  }
+};
+
 function TC(r){
   $('#save_product_pic_spin').hide();
   $('#test').append('<p>'+r.data.serving_url);
@@ -1782,6 +1790,40 @@ function showDesignerImgaeCB(r){
   $('#result_dom').html(h.join(''));
 }
 
+function showFrames(k){
+  openDialog('#designerImagesDailog');
+  $('#result_dom').html('<h4>Please wait...');
+  getRequest('','/superadmin/GetDesignerImgaes?k='+k,'showFramesCB');
+}
+
+function showFramesCB(r){
+  var h = [];
+  for(var i=0; i<r.data.img_url.length; i++){
+    h.push('<div class="design-img-box" id="img_box_');
+    h.push(i);
+    h.push('">');
+    h.push(r.data.bucket_path[i]);
+    h.push('<br><img src="');
+    h.push(r.data.img_url[i]);
+    h.push('"><br><button class="btn btn-danger btn-minier" onclick="deleteDesignerImg(');
+    h.push("'");
+    h.push(r.data.k);
+    h.push("'");
+    h.push(',');
+    h.push("'");
+    h.push(r.data.bucket_key[i]);
+    h.push("'");
+    h.push(',');
+    h.push("'");
+    h.push(r.data.bucket_path[i]);
+    h.push("'");
+    h.push(')">Delete</button> </div>');
+    
+  }
+  
+  $('#result_dom').html(h.join(''));
+}
+
 function deleteCategory(k, entity){
   postRequest('','/superadmin/DeleteCategory?k='+k+'&entity='+entity,'deleteCategoryCB')
 }
@@ -2054,8 +2096,17 @@ function getMailTemplateCB(r){
 }
 
 function saveReadyDesign() {
-  postRequest('ready_design_setup_form', '/superadmin/ReadyDesingSetup', null);
+  postRequest('ready_design_setup_form', '/superadmin/ReadyDesingSetup', 'saveReadyDesignCB');
 } 
+
+function saveReadyDesignCB() {
+  $('#ready_design_setup_form')[0].reset();
+}
+
+function addReadyDesignCanvasSouceCode(){
+  $('#add_more_source').append('<div class="form-group"> <label class="col-sm-3 control-label no-padding-right">Canvas Source Code </label> <div class="col-sm-9"> <textarea name="source_code" class="form-control input-custom"></textarea> </div> </div>');
+}
+
 
 function activeSuperAdminUser(k){
     getRequest('', '/superadmin/ManageUserStatus?k='+k+'&status=true', 'deactiveSuperAdminUserCB');
@@ -2457,4 +2508,12 @@ function updateDiscount(k){
   newXhr.send(formData); 
   
   
+}
+
+function deleteReadyDesign(k){
+  postRequest('', '/superadmin/DeleteReadyDesign?k='+k, 'deleteReadyDesignCB');
+}
+
+function deleteReadyDesignCB(r){
+  getWebPage('/superadmin/ReadyDesingSetup',{'title':'Ready Designs', 'data':''})
 }
