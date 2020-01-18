@@ -137,6 +137,18 @@
               data-parameters='{"svg": "/wp-content/2_hexagon.svg", "removable": true, "draggable": true, "rotatable": true, "resizable": true, "boundingBox": "Base", "autoCenter": true}' />
           </div>
         </div>#}
+        {%if ready_design_list%}
+        <div class="fpd-readydesigns">
+          <div class="fpd-category" title="New Designs" data-thumbnail="">
+            {%for readyDesign in ready_design_list%}
+            <img2 src="{{readyDesign.design_prev_url}}" title="{{readyDesign.template_name}}"
+              data-parameters='{"readydesignskey": "{{readyDesign.entityKey}}"}'/></img2>
+            {%endfor%}  
+          </div>
+          <div class="fpd-category" title="Extra" data-thumbnail="">
+          </div>
+        </div>
+        {%endif%}
       </div>
       <div class="fpd-clearfix text-center" style="margin-top: 15px;">
         <div class="api-buttons fpd-container">
@@ -204,6 +216,8 @@ window.onbeforeunload = function () {
 }
 
 var canvasPreviewUrl = '',
+productKey='{{key}}',
+readyDesignKey='{{readyDesignKey}}',
 prodCode='{{p.code}}',
 preview_top = 0,
 preview_left = 0,
