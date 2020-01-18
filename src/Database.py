@@ -550,6 +550,11 @@ class DesignCategory(EndpointsModel):
   bucket_path = ndb.StringProperty(repeated=True)
   img_title = ndb.StringProperty(repeated=True)
   product_category = ndb.KeyProperty(repeated=True)
+  product_code_list = ndb.StringProperty(repeated=True)
+    
+  @classmethod
+  def get_product_mapping_list(cls, code):  
+    return cls.query(cls.product_code_list.IN([code])).order(cls.title)  
   
   @classmethod
   def get_list(cls):  
@@ -557,7 +562,7 @@ class DesignCategory(EndpointsModel):
   
   @classmethod
   def get_mapping_list(cls, category):  
-    return cls.query(cls.product_category.IN([category])).order(cls.title)  
+    return cls.query(cls.product_category.IN([category])).order(cls.title)
       
 class DesignSubCategory(EndpointsModel):
   ''' Themes datastore '''
@@ -590,6 +595,11 @@ class BGCategory(EndpointsModel):
   bucket_path = ndb.StringProperty(repeated=True)
   img_title = ndb.StringProperty(repeated=True)
   product_category = ndb.KeyProperty(repeated=True)
+  product_code_list = ndb.StringProperty(repeated=True)
+    
+  @classmethod
+  def get_product_mapping_list(cls, code):  
+    return cls.query(cls.product_code_list.IN([code])).order(cls.title) 
   
   @classmethod
   def get_list(cls):  
@@ -631,6 +641,11 @@ class FrameCategory(EndpointsModel):
   bucket_path = ndb.StringProperty(repeated=True)
   img_title = ndb.StringProperty(repeated=True)
   product_category = ndb.KeyProperty(repeated=True)
+  product_code_list = ndb.StringProperty(repeated=True)
+    
+  @classmethod
+  def get_product_mapping_list(cls, code):  
+    return cls.query(cls.product_code_list.IN([code])).order(cls.title) 
   
   @classmethod
   def get_list(cls):  

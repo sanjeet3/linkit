@@ -75,6 +75,8 @@ class DesignerModuleSetup(ActionSupport):
       designer_module.append('text')    
     if self.request.get('designs'):  
       designer_module.append('designs')     
+    if self.request.get('readydesigns'):  
+      designer_module.append('readydesigns')     
       
     e.designer_module = designer_module    
     e.put()
@@ -131,7 +133,7 @@ class DesinerDemo(ActionSupport):
     canvas = ProductCanvas.get_obj(p.key)
     if canvas:
       designer_module = canvas.designer_module
-    frame_list = FrameCategory.get_mapping_list(p.category_key)
+    frame_list = FrameCategory.get_product_mapping_list(p.code)
     for e in FrameSubCategory.get_list():
       if e.category in sub_frame_dict:
         sub_frame_dict[e.category].append(e)
@@ -139,14 +141,14 @@ class DesinerDemo(ActionSupport):
         sub_frame_dict[e.category]=[e] 
     
     
-    design_list  = DesignCategory.get_mapping_list(p.category_key)
+    design_list  = DesignCategory.get_product_mapping_list(p.code)
     for e in DesignSubCategory.get_list():
       if e.category in sub_cat_dict:
         sub_cat_dict[e.category].append(e)
       else:
         sub_cat_dict[e.category]=[e]    
                 
-    bg_list = BGCategory.get_mapping_list(p.category_key).fetch()
+    bg_list = BGCategory.get_product_mapping_list(p.code).fetch()
     sub_bg_list = BGSubCategory.get_list()
     for e in sub_bg_list:
       if e.category in sub_bg_dict:  
@@ -522,34 +524,37 @@ class UploadProductPreview(ActionSupport):
 class GetMappingCustomDesign(ActionSupport):
   def get(self): 
     mapping_list = []  
-    category = ndb.Key(urlsafe=self.request.get('cat'))
-    for e in DesignCategory.get_mapping_list(category):
+    #category = ndb.Key(urlsafe=self.request.get('cat'))
+    code = self.request.get('cat')
+    for e in DesignCategory.get_product_mapping_list(code):
       mapping_list.append(e.entityKey)  
     return json_response(self.response, {'mapping_list': mapping_list}, SUCCESS, 'Success')
 
 class MappingCustomDesign(ActionSupport):
   def get(self):    
-    cat_list = ProductCategory.get_list()  
+    e_list = Product.get_product_list()  
+    #cat_list = ProductCategory.get_list()  
     design_list = DesignCategory.get_list()
-    d = {'cat_list': cat_list,
+    d = {'p_list': e_list,
          'design_list': design_list}  
     template = self.get_jinja2_env.get_template('super/design_mapping.html')    
     self.response.out.write(template.render(d)) 
   
   def post(self): 
-    category = ndb.Key(urlsafe=self.request.get('category') ) 
+    #category = ndb.Key(urlsafe=self.request.get('category') ) 
+    product_code = self.request.get('category') 
     key_list = json.loads( self.request.get('data') )  
     design_key = [ndb.Key(urlsafe=k) for k in key_list]
     logging.info(design_key)
-    logging.info(category)
+    #logging.info(category)
     ndb_list = []
     for e in DesignCategory.get_list():
       if e.key in design_key:
-        if category not in e.product_category:         
-          e.product_category.append(category)
+        if product_code not in e.product_code_list:         
+          e.product_code_list.append(product_code)
           ndb_list.append(e)
-      elif category in e.product_category:
-        e.product_category.remove(category)         
+      elif product_code in e.product_code_list:
+        e.product_code_list.remove(product_code)         
         ndb_list.append(e)
         
     if ndb_list:
@@ -559,35 +564,34 @@ class MappingCustomDesign(ActionSupport):
 
 class GetMappingBackground(ActionSupport):
   def get(self):    
-    mapping_list = []  
-    category = ndb.Key(urlsafe=self.request.get('cat'))
-    for e in BGCategory.get_mapping_list(category):
+    mapping_list = []   
+    code=self.request.get('cat')
+    for e in BGCategory.get_product_mapping_list(code):
       mapping_list.append(e.entityKey) 
 
     return json_response(self.response, {'mapping_list': mapping_list}, SUCCESS, 'Success')   
 
 class MappingBackground(ActionSupport):
   def get(self):    
-    cat_list = ProductCategory.get_list()  
+    p_list = Product.get_product_list()
     bg_list = BGCategory.get_list()
-    d = {'cat_list': cat_list, 'bg_list': bg_list}  
+    d = {'p_list': p_list, 'bg_list': bg_list}  
     template = self.get_jinja2_env.get_template('super/background_mapping.html')    
     self.response.out.write(template.render(d)) 
 
   def post(self): 
-    category = ndb.Key(urlsafe=self.request.get('category') ) 
+    product_code = self.request.get('category')
     key_list = json.loads( self.request.get('data') )  
     design_key = [ndb.Key(urlsafe=k) for k in key_list]
     logging.info(design_key)
-    logging.info(category)
     ndb_list = []
     for e in BGCategory.get_list():
       if e.key in design_key:
-        if category not in e.product_category:         
-          e.product_category.append(category)
+        if product_code not in e.product_code_list:         
+          e.product_code_list.append(product_code)
           ndb_list.append(e)
-      elif category in e.product_category:
-        e.product_category.remove(category)         
+      elif product_code in e.product_code_list:
+        e.product_code_list.remove(product_code)         
         ndb_list.append(e)
         
     if ndb_list:
@@ -596,26 +600,25 @@ class MappingBackground(ActionSupport):
 
 class MappingFrame(ActionSupport):
   def get(self):    
-    cat_list = ProductCategory.get_list()  
+    p_list = Product.get_product_list()  
     bg_list = FrameCategory.get_list()
-    d = {'cat_list': cat_list, 'bg_list': bg_list}  
+    d = {'p_list': p_list, 'bg_list': bg_list}  
     template = self.get_jinja2_env.get_template('super/frame_mapping.html')    
     self.response.out.write(template.render(d)) 
 
   def post(self): 
-    category = ndb.Key(urlsafe=self.request.get('category') ) 
+    product_code = self.request.get('category')
     key_list = json.loads( self.request.get('data') )  
     design_key = [ndb.Key(urlsafe=k) for k in key_list]
     logging.info(design_key)
-    logging.info(category)
     ndb_list = []
     for e in FrameCategory.get_list():
       if e.key in design_key:
-        if category not in e.product_category:         
-          e.product_category.append(category)
+        if product_code not in e.product_code_list:         
+          e.product_code_list.append(product_code)
           ndb_list.append(e)
-      elif category in e.product_category:
-        e.product_category.remove(category)         
+      elif product_code in e.product_code_list:
+        e.product_code_list.remove(product_code)         
         ndb_list.append(e)
         
     if ndb_list:
@@ -625,8 +628,8 @@ class MappingFrame(ActionSupport):
 class GetMappingFrame(ActionSupport):
   def get(self):    
     mapping_list = []  
-    category = ndb.Key(urlsafe=self.request.get('cat'))
-    for e in FrameCategory.get_mapping_list(category):
+    code=self.request.get('cat')
+    for e in FrameCategory.get_product_mapping_list(code):
       mapping_list.append(e.entityKey) 
 
     return json_response(self.response, {'mapping_list': mapping_list}, SUCCESS, 'Success') 

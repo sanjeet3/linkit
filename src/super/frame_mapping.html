@@ -18,8 +18,8 @@
         <label class="col-sm-1 control-label no-padding-right">Category </label>
         <div class="col-sm-4">
           <select name="category" id="selected_category" class="form-control" onchange="getFramesForCategory(this)">
-            <option value="">-select-</option> {%for c in cat_list%}
-            <option value="{{c.entityKey}}">{{c.name}}</option> {%endfor%}
+            <option value="">-select-</option> {%for p in p_list%}
+            <option value="{{p.code}}">{{p.code}}-{{p.name}}</option> {%endfor%}
           </select>
         </div>
       </div>

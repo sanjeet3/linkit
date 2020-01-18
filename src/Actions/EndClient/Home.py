@@ -114,8 +114,8 @@ class Register(ActionSupport):
   def post(self):  
     data_dict = {}  
     name = self.request.get('name')
-    email = self.request.get('email')
-    password = self.request.get('password')
+    email = self.request.get('email').strip().lower()
+    password = self.request.get('password').strip().lower()
     contact = self.request.get('contact') 
     if not email or '@' not in  email or email.__len__()<5:
       return json_response(self.response, data_dict, ERROR, 'Invalid email')
@@ -151,8 +151,8 @@ class Login(ActionSupport):
       
   def validate_login_detail(self):
     self.valid_credential = True     
-    email = self.request.get('email').lower()
-    password =  self.request.get('password').lower()
+    email = self.request.get('email').strip().lower()
+    password =  self.request.get('password').strip().lower()
     if email.__len__() < 5:
       self.valid_credential = False
       self.msg = 'invalid email: minimum 5 char'       
@@ -457,7 +457,7 @@ class PlaceOrder(ActionSupport):
 class GetProductDesignor(ActionSupport):
     
   def set_frames(self):  
-    self.frame_list = FrameCategory.get_mapping_list(self.p.category_key)
+    self.frame_list = FrameCategory.get_product_mapping_list(self.p.code)
     for e in FrameSubCategory.get_list():
       if e.category in self.sub_frame_dict:
         self.sub_frame_dict[e.category].append(e)
@@ -465,7 +465,7 @@ class GetProductDesignor(ActionSupport):
         self.sub_frame_dict[e.category]=[e] 
         
   def set_designs(self):        
-    self.design_list  = DesignCategory.get_mapping_list(self.p.category_key)
+    self.design_list  = DesignCategory.get_product_mapping_list(self.p.code)
     for e in DesignSubCategory.get_list():
       if e.category in self.sub_cat_dict:
         self.sub_cat_dict[e.category].append(e)
@@ -473,7 +473,7 @@ class GetProductDesignor(ActionSupport):
         self.sub_cat_dict[e.category]=[e]  
   
   def set_bg(self):
-    self.bg_list = BGCategory.get_mapping_list(self.p.category_key).fetch()
+    self.bg_list = BGCategory.get_product_mapping_list(self.p.code).fetch()
     self.sub_bg_list = BGSubCategory.get_list()
     for e in self.sub_bg_list:
       if e.category in self.sub_bg_dict:  
@@ -499,9 +499,8 @@ class GetProductDesignor(ActionSupport):
     if reday_design_key:  
       r_d_templt = ndb.Key(urlsafe=reday_design_key).get()   
       source_html = r_d_templt.template_source 
-      template_path = 'endclient/product_designor_custom_template.html'
-    '''elif self.p.default_design_template:
-      template_path = 'endclient/%s.html' %(self.p.default_design_template)'''
+      template_path = 'endclient/product_designor_custom_template.html' 
+      
     logging.info(template_path)      
     template = self.get_jinja2_env.get_template(template_path)    
     canvas = ProductCanvas.get_obj(self.p.key)
@@ -514,13 +513,15 @@ class GetProductDesignor(ActionSupport):
         self.set_designs()    
       if 'backgrounds' in designer_module:
         self.set_bg()  
-       
+    ready_design_list = ReadyDesignTemplate.get_ready_design_list(self.p.key)   
     self.response.out.write(template.render({'p': self.p,
+                                             'ready_design_list': ready_design_list,
                                              'tutorial': tutorial,
                                              'source_html': source_html,
                                              'designer_module': designer_module,
                                              'dev': self.DEV,
                                              'key': self.request.get('key'), 
+                                             'readyDesignKey': self.request.get('readyDesignKey'), 
                                              'user_obj': self.client, 
                                              'canvas': canvas, 
                                              'frame_list': self.frame_list,
