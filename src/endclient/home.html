@@ -228,11 +228,12 @@
               <label for="pwd">Password</label>
               <div>
                 <input type="password" name="password" class="form-control" id="pwd" required>
+                <a href="/ForgetPassword" target="_blank">Forget Password?</a>
               </div>
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-success pull-left">Login</button>
-              <a href="javascript:showRegisterDom();" class="pull-right">Create Account</a>
+              <a href="javascript:showRegisterDom();" class="btn btn-info pull-right">Create Account</a>
             </div>
           </form>
           <form id="registration_form" {%if r%}style="display: none;"{%endif%}>

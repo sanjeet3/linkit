@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <title>Craftyourchoice</title>
+<link rel="shortcut icon" type="image/png" href="/img/fevicon.png"/>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/css/bootstrap337.css">
@@ -14,23 +15,26 @@
   <section class="container">
     <div class="row">
       <div class="col-lg-12 col-xs-12 product-view text-center" id="login_dom">
+        <img alt="" src="/img/header.jpg" width="100%" height="180px">
         <div class="col-lg-12 col-xs-12 ">
           <h3>{{msg}}</h3>
         </div>
-        <form class="dom-bg" action="/Login" method="post">
+        <form class="dom-bg" action="/Login" method="post" style="padding-bottom: 40px;">
           <div class="form-group">
-            <label for="email" style="width: 30%">Email address</label>
+            <label for="email" style="width: 39%;text-align: left;">Email address</label>
             <div style="width: 40%; margin-left: 30%;">
-              <input type="email" class="form-control" id="email" name="email" required="required">
+              <input type="email" class="form-control" value="{{email}}" id="email" name="email" required="required">
             </div>
           </div>
           <div class="form-group">
-            <label for="pwd" style="width: 30%">Password</label>
+            <label for="pwd" style="width: 39%;text-align: left;">Password</label>
             <div style="width: 40%; margin-left: 30%;">
               <input type="password" name="password" class="form-control" id="pwd" required>
+              <a href="/ForgetPassword" style="float: left;">Forget Password?</a>
+              <button type="submit" class="btn btn-success" style="float: right;margin-top: 10px;">Login</button>
             </div>
           </div>
-          <button type="submit" class="btn btn-success">Login</button>
+          
         </form>
       </div>
       <div class="col-lg-12 col-xs-12 product-view text-center" id="registeration_msg_dom"

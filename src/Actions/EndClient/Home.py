@@ -181,7 +181,7 @@ class Login(ActionSupport):
       return self.redirect('/')      
     else:
       template = self.get_jinja2_env.get_template('endclient/loginerror.html')    
-      self.response.out.write(template.render({'msg': self.msg}))   
+      self.response.out.write(template.render({'msg': self.msg, 'email': email}))   
     
   def validate_in_session(self, user_name, password):
     ''' Validate User in Webapp2.model.user '''  
