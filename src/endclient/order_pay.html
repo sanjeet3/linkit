@@ -51,10 +51,10 @@
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
           <form method="post" action="/UpdateOrderRef" id="">
             <input type="hidden" name="order_id" value="{{new_order.entityKey}}">
-            <input type="text" name="payment_ref" id="payment_ref" placeholder="Payment Ref no."><br> <span class="red">{{error}}</span><br>
-            <button type="submit" class="btn btn-sm btn-primary btn-white btn-round">
-              <i class="fa fa-send-o"></i> Add Payment
-            </button>
+            <input type="text" name="payment_ref" id="payment_ref" placeholder="Payment Ref no." style="display: none;"><br> <span class="red">{{error}}</span><br>
+            <button type="button" class="btn btn-sm btn-primary btn-white btn-round">
+              <i class="fa fa-send-o"></i>Payment Now
+            </button> <span>Or</span> <a href="/" class="btn btn-sm btn-primary btn-white btn-round"><i class="fa fa-shopping-o"></i> Continue Shopping</a>
           </form>
         </div>
       </div>

@@ -431,6 +431,10 @@ class ClientProductDesign(EndpointsModel):
     e = cls.query(cls.client==client, cls.product==product).fetch()      
     return e
   
+  @classmethod
+  def get_my_designs(cls, client):
+    return cls.query(cls.client==client)      
+  
 class OrderStage(EndpointsModel):
   name = ndb.StringProperty(repeated=True)
 
@@ -791,6 +795,28 @@ class ReadyDesignStaticImage(EndpointsModel):
       e = ReadyDesignStaticImage().put().get()    
     return e 
   
+class ReadyDesignCategory(EndpointsModel):
+  name = ndb.StringProperty(repeated=True)
+  
+  @classmethod
+  def update_obj(cls, category_name):
+    e = cls.query().get()
+    if not e:
+      ReadyDesignCategory(name=[category_name]).put()
+    else:
+      e.name.append(category_name)
+      e.name.sort()
+      e.name = set(e.name)
+      e.put()  
+      
+  @classmethod
+  def get_name_list(cls):
+    l=[]
+    e = cls.query().get()
+    if e:
+      l = e.name
+    return l  
+      
 class ReadyDesignTemplate(EndpointsModel):
   ''' Text Patterns datastore '''
   created_on = ndb.DateTimeProperty(auto_now_add=True)
@@ -798,6 +824,7 @@ class ReadyDesignTemplate(EndpointsModel):
   product = ndb.KeyProperty(Product)
   product_code = ndb.StringProperty(default='')
   name = ndb.StringProperty(default='')
+  category = ndb.StringProperty(default='Latest')
   design_prev_url = ndb.TextProperty(default='')
   template_source = ndb.TextProperty(repeated=True)
   template_name = ndb.StringProperty(default='')

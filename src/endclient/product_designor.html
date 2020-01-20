@@ -44,7 +44,7 @@
         <h3>Please wait loading designer files...</h3>
       </div>
     </div>
-    <div id="main-container">
+    <div id="main-container" style="padding-top: 52px;">
       <h3 id="clothing" class="pull-left">{{p.name}}</h3>
       {%if tutorial.video_link%}
       <i class="fa fa-youtube-play fa-2x pull-left" title="Tutorial Video" style="cursor: pointer; color: red; margin-top: 25px; padding-left: 10px;" onclick="youtubeModal()"></i>
@@ -64,7 +64,7 @@
       </button>  -->
       <button type="button" onclick="SaveAndOrderSVG()" id="save_design_place_order_btn"
         class="btn btn-sm btn-success btn-round btn-mini mt-15 pull-right">
-        <i class="ace-icon fa fa-cart-plus"></i> Save + Order
+        <i class="ace-icon fa fa-cart-plus"></i> Save+Add To Cart
       </button>
       {%endif%}
       <div id="product-designer" style="clear: both;"

@@ -307,7 +307,7 @@ class GetProductDetails(ActionSupport):
     p = ndb.Key(urlsafe=self.request.get('key')).get()
     seller_dict = {}#Seller.get_key_obj_dict()
     seller_product_list = []#SellerProduct.get_product_by_master_key_for_client(p.key)
-    design_list = ReadyDesignTemplate.get_ready_design_list(p.key) #ProductDesign.get_design_list(p.key)
+    #design_list = ReadyDesignTemplate.get_ready_design_list(p.key) #ProductDesign.get_design_list(p.key)
     product_cat_list = ProductCategory.get_list()
     tutorial = ProductTutorial.get_tutorial(p.key)
     if self.client:
@@ -315,8 +315,7 @@ class GetProductDetails(ActionSupport):
     template = self.get_jinja2_env.get_template('endclient/product_datails.html')    
     self.response.out.write(template.render({'p': p,
                                              'tutorial': tutorial,
-                                             'AllowDesignerOffLogin': AllowDesignerOffLogin.get_obj().allow,
-                                             'design_list': design_list,
+                                             'AllowDesignerOffLogin': AllowDesignerOffLogin.get_obj().allow, 
                                              'save_design_list': save_design_list,
                                              'seller_product': SellerProduct.get_default_seller_product(p.key),
                                              'seller_product_list': seller_product_list,
@@ -855,6 +854,21 @@ class MyOrders(ActionSupport):
             'user_obj': self.client}
     template = self.get_jinja2_env.get_template('endclient/orders.html') 
     self.response.out.write(template.render(data))
+    
+class MySaveDesign(ActionSupport):
+  def get(self):
+    if not self.client:
+      template = self.get_jinja2_env.get_template('endclient/loginerror.html')  
+      d= {'msg': 'Session expired! Kindly login again'}  
+      return self.response.out.write(template.render(d))   
+    
+    save_design_list = []    
+    if self.client:
+      save_design_list = ClientProductDesign.get_my_designs(self.client.key)
+    template = self.get_jinja2_env.get_template('endclient/myDesigns.html')    
+    self.response.out.write(template.render({
+                                             'save_design_list': save_design_list,
+                                             'user_obj': self.client}))
     
 class GetMyOrderDetails(ActionSupport):
   def get(self):

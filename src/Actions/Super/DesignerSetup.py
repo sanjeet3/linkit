@@ -5,7 +5,7 @@ Created on 12-Sep-2018
 '''
 from src.api.baseapi import json_response, SUCCESS, ERROR, WARNING
 from src.api.bucketHandler import upload_file, delete_bucket_file, write_urlecoded_png_img, upload_text_file
-from src.Database import BGCategory, BGSubCategory, ProductCategory, DesignCategory,DesignSubCategory
+from src.Database import BGCategory, BGSubCategory, ReadyDesignCategory, DesignCategory,DesignSubCategory
 from src.Database import FrameCategory, FrameSubCategory, AllowDesignerOffLogin, ReadyDesignStaticImage
 from src.Database import TextPatterns, Masks, ProductCanvas, Product, ReadyDesignTemplate
 from src.lib.SABasehandler import ActionSupport
@@ -909,6 +909,15 @@ class DeleteSUBCategory(ActionSupport):
       self.msg='Deletion completed'
             
     return json_response(self.response, {'k': k}, self.status, self.msg)
+
+class AddReadyDesingCategory(ActionSupport):
+  def post(self):
+    category=self.request.get('category').strip()
+    ReadyDesignCategory.update_obj(category)
+    data_dict={ 
+    'name': category, 
+    }
+    return  json_response(self.response, data_dict, SUCCESS, 'Category %s saved' %(category))
  
 class ReadyDesingSetup(ActionSupport):
   def get(self):
@@ -916,6 +925,7 @@ class ReadyDesingSetup(ActionSupport):
     ready_design_list = ReadyDesignTemplate.get_list()    
     p_list = Product.get_product_list()
     context = {'p_list': p_list,
+               'category_list': ReadyDesignCategory.get_name_list(),
                'ready_design_list': ready_design_list,
                'img_url': e.img_url[-5:]}  
     template = self.get_jinja2_env.get_template('super/ready_design.html')    
@@ -927,6 +937,7 @@ class ReadyDesingSetup(ActionSupport):
     if not url: 
       return json_response(self.response, {}, ERROR, 'Prev Url missing')
       
+    category = self.request.get('category')  
     template_name = self.request.get('template_name')  
     source_code = self.request.get_all('source_code') 
     logging.info(source_code.__len__()) 
@@ -940,6 +951,7 @@ class ReadyDesingSetup(ActionSupport):
         
     e = ReadyDesignTemplate()
     e.design_prev_url = url
+    e.category = category
     e.name = product.name
     e.product = product.key
     e.product_code = product.code

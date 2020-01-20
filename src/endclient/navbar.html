@@ -10,7 +10,7 @@
       {%for e in product_cat_list%} <a href="/Product?cat={{e.entityKey}}">{{e.name}}</a> {%endfor%}
     </div>
   </div>
-  {% if user_obj %} <a href="/Orders">Orders</a> <a href="/AboutUs">About Us</a> <a
+  {% if user_obj %} <a href="/MyDesigns">My Designs</a> <a href="/MyCart">Cart</a> <a href="/AboutUs">About Us</a> <a
     href="/ContactUs">Contact Us</a>
     <a href="/Logout" id="logout">Logout</a>
    {%else%} <a href="/AboutUs">About Us</a> <a href="/ContactUs">Contact Us</a>

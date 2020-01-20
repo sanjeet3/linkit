@@ -199,7 +199,7 @@
                   value="{{seller_product.entityKey}}">
               </form>
             </div>
-            <br />Maxpro will provide free delivery to you.<br /> <br />
+            <br /> <br />
             {%if not AllowDesignerOffLogin and not user_obj%} <a
               class="now-get" id="create_desgin_btn"
               href="javascript:alert('Please login to create your design')">Create
@@ -226,21 +226,6 @@
               onclick="showImageModel(this)">View</div>
             <div class="button" style="left: 130px"
               onclick="deleteDesign('{{d.entityKey}}')">Delete</div>
-            <div class="button" style="left: 250px">Order</div>
-          </div>
-          {%endfor%}
-        </div>
-        {%endif%} {%if design_list%}
-        <div class="nbs-flexisel-inner">
-          <h5>Choose from ready designs:</h5>
-          {%for d in design_list%}
-          <div class="ready-design-box" 
-            style="background-image: url('{{d.design_prev_url}}')">
-            <div class="overlay"></div>
-            <div class="button" style="left: 30px"
-              onclick="showReadyDesignModel('{{d.design_prev_url}}')">View</div>
-            <a class="button" style="left: 130px"
-              href="/GetProductDesignor?key={{p.entityKey}}&readyDesignKey={{d.entityKey}}&redayDesignTemplate={{d.template_name}}">Edit</a>
             <div class="button" style="left: 250px">Order</div>
           </div>
           {%endfor%}

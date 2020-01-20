@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Craftyourchoice</title>
+<link rel="shortcut icon" type="image/png" href="/img/fevicon.png"/>
 <link rel="stylesheet" href="/css/api.css">
 <link href="/light/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
 <!--theme-style-->
@@ -35,7 +36,8 @@
     <div class="mt-10 mb-10">
       <div id="order_list_dom">
         <div class="mb-5">
-          <h4 class="pull-left">Your Orders</h4>
+          <h4 class="pull-left">Your Items in Cart</h4>
+          <button class="btn btn-sm btn-primary btn-white btn-round pull-right" type="button">Order Now</button>
         </div>
         <table class="table table-bordered">
           <thead>
@@ -44,8 +46,7 @@
               <th>Item</th>
               <th>Date</th>
               <th>Amount (KES)</th>
-              <th>Qty</th>
-              <th>Status</th>
+              <th>Qty</th> 
             </tr>
           </thead>
           <tbody>
@@ -59,7 +60,7 @@
               <td>{{e.date}}</td>
               <td>{{e.amount}}</td>
               <td>{{e.qty}}</td>
-              <td><a href="javascript:getOrderDetails('{{e.entityKey}}')">{{e.status}}</a></td>
+              <!-- <td><a href="javascript:getOrderDetails('{{e.entityKey}}')">{{e.status}}</a></td> -->
             </tr>
             {%else%}
             <tr>

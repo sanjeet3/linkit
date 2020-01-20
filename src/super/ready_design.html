@@ -22,6 +22,21 @@
           </div>
         </div> 
         <div class="form-group">
+          <label class="col-sm-3 control-label no-padding-right">Category</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+            <select name="category" id="category" class="form-control">
+              {%for c in category_list%}
+              <option value="{{c}}">{{c}}</option>
+              {%endfor%}
+            </select>
+             <span class="input-group-addon font-12" onclick="openDialog('#addCategoryDailog')">
+                <i class="fa fa-plus bigger-110"></i>
+              </span>
+            </div>
+          </div>
+        </div>  
+        <div class="form-group">
           <label class="col-sm-3 control-label no-padding-right">Serving Url </label>
           <div class="col-sm-9">
             <input type="text" name="url" class="form-control input-custom">
@@ -61,6 +76,7 @@
           <tr>
             <td>Product</td>
             <td>Template Name</td>
+            <td>Category</td>
             <td>Image</td>
             <td>Remove</td>
           </tr>
@@ -70,6 +86,7 @@
           <tr>
             <td>{{e.name}} {{e.product_code}}</td>
             <td>{{e.template_name}}</td>
+            <td>{{e.category}}</td>
             <td><button class="btn btn-info btn-minier mt-5" onclick="window.open('{{e.design_prev_url}}')">See Design</button></td>
             <td><button class="btn btn-danger btn-minier mt-5" type="button" onclick="deleteReadyDesign('{{e.entityKey}}')">Delete</button></td>
           </tr>
@@ -108,6 +125,35 @@
     </div>   
     {%endfor%}
     </div>
+  </div>
+</div>
+
+<div id="addCategoryDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Add Category</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#addCategoryDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="add_new_category_form">
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category
+        </label>
+        <div class="col-sm-9">
+          <input type="text" name="category" id="new_category" class="form-control input-custom">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="saveReadyDesignCategory()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save <i id="add_new_category_spin"
+              class="fa fa-spinner fa-spin" style="display: none;"></i>
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#addCategoryDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 <script src="/super/assets/js/jquery.dataTables.min.js"></script>

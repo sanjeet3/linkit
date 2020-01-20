@@ -20,7 +20,8 @@ __route_list = [
     RedirectRoute(r'/Register', Home.Register, name='Register page', strict_slash=True),
     RedirectRoute(r'/Login', Home.Login, name='Login page', strict_slash=True),
     RedirectRoute(r'/Logout', Home.Logout, name='Logout page', strict_slash=True),
-    RedirectRoute(r'/Orders', Home.MyOrders, name='My orders page', strict_slash=True),
+    RedirectRoute(r'/MyCart', Home.MyOrders, name='My orders page', strict_slash=True),
+    RedirectRoute(r'/MyDesigns', Home.MySaveDesign, name='My Saved Design page', strict_slash=True),
     RedirectRoute(r'/UpdateOrderRef', Home.UpdateOrderRef, name='Create Product Design and Place Order', strict_slash=True),
     RedirectRoute(r'/AddOrderPaymentRef', Home.AddOrderPaymentRef, name='Add Order Payment Ref View', strict_slash=True),
     RedirectRoute(r'/CreateNewOrder', Home.CreateNewOrder, name='Place Order', strict_slash=True),
@@ -64,6 +65,7 @@ __route_list = [
     #Designer Setup
     RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),
     RedirectRoute(r'/superadmin/ReadyDesingSetup', DesignerSetup.ReadyDesingSetup, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/AddReadyDesingCategory', DesignerSetup.AddReadyDesingCategory, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadReadyDesignImage', DesignerSetup.UploadReadyDesignImage, name='SuperAdmin Upload ReadyDesignImage', strict_slash=True),
     RedirectRoute(r'/superadmin/DeleteReadyDesign', DesignerSetup.DeleteReadyDesign, name='SuperAdmin Upload ReadyDesignImage', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),

@@ -73,6 +73,24 @@ function saveProductCallBack(obj, fID) {
   $('#' + fID)[0].reset();
 };
 
+function saveReadyDesignCategory() {
+
+  if (!$('#new_category').val()) {
+    showMSG('Please enter category', 'warning');
+    return;
+  }
+  postRequest('add_new_category_form', '/superadmin/AddReadyDesingCategory',
+      'saveReadyDesignCategoryCB')
+};
+function saveReadyDesignCategoryCB(obj, fID) {
+  $('#add_new_category_spin').hide();
+  $('#' + fID)[0].reset();
+  closeDialog('#addCategoryDailog');
+  $('#category').append($('<option>', {
+    value : obj.data.name
+  }).text(obj.data.name));
+}
+
 function saveProductCategory() {
 
   if (!$('#new_category').val()) {
@@ -87,7 +105,6 @@ function saveCategoryCallBack(obj, fID) {
   $('#add_new_category_spin').hide();
   $('#' + fID)[0].reset();
   closeDialog('#addCategoryDailog');
-  category
   $('#category').append($('<option>', {
     value : obj.data.key
   }).text(obj.data.name));
