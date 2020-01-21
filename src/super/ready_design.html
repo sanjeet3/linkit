@@ -140,7 +140,7 @@
         <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category
         </label>
         <div class="col-sm-9">
-          <input type="text" name="category" id="change_category" class="form-control input-custom">
+          <input type="text" name="category" id="new_category" class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
@@ -201,7 +201,7 @@ var RDDT;
 
 function erdc(key, cat){
   $('#selected_rd_key').val(key);
-  $('#change_category').val(cat);
+  $('#rd_category').val(cat);
   openDialog('#changeCategoryDailog');
 }
 function updateCategoryOfReadyDesignCB(r){ 
