@@ -162,11 +162,10 @@
           <div class="clearfix"></div>
         </div>
         <div class="desc1 span_3_of_2" id="prd_info">
-          <button type="button"
-            onclick="window.history.go(-1); return false;"
+          <a href="/Product?cat={{p.category_key.urlsafe()}}"
             class="btn btn-sm btn-primary btn-white btn-round btn-mini pull-right">
             <i class="ace-icon fa fa-arrow-left"></i> Back
-          </button>
+          </a>
           <h4>{{p.name}}</h4>
           <div class="cart-b">
             <div class="clearfix"></div>
