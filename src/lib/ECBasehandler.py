@@ -6,8 +6,7 @@ Created on 04-Jul-2018
 
 from src.Database import Client, ClientLogs
 
-import os
-import logging
+import os, json
 import webapp2
 import jinja2
 from webapp2_extras import auth
@@ -67,4 +66,11 @@ class ActionSupport(webapp2.RequestHandler):
     environment = jinja2.Environment(loader = jinja2.FileSystemLoader(os.path.join(
         os.path.dirname(__file__), '..')), extensions=['jinja2.ext.do',],
         autoescape=True)
+    environment.filters['jdump'] = jdump
+    environment.filters['jload'] = jload
     return environment    
+
+def jdump(value):
+  return json.dumps(value)  
+def jload(value):
+  return json.loads(value)    

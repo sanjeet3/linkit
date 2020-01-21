@@ -290,3 +290,18 @@ function getSavedDesingJsonCB(r){
   
 }
 
+class FPDActionData {
+  constructor(action) {
+    this.action = action;
+  }
+  data(args) {
+    return this.action;
+  }
+
+};
+
+function PreviewBtnnManual(){ 
+  //var preveAction = $('<div data-action="preview-lightbox"></div>');
+  var customActionProvider = new FPDActionData("preview-lightbox");
+  //yourDesigner.actions.doAction(customActionProvider);
+};  

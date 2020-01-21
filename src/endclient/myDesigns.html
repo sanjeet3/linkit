@@ -47,7 +47,7 @@
           {%for d in save_design_list%}
           <div class="ready-design-box"
             style="background-image: url('{%if d.png_url %}{{d.png_url[0]}}{%endif%}')"
-            id="{{d.entityKey}}" data-list="{{d.png_url|safe}}">
+            id="{{d.entityKey}}" data-list='{{d.png_url|jdump|safe}}'>
             <div class="overlay"></div>
             <div class="button" style="left: 30px"
               onclick="showImageModel(this)">View</div>

@@ -440,11 +440,13 @@ function showHistory(status){
 
 
 function showImageModel(btn){
-   var arr = btn.parentElement.dataset.list.replace("u'", '"');
+  /*var arr = btn.parentElement.dataset.list.replace("u'", '"');
    arr = arr.replace("'", '"');
-   arr = $.parseJSON(arr);
+   arr = $.parseJSON(arr);*/
+  var arr = $.parseJSON(btn.parentElement.dataset.list);
+   $('#modal-content').html('');
    for(let i in arr){
-     $('#modal-content').html('<img style="max-width:100%; margin-botom:10px;" src="' + arr[i] +'">');
+     $('#modal-content').append('<img style="max-width:100%; margin-botom:10px;" src="' + arr[i] +'"><br>');
    }
    $('#modal-background').fadeIn();
    $('#product_action_caontainer').hide();
