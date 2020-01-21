@@ -918,6 +918,19 @@ class AddReadyDesingCategory(ActionSupport):
     'name': category, 
     }
     return  json_response(self.response, data_dict, SUCCESS, 'Category %s saved' %(category))
+
+class ChangeReadyDesingCategory(ActionSupport):
+  def post(self):
+    category=self.request.get('category')
+    e = ndb.Key(urlsafe=self.request.get('key')).get()
+    e.category = category
+    e.put()
+    data_dict={ 
+      'k': self.request.get('key'),
+      'name': category, 
+    }
+    return  json_response(self.response, data_dict, SUCCESS, 'Category %s Updated' %(category))
+
  
 class ReadyDesingSetup(ActionSupport):
   def get(self):

@@ -77,16 +77,18 @@
             <td>Product</td>
             <td>Template Name</td>
             <td>Category</td>
+            <td>Edit Category</td>
             <td>Image</td>
             <td>Remove</td>
           </tr>
         </thead>
         <tbody>
           {%for e in ready_design_list%}
-          <tr>
+          <tr id="{{e.entityKey}}">
             <td>{{e.name}} {{e.product_code}}</td>
             <td>{{e.template_name}}</td>
             <td>{{e.category}}</td>
+            <td><button class="btn btn-info btn-minier mt-5" onclick="erdc('{{e.entityKey}}', '{{e.category}}')">Edit</button></td>
             <td><button class="btn btn-info btn-minier mt-5" onclick="window.open('{{e.design_prev_url}}')">See Design</button></td>
             <td><button class="btn btn-danger btn-minier mt-5" type="button" onclick="deleteReadyDesign('{{e.entityKey}}')">Delete</button></td>
           </tr>
@@ -127,7 +129,6 @@
     </div>
   </div>
 </div>
-
 <div id="addCategoryDailog" class="dialog-box">
   <div class="dailog-header">
     <span>Add Category</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
@@ -139,7 +140,7 @@
         <label class="col-sm-3 control-label no-padding-right" for="new_category"> Category
         </label>
         <div class="col-sm-9">
-          <input type="text" name="category" id="new_category" class="form-control input-custom">
+          <input type="text" name="category" id="change_category" class="form-control input-custom">
         </div>
       </div>
       <div class="form-group">
@@ -156,8 +157,61 @@
     </form>
   </div>
 </div>
+<div id="changeCategoryDailog" class="dialog-box">
+  <div class="dailog-header">
+    <span>Change Category</span> <i class="fa fa-times fa-2x pull-right pr-5 pt-5 cursor"
+      onclick="closeDialog('#changeCategoryDailog')"></i>
+  </div>
+  <div class="dialog-content">
+    <form class="form-horizontal mx-w-99" role="form" id="change_category_form">
+      <input type="hidden" name="key" id="selected_rd_key">
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="rd_category"> Category
+        </label>
+        <div class="col-sm-9">
+          <select name="category" id="rd_category" class="form-control input-custom">
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+          <button class="btn btn-info btn-minier" type="button" onclick="updateCategoryOfReadyDesign()">
+            <i class="ace-icon fa fa-check bigger-110"></i> Save
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <button class="btn btn-minier" type="button" onclick="closeDialog('#changeCategoryDailog')">Close
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 <script src="/super/assets/js/jquery.dataTables.min.js"></script>
 <script src="/super/assets/js/jquery.dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
-  $('#ready_design_dynamic_table').DataTable();
+var RDDT;
+(function() {
+  // your page initialization code here
+  // the DOM will be available here
+
+  RDDT = $('#ready_design_dynamic_table').DataTable();
+  var $options = $("#category > option").clone();
+  $('#rd_category').append($options);
+})();
+
+function erdc(key, cat){
+  $('#selected_rd_key').val(key);
+  $('#change_category').val(cat);
+  openDialog('#changeCategoryDailog');
+}
+function updateCategoryOfReadyDesignCB(r){ 
+  $('#' + r.data.k + ' td:eq(2)').html(r.data.name);
+  $('#' + r.data.k + ' td:eq(3)').html(r.data.name);
+  //var x = $('#' + r.data.k + ' td:eq(3)').html();
+  //console.log(x);
+  closeDialog('#changeCategoryDailog');
+}
+function updateCategoryOfReadyDesign(){
+  postRequest('change_category_form','/superadmin/ChangeReadyDesingCategory','updateCategoryOfReadyDesignCB')
+}
 </script>

@@ -89,6 +89,9 @@ function saveReadyDesignCategoryCB(obj, fID) {
   $('#category').append($('<option>', {
     value : obj.data.name
   }).text(obj.data.name));
+  $('#rd_category').append($('<option>', {
+    value : obj.data.name
+  }).text(obj.data.name));
 }
 
 function saveProductCategory() {

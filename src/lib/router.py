@@ -66,6 +66,7 @@ __route_list = [
     RedirectRoute(r'/DesinerDemo', DesignerSetup.DesinerDemo, name='SuperAdmin Designer Demo page', strict_slash=True),
     RedirectRoute(r'/superadmin/ReadyDesingSetup', DesignerSetup.ReadyDesingSetup, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/AddReadyDesingCategory', DesignerSetup.AddReadyDesingCategory, name='SuperAdmin DesignerSetup page', strict_slash=True),
+    RedirectRoute(r'/superadmin/ChangeReadyDesingCategory', DesignerSetup.ChangeReadyDesingCategory, name='SuperAdmin DesignerSetup page', strict_slash=True),
     RedirectRoute(r'/superadmin/UploadReadyDesignImage', DesignerSetup.UploadReadyDesignImage, name='SuperAdmin Upload ReadyDesignImage', strict_slash=True),
     RedirectRoute(r'/superadmin/DeleteReadyDesign', DesignerSetup.DeleteReadyDesign, name='SuperAdmin Upload ReadyDesignImage', strict_slash=True),
     RedirectRoute(r'/superadmin/DesignerSetup', DesignerSetup.Home, name='SuperAdmin DesignerSetup page', strict_slash=True),
