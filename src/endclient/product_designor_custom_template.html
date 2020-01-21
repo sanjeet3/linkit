@@ -132,9 +132,14 @@
         </div> 
         <div class="fpd-readydesigns">
           <div class="fpd-category" title="New Designs" data-thumbnail="">
-            {%for readyDesign in ready_design_list%}
+            {%for cat in ready_design_dict%}
+            <div class="fpd-category" title="{{cat}}" data-thumbnail="">
+            {%set readyDesignList = ready_design_dict[cat]%}
+            {%for readyDesign in readyDesignList%}
             <img2 src="{{readyDesign.design_prev_url}}" title="{{readyDesign.template_name}}"
               data-parameters='{"readydesignskey": "{{readyDesign.entityKey}}"}'/></img2>
+            {%endfor%}  
+            </div>  
             {%endfor%}  
           </div>
           <div class="fpd-category" title="Extra" data-thumbnail="">

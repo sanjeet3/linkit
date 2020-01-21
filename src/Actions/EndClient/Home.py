@@ -479,11 +479,19 @@ class GetProductDesignor(ActionSupport):
         self.sub_bg_dict[e.category].append(e)
       else:
         self.sub_bg_dict[e.category]=[e]
+        
+  def set_ready_design(self):
+    for e in ReadyDesignTemplate.get_ready_design_list(self.p.key):
+      if e.category in self.ready_design_dict:
+        self.ready_design_dict[e.category].append(e)
+      else:  
+        self.ready_design_dict[e.category] = [e]
            
   def get(self): 
     self.sub_frame_dict = {}
     self.sub_cat_dict = {}
     self.sub_bg_dict = {}
+    self.ready_design_dict = {}
     self.frame_list=[]
     self.design_list=[]
     self.bg_list=[]
@@ -512,9 +520,9 @@ class GetProductDesignor(ActionSupport):
         self.set_designs()    
       if 'backgrounds' in designer_module:
         self.set_bg()  
-    ready_design_list = ReadyDesignTemplate.get_ready_design_list(self.p.key)   
+    self.set_ready_design()   
     self.response.out.write(template.render({'p': self.p,
-                                             'ready_design_list': ready_design_list,
+                                             'ready_design_dict': self.ready_design_dict,
                                              'tutorial': tutorial,
                                              'source_html': source_html,
                                              'designer_module': designer_module,
@@ -866,7 +874,7 @@ class MySaveDesign(ActionSupport):
     if self.client:
       save_design_list = ClientProductDesign.get_my_designs(self.client.key)
     template = self.get_jinja2_env.get_template('endclient/myDesigns.html')    
-    self.response.out.write(template.render({
+    self.response.out.write(template.render({'product_cat_list': ProductCategory.get_list(),
                                              'save_design_list': save_design_list,
                                              'user_obj': self.client}))
     
